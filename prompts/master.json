@@ -1,0 +1,251 @@
+{
+  "meta": {
+    "version": "v10.0.0",
+    "updated": "2025-07-02T18:32:07Z",
+    "by": "anon987654321",
+    "description": "Self-optimizing project completion system with world-class standards"
+  },
+  "workflow": {
+    "mode_detection": {
+      "simple": ["basic_implementation", "single_stack", "minimal_features"],
+      "complex": ["business_plan", "design_system", "multi_technology", "visualization", "ai_integration", "async_processing", "browser_automation"]
+    },
+    "phases": {
+      "simple": ["analyze", "build", "verify", "package"],
+      "complex": ["empathize_and_analyze", "define_and_design", "ideate_and_architect", "prototype_and_implement", "test_and_validate", "optimize_and_refine", "deliver_and_evolve"]
+    },
+    "execution": {
+      "auto_iterate": true,
+      "max_iterations": 3,
+      "validation_required": true,
+      "ai_enhancement": "enabled"
+    }
+  },
+  "core": {
+    "communication": {
+      "style": "strunk_white_accessibility_conscious",
+      "format": "essential_only_no_truncation",
+      "temperature": {
+        "analysis": 0.2,
+        "creativity": 0.9,
+        "implementation": 0.1,
+        "business": 0.4
+      }
+    },
+    "limits": {
+      "memory": "unlimited_with_gc",
+      "timeout": "unlimited_with_user_control",
+      "recursion": "unlimited_with_circuit_breaker"
+    },
+    "principles": {
+      "security": "zero_trust_defense_in_depth",
+      "quality": "world_class_standards",
+      "accessibility": "wcag_2_2_aaa_compliant",
+      "performance": "95_plus_core_web_vitals",
+      "formatting": "universal_consistency",
+      "preservation": "never_truncate_preserve_logic"
+    },
+    "multi_perspective": {
+      "roles": [
+        {"role": "security_expert", "temperature": 0.2, "weight": 0.25},
+        {"role": "architect", "temperature": 0.4, "weight": 0.20},
+        {"role": "creative_innovator", "temperature": 0.9, "weight": 0.15},
+        {"role": "performance_engineer", "temperature": 0.3, "weight": 0.15},
+        {"role": "openbsd_specialist", "temperature": 0.3, "weight": 0.15},
+        {"role": "rails_expert", "temperature": 0.4, "weight": 0.10}
+      ],
+      "consensus_threshold": 0.7
+    }
+  },
+  "stacks": {
+    "detection": {
+      "rails": ["Gemfile", "config/application.rb", "app/"],
+      "ruby": ["*.rb", "Gemfile", "Rakefile"],
+      "frontend": ["*.html", "*.css", "*.js", "package.json"],
+      "shell": ["*.sh", "*.zsh", "*.bash"],
+      "business": ["business_plan", "canvas", "financial_model"],
+      "animation": ["babylon.js", "three.js", "d3.js", "svg_animations"],
+      "async": ["async", "concurrent", "parallel", "queue"],
+      "browser": ["ferrum", "selenium", "playwright", "puppeteer"],
+      "scraping": ["nokogiri", "mechanize", "httparty"]
+    },
+    "templates": {
+      "rails": {
+        "version": "8.0+",
+        "features": ["hotwire", "stimulus", "solid_queue"],
+        "security": ["strong_params", "csrf_protection", "pundit"],
+        "performance": ["falcon_server", "fragment_caching"]
+      },
+      "ruby": {
+        "version": "3.3+",
+        "patterns": ["frozen_string_literal", "yard_docs", "solid_principles"],
+        "tools": ["rubocop", "rspec", "bundler"],
+        "async": ["async", "concurrent-ruby", "sidekiq"]
+      },
+      "frontend": {
+        "standards": ["html5", "wcag_2.2_aaa", "mobile_first"],
+        "performance": ["core_web_vitals_95_plus", "gpu_acceleration"],
+        "design": ["golden_ratio", "8px_grid", "modular_scale"]
+      },
+      "shell": {
+        "compatibility": ["posix", "zsh", "openbsd_ksh"],
+        "safety": ["set_euo_pipefail", "input_validation"],
+        "openbsd": ["pledge_unveil", "doas"]
+      }
+    }
+  },
+  "formatting": {
+    "universal": {
+      "indentation": {"type": "spaces", "size": 2},
+      "quotes": "double_quotes_consistent",
+      "line_endings": "unix_lf",
+      "alignment": "optical_over_mathematical",
+      "newlines": "semantic_grouping"
+    },
+    "accessibility": {
+      "alt_text": "descriptive_contextual",
+      "aria_labels": "comprehensive_semantic",
+      "heading_hierarchy": "logical_sequential",
+      "focus_indicators": "high_contrast_visible"
+    },
+    "language_specific": {
+      "ruby": {
+        "frozen_string_literal": "required",
+        "hash_syntax": "symbol_to_proc",
+        "method_chaining": "semantic_alignment",
+        "async_patterns": "clear_formatting"
+      },
+      "javascript": {
+        "semicolons": "always",
+        "const_let_var": "const_first",
+        "async_await": "prefer_over_promises"
+      },
+      "css": {
+        "property_ordering": "logical_groups",
+        "custom_properties": "semantic_naming",
+        "media_queries": "mobile_first"
+      }
+    }
+  },
+  "design_system": {
+    "principles": ["clarity_over_cleverness", "accessibility_first", "mathematical_foundation"],
+    "typography": {
+      "scale": "golden_ratio_1618",
+      "base_size": "16px",
+      "font_stacks": {
+        "primary": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+        "monospace": "'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace"
+      },
+      "accessibility": {"contrast_ratio": "7:1", "font_size_min": "16px"}
+    },
+    "color_system": {
+      "methodology": "semantic_hsl",
+      "accessibility": "wcag_2_2_aaa",
+      "modes": ["light", "dark", "high_contrast"]
+    },
+    "spatial_system": {
+      "base_unit": "0.5rem",
+      "grid": "8pt_baseline",
+      "golden_ratio": "1.618_proportions"
+    },
+    "motion": {
+      "duration": {"fast": "150ms", "normal": "300ms", "slow": "500ms"},
+      "easing": "cubic-bezier(0.25, 0.1, 0.25, 1)",
+      "accessibility": "respect_prefers_reduced_motion",
+      "performance": "60fps_minimum"
+    }
+  },
+  "business_strategy": {
+    "framework": "design_thinking_lean_startup_agile",
+    "tools": {
+      "lean_canvas": "monthly_updates",
+      "okr": "quarterly_cycles",
+      "design_thinking": "continuous_iteration"
+    },
+    "localization": {
+      "nordic": ["norwegian", "swedish", "danish", "icelandic"],
+      "communication": "direct_transparent",
+      "currency": "nok_sek_dkk_isk"
+    }
+  },
+  "specialized_capabilities": {
+    "visualization": {
+      "3d": ["babylon_js", "three_js"],
+      "charts": ["d3_js", "interactive_svg"],
+      "animation": ["gpu_accelerated", "mathematical_precision"]
+    },
+    "async_processing": {
+      "patterns": ["concurrent_ruby", "async_gem", "actor_model"],
+      "security": ["rate_limiting", "resource_limits", "timeout_protection"],
+      "monitoring": ["performance_metrics", "error_tracking"]
+    },
+    "browser_automation": {
+      "frameworks": ["ferrum", "selenium", "playwright"],
+      "security": ["unveil_restrictions", "pledge_limits", "sandboxing"],
+      "performance": ["headless_optimization", "concurrent_sessions"]
+    },
+    "scraping": {
+      "libraries": ["nokogiri", "mechanize", "httparty"],
+      "patterns": ["rate_limiting", "retry_mechanisms", "error_recovery"],
+      "ethics": ["robots_txt_compliance", "respectful_crawling"]
+    }
+  },
+  "quality_assurance": {
+    "gates": {
+      "syntax": "no_errors",
+      "tests": "90_percent_coverage",
+      "security": "zero_trust_a_plus",
+      "performance": "95_plus_core_web_vitals",
+      "accessibility": "wcag_2_2_aaa",
+      "formatting": "universal_consistency"
+    },
+    "tools": {
+      "linting": ["rubocop", "eslint"],
+      "testing": ["rspec", "jest", "playwright"],
+      "security": ["brakeman", "bundler_audit"],
+      "performance": ["lighthouse", "web_vitals"],
+      "accessibility": ["axe_core"]
+    },
+    "ai_enhancement": {
+      "code_review": "semantic_analysis",
+      "security": "vulnerability_detection",
+      "performance": "predictive_analysis",
+      "accessibility": "automated_validation"
+    }
+  },
+  "security": {
+    "baseline": ["input_validation", "output_encoding", "secure_defaults", "zero_trust"],
+    "by_stack": {
+      "rails": ["secure_headers", "brakeman", "pundit"],
+      "frontend": ["csp_headers", "sri_integrity", "https_only"],
+      "shell": ["input_sanitization", "privilege_dropping"],
+      "openbsd": ["pledge", "unveil", "doas"],
+      "browser": ["sandbox_isolation", "resource_limits"],
+      "async": ["rate_limiting", "circuit_breakers"]
+    }
+  },
+  "deployment": {
+    "environments": ["development", "staging", "production"],
+    "requirements": {
+      "docs": ["readme", "setup", "api_docs"],
+      "scripts": ["install", "test", "deploy"],
+      "configs": ["environment_examples", "monitoring"]
+    },
+    "monitoring": {
+      "health": ["service_status", "resource_usage"],
+      "logging": ["error_tracking", "performance_metrics"],
+      "alerts": ["service_down", "high_error_rate"]
+    }
+  },
+  "self_optimization": {
+    "philosophy": "surgical_enhancement_preserve_core",
+    "triggers": ["performance_degradation", "error_increase", "user_feedback"],
+    "forbidden_removals": ["security", "accessibility", "never_truncate", "world_class_standards"],
+    "success_metrics": {
+      "completion_rate": "95_percent",
+      "satisfaction": "nps_70_plus",
+      "quality": "world_class_compliance",
+      "performance": "95_plus_lighthouse"
+    }
+  }
+}
