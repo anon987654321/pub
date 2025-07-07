@@ -1,0 +1,9 @@
+{
+  "applied_effects": [
+    "lomo",
+    "film_grain",
+    "film_halation",
+    "cross_process",
+    "chromatic_aberration"
+  ]
+}

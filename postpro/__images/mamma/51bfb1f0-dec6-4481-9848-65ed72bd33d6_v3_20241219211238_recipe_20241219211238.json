@@ -1,0 +1,9 @@
+{
+  "applied_effects": [
+    "selective_color_adjustment",
+    "bloom_effect",
+    "anamorphic_simulation",
+    "day_for_night",
+    "film_grain"
+  ]
+}

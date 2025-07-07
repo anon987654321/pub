@@ -1,0 +1,9 @@
+{
+  "applied_effects": [
+    "cross_process",
+    "selective_color_adjustment",
+    "chromatic_aberration",
+    "bloom_effect",
+    "golden_hour_glow"
+  ]
+}

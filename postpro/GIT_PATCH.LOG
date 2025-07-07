@@ -1,0 +1,4450 @@
+commit ebcd8eb6aa09e1d2b275ac326dcf3060a3054a9a
+Author: dev <dev@dev.openbsd.amsterdam>
+Date:   Thu Apr 17 20:27:21 2025 +0200
+
+    TMP
+
+diff --git a/README.md b/README.md
+index 824489b..bd633c4 100644
+--- a/README.md
++++ b/README.md
+@@ -1,147 +1,328 @@
+ # Postpro.rb – Analog and Cinematic Post-Processing
+ 
+-**Version:** 12.9.1
+-**Last Modified:** 2025-03-02T05:07:54Z
+-**Author:** PubHealthcare
++Postpro.rb transforms digital images with analog and cinematic effects, blending vintage charm with experimental flair. Powered by `libvips` and `ruby-vips`, it creates unique variations with layered effects, prioritizing depth and character.
+ 
+----
+-
+-Postpro.rb is an **interactive CLI** tool that applies analog and cinematic effects to images using [libvips](https://libvips.github.io/libvips/) via [ruby-vips](https://github.com/libvips/ruby-vips). It allows **recursive batch processing** of entire folders, layering multiple transformations for a fully customized look.
++Version: 13.3.22  
++Last Modified: 2025-04-13T14:00:00Z  
++Author: PubHealthcare  
+ 
+ ---
+ 
+ ## Key Features
+ 
+-1. **Analog & Retro**
+-   - **Film Grain & Vignetting**: Classic film texture
+-   - **VHS Degrade & Light Leaks**: 80s/90s analog feel
+-
+-2. **Cinematic Looks**
+-   - **Bloom & Halation**: Dreamy highlight glows
+-   - **Teal-and-Orange & Day-for-Night**: Hollywood-grade color grading
+-   - **Anamorphic Simulation**: Widescreen lens flares
+-
+-3. **Layered Processing**
+-   - Combine multiple effects in one pass
+-   - Fine-tune each effect's intensity
+-
+-4. **Interactive CLI**
+-   - Choose random or custom JSON recipes
+-   - Specify file patterns for batch-processing
+-
+-5. **High Speed & Low Memory**
+-   - Built on libvips for efficient performance
+-
+----
+-
+-## Installation
+-
+-1. **Install libvips**
+-   - **OpenBSD**: `doas pkg_add -U vips`
+-   - **Ubuntu/Debian**: `apt-get install libvips`
+-   - **macOS**: `brew install vips`
+-
+-2. **Install Ruby Gems**
+-   ```bash
+-   gem install --user-install ruby-vips tty-prompt
+-   ```
+-
+-### Critical: OpenBSD Environment Setup
+-
+-On **OpenBSD**, ensure **libvips** is properly configured:
+-```sh
+-# Required to prevent "not found" errors
+-export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+-
+-# For gem environment (adjust Ruby version as needed)
+-export GEM_HOME=$HOME/.gem/ruby/3.3
+-export GEM_PATH=$HOME/.gem/ruby/3.3:$GEM_PATH
+-export PATH=$HOME/.gem/ruby/3.3/bin:$PATH
+-```
++- **Randomized Variations**: Generates unique outputs with 3–5 effects per variant in professional mode (intensity 0.1–0.4), 5–8 in experimental mode (intensity 0.2–0.6), ensuring variety through mood-based selection (warm, cool, neutral).  
++- **Dual Modes**: Professional mode focuses on analog effects; experimental mode adds non-analog effects like neon glow and pixel sorting.  
++- **Layered Effects**: Applies `film_stock_emulation` (random Kodak Portra or Fuji Velvia) and `film_grain` (layered noise for analog texture) to all variants, with subtle blurs, no vignettes/borders.  
++- **Detail Preservation**: Maintains brightness in the 100–150 range to preserve architectural details, adjusting effects dynamically.  
++- **CLI Workflow**: Supports random effects or JSON recipes, optionally saves recipes (`recipe_[timestamp].json`), avoids overwriting processed files.  
++- **Validated Aesthetic**: Matches Snøhetta’s analog film look (muted tones, fine grain, dust specks, soft lighting).
+ 
+ ---
+ 
+-## Example Interactive Flow
+-
+-```bash
+-$ ruby postpro.rb
+-Apply a random combination of effects? (Y/n): y
+-Enter file patterns (default: **/*.jpg, **/*.jpeg, **/*.png, **/*.webp): images/**/*.jpg
+-How many variations per image? (default: 3): 4
+-
+-Starting image processing...
+-Processing file: images/pic1.jpg
+-Applied effect: film_grain (intensity: 1.2)
+-Applied effect: teal_and_orange (intensity: 1.0)
+-Applied effect: bloom_effect (intensity: 1.5)
+-Saved variation 1 as images/pic1_processed_v1_20250302050754.jpg
+-Saved variation 2 as images/pic1_processed_v2_20250302050754.jpg
+-Saved variation 3 as images/pic1_processed_v3_20250302050754.jpg
+-Saved variation 4 as images/pic1_processed_v4_20250302050754.jpg
+-Processing completed.
+-```
++## Effects and Techniques
++
++All variants receive `film_stock_emulation` and `film_grain` by default, ensuring an analog foundation. Effects are inspired by historical photography and cinematography techniques, equipment, and their visual impacts.
++
++### anamorphic_simulation  
++- **History**: Inspired by anamorphic lenses (1950s), used in widescreen cinema (e.g., *Ben-Hur*, 1959) for a stretched, cinematic look.  
++- **Equipment**: Anamorphic lenses (e.g., Panavision C-Series).  
++- **Visual Impact**: Resizes horizontally (0.1–0.3), random vertical scale (0.95–1.05), creating a widescreen effect.  
++- **Aesthetic**: Enhances cinematic grandeur, often used in epic films to emphasize expansive compositions.
++
++### bleach_bypass  
++- **History**: A film processing technique (1990s), skipping the bleach step in color film development, used in movies like *Saving Private Ryan* (1998) for a desaturated, high-contrast look.  
++- **Equipment**: Film labs processing 35mm film (e.g., Technicolor).  
++- **Visual Impact**: Blends with greyscale (0.4–0.8), boosts contrast (1.1, 5 × intensity), yielding a stark, gritty appearance.  
++- **Aesthetic**: Imparts a raw, cinematic intensity, ideal for dramatic or war-like scenes, emphasizing texture over color.
++
++### bloom_effect  
++- **History**: Inspired by overexposed highlights in 1970s cinematography, often seen in sci-fi films like *Close Encounters of the Third Kind* (1977).  
++- **Equipment**: Soft focus filters on film cameras (e.g., ARRI 35mm).  
++- **Visual Impact**: Boosts brightness (1.2–1.5), subtle blur (sigma 0.3 × intensity), blended at 0.1, creating glowing highlights.  
++- **Aesthetic**: Enhances ethereal, dreamy qualities, often used in fantasy or romantic scenes to emphasize light sources.
++
++### chemical_stains  
++- **History**: Inspired by chemical damage on film (1900s–1950s), caused by improper storage or processing.  
++- **Equipment**: Damaged celluloid film strips.  
++- **Visual Impact**: Draws 3–7 circles (muted colors), subtle blur (sigma 0.2 × intensity), blends at 0.05.  
++- **Aesthetic**: Creates an aged, decayed look, used in historical or post-apocalyptic visuals to suggest neglect.
++
++### chromatic_aberration  
++- **History**: An optical flaw in early lenses (1800s–1900s), causing color fringing, later embraced in modern experimental photography.  
++- **Equipment**: Uncorrected lenses (e.g., Petzval lenses).  
++- **Visual Impact**: Shifts red/blue (1.0–3.0) using `wrap`, creating fringed edges.  
++- **Aesthetic**: Adds a retro, imperfect charm, often used in surreal or glitch art to suggest optical distortion.
++
++### cinemascope_bars  
++- **History**: Inspired by Cinemascope films (1950s), using anamorphic lenses for widescreen, often with a tonal shift.  
++- **Equipment**: Cinemascope lenses (e.g., Bausch & Lomb).  
++- **Visual Impact**: Adjusts tone (0.1 × intensity), subtle blur (sigma 0.2 × intensity), no bars.  
++- **Aesthetic**: Enhances cinematic tone, used in epic films to emphasize mood without framing.
++
++### color_bleed  
++- **History**: Seen in early color film (1950s), where dyes bled between layers, causing color mixing.  
++- **Equipment**: Early color film stocks (e.g., Agfacolor).  
++- **Visual Impact**: Shifts RGB channels (0.1–0.3), blends with offsets (3–5), creating subtle color mixing.  
++- **Aesthetic**: Imparts a soft, dreamy degradation, used in experimental photography for a painterly effect.
++
++### color_fade  
++- **History**: Mimics the fading of color prints (1960s–1980s) due to chemical instability in early color film stocks like Ektachrome.  
++- **Equipment**: Aged color prints or Polaroids.  
++- **Visual Impact**: Reduces intensity (0.1–0.3), offsets (10–20), creating a washed-out look.  
++- **Aesthetic**: Imparts an aged, melancholic feel, often used in vintage or memory-themed photography.
++
++### cross_process  
++- **History**: A 1960s–1980s darkroom technique, processing slide film in negative chemicals (or vice versa), creating surreal color shifts.  
++- **Equipment**: Film labs with E-6 and C-41 processing chemicals.  
++- **Visual Impact**: Shifts RGB (0.1–0.7), random offsets, producing unnatural, vibrant hues.  
++- **Aesthetic**: Adds a psychedelic, experimental vibe, popular in fashion and art photography for its surreal effect.
++
++### day_for_night  
++- **History**: A 1940s–1960s filmmaking technique, shooting day scenes with filters to simulate night, used in classics like *The Day of the Jackal* (1973).  
++- **Equipment**: Blue filters on 35mm cameras (e.g., Panavision).  
++- **Visual Impact**: Darkens (0.1–0.3), boosts blue (0.1–0.3), with random offsets, mimicking moonlight.  
++- **Aesthetic**: Imparts a moody, nocturnal feel, ideal for dramatic night scenes shot in daylight.
++
++### double_exposure  
++- **History**: A 19th-century photography technique, exposing the same film frame twice, later used in surrealism (e.g., Man Ray’s work).  
++- **Equipment**: Analog cameras with manual film advance (e.g., Nikon F).  
++- **Visual Impact**: Overlays the image with itself at random opacity (0.2–0.4), creating ghostly overlaps.  
++- **Aesthetic**: Adds a surreal, dreamlike quality, often used in experimental or artistic photography to blend realities.
++
++### double_tone_grading  
++- **History**: A modern color grading technique (2010s), popularized in experimental cinema for split-tone effects.  
++- **Equipment**: Digital grading software (e.g., DaVinci Resolve).  
++- **Visual Impact**: Applies blue shadows, orange highlights (factors 0.2–0.5), blending with the original.  
++- **Aesthetic**: Adds a surreal, cinematic contrast, used in avant-garde films to create emotional depth.
++
++### dust_and_specks  
++- **History**: Mimics dust on film negatives (1900s–1950s), a common issue in analog photography.  
++- **Equipment**: Film negatives scanned without cleaning.  
++- **Visual Impact**: Draws 30–80 small rectangles (1–3 pixels, grayscale), subtle blur (sigma 0.2 × intensity), blends at 0.1.  
++- **Aesthetic**: Adds an aged, archival quality, often used in historical photography to suggest age.
++
++### film_grain  
++- **History**: Originated in early film photography (late 19th century), where silver halide grains in film emulsions created a textured noise pattern, especially in high-ISO films like Kodak Tri-X.  
++- **Equipment**: 35mm film cameras (e.g., Leica M3) and high-ISO film stocks.  
++- **Visual Impact**: Uses layered Gaussian noise (scales 10–30), blended at 0.3–0.4 opacity with contrast (0.5–0.7), mimicking organic grain texture.  
++- **Aesthetic**: Evokes nostalgia, grounding modern images in a timeless, cinematic feel, often seen in classic portraiture or documentary photography.
++
++### film_halation  
++- **History**: A phenomenon in early color film (1950s), where light scatters around bright areas, seen in Kodachrome film.  
++- **Equipment**: Kodachrome 35mm film, lacking an anti-halation layer.  
++- **Visual Impact**: Masks highlights (180–220), subtle blur (sigma 0.2 × intensity), blends at 0.1, creating soft halos.  
++- **Aesthetic**: Adds a vintage glow, enhancing the nostalgic feel of bright areas, often used in portraiture for a soft, radiant look.
++
++### film_scratches  
++- **History**: Common in aged film reels (1900s–1950s), caused by physical wear on celluloid.  
++- **Equipment**: 35mm film reels on projectors.  
++- **Visual Impact**: Draws 5–12 lines, subtle blur (sigma 0.1 × intensity), blends at 0.2, simulating scratches.  
++- **Aesthetic**: Adds an aged, worn look, often used in archival or historical footage to suggest time’s passage.
++
++### film_stock_emulation  
++- **History**: Emulates classic film stocks (1950s–1980s), like Kodak Portra (warm tones) or Fuji Velvia (vivid colors).  
++- **Equipment**: 35mm film stocks in cameras (e.g., Canon AE-1).  
++- **Visual Impact**: Adjusts RGB (e.g., Portra: +0.05 red), boosts (0.1–0.2), creating film-like tones.  
++- **Aesthetic**: Grounds images in analog authenticity, used in portraiture or landscapes for a timeless feel.
++
++### frame_distortion  
++- **History**: Inspired by projector misalignment in early cinema (1920s–1950s), causing twisted frames.  
++- **Equipment**: 35mm film projectors (e.g., Bell & Howell).  
++- **Visual Impact**: Rotates (-10..10 or -15..15), crops to size, creating a skewed effect.  
++- **Aesthetic**: Adds a sense of mechanical imperfection, often used in experimental films to evoke instability.
++
++### gate_weave  
++- **History**: A flaw in early film projectors (1920s–1950s), where film shifted during projection, causing jitter.  
++- **Equipment**: 16mm or 35mm projectors (e.g., Keystone).  
++- **Visual Impact**: Applies micro-translations (shifts -10..10), crops to size, mimicking frame jitter.  
++- **Aesthetic**: Adds a mechanical, unstable feel, often used in found-footage horror to enhance unease.
++
++### glitch  
++- **History**: Inspired by digital video errors (1990s–2000s), seen in corrupted VHS or early digital files.  
++- **Equipment**: Faulty digital video players or corrupted files.  
++- **Visual Impact**: Shifts RGB (10–30) using `wrap`, adds noise (sigma 5–10), blends at 0.2, creating digital breakup.  
++- **Aesthetic**: Evokes a cyberpunk, dystopian feel, used in glitch art or modern music videos for a chaotic vibe.
++
++### golden_hour_glow  
++- **History**: Mimics golden hour lighting (late 19th-century photography), the warm light at sunrise/sunset, cherished by landscape photographers.  
++- **Equipment**: Film cameras with warm filters (e.g., Kodak Gold 200).  
++- **Visual Impact**: Applies a uniform warm tint (200–255, 160–220, 120–180), subtle blur (sigma 0.3 × intensity), blended at 0.1.  
++- **Aesthetic**: Evokes a serene, romantic warmth, enhancing natural beauty in landscapes or portraits.
++
++### halftone_print  
++- **History**: A 19th-century printing technique, used in newspapers to create dotted images from continuous tones.  
++- **Equipment**: Halftone screens in offset printing.  
++- **Visual Impact**: Ranks greyscale (8–16), blends at 0.2, creating a dotted pattern.  
++- **Aesthetic**: Evokes vintage print media, often used in pop art or retro designs for a graphic, textured look.
++
++### lens_distortion  
++- **History**: Seen in early wide-angle lenses (1920s–1950s), where optical imperfections caused barrel or pincushion distortion, especially in lenses like the Zeiss Protar.  
++- **Equipment**: Wide-angle lenses on vintage cameras (e.g., Nikon F).  
++- **Visual Impact**: Warps edges (factor 0.1–0.5), with random offsets (1–3), creating a slightly surreal, curved perspective.  
++- **Aesthetic**: Adds a retro lens character, often used in architectural photography to emphasize spatial distortion, enhancing a sense of depth or unease.
++
++### lens_flare  
++- **History**: An optical effect in 1960s–1970s cinematography, popularized by J.J. Abrams in films like *Star Trek* (2009).  
++- **Equipment**: Uncoated lenses or anamorphic lenses (e.g., Panavision).  
++- **Visual Impact**: Draws 3–7 lines, subtle blur (sigma 0.2 × intensity), blends at 0.2, creating light streaks.  
++- **Aesthetic**: Adds a cinematic, futuristic glow, often used in sci-fi or action films to emphasize light sources.
++
++### lens_prism  
++- **History**: Inspired by prismatic effects in experimental photography (1960s), using prism filters to split light.  
++- **Equipment**: Prism filters on DSLR lenses (e.g., Moment lenses).  
++- **Visual Impact**: Shifts red/blue channels angularly (5–15 pixels), creating prismatic color splits.  
++- **Aesthetic**: Adds a psychedelic, kaleidoscopic effect, used in music videos or fashion photography for a surreal flair.
++
++### light_leaks  
++- **History**: Common in analog photography (1900s–1980s), caused by accidental light exposure in film cameras due to loose seals or improper loading.  
++- **Equipment**: Vintage cameras like the Holga or Lomography Diana, prone to light leaks.  
++- **Visual Impact**: Creates warm streaks (3–7 circles, colors 255, 150–200, 50–100), with subtle blur (sigma 0.2 × intensity), blended at 0.1 opacity, adding a dreamy, unpredictable glow.  
++- **Aesthetic**: Imparts a lo-fi, whimsical charm, often used in experimental or artistic photography to suggest imperfection and spontaneity.
++
++### lomo  
++- **History**: Inspired by Lomography (1990s), a movement using Soviet-era LOMO cameras for high-saturation, low-fidelity images.  
++- **Equipment**: LOMO LC-A camera, known for vibrant colors.  
++- **Visual Impact**: Boosts saturation (0.2–0.6, increased for warm mood), adds subtle blur (sigma 0.2 × intensity) for smoothness, no vignette.  
++- **Aesthetic**: Creates a vibrant, playful look, often used in street photography to capture a carefree, vivid energy.
++
++### neon_glow  
++- **History**: Inspired by 1980s cyberpunk aesthetics, seen in films like *Blade Runner* (1982), using neon lighting.  
++- **Equipment**: Neon lights in cinematography (e.g., ARRI lighting kits).  
++- **Visual Impact**: Draws 3–5 circles with neon colors (pink/cyan), subtle blur (sigma 0.3 × intensity), blends at 0.2.  
++- **Aesthetic**: Creates a futuristic, vibrant glow, used in sci-fi or music videos for a neon-drenched look.
++
++### overexposure_burn  
++- **History**: Mimics overexposed film (1900s–1950s), where bright areas burned out due to excessive light.  
++- **Equipment**: Overexposed film negatives.  
++- **Visual Impact**: Brightens 2–5 areas (255 intensity), blends at 0.03, creating subtle burned-out spots.  
++- **Aesthetic**: Adds a harsh, damaged quality, often used in experimental or abstract photography for contrast.
++
++### pixel_sorting  
++- **History**: A digital art technique (2010s), originating in glitch art communities, sorting pixels to create abstract patterns.  
++- **Equipment**: Custom software or scripts in Processing.  
++- **Visual Impact**: Sorts pixels in 5–20 horizontal strips, creating streaked, abstract effects.  
++- **Aesthetic**: Evokes a digital, glitchy abstraction, used in modern art or music videos for a futuristic, chaotic vibe.
++
++### polaroid_frame  
++- **History**: Inspired by Polaroid instant photography (1940s–1980s), known for its instant prints with a characteristic tint.  
++- **Equipment**: Polaroid SX-70 camera.  
++- **Visual Impact**: Applies a uniform tint (240–255), subtle blur (sigma 0.2 × intensity), blends at 0.1, no border.  
++- **Aesthetic**: Evokes instant photo nostalgia, often used in personal or candid photography for a warm, intimate feel.
++
++### sepia  
++- **History**: Popular in 19th-century photography, sepia toning preserved prints by replacing silver with sepia pigment, giving a warm brown tone.  
++- **Equipment**: Darkroom toning with sepia chemicals on silver gelatin prints.  
++- **Visual Impact**: Applies a warm brown matrix (shift 0.1–0.2), evoking aged photographs.  
++- **Aesthetic**: Creates a historical, nostalgic mood, often used in vintage portraiture or historical reenactments to evoke the past.
++
++### soft_focus  
++- **History**: A 1920s–1930s portraiture technique, using soft focus lenses to create a dreamy effect, popularized by Hollywood glamour photography.  
++- **Equipment**: Soft focus lenses (e.g., Cooke Soft Focus).  
++- **Visual Impact**: Blends with subtle blur (sigma 0.2 × intensity, blend 0.4–0.8), softening contrast.  
++- **Aesthetic**: Creates a romantic, ethereal quality, ideal for portraits or nostalgic scenes, softening details for a painterly effect.
++
++### sprocket_holes  
++- **History**: Inspired by film sprocket holes (1900s), repurposed as a textural effect without perforations.  
++- **Equipment**: 35mm film strips.  
++- **Visual Impact**: Applies noise (sigma 5 × intensity), subtle blur (sigma 0.2 × intensity), blends at 0.1.  
++- **Aesthetic**: Adds a subtle, tactile texture, enhancing the analog feel without literal sprockets.
++
++### static_noise  
++- **History**: Mimics TV static from analog television (1950s–1980s), caused by signal interference.  
++- **Equipment**: Analog TVs or CRT monitors.  
++- **Visual Impact**: Adds high-contrast noise (sigma 20–50), blends at 0.3, creating a static overlay.  
++- **Aesthetic**: Imparts a retro, distorted feel, used in horror or sci-fi to suggest signal loss or interference.
++
++### super8_flicker  
++- **History**: Emulates Super 8 film (1960s–1980s), known for its flickering frames due to low frame rates.  
++- **Equipment**: Super 8 cameras (e.g., Canon 514XL).  
++- **Visual Impact**: Draws 5–12 rectangles, subtle blur (sigma 0.2 × intensity), blends at 0.2, mimicking frame jumps.  
++- **Aesthetic**: Creates a home-movie nostalgia, often used in personal or indie films for an intimate, retro vibe.
++
++### tape_degradation  
++- **History**: Mimics the degradation of magnetic tapes (1970s–1990s), seen in VHS or Betamax, with warping and noise.  
++- **Equipment**: VHS tapes played on VCRs (e.g., Sony Betamax).  
++- **Visual Impact**: Adds noise (sigma 15–30), warps (0.2–0.6), subtle blur (sigma 0.2 × intensity), blends at 0.2.  
++- **Aesthetic**: Imparts a degraded, retro video feel, ideal for 80s/90s nostalgia or horror aesthetics.
++
++### teal_and_orange  
++- **History**: Popularized in 2000s Hollywood (e.g., *Transformers*, 2007), using color grading to contrast skin tones (orange) with backgrounds (teal).  
++- **Equipment**: Digital color grading in post-production (e.g., DaVinci Resolve).  
++- **Visual Impact**: Shifts RGB (0.1–0.7, increased for cool mood), emphasizing teal shadows and orange highlights.  
++- **Aesthetic**: Creates a modern, cinematic contrast, widely used in action films to make subjects pop against cooler backgrounds.
++
++### vhs_degrade  
++- **History**: Inspired by VHS tapes (1980s–1990s), where magnetic degradation caused noise and scanlines, seen in home videos.  
++- **Equipment**: VHS camcorders (e.g., JVC GR-C1).  
++- **Visual Impact**: Adds noise (sigma 15–35), sine lines (0.1–0.3 scale), subtle blur (sigma 0.2 × intensity), blended at 0.2.  
++- **Aesthetic**: Evokes 80s nostalgia, ideal for retro or found-footage aesthetics, adding a lo-fi, degraded texture.
+ 
+ ---
+ 
+-## Available Effects
+-
+-- **film_grain**: Textured noise reminiscent of high-ISO film stocks
+-- **light_leaks**: Warm color overlays simulating accidental exposure
+-- **lens_distortion**: Optical imperfections typical of vintage lenses
+-- **sepia**: Classic warm-toned look of early photography
+-- **bleach_bypass**: High-contrast, desaturated cinematic style
+-- **lomo**: High-saturation with characteristic vignetting
+-- **golden_hour_glow**: Warm diffused light of sunset photography
+-- **cross_process**: Distinctive color shifts from alternative processing
+-- **bloom_effect**: Soft glow around highlights
+-- **film_halation**: Light halos from film emulsion scattering
+-- **teal_and_orange**: Contemporary cinematic color grading
+-- **day_for_night**: Blue-tinted darkness simulating night scenes
+-- **anamorphic_simulation**: Horizontal stretching of widescreen cinema
+-- **chromatic_aberration**: Color fringing along high-contrast edges
+-- **vhs_degrade**: Retro noise and scanlines of analog video
+-- **color_fade**: Subtle color aging effect
+-- **soft_focus**: Dreamy blur for lofi aesthetics
++## Usage Example: Recreating Snøhetta’s Analog Film Aesthetic
+ 
+----
++To recreate the analog film degradation seen in Snøhetta’s architectural photography (muted tones, fine grain, dust specks, soft lighting) while preserving details:
+ 
+-## JSON Recipe Usage
++1. **Prepare Your Image**  
++   - Save your image as `snohetta_interior.png` in the working directory.
+ 
+-Create a JSON file (e.g., `myrecipe.json`):
+-
+-```json
+-{
+-  "film_grain": 1.0,
+-  "day_for_night": 0.8,
+-  "bloom_effect": 1.2
+-}
+-```
++2. **Run the Script**  
++   ```bash
++   ruby postpro.rb
++   ```
+ 
+-Then, when prompted, enter the filename to apply that exact recipe.
++3. **CLI Inputs**  
++   - Professional mode: Yes (for analog focus)  
++   - Apply random effects: Yes  
++   - Custom JSON recipe file: (Enter)  
++   - File patterns: `snohetta_interior.png`  
++   - Number of variations: 5  
++   - Effects per variation: 4  
++   - Save a recipe file: Yes (to capture the effects applied)
++
++4. **Expected Output**  
++   - **Files**: 5 variants (e.g., `snohetta_interior_processed_v1_[timestamp]_[unique_id].png`), each with distinct effects due to mood-based variety.  
++   - **Recipe**: `recipe_[timestamp].json` with applied effects.  
++   - **Visuals**:  
++     - Muted, warm-gray tones (`film_stock_emulation`).  
++     - Pronounced, organic grain (`film_grain`, layered noise, opacity 0.3).  
++     - Subtle scratches (`film_scratches`).  
++     - Faint specks (`dust_and_specks`).  
++     - Desaturated colors (`color_fade`, reduced intensity).  
++     - Softened contrast (`soft_focus`).  
++     - Subtle bright spots (`overexposure_burn`, reduced blending).  
++     - No vignettes or borders, subtle blurs (sigma 0.1–0.3).  
++     - Brightness preserved (100–150 range) to retain architectural details like textures and lines.
++
++5. **Verify in Log**  
++   - Check `postpro.log` for applied effects, ensuring defaults and selected effects (e.g., `dust_and_specks`) are logged, with brightness adjustments noted.
+ 
+ ---
+ 
+ ## Troubleshooting
+ 
+-### "Not Found" Errors
+-If you encounter libvips loading errors:
+-```bash
+-# Verify libvips is installed
+-doas pkg_info libvips
++### Partial Processing or Skipped Files
++- **Symptoms**: Some files or variants are not processed.  
++- **Solution**: Check `postpro.log` for errors (e.g., file loading failures, effect issues). Ensure images are valid PNG/JPEG/WebP files. Use `DEBUG` level logging to trace skips.
+ 
+-# Ensure library path is set correctly (most common fix)
+-export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+-```
++### Effects Not Applied
++- **Symptoms**: Images show minimal change (e.g., `change: 0.0` in log).  
++- **Solution**: Verify effect names in `EFFECTS` and log for skips. Increase effect count in CLI (e.g., 5 effects). All variants include `film_stock_emulation` and `film_grain`.
+ 
+-### Dark Images
+-- Combine fewer effects
+-- Lower intensity values in recipes
+-- Intensity auto-adjusts based on image size
++### No Recursive Globbing
++- **Symptoms**: Subdirectory files are not processed.  
++- **Solution**: Use `**/*.jpg` for recursive search; default `**/*.{jpg,jpeg,png,webp}` supports ZSH and Bash.
+ 
+----
++### Files Not Found
++- **Symptoms**: Script reports no matched files.  
++- **Solution**: Check pattern syntax and ensure files exist.
++
++### Overwritten Output Files
++- **Symptoms**: Processed files are overwritten.  
++- **Solution**: The script uses unique identifiers in filenames and skips existing files. Check `postpro.log` for skipped saves.
+ 
+-## Advanced Notes
++### Recipe File Not Saved
++- **Symptoms**: `recipe_[timestamp].json` not generated.  
++- **Solution**: Select "Yes" to save a recipe file. Check `postpro.log` for errors.
+ 
+-- **Multiple Effects**: Stack grain, hue shift, VHS degrade, halation for unique combinations
+-- **Performance**: Process large images quickly with minimal memory
+-- **Cinematic Control**: Adjust intensities to preserve skin tones or create stylized looks
++---
+\ No newline at end of file
+diff --git a/postpro.rb b/postpro.rb
+index b36e808..2085ac8 100644
+--- a/postpro.rb
++++ b/postpro.rb
+@@ -1,330 +1,1138 @@
+-#!/usr/bin/env ruby
+-# frozen_string_literal: true
+-#   
+-# IMPORTANT ENVIRONMENT SETUP:
+-# 1. Install required gems:
+-#    gem install --user-install ruby-vips tty-prompt
+-#
+-# 2. Set Ruby environment variables:
+-#    export GEM_HOME=$HOME/.gem/ruby/3.3 
+-#    export GEM_PATH=$HOME/.gem/ruby/3.3:$GEM_PATH
+-#    export PATH=$HOME/.gem/ruby/3.3/bin:$PATH
+-#
+-# 3. CRITICAL: Ensure libvips shared libraries are in your library path:
+-#    export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+-#
+-# Without the correct LD_LIBRARY_PATH, ruby-vips cannot find the libvips
+-# shared libraries, resulting in "not found" errors.
+-
+-require "vips"
+-require "logger"
+-require "tty-prompt"
+-require "json"
+-require "time"
+-
+-# Setup logging: file logging for detailed info and CLI logging for user feedback.
+-$logger = Logger.new("postpro.log")
+-$logger.level = Logger::INFO
+-$cli_logger = Logger.new(STDOUT)
+-$cli_logger.level = Logger::INFO
+-
+-PROMPT = TTY::Prompt.new
+-
+-# Map effect names to their method symbols.
+-EFFECTS = {
+-  film_grain: :film_grain,
+-  light_leaks: :light_leaks,
+-  lens_distortion: :lens_distortion,
+-  sepia: :sepia,
+-  bleach_bypass: :bleach_bypass,
+-  lomo: :lomo,
+-  golden_hour_glow: :golden_hour_glow,
+-  cross_process: :cross_process,
+-  bloom_effect: :bloom_effect,
+-  film_halation: :film_halation,
+-  teal_and_orange: :teal_and_orange,
+-  day_for_night: :day_for_night,
+-  anamorphic_simulation: :anamorphic_simulation,
+-  chromatic_aberration: :chromatic_aberration,
+-  vhs_degrade: :vhs_degrade,
+-  color_fade: :color_fade,
+-  soft_focus: :soft_focus  # New: adds a dreamy, soft glow for a lofi aesthetic.
+-}
+-
+-# Returns a random array of effect keys.
+-def random_effects(count)
+-  EFFECTS.keys.sample(count)
+-end
+-
+-# Adjusts the intensity based on image dimensions with an upper limit to prevent overprocessing.
+-def adjust_intensity(image, base_intensity)
+-  size_factor = Math.sqrt(image.width * image.height) / 1000.0
+-  (base_intensity * size_factor).clamp(0.5, 2.0)
+-end
+-
+-# Applies an array of effects sequentially.
+-def apply_effects(image, effects_array)
+-  effects_array.each do |effect_name|
+-    method_sym = EFFECTS[effect_name]
+-    if respond_to?(method_sym, true)
+-      intensity = adjust_intensity(image, 1.0)
+-      $cli_logger.info "Applying effect: #{effect_name} (intensity: #{intensity.round(2)})"
+-      image = send(method_sym, image, intensity)
+-    else
+-      $logger.error "Effect method #{method_sym} not found"
+-    end
+-  end
+-  image
+-end
+-
+-# Applies effects as defined in a JSON recipe.
+-def apply_effects_from_recipe(image, recipe)
+-  recipe.each do |effect, intensity|
+-    method_sym = EFFECTS[effect.to_sym]
+-    if respond_to?(method_sym, true)
+-      $cli_logger.info "Applying effect from recipe: #{effect} (intensity: #{intensity})"
+-      image = send(method_sym, image, intensity.to_f)
+-    else
+-      $logger.error "Effect method #{method_sym} not found"
+-    end
+-  end
+-  image
+-end
+-
+-# ----------------- Effects Definitions -----------------
+-
+-def film_grain(image, intensity)
+-  noise = Vips::Image.gaussnoise(image.width, image.height, mean: 128, sigma: 30 * intensity)
+-  (image + noise).clamp(0, 255)
+-end
+-
+-def light_leaks(image, intensity)
+-  overlay = Vips::Image.black(image.width, image.height)
+-  overlay = overlay.draw_circle([255 * intensity, 50 * intensity, 0],
+-                                  image.width / 3, image.height / 3,
+-                                  image.width / 4, fill: true)
+-  image.composite2(overlay, "add")
+-end
+-
+-def lens_distortion(image, intensity)
+-  identity = Vips::Image.identity(image.width, image.height)
+-  image.mapim(identity.linear([1.0 + 0.2 * intensity], [0]))
+-end
+-
+-def sepia(image, intensity)
+-  matrix = [
+-    0.393 * intensity, 0.769 * intensity, 0.189 * intensity,
+-    0.349 * intensity, 0.686 * intensity, 0.168 * intensity,
+-    0.272 * intensity, 0.534 * intensity, 0.131 * intensity
+-  ]
+-  image.recomb(matrix)
+-end
+-
+-def bleach_bypass(image, intensity)
+-  gray = image.colourspace("b-w")
+-  blend = (image * 0.5 + gray * 0.5) * intensity
+-  (image + blend).clamp(0, 255)
+-end
+-
+-def lomo(image, intensity)
+-  saturated = image * (1.0 + 0.1 * intensity)
+-  vignette = Vips::Image.black(image.width, image.height)
+-  vignette = vignette.draw_circle(128, image.width / 2, image.height / 2,
+-                                    image.width / 2, fill: true)
+-  saturated.composite2(vignette, "multiply")
+-end
+-
+-def golden_hour_glow(image, intensity)
+-  overlay = Vips::Image.black(image.width, image.height)
+-  overlay = overlay.draw_circle([255, 200, 150],
+-                                  image.width / 2, image.height / 2,
+-                                  image.width / 3, fill: true)
+-  image.composite2(overlay, "add")
+-end
+-
+-def cross_process(image, intensity)
+-  image.invert if intensity > 0.5
+-  image
+-end
+-
+-def bloom_effect(image, intensity)
+-  blur1 = image.gaussblur(5 * intensity)
+-  blur2 = image.gaussblur(10 * intensity)
+-  combined = (blur1 * 0.6 + blur2 * 0.4) * intensity
+-  (image + combined).clamp(0, 255)
+-end
+-
+-def film_halation(image, intensity)
+-  highlights = image.more(220)
+-  halo = highlights.gaussblur(15 * intensity).linear(0.1 * intensity, 0)
+-  (image + halo).clamp(0, 255)
+-end
+-
+-def teal_and_orange(image, intensity)
+-  matrix = [
+-    0.9, 0.1, 0.0,
+-    0.0, 0.8, 0.2,
+-    0.1, 0.2, 0.7
+-  ]
+-  image.recomb(matrix).linear(intensity, 0).clamp(0, 255)
+-end
+-
+-def day_for_night(image, intensity)
+-  darkened = image.linear(1.0 - 0.3 * intensity, 0).clip(0, 255)
+-  bluish = darkened.add([0, 0, 60 * intensity]).clip(0, 255)
+-  bluish
+-end
+-
+-def anamorphic_simulation(image, intensity)
+-  image.resize(1.0 + 0.1 * intensity, vscale: 1.0)
+-end
+-
+-def chromatic_aberration(image, intensity)
+-  r, g, b = image.bandsplit
+-  r = r.roll(intensity, 0)
+-  b = b.roll(-intensity, 0)
+-  Vips::Image.bandjoin([r, g, b])
+-end
+-
+-def vhs_degrade(image, intensity)
+-  noise = Vips::Image.gaussnoise(image.width, image.height, sigma: 50 * intensity)
+-  lines = Vips::Image.sines(image.width, image.height).linear(0.3, 128)
+-  (image + noise - lines).clip(0, 255)
+-end
+-
+-def color_fade(image, intensity)
+-  image.linear(1 - intensity, 128 * intensity).clip(0, 255)
+-end
+-
+-def soft_focus(image, intensity)
+-  blurred = image.gaussblur(2 * intensity)
+-  blended = image * (1 - 0.5 * intensity) + blurred * (0.5 * intensity)
+-  blended.clamp(0, 255)
+-end
+-
+-# ----------------- Camera Preset Functions -----------------
+-
+-def load_camera_presets
+-  presets = []
+-  Dir.glob("cameras/*.dcp").each do |file|
+-    begin
+-      preset = load(file)  # Assumes each file returns an array when loaded.
+-      presets.concat(preset) if preset.is_a?(Array)
+-    rescue StandardError => e
+-      $cli_logger.error "Error loading preset from #{file}: #{e.message}"
+-    end
+-  end
+-  presets
+-end
+-
+-def compute_average_preset(presets)
+-  totals = Hash.new(0)
+-  counts = Hash.new(0)
+-  presets.each do |hash|
+-    effect = hash[:effect] || hash["effect"]
+-    intensity = (hash[:intensity] || hash["intensity"]).to_f rescue 0.0
+-    next if effect.nil?
+-    totals[effect] += intensity
+-    counts[effect] += 1
+-  end
+-  totals.each_with_object({}) { |(effect, total), avg| avg[effect] = counts[effect] > 0 ? total / counts[effect] : 1.0 }
+-end
+-
+-def generate_camera_variation(average_preset)
+-  average_preset.each_with_object({}) do |(effect, intensity), variation|
+-    variation[effect] = intensity * (1 + (rand - 0.5) * 0.2)
+-  end
+-end
+-
+-def apply_camera_preset(image, preset_variation)
+-  preset_variation.each do |effect, intensity|
+-    method_sym = EFFECTS[effect.to_sym]
+-    next unless respond_to?(method_sym, true)
+-    $cli_logger.info "Applying camera preset variation: #{effect} (intensity: #{intensity.round(2)})"
+-    image = send(method_sym, image, intensity)
+-  end
+-  image
+-end
+-
+-# ----------------- Main Interactive Workflow -----------------
+-
+-def main
+-  # Perform a basic verification that libvips is accessible
+-  begin
+-    Vips.init("")
+-    $cli_logger.info "Successfully initialized libvips #{Vips.version_string}"
+-  rescue LoadError => e
+-    $cli_logger.error "ERROR: Failed to initialize libvips: #{e.message}"
+-    $cli_logger.error "Please ensure libvips is installed and LD_LIBRARY_PATH includes its location"
+-    $cli_logger.error "On OpenBSD: export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH"
+-    return
+-  end
+-
+-  use_camera_presets = PROMPT.yes?("Apply camera preset-based variations? (Otherwise, use standard effects)")
+-  
+-  recipe = nil
+-  if !use_camera_presets
+-    apply_random = PROMPT.yes?("Apply a random combination of effects?")
+-    recipe_file = PROMPT.ask("Load a custom effects recipe JSON file? (Leave blank to skip)", default: "").strip
+-    if !recipe_file.empty? && File.exist?(recipe_file)
+-      recipe = JSON.parse(File.read(recipe_file))
+-      $cli_logger.info "Loaded recipe from #{recipe_file}"
+-    end
+-  end
+-
+-  file_patterns_input = PROMPT.ask("Enter file patterns separated by commas (default: **/*.jpg, **/*.jpeg, **/*.png, **/*.webp):", default: "").strip
+-  file_patterns = file_patterns_input.empty? ? ["**/*.jpg", "**/*.jpeg", "**/*.png", "**/*.webp"] : file_patterns_input.split(",").map(&:strip)
+-  variations = PROMPT.ask("How many variations per image? (default: 3):", convert: :int, default: "3").to_i
+-
+-  $cli_logger.info "Starting image processing..."
+-  files = file_patterns.flat_map { |pattern| Dir.glob(pattern) }.uniq
+-  if files.empty?
+-    $cli_logger.error "No files matched the specified patterns."
+-    return
+-  end
+-
+-  average_preset = nil
+-  if use_camera_presets
+-    presets = load_camera_presets
+-    if presets.empty?
+-      $cli_logger.error "No camera presets found in 'cameras' folder."
+-      return
+-    end
+-    average_preset = compute_average_preset(presets)
+-    $cli_logger.info "Computed average camera preset: #{average_preset}"
+-  end
+-
+-  files.each do |file|
+-    next if file.include?("processed")
+-    begin
+-      $cli_logger.info "Processing file: #{file}"
+-      image = Vips::Image.new_from_file(file)
+-      processed_image = if use_camera_presets
+-                          preset_variation = generate_camera_variation(average_preset)
+-                          apply_camera_preset(image, preset_variation)
+-                        elsif recipe
+-                          apply_effects_from_recipe(image, recipe)
+-                        elsif PROMPT.yes?("Apply random effects for #{file}?")
+-                          selected = random_effects(3)
+-                          apply_effects(image, selected)
+-                        else
+-                          $cli_logger.warn "No effects selected for file: #{file}, skipping."
+-                          next
+-                        end
+-
+-      variations.times do |i|
+-        timestamp = Time.now.strftime("%Y%m%d%H%M%S")
+-        output_file = file.sub(File.extname(file), "_processed_v#{i + 1}_#{timestamp}#{File.extname(file)}")
+-        processed_image.write_to_file(output_file)
+-        $cli_logger.info "Saved variation #{i + 1} as #{output_file}"
+-      end
+-    rescue StandardError => e
+-      $cli_logger.error "Error processing file #{file}: #{e.message}"
+-      $logger.debug(e.backtrace.join("\n"))
+-    end
+-  end
+-
+-  $cli_logger.info "Image processing completed."
+-end
+-
+-main if __FILE__ == $0
++#!/usr/bin/env ruby
++# frozen_string_literal: true
++#
++# Postpro.rb transforms digital images with random analog and cinematic effects.
++# Version: 13.3.22
++# Updated: 2025-04-13
++# Requires: ruby-vips (>= 2.1.0), tty-prompt
++# Compatible with: libvips 8.14.3 via ruby-vips
++#
++# Note: Applies film_stock_emulation and film_grain to all variants, includes subtle
++# blurs, excludes vignettes/borders. Validated for Snøhetta's analog film aesthetic
++# (muted tones, fine grain, dust specks, soft lighting). Improved variety in outputs,
++# preserves brightness for architectural details (range 100–150), and enhances film grain
++# with layered noise for authentic analog texture. Professional mode focuses on analog effects;
++# experimental mode adds non-analog effects like neon glow and pixel sorting. Saves recipes
++# per run if requested, avoids overwriting existing processed files.
++
++require "vips"
++require "logger"
++require "tty-prompt"
++require "json"
++require "time"
++require "fileutils"
++require "securerandom"
++
++# Reset log and clean CWD of .json and *processed* files on each run
++File.write("postpro.log", "") if File.exist?("postpro.log")
++FileUtils.rm(Dir.glob("*.json"), force: true)
++FileUtils.rm(Dir.glob("*processed*"), force: true)
++$logger = Logger.new("postpro.log", "daily", level: Logger::DEBUG)
++$logger = Logger.new(STDERR) if $logger.nil?
++$cli_logger = Logger.new(STDOUT, level: Logger::INFO)
++PROMPT = TTY::Prompt.new
++$logger.debug "Initialized: log reset, CWD cleaned of .json and *processed* files"
++
++EFFECTS = {
++  "film_grain" => :film_grain,
++  "light_leaks" => :light_leaks,
++  "lens_distortion" => :lens_distortion,
++  "sepia" => :sepia,
++  "bleach_bypass" => :bleach_bypass,
++  "lomo" => :lomo,
++  "golden_hour_glow" => :golden_hour_glow,
++  "cross_process" => :cross_process,
++  "bloom_effect" => :bloom_effect,
++  "film_halation" => :film_halation,
++  "teal_and_orange" => :teal_and_orange,
++  "day_for_night" => :day_for_night,
++  "anamorphic_simulation" => :anamorphic_simulation,
++  "chromatic_aberration" => :chromatic_aberration,
++  "vhs_degrade" => :vhs_degrade,
++  "color_fade" => :color_fade,
++  "soft_focus" => :soft_focus,
++  "double_exposure" => :double_exposure,
++  "polaroid_frame" => :polaroid_frame,
++  "tape_degradation" => :tape_degradation,
++  "frame_distortion" => :frame_distortion,
++  "super8_flicker" => :super8_flicker,
++  "cinemascope_bars" => :cinemascope_bars,
++  "halftone_print" => :halftone_print,
++  "film_scratches" => :film_scratches,
++  "film_stock_emulation" => :film_stock_emulation,
++  "sprocket_holes" => :sprocket_holes,
++  "lens_flare" => :lens_flare,
++  "glitch" => :glitch,
++  "dust_and_specks" => :dust_and_specks,
++  "color_bleed" => :color_bleed,
++  "gate_weave" => :gate_weave,
++  "chemical_stains" => :chemical_stains,
++  "overexposure_burn" => :overexposure_burn,
++  "neon_glow" => :neon_glow,
++  "double_tone_grading" => :double_tone_grading,
++  "pixel_sorting" => :pixel_sorting,
++  "lens_prism" => :lens_prism,
++  "static_noise" => :static_noise
++}.freeze
++
++EXPERIMENTAL_EFFECTS = %w[
++  vhs_degrade tape_degradation super8_flicker lens_flare glitch chromatic_aberration
++  dust_and_specks color_bleed gate_weave chemical_stains overexposure_burn
++  neon_glow double_tone_grading pixel_sorting lens_prism static_noise
++].freeze
++
++BRIGHTNESS_ALTERING_EFFECTS = %w[
++  overexposure_burn day_for_night color_fade bloom_effect bleach_bypass
++].freeze
++
++PARAM_RANGES = {
++  "double_exposure" => { "blend_mode" => %w[over add multiply] },
++  "polaroid_frame" => { "border_style" => %w[classic worn] },
++  "cinemascope_bars" => { "aspect_ratio" => %w[2.35:1 1.85:1] },
++  "film_stock_emulation" => { "stock_type" => %w[kodak_portra fuji_velvia] }
++}.freeze
++
++# Track used effects per file to ensure variety
++USED_EFFECTS = Hash.new { |h, k| h[k] = [] }
++
++# Selects a random subset of effects, ensuring variety
++def random_effects(count, mode, file)
++  available = EFFECTS.keys - USED_EFFECTS[file]
++  available = EFFECTS.keys if available.empty? # Reset if all effects used
++  count = [count, available.size].min
++
++  # Select mood for this variant
++  mood = %w[warm cool neutral].sample
++  $logger.debug "Selected mood for variant: #{mood}"
++
++  # Prioritize effects based on mood
++  mood_preferred = case mood
++                   when "warm"
++                     %w[golden_hour_glow sepia light_leaks overexposure_burn]
++                   when "cool"
++                     %w[day_for_night teal_and_orange double_tone_grading]
++                   else
++                     %w[film_halation lomo cross_process]
++                   end
++  mood_preferred = (mood_preferred & available).shuffle
++
++  # Select effects, prioritizing mood and variety
++  selected = []
++  if mode == "experimental"
++    bold_count = [count / 2 + rand(3), count].min
++    subtle_count = count - bold_count
++    bold = (available & EXPERIMENTAL_EFFECTS).shuffle
++    subtle = (available - EXPERIMENTAL_EFFECTS).shuffle
++    # Prioritize unused bold effects
++    unused_bold = bold - USED_EFFECTS[file]
++    selected = unused_bold.take(bold_count / 2)
++    selected += (bold - selected).take(bold_count - selected.size)
++    # Prioritize unused subtle effects
++    unused_subtle = subtle - USED_EFFECTS[file]
++    selected += unused_subtle.take(subtle_count / 2)
++    selected += (subtle - selected).take(subtle_count - (selected.size - bold_count))
++  else
++    unused_preferred = mood_preferred - USED_EFFECTS[file]
++    selected = unused_preferred.take(count / 2)
++    unused_others = (available - selected) - USED_EFFECTS[file]
++    selected += unused_others.take(count - selected.size)
++    selected += (available - selected).shuffle.take(count - selected.size)
++  end
++
++  selected = selected.map(&:to_sym)
++  USED_EFFECTS[file] += selected
++  $logger.debug "Selected effects: #{selected}"
++  selected
++end
++
++# Returns a random intensity for effect application
++def random_intensity(mode)
++  mode == "experimental" ? rand(0.2..0.6) : rand(0.1..0.4)
++end
++
++# Loads an image, adjusts bands for processing
++def load_image(file)
++  $logger.debug "Loading '#{file}'"
++  unless File.exist?(file) && File.readable?(file)
++    $logger.error "File '#{file}' not found or unreadable"
++    return nil
++  end
++  begin
++    image = Vips::Image.new_from_file(file)
++    $logger.debug "Loaded '#{file}': #{image.width}x#{image.height}, #{image.bands} bands, avg: #{image.avg}"
++    if image.bands < 3
++      $logger.debug "Converting to sRGB for 3-band minimum"
++      image = image.colourspace("srgb")
++    elsif image.bands > 3
++      $logger.debug "Reducing to 3 bands from #{image.bands}"
++      image = image.extract_band(0, n: 3)
++    end
++    image
++  rescue StandardError => e
++    $logger.error "Failed to load '#{file}': #{e.message}\n#{e.backtrace.join("\n")}"
++    nil
++  end
++end
++
++# Preserves brightness within a safe range (100–150)
++def preserve_brightness(image)
++  avg = image.avg
++  $logger.debug "Preserving brightness, current avg: #{avg}"
++  return image if avg.between?(100, 150)
++
++  if avg < 100
++    # Brighten
++    factor = (110 - avg) / 255.0
++    image = image.linear([1 + factor], [10])
++  elsif avg > 150
++    # Darken
++    factor = (avg - 140) / 255.0
++    image = image.linear([1 - factor], [-10])
++  end
++  image = image.cast("uchar")
++  $logger.debug "Adjusted brightness, new avg: #{image.avg}"
++  image
++end
++
++# Applies multiple effects with random intensities, continuing on failures
++def apply_effects(image, effects_array, mode)
++  $logger.debug "Applying effects to image, avg: #{image.avg}, bands: #{image.bands}"
++  original_avg = image.avg
++  applied_effects = []
++  initial_avg = original_avg
++  mood = %w[warm cool neutral].sample # Recompute mood for parameter adjustments
++
++  effects_array.each do |effect|
++    effect_str = effect.to_s
++    unless EFFECTS.key?(effect_str)
++      $logger.warn "Skipping unknown effect: #{effect}"
++      next
++    end
++
++    # Skip brightness-altering effects if image is already too bright/dark
++    if BRIGHTNESS_ALTERING_EFFECTS.include?(effect_str)
++      if initial_avg < 120 && %w[day_for_night color_fade].include?(effect_str)
++        $logger.debug "Skipping #{effect} (image too dark, avg: #{initial_avg})"
++        next
++      elsif initial_avg > 130 && %w[overexposure_burn bloom_effect].include?(effect_str)
++        $logger.debug "Skipping #{effect} (image too bright, avg: #{initial_avg})"
++        next
++      end
++    end
++
++    intensity = random_intensity(mode)
++    $cli_logger.info "Applying #{effect} (intensity: #{intensity.round(2)})"
++    $logger.debug "Before #{effect}: avg #{image.avg}, bands #{image.bands}"
++    begin
++      # Adjust effect parameters based on mood
++      case effect_str
++      when "lomo"
++        intensity *= 1.2 if mood == "warm"
++      when "teal_and_orange"
++        intensity *= 1.2 if mood == "cool"
++      when "film_halation"
++        intensity *= 1.1 if mood == "neutral"
++      end
++      image = send(effect, image, intensity, mode)
++      image = image.extract_band(0, n: 3) if image.bands > 3
++      change = (image.avg - original_avg).round(2)
++      $logger.debug "After #{effect}: avg #{image.avg}, change #{change}"
++      $logger.warn "#{effect} had no impact (change: #{change})" if change.abs < 1.0
++      applied_effects << { effect: effect.to_s, intensity: intensity.round(2) }
++    rescue StandardError => e
++      $logger.error "Effect #{effect} failed: #{e.message}\n#{e.backtrace.join("\n")}"
++      next
++    end
++  end
++
++  # Preserve brightness after applying effects
++  image = preserve_brightness(image)
++  final_change = (image.avg - original_avg).round(2)
++  $logger.debug "Effects applied, final avg: #{image.avg}, total change: #{final_change}"
++  { image: image, applied_effects: applied_effects }
++rescue StandardError => e
++  $logger.error "Unexpected failure in apply_effects: #{e.message}\n#{e.backtrace.join("\n")}"
++  { image: image, applied_effects: applied_effects }
++end
++
++# Applies effects from a JSON recipe
++def apply_effects_from_recipe(image, recipe, mode)
++  $logger.debug "Applying recipe to image, avg: #{image.avg}, bands: #{image.bands}"
++  original_avg = image.avg
++  applied_effects = []
++  initial_avg = original_avg
++
++  recipe.each do |effect, params|
++    effect_str = effect.to_s
++    next unless EFFECTS.key?(effect_str)
++
++    if BRIGHTNESS_ALTERING_EFFECTS.include?(effect_str)
++      if initial_avg < 120 && %w[day_for_night color_fade].include?(effect_str)
++        $logger.debug "Skipping #{effect} (image too dark, avg: #{initial_avg})"
++        next
++      elsif initial_avg > 130 && %w[overexposure_burn bloom_effect].include?(effect_str)
++        $logger.debug "Skipping #{effect} (image too bright, avg: #{initial_avg})"
++        next
++      end
++    end
++
++    intensity = params.is_a?(Hash) ? params["intensity"].to_f : params.to_f
++    $cli_logger.info "Applying recipe #{effect} (intensity: #{intensity.round(2)})"
++    $logger.debug "Before #{effect}: avg #{image.avg}, bands #{image.bands}"
++    begin
++      image = if effect == "double_exposure"
++                blend_mode = params.is_a?(Hash) ? params["blend_mode"] || "over" : "over"
++                send(:double_exposure, image, nil, blend_mode, mode)
++              elsif effect == "polaroid_frame"
++                border_style = params.is_a?(Hash) ? params["border_style"] || "classic" : "classic"
++                send(:polaroid_frame, image, intensity, border_style, mode)
++              elsif effect == "cinemascope_bars"
++                aspect_ratio = params.is_a?(Hash) ? params["aspect_ratio"] || "2.35:1" : "2.35:1"
++                send(:cinemascope_bars, image, intensity, aspect_ratio, mode)
++              elsif effect == "film_stock_emulation"
++                stock_type = params.is_a?(Hash) ? params["stock_type"] || "kodak_portra" : "kodak_portra"
++                send(:film_stock_emulation, image, intensity, stock_type, mode)
++              else
++                send(effect, image, intensity, mode)
++              end
++      image = image.extract_band(0, n: 3) if image.bands > 3
++      change = (image.avg - original_avg).round(2)
++      $logger.debug "After #{effect}: avg #{image.avg}, change #{change}"
++      $logger.warn "#{effect} had no impact (change: #{change})" if change.abs < 1.0
++      applied_effects << { effect: effect.to_s, intensity: intensity.round(2) }
++    rescue StandardError => e
++      $logger.error "Recipe effect #{effect} failed: #{e.message}\n#{e.backtrace.join("\n")}"
++      next
++    end
++  end
++
++  image = preserve_brightness(image)
++  final_change = (image.avg - original_avg).round(2)
++  $logger.debug "Recipe complete, final avg: #{image.avg}, total change: #{final_change}"
++  { image: image, applied_effects: applied_effects }
++rescue StandardError => e
++  $logger.error "Failed to apply recipe: #{e.message}\n#{e.backtrace.join("\n")}"
++  { image: image, applied_effects: applied_effects }
++end
++
++# Adds analog-like film grain using layered Gaussian noise
++def film_grain(image, intensity, mode)
++  scale1 = mode == "professional" ? rand(10..20) : rand(20..30)
++  scale2 = scale1 * 2
++  contrast = rand(0.5..0.7)
++  $logger.debug "Generating layered Gaussian noise grain, scale1: #{scale1}, scale2: #{scale2}, contrast: #{contrast}"
++
++  # Generate two layers of Gaussian noise at different scales
++  noise1 = Vips::Image.gaussnoise(image.width, image.height, sigma: scale1)
++  noise2 = Vips::Image.gaussnoise(image.width, image.height, sigma: scale2)
++
++  # Blend the noise layers with slight blur for clustering effect
++  noise1 = noise1.gaussblur(0.5) # Small blur for clustering
++  noise2 = noise2.gaussblur(1.0) # Larger blur for variation
++  noise = (noise1 * 0.6 + noise2 * 0.4).linear([contrast], [128]) # Blend and adjust contrast
++  noise = noise.cast("uchar")
++
++  # Ensure noise matches image bands
++  noise = noise.bandjoin([noise] * (image.bands - 1)) if noise.bands < image.bands
++
++  # Blend with image at higher opacity for stronger grain
++  opacity = mode == "professional" ? 0.3 : 0.4
++  result = (image + noise * opacity).cast("uchar")
++  $logger.debug "film_grain applied, avg: #{result.avg}, bands: #{result.bands}"
++  result
++rescue StandardError => e
++  $logger.error "Failed in film_grain: #{e.message}\n#{e.backtrace.join("\n")}"
++  raise
++end
++
++# Simulates light leaks with colored overlays, subtle blur
++def light_leaks(image, intensity, mode)
++  overlay = Vips::Image.black(image.width, image.height, bands: image.bands)
++  count = mode == "professional" ? rand(3..5) : rand(5..7)
++  $logger.debug "Adding #{count} light leaks"
++  count.times do
++    x, y = rand(image.width), rand(image.height)
++    radius = image.width / rand(1..3)
++    color = mode == "professional" ? [200 * intensity, 100 * intensity, 50 * intensity] : [255 * intensity, rand(150..200) * intensity, rand(50..100) * intensity]
++    overlay = overlay.draw_circle(color, x, y, radius, fill: true)
++  end
++  overlay = overlay.gaussblur(intensity * 0.2)
++  result = (image + overlay * 0.1).cast("uchar")
++  $logger.debug "light_leaks applied, avg: #{result.avg}, bands: #{result.bands}"
++  result
++rescue StandardError => e
++  $logger.error "Failed in light_leaks: #{e.message}\n#{e.backtrace.join("\n")}"
++  raise
++end
++
++# Applies subtle lens distortion
++def lens_distortion(image, intensity, mode)
++  identity = Vips::Image.identity.uint8(image.width, image.height)
++  factor = mode == "professional" ? rand(0.1..0.3) * intensity : rand(0.3..0.5) * intensity
++  $logger.debug "Applying lens distortion, factor: #{factor}"
++  dx = identity.linear(factor, -intensity * rand(1..3)).cast("float")
++  dy = identity.linear(factor, -intensity * rand(1..3)).cast("float")
++  result = image.mapim(dx.bandjoin(dy))
++  $logger.debug "lens_distortion applied, avg: #{result.avg}, bands: #{result.bands}"
++  result
++rescue StandardError => e
++  $logger.error "Failed in lens_distortion: #{e.message}\n#{e.backtrace.join("\n")}"
++  raise
++end
++
++# Adds a sepia tone
++def sepia(image, intensity, mode)
++  shift = mode == "professional" ? 0.1 * intensity : 0.2 * intensity
++  $logger.debug "Applying sepia, shift: #{shift}"
++  matrix = [0.9 + shift, 0.7 - shift / 2, 0.2, 0.3, 0.8 + shift / 2, 0.15 - shift / 2, 0.25 - shift / 2, 0.6, 0.1 + shift]
++  result = image.recomb(matrix).cast("uchar")
++  $logger.debug "sepia applied, avg: #{result.avg}, bands: #{result.bands}"
++  result
++rescue StandardError => e
++  $logger.error "Failed in sepia: #{e.message}\n#{e.backtrace.join("\n")}"
++  raise
++end
++
++# Creates a high-contrast, desaturated look
++def bleach_bypass(image, intensity, mode)
++  gray = image.colourspace("grey16").cast("uchar")
++  blend_factor = mode == "professional" ? rand(0.4..0.6) : rand(0.6..0.8)
++  $logger.debug "Applying bleach bypass, blend_factor: #{blend_factor}"
++  blend = image * (1 - blend_factor * intensity) + gray * (blend_factor * intensity)
++  result = blend.linear([1.1], [5 * intensity]).cast("uchar")
++  $logger.debug "bleach_bypass applied, avg: #{result.avg}, bands: #{result.bands}"
++  result
++rescue StandardError => e
++  $logger.error "Failed in bleach_bypass: #{e.message}\n#{e.backtrace.join("\n")}"
++  raise
++end
++
++# Boosts saturation with subtle blur, no vignette
++def lomo(image, intensity, mode)
++  sat_factor = mode == "professional" ? rand(0.2..0.4) * intensity : rand(0.4..0.6) * intensity
++  $logger.debug "Applying lomo, sat_factor: #{sat_factor}"
++  result = image.linear([1.0 + sat_factor], [0])
++  result = result.gaussblur(intensity * 0.2)
++  result = result.cast("uchar")
++  $logger.debug "lomo applied, avg: #{result.avg}, bands: #{result.bands}"
++  result
++rescue StandardError => e
++  $logger.error "Failed in lomo: #{e.message}\n#{e.backtrace.join("\n")}"
++  raise
++end
++
++# Applies a uniform warm tint with subtle blur, no vignette
++def golden_hour_glow(image, intensity, mode)
++  $logger.debug "Applying golden hour glow"
++  color = mode == "professional" ? [200 * intensity, 160 * intensity, 120 * intensity] : [255 * intensity, rand(180..220) * intensity, rand(150..180) * intensity]
++  overlay = Vips::Image.new_from_array([color], image.height, image.width)
++  overlay = overlay.gaussblur(intensity * 0.3)
++  result = (image + overlay * 0.1).cast("uchar")
++  $logger.debug "golden_hour_glow applied, avg: #{result.avg}, bands: #{result.bands}"
++  result
++rescue StandardError => e
++  $logger.error "Failed in golden_hour_glow: #{e.message}\n#{e.backtrace.join("\n")}"
++  raise
++end
++
++# Simulates cross-processed film color shifts
++def cross_process(image, intensity, mode)
++  r, g, b = image.bandsplit
++  r_shift = mode == "professional" ? rand(0.2..0.4) * intensity : rand(0.4..0.6) * intensity
++  g_shift = mode == "professional" ? rand(0.1..0.2) * intensity : rand(0.2..0.3) * intensity
++  b_shift = mode == "professional" ? rand(0.3..0.5) * intensity : rand(0.5..0.7) * intensity
++  $logger.debug "Applying cross process, shifts: r=#{r_shift}, g=#{g_shift}, b=#{b_shift}"
++  r = r.linear([1 + r_shift], [rand(5..10) * intensity])
++  g = g.linear([1 - g_shift], [0])
++  b = b.linear([1 + b_shift], [-rand(3..6) * intensity])
++  result = Vips::Image.bandjoin([r, g, b]).cast("uchar")
++  $logger.debug "cross_process applied, avg: #{result.avg}, bands: #{result.bands}"
++  result
++rescue StandardError => e
++  $logger.error "Failed in cross_process: #{e.message}\n#{e.backtrace.join("\n")}"
++  raise
++end
++
++# Boosts brightness with subtle blur
++def bloom_effect(image, intensity, mode)
++  boost = mode == "professional" ? rand(1.2..1.3) * intensity : rand(1.3..1.5) * intensity
++  $logger.debug "Applying bloom, boost: #{boost}"
++  bright = image.linear([boost], [0])
++  bright = bright.gaussblur(intensity * 0.3)
++  result = (image + bright * 0.1).cast("uchar")
++  $logger.debug "bloom_effect applied, avg: #{result.avg}, bands: #{result.bands}"
++  result
++rescue StandardError => e
++  $logger.error "Failed in bloom_effect: #{e.message}\n#{e.backtrace.join("\n")}"
++  raise
++end
++
++# Boosts highlights with subtle blur
++def film_halation(image, intensity, mode)
++  highlights = image > rand(180..220)
++  $logger.debug "Applying film halation"
++  halo = highlights.gaussblur(intensity * 0.2).linear(0.05 * intensity, 0)
++  halo = halo.bandjoin([halo] * (image.bands - 1)) if halo.bands < image.bands
++  result = (image + halo * 0.1).cast("uchar")
++  $logger.debug "film_halation applied, avg: #{result.avg}, bands: #{result.bands}"
++  result
++rescue StandardError => e
++  $logger.error "Failed in film_halation: #{e.message}\n#{e.backtrace.join("\n")}"
++  raise
++end
++
++# Applies a teal and orange cinematic grade
++def teal_and_orange(image, intensity, mode)
++  r, g, b = image.bandsplit
++  r_shift = mode == "professional" ? rand(0.2..0.4) * intensity : rand(0.4..0.6) * intensity
++  g_shift = mode == "professional" ? rand(0.1..0.2) * intensity : rand(0.2..0.3) * intensity
++  b_shift = mode == "professional" ? rand(0.3..0.5) * intensity : rand(0.5..0.7) * intensity
++  $logger.debug "Applying teal and orange, shifts: r=#{r_shift}, g=#{g_shift}, b=#{b_shift}"
++  r = r.linear([1 + r_shift], [rand(5..10) * intensity])
++  g = g.linear([1 - g_shift], [0])
++  b = b.linear([1 + b_shift], [0])
++  result = Vips::Image.bandjoin([r, g, b]).cast("uchar")
++  $logger.debug "teal_and_orange applied, avg: #{result.avg}, bands: #{result.bands}"
++  result
++rescue StandardError => e
++  $logger.error "Failed in teal_and_orange: #{e.message}\n#{e.backtrace.join("\n")}"
++  raise
++end
++
++# Turns day scenes into night with a blue tint
++def day_for_night(image, intensity, mode)
++  dark_factor = mode == "professional" ? rand(0.1..0.2) * intensity : rand(0.2..0.3) * intensity
++  $logger.debug "Applying day for night, dark_factor: #{dark_factor}"
++  darkened = image.linear([1 - dark_factor], [-rand(5..10) * intensity])
++  r, g, b = darkened.bandsplit
++  b_boost = mode == "professional" ? rand(0.1..0.2) * intensity : rand(0.2..0.3) * intensity
++  b = b.linear([1 + b_boost], [rand(5..8) * intensity])
++  result = Vips::Image.bandjoin([r, g, b]).cast("uchar")
++  $logger.debug "day_for_night applied, avg: #{result.avg}, bands: #{result.bands}"
++  result
++rescue StandardError => e
++  $logger.error "Failed in day_for_night: #{e.message}\n#{e.backtrace.join("\n")}"
++  raise
++end
++
++# Mimics anamorphic lens stretch
++def anamorphic_simulation(image, intensity, mode)
++  stretch = mode == "professional" ? rand(0.1..0.2) * intensity : rand(0.2..0.3) * intensity
++  $logger.debug "Applying anamorphic simulation, stretch: #{stretch}"
++  result = image.resize(1.0 + stretch, vscale: rand(0.95..1.05))
++  $logger.debug "anamorphic_simulation applied, avg: #{result.avg}, bands: #{result.bands}"
++  result
++rescue StandardError => e
++  $logger.error "Failed in anamorphic_simulation: #{e.message}\n#{e.backtrace.join("\n")}"
++  raise
++end
++
++# Adds chromatic aberration with color fringing
++def chromatic_aberration(image, intensity, mode)
++  shift = mode == "professional" ? rand(1.0..2.0) * intensity : rand(2.0..3.0) * intensity
++  $logger.debug "Applying chromatic aberration, shift: #{shift}"
++  r, g, b = image.bandsplit
++  r = r.wrap(shift.to_i, rand(-shift..shift).to_i)
++  b = b.wrap(-shift.to_i, rand(-shift..shift).to_i)
++  result = Vips::Image.bandjoin([r, g, b]).cast("uchar")
++  $logger.debug "chromatic_aberration applied, avg: #{result.avg}, bands: #{result.bands}"
++  result
++rescue StandardError => e
++  $logger.error "Failed in chromatic_aberration: #{e.message}\n#{e.backtrace.join("\n")}"
++  raise
++end
++
++# Emulates VHS noise and scanlines with subtle blur
++def vhs_degrade(image, intensity, mode)
++  sigma = mode == "professional" ? rand(15..25) * intensity : rand(25..35) * intensity
++  $logger.debug "Applying VHS degrade, sigma: #{sigma}"
++  noise = Vips::Image.gaussnoise(image.width, image.height, sigma: sigma)
++  lines = Vips::Image.sines(image.width, image.height).linear(rand(0.1..0.3) * intensity, rand(80..120))
++  noise = noise.bandjoin([noise] * (image.bands - 1)) if noise.bands < image.bands
++  image_plus_lines = (image + lines * 0.2).cast("uchar")
++  result = (image_plus_lines + noise * 0.2).cast("uchar")
++  result = result.gaussblur(intensity * 0.2)
++  $logger.debug "vhs_degrade applied, avg: #{result.avg}, bands: #{result.bands}"
++  result
++rescue StandardError => e
++  $logger.error "Failed in vhs_degrade: #{e.message}\n#{e.backtrace.join("\n")}"
++  raise
++end
++
++# Fades colors for an aged look
++def color_fade(image, intensity, mode)
++  fade_factor = mode == "professional" ? rand(0.1..0.2) * intensity : rand(0.2..0.3) * intensity
++  $logger.debug "Applying color fade, fade_factor: #{fade_factor}"
++  result = image.linear([1 - fade_factor], [rand(10..20) * intensity]).cast("uchar")
++  $logger.debug "color_fade applied, avg: #{result.avg}, bands: #{result.bands}"
++  result
++rescue StandardError => e
++  $logger.error "Failed in color_fade: #{e.message}\n#{e.backtrace.join("\n")}"
++  raise
++end
++
++# Adjusts contrast with very subtle blur
++def soft_focus(image, intensity, mode)
++  $logger.debug "Applying soft focus"
++  blend_factor = mode == "professional" ? rand(0.4..0.6) : rand(0.6..0.8)
++  blurred = image.gaussblur(intensity * 0.2)
++  result = (image * (1 - blend_factor) + blurred * blend_factor).cast("uchar")
++  $logger.debug "soft_focus applied, avg: #{result.avg}, bands: #{result.bands}"
++  result
++rescue StandardError => e
++  $logger.error "Failed in soft_focus: #{e.message}\n#{e.backtrace.join("\n")}"
++  raise
++end
++
++# Blends the image with itself
++def double_exposure(image, second_image_path, blend_mode = "over", mode = "professional")
++  $logger.debug "Applying double exposure, blend_mode: #{blend_mode}"
++  second = second_image_path ? load_image(second_image_path) : image
++  unless second&.bands == image.bands
++    $logger.warn "Band mismatch or no second image (image: #{image.bands}, second: #{second&.bands})"
++    return image
++  end
++  second = second.resize(image.width.to_f / second.width) if second.width != image.width
++  result = (image + second * rand(0.2..0.4)).cast("uchar")
++  $logger.debug "double_exposure applied, avg: #{result.avg}, bands: #{result.bands}"
++  result
++rescue StandardError => e
++  $logger.error "Failed in double_exposure: #{e.message}\n#{e.backtrace.join("\n")}"
++  raise
++end
++
++# Applies a color tint with subtle blur, no border
++def polaroid_frame(image, intensity, border_style = "classic", mode = "professional")
++  $logger.debug "Applying polaroid frame effect, style: #{border_style}"
++  frame_color = mode == "professional" ? [245, 245, 225] : [rand(240..255), rand(240..255), rand(220..240)]
++  overlay = Vips::Image.new_from_array([frame_color], image.height, image.width)
++  overlay = overlay.gaussblur(intensity * 0.2)
++  result = (image + overlay * 0.1).cast("uchar")
++  $logger.debug "polaroid_frame applied, avg: #{result.avg}, bands: #{result.bands}"
++  result
++rescue StandardError => e
++  $logger.error "Failed in polaroid_frame: #{e.message}\n#{e.backtrace.join("\n")}"
++  raise
++end
++
++# Simulates tape degradation with noise, warp, subtle blur
++def tape_degradation(image, intensity, mode)
++  sigma = mode == "professional" ? rand(15..20) * intensity : rand(20..30) * intensity
++  $logger.debug "Applying tape degradation, sigma: #{sigma}"
++  noise = Vips::Image.gaussnoise(image.width, image.height, sigma: sigma)
++  warp_factor = mode == "professional" ? rand(0.2..0.4) * intensity : rand(0.4..0.6) * intensity
++  warped = image.resize(1 + warp_factor, vscale: rand(0.95..1.05)).rotate(rand(-3..3) * intensity)
++  noise = noise.bandjoin([noise] * (image.bands - 1)) if noise.bands < image.bands
++  intermediate = (image + noise * 0.2).cast("uchar")
++  result = (intermediate + warped * 0.2).cast("uchar")
++  result = result.gaussblur(intensity * 0.2)
++  $logger.debug "tape_degradation applied, avg: #{result.avg}, bands: #{result.bands}"
++  result
++rescue StandardError => e
++  $logger.error "Failed in tape_degradation: #{e.message}\n#{e.backtrace.join("\n")}"
++  raise
++end
++
++# Distorts the frame like a projector glitch
++def frame_distortion(image, intensity, mode)
++  angle_range = mode == "professional" ? (-10..10) : (-15..15)
++  angle = rand(angle_range) * intensity
++  $logger.debug "Applying frame distortion, angle: #{angle}"
++  rotated = image.rotate(angle)
++  offset = (image.width * Math.sin(angle.abs * Math::PI / 180) / 2).to_i
++  result = rotated.crop(offset, offset, image.width, image.height)
++  $logger.debug "frame_distortion applied, avg: #{result.avg}, bands: #{result.bands}"
++  result
++rescue StandardError => e
++  $logger.error "Failed in frame_distortion: #{e.message}\n#{e.backtrace.join("\n")}"
++  raise
++end
++
++# Adds Super 8 flicker rectangles with subtle blur
++def super8_flicker(image, intensity, mode)
++  flicker = Vips::Image.black(image.width, image.height, bands: image.bands)
++  count = mode == "professional" ? rand(5..8) : rand(8..12)
++  $logger.debug "Applying super8 flicker, #{count} flickers"
++  count.times do
++    flicker = flicker.draw_rect([rand(80..120) * intensity] * image.bands, rand(image.width), rand(image.height), rand(20..40), rand(20..40), fill: true)
++  end
++  flicker = flicker.gaussblur(intensity * 0.2)
++  result = (image + flicker * 0.2).cast("uchar")
++  $logger.debug "super8_flicker applied, avg: #{result.avg}, bands: #{result.bands}"
++  result
++rescue StandardError => e
++  $logger.error "Failed in super8_flicker: #{e.message}\n#{e.backtrace.join("\n")}"
++  raise
++end
++
++# Applies color adjustment with subtle blur, no bars
++def cinemascope_bars(image, intensity, aspect_ratio = "2.35:1", mode = "professional")
++  $logger.debug "Applying cinemascope effect"
++  result = image.linear([1.0 - intensity * 0.1], [rand(5..10) * intensity])
++  result = result.gaussblur(intensity * 0.2)
++  result = result.cast("uchar")
++  $logger.debug "cinemascope_bars applied, avg: #{result.avg}, bands: #{result.bands}"
++  result
++rescue StandardError => e
++  $logger.error "Failed in cinemascope_bars: #{e.message}\n#{e.backtrace.join("\n")}"
++  raise
++end
++
++# Creates a halftone dot print effect
++def halftone_print(image, intensity, mode)
++  grey = image.colourspace("grey16").cast("uchar")
++  rank_size = mode == "professional" ? rand(8..12) : rand(12..16)
++  $logger.debug "Applying halftone print, rank_size: #{rank_size}"
++  dots = grey.rank(rank_size, rank_size, rand(2..4)).linear([1.1 * intensity], [0])
++  result = (image + dots * 0.2).cast("uchar")
++  $logger.debug "halftone_print applied, avg: #{result.avg}, bands: #{result.bands}"
++  result
++rescue StandardError => e
++  $logger.error "Failed in halftone_print: #{e.message}\n#{e.backtrace.join("\n")}"
++  raise
++end
++
++# Adds film reel scratches with subtle blur
++def film_scratches(image, intensity, mode)
++  scratches = Vips::Image.black(image.width, image.height, bands: image.bands)
++  count = mode == "professional" ? rand(5..8) : rand(8..12)
++  $logger.debug "Applying #{count} film scratches"
++  count.times do
++    x = rand(image.width)
++    width = rand(1..3) * intensity
++    scratches = scratches.draw_rect([rand(200..255) * intensity] * image.bands, x, 0, width, image.height, fill: true)
++  end
++  scratches = scratches.gaussblur(intensity * 0.1)
++  result = (image + scratches * 0.2).cast("uchar")
++  $logger.debug "film_scratches applied, avg: #{result.avg}, bands: #{result.bands}"
++  result
++rescue StandardError => e
++  $logger.error "Failed in film_scratches: #{e.message}\n#{e.backtrace.join("\n")}"
++  raise
++end
++
++# Emulates classic film stock tones with random selection
++def film_stock_emulation(image, intensity, stock_type = nil, mode = "professional")
++  stock_type ||= %w[kodak_portra fuji_velvia].sample
++  r, g, b = image.bandsplit
++  if stock_type == "kodak_portra"
++    $logger.debug "Applying Kodak Portra emulation"
++    r = r.linear([1 + 0.05 * intensity], [5 * intensity])
++    g = g.linear([1 - 0.03 * intensity], [0])
++    b = b.linear([1 - 0.04 * intensity], [-3 * intensity])
++  else
++    $logger.debug "Applying Fuji Velvia emulation"
++    r = r.linear([1 + 0.1 * intensity], [10 * intensity])
++    g = g.linear([1 + 0.05 * intensity], [0])
++    b = b.linear([1 + 0.03 * intensity], [0])
++  end
++  boost = mode == "professional" ? rand(0.1..0.15) : rand(0.15..0.2)
++  result = Vips::Image.bandjoin([r, g, b]).linear([1 + boost], [0]).cast("uchar")
++  $logger.debug "film_stock_emulation applied, avg: #{result.avg}, bands: #{result.bands}"
++  result
++rescue StandardError => e
++  $logger.error "Failed in film_stock_emulation: #{e.message}\n#{e.backtrace.join("\n")}"
++  raise
++end
++
++# Applies texture overlay with subtle blur, no perforations
++def sprocket_holes(image, intensity, mode)
++  $logger.debug "Applying sprocket holes effect"
++  texture = Vips::Image.gaussnoise(image.width, image.height, sigma: intensity * 5)
++  texture = texture.bandjoin([texture] * (image.bands - 1)) if texture.bands < image.bands
++  texture = texture.gaussblur(intensity * 0.2)
++  result = (image + texture * 0.1).cast("uchar")
++  $logger.debug "sprocket_holes applied, avg: #{result.avg}, bands: #{result.bands}"
++  result
++rescue StandardError => e
++  $logger.error "Failed in sprocket_holes: #{e.message}\n#{e.backtrace.join("\n")}"
++  raise
++end
++
++# Adds light streaks with subtle blur
++def lens_flare(image, intensity, mode)
++  flare = Vips::Image.black(image.width, image.height, bands: image.bands)
++  count = mode == "professional" ? rand(3..5) : rand(5..7)
++  $logger.debug "Applying #{count} lens flares"
++  count.times do
++    x, y = rand(image.width), rand(image.height)
++    length = mode == "professional" ? rand(80..150) * intensity : rand(150..200) * intensity
++    flare = flare.draw_line([255, rand(200..255), rand(180..255)], x, y, x + length, y)
++  end
++  flare = flare.gaussblur(intensity * 0.2)
++  result = (image + flare * 0.2).cast("uchar")
++  $logger.debug "lens_flare applied, avg: #{result.avg}, bands: #{result.bands}"
++  result
++rescue StandardError => e
++  $logger.error "Failed in lens_flare: #{e.message}\n#{e.backtrace.join("\n")}"
++  raise
++end
++
++# Creates digital glitch effects with pixel shifts
++def glitch(image, intensity, mode)
++  r, g, b = image.bandsplit
++  shift = mode == "professional" ? rand(10..20) * intensity : rand(20..30) * intensity
++  $logger.debug "Applying glitch, shift: #{shift}"
++  r = r.wrap(rand(-shift..shift).to_i, rand(-shift..shift).to_i)
++  g = g.wrap(rand(-shift..shift).to_i, rand(-shift..shift).to_i)
++  b = b.wrap(rand(-shift..shift).to_i, rand(-shift..shift).to_i)
++  noise = Vips::Image.gaussnoise(image.width, image.height, sigma: rand(5..10) * intensity)
++  noise = noise.bandjoin([noise] * (image.bands - 1)) if noise.bands < image.bands
++  result = Vips::Image.bandjoin([r, g, b]) + (noise * 0.2).cast("uchar")
++  $logger.debug "glitch applied, avg: #{result.avg}, bands: #{result.bands}"
++  result
++rescue StandardError => e
++  $logger.error "Failed in glitch: #{e.message}\n#{e.backtrace.join("\n")}"
++  raise
++end
++
++# Adds dust and specks for film degradation
++def dust_and_specks(image, intensity, mode)
++  specks = Vips::Image.black(image.width, image.height, bands: image.bands)
++  count = mode == "professional" ? rand(30..50) : rand(50..80)
++  $logger.debug "Applying #{count} dust specks"
++  count.times do
++    x, y = rand(image.width), rand(image.height)
++    size = rand(1..3)
++    color = [rand(50..150) * intensity] * image.bands
++    specks = specks.draw_rect(color, x, y, size, size, fill: true)
++  end
++  specks = specks.gaussblur(intensity * 0.2)
++  result = (image + specks * 0.1).cast("uchar")
++  $logger.debug "dust_and_specks applied, avg: #{result.avg}, bands: #{result.bands}"
++  result
++rescue StandardError => e
++  $logger.error "Failed in dust_and_specks: #{e.message}\n#{e.backtrace.join("\n")}"
++  raise
++end
++
++# Simulates color bleed between channels
++def color_bleed(image, intensity, mode)
++  r, g, b = image.bandsplit
++  bleed_factor = mode == "professional" ? rand(0.1..0.2) * intensity : rand(0.2..0.3) * intensity
++  $logger.debug "Applying color bleed, bleed_factor: #{bleed_factor}"
++  r = r.linear([1.0 + bleed_factor], [rand(3..5) * intensity])
++  g = g.linear([1.0 + bleed_factor / 2], [rand(2..4) * intensity])
++  b = b.linear([1.0 + bleed_factor], [0])
++  result = Vips::Image.bandjoin([r, g, b]).cast("uchar")
++  $logger.debug "color_bleed applied, avg: #{result.avg}, bands: #{result.bands}"
++  result
++rescue StandardError => e
++  $logger.error "Failed in color_bleed: #{e.message}\n#{e.backtrace.join("\n")}"
++  raise
++end
++
++# Mimics projector gate weave with micro-translations
++def gate_weave(image, intensity, mode)
++  shift_x = mode == "professional" ? rand(-5..5) * intensity : rand(-10..10) * intensity
++  shift_y = mode == "professional" ? rand(-5..5) * intensity : rand(-10..10) * intensity
++  $logger.debug "Applying gate weave, shifts: x=#{shift_x}, y=#{shift_y}"
++  result = image.embed(shift_x.to_i, shift_y.to_i, image.width, image.height, extend: "mirror")
++  result = result.crop(0, 0, image.width, image.height)
++  $logger.debug "gate_weave applied, avg: #{result.avg}, bands: #{result.bands}"
++  result
++rescue StandardError => e
++  $logger.error "Failed in gate_weave: #{e.message}\n#{e.backtrace.join("\n")}"
++  raise
++end
++
++# Adds chemical stains for aged film look
++def chemical_stains(image, intensity, mode)
++  stains = Vips::Image.black(image.width, image.height, bands: image.bands)
++  count = mode == "professional" ? rand(3..5) : rand(5..7)
++  $logger.debug "Applying #{count} chemical stains"
++  count.times do
++    x, y = rand(image.width), rand(image.height)
++    radius = image.width / rand(4..6)
++    color = [rand(100..150) * intensity, rand(80..120) * intensity, rand(50..100) * intensity]
++    stains = stains.draw_circle(color, x, y, radius, fill: true)
++  end
++  stains = stains.gaussblur(intensity * 0.2)
++  result = (image + stains * 0.05).cast("uchar")
++  $logger.debug "chemical_stains applied, avg: #{result.avg}, bands: #{result.bands}"
++  result
++rescue StandardError => e
++  $logger.error "Failed in chemical_stains: #{e.message}\n#{e.backtrace.join("\n")}"
++  raise
++end
++
++# Simulates overexposed bright spots
++def overexposure_burn(image, intensity, mode)
++  burn = Vips::Image.black(image.width, image.height, bands: image.bands)
++  count = mode == "professional" ? rand(2..3) : rand(3..5)
++  $logger.debug "Applying #{count} overexposure burns"
++  count.times do
++    x, y = rand(image.width), rand(image.height)
++    radius = image.width / rand(5..8)
++    color = [255 * intensity] * image.bands
++    burn = burn.draw_circle(color, x, y, radius, fill: true)
++  end
++  result = (image + burn * 0.03).cast("uchar")
++  $logger.debug "overexposure_burn applied, avg: #{result.avg}, bands: #{result.bands}"
++  result
++rescue StandardError => e
++  $logger.error "Failed in overexposure_burn: #{e.message}\n#{e.backtrace.join("\n")}"
++  raise
++end
++
++# Adds neon glow with vibrant colors
++def neon_glow(image, intensity, mode)
++  overlay = Vips::Image.black(image.width, image.height, bands: image.bands)
++  count = mode == "professional" ? rand(2..3) : rand(3..5)
++  $logger.debug "Applying #{count} neon glows"
++  count.times do
++    x, y = rand(image.width), rand(image.height)
++    radius = image.width / rand(3..5)
++    color = [rand([255, 0]) * intensity, rand(0..100) * intensity, rand([0, 255]) * intensity] # Pink/cyan neon
++    overlay = overlay.draw_circle(color, x, y, radius, fill: true)
++  end
++  overlay = overlay.gaussblur(intensity * 0.3)
++  result = (image + overlay * 0.2).cast("uchar")
++  $logger.debug "neon_glow applied, avg: #{result.avg}, bands: #{result.bands}"
++  result
++rescue StandardError => e
++  $logger.error "Failed in neon_glow: #{e.message}\n#{e.backtrace.join("\n")}"
++  raise
++end
++
++# Applies double-tone color grading (e.g., blue shadows, orange highlights)
++def double_tone_grading(image, intensity, mode)
++  r, g, b = image.bandsplit
++  shadow_factor = mode == "professional" ? rand(0.2..0.3) * intensity : rand(0.3..0.5) * intensity
++  highlight_factor = mode == "professional" ? rand(0.2..0.3) * intensity : rand(0.3..0.5) * intensity
++  $logger.debug "Applying double tone grading, shadow_factor: #{shadow_factor}, highlight_factor: #{highlight_factor}"
++  # Blue shadows
++  shadows = image < 128
++  r_shadow = r - (shadows * shadow_factor * 50)
++  g_shadow = g - (shadows * shadow_factor * 20)
++  b_shadow = b + (shadows * shadow_factor * 50)
++  # Orange highlights
++  highlights = image >= 128
++  r_highlight = r + (highlights * highlight_factor * 50)
++  g_highlight = g + (highlights * highlight_factor * 30)
++  b_highlight = b - (highlights * highlight_factor * 20)
++  r = r_shadow + (highlights * (r_highlight - r_shadow))
++  g = g_shadow + (highlights * (g_highlight - g_shadow))
++  b = b_shadow + (highlights * (b_highlight - b_shadow))
++  result = Vips::Image.bandjoin([r, g, b]).cast("uchar")
++  $logger.debug "double_tone_grading applied, avg: #{result.avg}, bands: #{result.bands}"
++  result
++rescue StandardError => e
++  $logger.error "Failed in double_tone_grading: #{e.message}\n#{e.backtrace.join("\n")}"
++  raise
++end
++
++# Simulates pixel sorting by rearranging pixels in strips
++def pixel_sorting(image, intensity, mode)
++  strip_count = mode == "professional" ? rand(5..10) : rand(10..20)
++  $logger.debug "Applying pixel sorting, strip_count: #{strip_count}"
++  result = image.dup
++  strip_height = image.height / strip_count
++  strip_count.times do |i|
++    y = i * strip_height
++    strip = result.crop(0, y, image.width, [strip_height, image.height - y].min)
++    pixels = strip.flatten
++    sorted_pixels = pixels.sort
++    sorted_strip = Vips::Image.new_from_array([sorted_pixels], strip.height, strip.width).cast("uchar")
++    sorted_strip = sorted_strip.bandjoin([sorted_strip] * (image.bands - 1)) if image.bands > 1
++    result = result.draw_image(sorted_strip, 0, y)
++  end
++  $logger.debug "pixel_sorting applied, avg: #{result.avg}, bands: #{result.bands}"
++  result
++rescue StandardError => e
++  $logger.error "Failed in pixel_sorting: #{e.message}\n#{e.backtrace.join("\n")}"
++  raise
++end
++
++# Mimics prismatic color splitting
++def lens_prism(image, intensity, mode)
++  r, g, b = image.bandsplit
++  angle = mode == "professional" ? rand(5..10) * intensity : rand(10..15) * intensity
++  $logger.debug "Applying lens prism, angle: #{angle}"
++  r = r.embed(angle.to_i, 0, image.width, image.height, extend: "mirror")
++  b = b.embed(-angle.to_i, 0, image.width, image.height, extend: "mirror")
++  r = r.crop(0, 0, image.width, image.height)
++  b = b.crop(0, 0, image.width, image.height)
++  result = Vips::Image.bandjoin([r, g, b]).cast("uchar")
++  $logger.debug "lens_prism applied, avg: #{result.avg}, bands: #{result.bands}"
++  result
++rescue StandardError => e
++  $logger.error "Failed in lens_prism: #{e.message}\n#{e.backtrace.join("\n")}"
++  raise
++end
++
++# Adds high-contrast TV static noise
++def static_noise(image, intensity, mode)
++  sigma = mode == "professional" ? rand(20..30) * intensity : rand(30..50) * intensity
++  $logger.debug "Applying static noise, sigma: #{sigma}"
++  noise = Vips::Image.gaussnoise(image.width, image.height, sigma: sigma)
++  noise = noise.bandjoin([noise] * (image.bands - 1)) if noise.bands < image.bands
++  result = (image + noise * 0.3).cast("uchar")
++  $logger.debug "static_noise applied, avg: #{result.avg}, bands: #{result.bands}"
++  result
++rescue StandardError => e
++  $logger.error "Failed in static_noise: #{e.message}\n#{e.backtrace.join("\n")}"
++  raise
++end
++
++# Processes a file, applying multiple random effects per variant
++def process_file(file, variations, recipe, apply_random, effect_count, mode, save_recipe)
++  $logger.debug "Processing '#{file}': #{variations} variants, #{effect_count} effects, mode: #{mode}"
++  image = load_image(file)
++  unless image
++    $logger.error "Skipping '#{file}': failed to load image"
++    return 0
++  end
++  original_avg = image.avg
++  processed_count = 0
++  recipe_data = { file: file, variants: [] }
++
++  variations.times do |i|
++    $logger.debug "Starting variant #{i + 1} for '#{file}'"
++    variant_effects = []
++    processed_image = if recipe
++                       result = apply_effects_from_recipe(image, recipe, mode)
++                       variant_effects = result[:applied_effects]
++                       result[:image]
++                     elsif apply_random
++                       variation_effects = random_effects(effect_count, mode, file)
++                       $logger.debug "Effects for variant #{i + 1}: #{variation_effects}"
++                       result = apply_effects(image, variation_effects, mode)
++                       variant_effects = result[:applied_effects]
++                       result[:image]
++                     else
++                       $cli_logger.warn "No effects selected, skipping variant #{i + 1}"
++                       next
++                     end
++
++    unless processed_image
++      $logger.error "Variant #{i + 1} failed: nil image"
++      next
++    end
++
++    # Apply default polish steps: random film stock emulation and film grain
++    polish_intensity = random_intensity(mode)
++    processed_image = film_stock_emulation(processed_image, polish_intensity, nil, mode)
++    $logger.debug "Post-stock emulation avg: #{processed_image.avg}"
++    variant_effects << { effect: "film_stock_emulation", intensity: polish_intensity.round(2) }
++    polish_intensity = random_intensity(mode)
++    processed_image = film_grain(processed_image, polish_intensity, mode)
++    $logger.debug "Post-grain avg: #{processed_image.avg}"
++    variant_effects << { effect: "film_grain", intensity: polish_intensity.round(2) }
++    polish_intensity = random_intensity(mode)
++    processed_image = film_scratches(processed_image, polish_intensity, mode)
++    $logger.debug "Post-scratches avg: #{processed_image.avg}"
++    variant_effects << { effect: "film_scratches", intensity: polish_intensity.round(2) }
++    processed_image = processed_image.extract_band(0, n: 3) if processed_image.bands > 3
++
++    final_avg = processed_image.avg
++    change = (final_avg - original_avg).round(2)
++    $logger.debug "Variant #{i + 1} complete, avg: #{final_avg}, change: #{change}"
++    $logger.warn "Variant #{i + 1} has minimal change (#{change})" if change.abs < 1.0
++
++    timestamp = Time.now.strftime("%Y%m%d%H%M%S")
++    unique_id = SecureRandom.hex(2) # 4-character random string
++    output_file = file.sub(File.extname(file), "_processed_v#{i + 1}_#{timestamp}_#{unique_id}#{File.extname(file)}")
++    if File.exist?(output_file)
++      $logger.warn "Output file '#{output_file}' already exists, skipping save for variant #{i + 1}"
++      next
++    end
++
++    begin
++      processed_image.write_to_file(output_file)
++      $cli_logger.info "Saved variant #{i + 1} as #{output_file}, avg: #{final_avg}, change: #{change}"
++      processed_count += 1
++      recipe_data[:variants] << { variant: i + 1, effects: variant_effects }
++    rescue StandardError => e
++      $logger.error "Failed to save '#{output_file}': #{e.message}\n#{e.backtrace.join("\n")}"
++    end
++  end
++
++  # Save recipe if requested
++  if save_recipe && !recipe_data[:variants].empty?
++    recipe_file = "recipe_#{timestamp}.json"
++    File.write(recipe_file, JSON.pretty_generate(recipe_data))
++    $cli_logger.info "Saved recipe for this run to '#{recipe_file}'"
++  end
++
++  processed_count
++rescue StandardError => e
++  $logger.error "Processing '#{file}' failed: #{e.message}\n#{e.backtrace.join("\n")}"
++  processed_count || 0
++end
++
++# Gathers user input via CLI
++def get_input
++  $logger.debug "Starting input collection"
++  $cli_logger.info "Postpro.rb v13.3.22 - Transform your images with analog and cinematic flair!"
++  mode = PROMPT.yes?("Professional mode? (Yes for analog focus, No for experimental cinematography)", default: true) ? "professional" : "experimental"
++  apply_random = PROMPT.yes?("Apply random effects? (No for custom recipe)", default: true)
++  recipe_file = PROMPT.ask("Custom JSON recipe file (or press Enter for none):", default: "").strip
++  patterns = PROMPT.ask("File patterns (e.g., *.jpg, **/*.jpg for recursive; default: **/*.{jpg,jpeg,png,webp}):", default: "**/*.{jpg,jpeg,png,webp}").strip
++  file_patterns = patterns.split(",").map(&:strip)
++  variations = PROMPT.ask("Number of variations per image (1-5):", convert: :int, default: 3) { |q| q.in("1-5") }
++  effect_count = apply_random ? PROMPT.ask("Effects per variation (#{mode == "experimental" ? "5-8" : "3-5"}):", convert: :int, default: mode == "experimental" ? 6 : 4) { |q| q.in(mode == "experimental" ? "5-8" : "3-5") } : 0
++  save_recipe = PROMPT.yes?("Save a recipe file for this run? (JSON format)", default: false)
++
++  recipe = nil
++  unless recipe_file.empty?
++    if File.exist?(recipe_file)
++      recipe = JSON.parse(File.read(recipe_file))
++      $cli_logger.info "Loaded recipe from '#{recipe_file}'"
++    else
++      $cli_logger.warn "Recipe file '#{recipe_file}' not found, proceeding without recipe"
++    end
++  end
++
++  [file_patterns, variations, recipe, apply_random, effect_count, mode, save_recipe]
++rescue StandardError => e
++  $logger.error "Input failed: #{e.message}\n#{e.backtrace.join("\n")}"
++  nil
++end
++
++# Main execution loop
++def main
++  $logger.debug "Starting Postpro.rb v13.3.22"
++  inputs = get_input
++  unless inputs
++    $cli_logger.error "Failed to gather input, exiting"
++    return
++  end
++  file_patterns, variations, recipe, apply_random, effect_count, mode, save_recipe = inputs
++
++  files = file_patterns.flat_map { |p| Dir.glob(p, File::FNM_DOTMATCH) }.uniq.reject { |f| f.match?(/processed_v\d+_\d+/) }
++  if files.empty?
++    $cli_logger.error "No files matched: #{file_patterns.join(", ")}"
++    $logger.error "No valid files found"
++    return
++  end
++
++  $cli_logger.info "Processing #{files.size} file#{files.size == 1 ? "" : "s"}..."
++  total_variations = successful_files = 0
++  retries = {}
++
++  files.each do |file|
++    retries[file] ||= 0
++    begin
++      variation_count = process_file(file, variations, recipe, apply_random, effect_count, mode, save_recipe)
++      total_variations += variation_count
++      successful_files += 1 if variation_count > 0
++    rescue StandardError => e
++      $logger.error "Error processing '#{file}': #{e.message}\n#{e.backtrace.join("\n")}"
++      if retries[file] < 2
++        retries[file] += 1
++        $cli_logger.warn "Retrying '#{file}' (attempt #{retries[file] + 1}/2)"
++        retry
++      else
++        $cli_logger.error "Failed '#{file}' after 2 retries: #{e.message}"
++      end
++    end
++  end
++
++  $cli_logger.info "Completed: #{successful_files} file#{successful_files == 1 ? "" : "s"} processed, #{total_variations} variation#{total_variations == 1 ? "" : "s"} created"
++  $logger.info "Execution completed: #{successful_files} files, #{total_variations} variations"
++rescue StandardError => e
++  $logger.error "Unexpected failure: #{e.message}\n#{e.backtrace.join("\n")}"
++end
++
++main if $0 == __FILE__
+\ No newline at end of file
+
+commit ea7e3322d4f66ebe16e3e2a24606f6329a789e8f
+Author: dev <dev@dev.openbsd.amsterdam>
+Date:   Sat Mar 8 17:26:15 2025 +0100
+
+    TMP
+
+diff --git a/README.md b/README.md
+index 7828281..824489b 100644
+--- a/README.md
++++ b/README.md
+@@ -1,107 +1,147 @@
+-# Postpro.rb – Analog and Cinematic Post-Processing
+-
+-**Version:** 12.9.0  
+-**Last Modified:** 2025-02-03T00:00:00Z  
+-**Author:** PubHealthcare  
+-
+----
+-
+-Postpro.rb is an **interactive CLI** tool that applies analog and cinematic effects to images using [libvips](https://libvips.github.io/libvips/) via [ruby-vips](https://github.com/libvips/ruby-vips). It allows **recursive batch processing** of entire folders, layering multiple transformations—such as film grain, blur, halation, VHS-style degrade, and more—for a fully customized look.
+-
+----
+-
+-## Key Features
+-
+-1. **Analog & Retro**  
+-   - **Film Grain & Vignetting**: Classic film texture  
+-   - **VHS Degrade & Light Leaks**: 80s/90s analog feel  
+-
+-2. **Cinematic Looks**  
+-   - **Bloom & Halation**: Dreamy highlight glows  
+-   - **Teal-and-Orange & Day-for-Night**: Hollywood-grade color grading  
+-   - **Anamorphic Simulation**: Widescreen lens flares  
+-
+-3. **Layered Processing**  
+-   - Combine multiple effects (grain, hue shifts, color fade, etc.) in one pass  
+-   - Fine-tune each effect’s intensity  
+-
+-4. **Interactive CLI**  
+-   - Choose random or custom JSON recipes  
+-   - Specify file patterns (e.g., `**/*.jpg`) to batch-process recursively  
+-
+-5. **High Speed & Low Memory**  
+-   - Built on libvips, known for its efficient, fast performance  
+-
+----
+-
+-## Example Interactive Flow
+-
+-```bash
+-$ ruby postpro.rb
+-Apply a random combination of effects? (Y/n): y
+-Enter file patterns (default: **/*.jpg, **/*.jpeg, **/*.png, **/*.webp): images/**/*.jpg
+-How many variations per image? (default: 3): 4
+-
+-Starting image processing...
+-Processing file: images/pic1.jpg
+-Applied effect: film_grain (intensity: 1.2)
+-Applied effect: teal_and_orange (intensity: 1.0)
+-Applied effect: bloom_effect (intensity: 1.5)
+-Saved variation 1 as images/pic1_processed_v1_20250203151145.jpg
+-Saved variation 2 as images/pic1_processed_v2_20250203151145.jpg
+-Saved variation 3 as images/pic1_processed_v3_20250203151145.jpg
+-Saved variation 4 as images/pic1_processed_v4_20250203151145.jpg
+-Processing completed.
+-```
+-
+-- **Random Effects** or **Load a JSON recipe**  
+-- **Recursive** matching: `images/**/*.{jpg,png}`  
+-- **Multiple Variations**: e.g., 4 unique outputs per file  
+-
+----
+-
+-## Installation
+-
+-1. **Install libvips**  
+-   - **OpenBSD**: `pkg_add vips`  
+-   - **Ubuntu/Debian**: `apt-get install libvips`  
+-   - **macOS**: `brew install vips`
+-
+-2. **Install Ruby Gems**  
+-   ```bash
+-   gem install --user-install ruby-vips tty-prompt
+-   ```
+-
+-### OpenBSD Tips
+-
+-On **OpenBSD**, ensure **libvips** is recognized:
+-```sh
+-doas pkg_add -U vips
+-export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+-```
+-Confirm that **ruby-vips** is installed and the `.so` is in your `LD_LIBRARY_PATH`.
+-
+----
+-
+-## JSON Recipe Usage
+-
+-Create a JSON file (e.g., `myrecipe.json`):
+-
+-```json
+-{
+-  "film_grain": 1.0,
+-  "day_for_night": 0.8,
+-  "bloom_effect": 1.2
+-}
+-```
+-
+-Then, when prompted, enter the filename to **apply that exact recipe**.
+-
+----
+-
+-## Advanced Notes
+-
+-- **Multiple Effects**: Stack **grain, hue shift, vhs_degrade, halation** in one pass for unique combos.  
+-- **Performance**: libvips processes large images quickly with minimal memory.  
+-- **Cinematic Controls**: Adjust intensities to preserve skin tones or push stylized extremes.
+-
++# Postpro.rb – Analog and Cinematic Post-Processing
++
++**Version:** 12.9.1
++**Last Modified:** 2025-03-02T05:07:54Z
++**Author:** PubHealthcare
++
++---
++
++Postpro.rb is an **interactive CLI** tool that applies analog and cinematic effects to images using [libvips](https://libvips.github.io/libvips/) via [ruby-vips](https://github.com/libvips/ruby-vips). It allows **recursive batch processing** of entire folders, layering multiple transformations for a fully customized look.
++
++---
++
++## Key Features
++
++1. **Analog & Retro**
++   - **Film Grain & Vignetting**: Classic film texture
++   - **VHS Degrade & Light Leaks**: 80s/90s analog feel
++
++2. **Cinematic Looks**
++   - **Bloom & Halation**: Dreamy highlight glows
++   - **Teal-and-Orange & Day-for-Night**: Hollywood-grade color grading
++   - **Anamorphic Simulation**: Widescreen lens flares
++
++3. **Layered Processing**
++   - Combine multiple effects in one pass
++   - Fine-tune each effect's intensity
++
++4. **Interactive CLI**
++   - Choose random or custom JSON recipes
++   - Specify file patterns for batch-processing
++
++5. **High Speed & Low Memory**
++   - Built on libvips for efficient performance
++
++---
++
++## Installation
++
++1. **Install libvips**
++   - **OpenBSD**: `doas pkg_add -U vips`
++   - **Ubuntu/Debian**: `apt-get install libvips`
++   - **macOS**: `brew install vips`
++
++2. **Install Ruby Gems**
++   ```bash
++   gem install --user-install ruby-vips tty-prompt
++   ```
++
++### Critical: OpenBSD Environment Setup
++
++On **OpenBSD**, ensure **libvips** is properly configured:
++```sh
++# Required to prevent "not found" errors
++export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
++
++# For gem environment (adjust Ruby version as needed)
++export GEM_HOME=$HOME/.gem/ruby/3.3
++export GEM_PATH=$HOME/.gem/ruby/3.3:$GEM_PATH
++export PATH=$HOME/.gem/ruby/3.3/bin:$PATH
++```
++
++---
++
++## Example Interactive Flow
++
++```bash
++$ ruby postpro.rb
++Apply a random combination of effects? (Y/n): y
++Enter file patterns (default: **/*.jpg, **/*.jpeg, **/*.png, **/*.webp): images/**/*.jpg
++How many variations per image? (default: 3): 4
++
++Starting image processing...
++Processing file: images/pic1.jpg
++Applied effect: film_grain (intensity: 1.2)
++Applied effect: teal_and_orange (intensity: 1.0)
++Applied effect: bloom_effect (intensity: 1.5)
++Saved variation 1 as images/pic1_processed_v1_20250302050754.jpg
++Saved variation 2 as images/pic1_processed_v2_20250302050754.jpg
++Saved variation 3 as images/pic1_processed_v3_20250302050754.jpg
++Saved variation 4 as images/pic1_processed_v4_20250302050754.jpg
++Processing completed.
++```
++
++---
++
++## Available Effects
++
++- **film_grain**: Textured noise reminiscent of high-ISO film stocks
++- **light_leaks**: Warm color overlays simulating accidental exposure
++- **lens_distortion**: Optical imperfections typical of vintage lenses
++- **sepia**: Classic warm-toned look of early photography
++- **bleach_bypass**: High-contrast, desaturated cinematic style
++- **lomo**: High-saturation with characteristic vignetting
++- **golden_hour_glow**: Warm diffused light of sunset photography
++- **cross_process**: Distinctive color shifts from alternative processing
++- **bloom_effect**: Soft glow around highlights
++- **film_halation**: Light halos from film emulsion scattering
++- **teal_and_orange**: Contemporary cinematic color grading
++- **day_for_night**: Blue-tinted darkness simulating night scenes
++- **anamorphic_simulation**: Horizontal stretching of widescreen cinema
++- **chromatic_aberration**: Color fringing along high-contrast edges
++- **vhs_degrade**: Retro noise and scanlines of analog video
++- **color_fade**: Subtle color aging effect
++- **soft_focus**: Dreamy blur for lofi aesthetics
++
++---
++
++## JSON Recipe Usage
++
++Create a JSON file (e.g., `myrecipe.json`):
++
++```json
++{
++  "film_grain": 1.0,
++  "day_for_night": 0.8,
++  "bloom_effect": 1.2
++}
++```
++
++Then, when prompted, enter the filename to apply that exact recipe.
++
++---
++
++## Troubleshooting
++
++### "Not Found" Errors
++If you encounter libvips loading errors:
++```bash
++# Verify libvips is installed
++doas pkg_info libvips
++
++# Ensure library path is set correctly (most common fix)
++export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
++```
++
++### Dark Images
++- Combine fewer effects
++- Lower intensity values in recipes
++- Intensity auto-adjusts based on image size
++
++---
++
++## Advanced Notes
++
++- **Multiple Effects**: Stack grain, hue shift, VHS degrade, halation for unique combinations
++- **Performance**: Process large images quickly with minimal memory
++- **Cinematic Control**: Adjust intensities to preserve skin tones or create stylized looks
+diff --git a/postpro.rb b/postpro.rb
+index 39ac134..b36e808 100644
+--- a/postpro.rb
++++ b/postpro.rb
+@@ -1,232 +1,330 @@
+-#!/usr/bin/env ruby
+-# frozen_string_literal: true
+-#   
+-# IMPORTANT: gem install --user-install ruby-vips tty-prompt && export GEM_HOME=$HOME/.gem/ruby/3.3 GEM_PATH=$HOME/.gem/ruby/3.3:$GEM_PATH PATH=$HOME/.gem/ruby/3.3/bin:$PATH
+-
+-require "vips"
+-require "logger"
+-require "tty-prompt"
+-require "time"
+-
+-# Logging setup
+-$logger = Logger.new("postpro.log")
+-$logger.level = Logger::DEBUG
+-
+-$cli_logger = Logger.new(STDOUT)
+-$cli_logger.level = Logger::INFO
+-
+-PROMPT = TTY::Prompt.new
+-
+-# Map effect names to their method symbols
+-EFFECTS = {
+-  film_grain: :film_grain,
+-  light_leaks: :light_leaks,
+-  lens_distortion: :lens_distortion,
+-  sepia: :sepia,
+-  bleach_bypass: :bleach_bypass,
+-  lomo: :lomo,
+-  golden_hour_glow: :golden_hour_glow,
+-  cross_process: :cross_process,
+-  bloom_effect: :bloom_effect,
+-  film_halation: :film_halation,
+-  teal_and_orange: :teal_and_orange,
+-  day_for_night: :day_for_night,
+-  anamorphic_simulation: :anamorphic_simulation,
+-  chromatic_aberration: :chromatic_aberration,
+-  vhs_degrade: :vhs_degrade,
+-  color_fade: :color_fade
+-}
+-
+-def random_effects(count)
+-  EFFECTS.keys.sample(count)
+-end
+-
+-def adjust_intensity(image, base_intensity)
+-  size_factor = Math.sqrt(image.width * image.height) / 1000.0
+-  (base_intensity * size_factor).clamp(0.5, 3.0)
+-end
+-
+-def apply_effects(image, effects_array)
+-  effects_array.each do |effect_name|
+-    method_sym = EFFECTS[effect_name]
+-    next unless respond_to?(method_sym, true)
+-    intensity = adjust_intensity(image, 1.0)
+-    $cli_logger.info "Applied effect: #{effect_name} (intensity: #{intensity.round(2)})"
+-    image = send(method_sym, image, intensity)
+-  end
+-  image
+-end
+-
+-def apply_effects_from_recipe(image, recipe)
+-  recipe.each do |effect, intensity|
+-    method_sym = EFFECTS[effect.to_sym]
+-    next unless respond_to?(method_sym, true)
+-    $cli_logger.info "Applied effect: #{effect} (intensity: #{intensity})"
+-    image = send(method_sym, image, intensity.to_f)
+-  end
+-  image
+-end
+-
+-# --- Effects ---
+-
+-def film_grain(image, intensity)
+-  noise = Vips::Image.gaussnoise(image.width, image.height, mean: 128, sigma: 30 * intensity)
+-  (image + noise).clamp(0, 255)
+-end
+-
+-def light_leaks(image, intensity)
+-  overlay = Vips::Image.black(image.width, image.height)
+-  overlay = overlay.draw_circle([255 * intensity, 50 * intensity, 0],
+-                                image.width / 3, image.height / 3,
+-                                image.width / 4, fill: true)
+-  image.composite2(overlay, "add")
+-end
+-
+-def lens_distortion(image, intensity)
+-  identity = Vips::Image.identity(image.width, image.height)
+-  image.mapim(identity.linear([1.0 + 0.2 * intensity], [0]))
+-end
+-
+-def sepia(image, intensity)
+-  matrix = [
+-    0.393 * intensity, 0.769 * intensity, 0.189 * intensity,
+-    0.349 * intensity, 0.686 * intensity, 0.168 * intensity,
+-    0.272 * intensity, 0.534 * intensity, 0.131 * intensity
+-  ]
+-  image.recomb(matrix)
+-end
+-
+-def bleach_bypass(image, intensity)
+-  gray = image.colourspace("b-w")
+-  blend = (image * 0.5 + gray * 0.5) * intensity
+-  (image + blend).clamp(0, 255)
+-end
+-
+-def lomo(image, intensity)
+-  saturated = image * (1.0 + 0.1 * intensity)
+-  vignette = Vips::Image.black(image.width, image.height)
+-  vignette = vignette.draw_circle(128, image.width / 2, image.height / 2, image.width / 2, fill: true)
+-  saturated.composite2(vignette, "multiply")
+-end
+-
+-def golden_hour_glow(image, intensity)
+-  overlay = Vips::Image.black(image.width, image.height)
+-  overlay = overlay.draw_circle([255, 200, 150],
+-                                image.width / 2, image.height / 2,
+-                                image.width / 3, fill: true)
+-  image.composite2(overlay, "add")
+-end
+-
+-def cross_process(image, intensity)
+-  # If intensity > 0.5, invert the image for dramatic effect
+-  image.invert if intensity > 0.5
+-  image
+-end
+-
+-def bloom_effect(image, intensity)
+-  blur1 = image.gaussblur(5 * intensity)
+-  blur2 = image.gaussblur(10 * intensity)
+-  combined = (blur1 * 0.6 + blur2 * 0.4) * intensity
+-  (image + combined).clamp(0, 255)
+-end
+-
+-def film_halation(image, intensity)
+-  highlights = image.more(220)
+-  halo = highlights.gaussblur(15 * intensity).linear(0.1 * intensity, 0)
+-  (image + halo).clamp(0, 255)
+-end
+-
+-def teal_and_orange(image, intensity)
+-  matrix = [
+-    0.9, 0.1, 0.0,
+-    0.0, 0.8, 0.2,
+-    0.1, 0.2, 0.7
+-  ]
+-  image.recomb(matrix).linear(intensity, 0).clamp(0, 255)
+-end
+-
+-def day_for_night(image, intensity)
+-  darkened = image.linear(1.0 - 0.3 * intensity, 0).clip(0, 255)
+-  bluish = darkened.add([0, 0, 60 * intensity]).clip(0, 255)
+-  bluish
+-end
+-
+-def anamorphic_simulation(image, intensity)
+-  image.resize(1.0 + 0.1 * intensity, vscale: 1.0)
+-end
+-
+-def chromatic_aberration(image, intensity)
+-  r, g, b = image.bandsplit
+-  r = r.roll(intensity, 0)
+-  b = b.roll(-intensity, 0)
+-  Vips::Image.bandjoin([r, g, b])
+-end
+-
+-def vhs_degrade(image, intensity)
+-  noise = Vips::Image.gaussnoise(image.width, image.height, sigma: 50 * intensity)
+-  lines = Vips::Image.sines(image.width, image.height).linear(0.3, 128)
+-  (image + noise - lines).clip(0, 255)
+-end
+-
+-def color_fade(image, intensity)
+-  image.linear(1 - intensity, 128 * intensity).clip(0, 255)
+-end
+-
+-# --- Main Interactive Workflow ---
+-
+-def main
+-  apply_random = PROMPT.yes?("Apply a random combination of effects?")
+-  recipe_file = PROMPT.ask("Load a custom effects recipe JSON? (filename):", default: "")
+-
+-  patterns = PROMPT.ask("Enter file patterns (default: **/*.jpg, **/*.jpeg, **/*.png, **/*.webp):", default: "")
+-  file_patterns = patterns.strip.split(",")
+-  file_patterns = ["**/*.jpg", "**/*.jpeg", "**/*.png", "**/*.webp"] if file_patterns.empty?
+-
+-  variations = PROMPT.ask("How many variations per image? (default: 3):", convert: :int, default: "3").to_i
+-
+-  $cli_logger.info "Starting image processing..."
+-  files = file_patterns.flat_map { |pattern| Dir.glob(pattern.strip) }
+-  if files.empty?
+-    $cli_logger.error "No files matched the pattern!"
+-    return
+-  end
+-
+-  recipe = nil
+-  if !recipe_file.empty? && File.exist?(recipe_file)
+-    recipe = JSON.parse(File.read(recipe_file))
+-    $cli_logger.info "Loaded recipe from #{recipe_file}"
+-  end
+-
+-  files.each do |file|
+-    next if File.basename(file).include?("processed")
+-    begin
+-      $cli_logger.info "Processing file: #{file}"
+-      image = Vips::Image.new_from_file(file)
+-
+-      processed_image = if recipe
+-                          apply_effects_from_recipe(image, recipe)
+-                        elsif apply_random
+-                          selected = random_effects(3)
+-                          apply_effects(image, selected)
+-                        else
+-                          $cli_logger.warn "No effects selected. Skipping file."
+-                          next
+-                        end
+-
+-      variations.times do |i|
+-        timestamp = Time.now.strftime("%Y%m%d%H%M%S")
+-        output_file = file.sub(File.extname(file), "_processed_v#{i + 1}_#{timestamp}#{File.extname(file)}")
+-        processed_image.write_to_file(output_file)
+-        $cli_logger.info "Saved variation #{i + 1} as #{output_file}"
+-      end
+-    rescue StandardError => e
+-      $cli_logger.error "Error processing #{file}: #{e.message}"
+-      $cli_logger.error e.backtrace.join("\n")
+-    end
+-  end
+-
+-  $cli_logger.info "Processing completed."
+-end
+-
+-main if __FILE__ == $0
+-
++#!/usr/bin/env ruby
++# frozen_string_literal: true
++#   
++# IMPORTANT ENVIRONMENT SETUP:
++# 1. Install required gems:
++#    gem install --user-install ruby-vips tty-prompt
++#
++# 2. Set Ruby environment variables:
++#    export GEM_HOME=$HOME/.gem/ruby/3.3 
++#    export GEM_PATH=$HOME/.gem/ruby/3.3:$GEM_PATH
++#    export PATH=$HOME/.gem/ruby/3.3/bin:$PATH
++#
++# 3. CRITICAL: Ensure libvips shared libraries are in your library path:
++#    export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
++#
++# Without the correct LD_LIBRARY_PATH, ruby-vips cannot find the libvips
++# shared libraries, resulting in "not found" errors.
++
++require "vips"
++require "logger"
++require "tty-prompt"
++require "json"
++require "time"
++
++# Setup logging: file logging for detailed info and CLI logging for user feedback.
++$logger = Logger.new("postpro.log")
++$logger.level = Logger::INFO
++$cli_logger = Logger.new(STDOUT)
++$cli_logger.level = Logger::INFO
++
++PROMPT = TTY::Prompt.new
++
++# Map effect names to their method symbols.
++EFFECTS = {
++  film_grain: :film_grain,
++  light_leaks: :light_leaks,
++  lens_distortion: :lens_distortion,
++  sepia: :sepia,
++  bleach_bypass: :bleach_bypass,
++  lomo: :lomo,
++  golden_hour_glow: :golden_hour_glow,
++  cross_process: :cross_process,
++  bloom_effect: :bloom_effect,
++  film_halation: :film_halation,
++  teal_and_orange: :teal_and_orange,
++  day_for_night: :day_for_night,
++  anamorphic_simulation: :anamorphic_simulation,
++  chromatic_aberration: :chromatic_aberration,
++  vhs_degrade: :vhs_degrade,
++  color_fade: :color_fade,
++  soft_focus: :soft_focus  # New: adds a dreamy, soft glow for a lofi aesthetic.
++}
++
++# Returns a random array of effect keys.
++def random_effects(count)
++  EFFECTS.keys.sample(count)
++end
++
++# Adjusts the intensity based on image dimensions with an upper limit to prevent overprocessing.
++def adjust_intensity(image, base_intensity)
++  size_factor = Math.sqrt(image.width * image.height) / 1000.0
++  (base_intensity * size_factor).clamp(0.5, 2.0)
++end
++
++# Applies an array of effects sequentially.
++def apply_effects(image, effects_array)
++  effects_array.each do |effect_name|
++    method_sym = EFFECTS[effect_name]
++    if respond_to?(method_sym, true)
++      intensity = adjust_intensity(image, 1.0)
++      $cli_logger.info "Applying effect: #{effect_name} (intensity: #{intensity.round(2)})"
++      image = send(method_sym, image, intensity)
++    else
++      $logger.error "Effect method #{method_sym} not found"
++    end
++  end
++  image
++end
++
++# Applies effects as defined in a JSON recipe.
++def apply_effects_from_recipe(image, recipe)
++  recipe.each do |effect, intensity|
++    method_sym = EFFECTS[effect.to_sym]
++    if respond_to?(method_sym, true)
++      $cli_logger.info "Applying effect from recipe: #{effect} (intensity: #{intensity})"
++      image = send(method_sym, image, intensity.to_f)
++    else
++      $logger.error "Effect method #{method_sym} not found"
++    end
++  end
++  image
++end
++
++# ----------------- Effects Definitions -----------------
++
++def film_grain(image, intensity)
++  noise = Vips::Image.gaussnoise(image.width, image.height, mean: 128, sigma: 30 * intensity)
++  (image + noise).clamp(0, 255)
++end
++
++def light_leaks(image, intensity)
++  overlay = Vips::Image.black(image.width, image.height)
++  overlay = overlay.draw_circle([255 * intensity, 50 * intensity, 0],
++                                  image.width / 3, image.height / 3,
++                                  image.width / 4, fill: true)
++  image.composite2(overlay, "add")
++end
++
++def lens_distortion(image, intensity)
++  identity = Vips::Image.identity(image.width, image.height)
++  image.mapim(identity.linear([1.0 + 0.2 * intensity], [0]))
++end
++
++def sepia(image, intensity)
++  matrix = [
++    0.393 * intensity, 0.769 * intensity, 0.189 * intensity,
++    0.349 * intensity, 0.686 * intensity, 0.168 * intensity,
++    0.272 * intensity, 0.534 * intensity, 0.131 * intensity
++  ]
++  image.recomb(matrix)
++end
++
++def bleach_bypass(image, intensity)
++  gray = image.colourspace("b-w")
++  blend = (image * 0.5 + gray * 0.5) * intensity
++  (image + blend).clamp(0, 255)
++end
++
++def lomo(image, intensity)
++  saturated = image * (1.0 + 0.1 * intensity)
++  vignette = Vips::Image.black(image.width, image.height)
++  vignette = vignette.draw_circle(128, image.width / 2, image.height / 2,
++                                    image.width / 2, fill: true)
++  saturated.composite2(vignette, "multiply")
++end
++
++def golden_hour_glow(image, intensity)
++  overlay = Vips::Image.black(image.width, image.height)
++  overlay = overlay.draw_circle([255, 200, 150],
++                                  image.width / 2, image.height / 2,
++                                  image.width / 3, fill: true)
++  image.composite2(overlay, "add")
++end
++
++def cross_process(image, intensity)
++  image.invert if intensity > 0.5
++  image
++end
++
++def bloom_effect(image, intensity)
++  blur1 = image.gaussblur(5 * intensity)
++  blur2 = image.gaussblur(10 * intensity)
++  combined = (blur1 * 0.6 + blur2 * 0.4) * intensity
++  (image + combined).clamp(0, 255)
++end
++
++def film_halation(image, intensity)
++  highlights = image.more(220)
++  halo = highlights.gaussblur(15 * intensity).linear(0.1 * intensity, 0)
++  (image + halo).clamp(0, 255)
++end
++
++def teal_and_orange(image, intensity)
++  matrix = [
++    0.9, 0.1, 0.0,
++    0.0, 0.8, 0.2,
++    0.1, 0.2, 0.7
++  ]
++  image.recomb(matrix).linear(intensity, 0).clamp(0, 255)
++end
++
++def day_for_night(image, intensity)
++  darkened = image.linear(1.0 - 0.3 * intensity, 0).clip(0, 255)
++  bluish = darkened.add([0, 0, 60 * intensity]).clip(0, 255)
++  bluish
++end
++
++def anamorphic_simulation(image, intensity)
++  image.resize(1.0 + 0.1 * intensity, vscale: 1.0)
++end
++
++def chromatic_aberration(image, intensity)
++  r, g, b = image.bandsplit
++  r = r.roll(intensity, 0)
++  b = b.roll(-intensity, 0)
++  Vips::Image.bandjoin([r, g, b])
++end
++
++def vhs_degrade(image, intensity)
++  noise = Vips::Image.gaussnoise(image.width, image.height, sigma: 50 * intensity)
++  lines = Vips::Image.sines(image.width, image.height).linear(0.3, 128)
++  (image + noise - lines).clip(0, 255)
++end
++
++def color_fade(image, intensity)
++  image.linear(1 - intensity, 128 * intensity).clip(0, 255)
++end
++
++def soft_focus(image, intensity)
++  blurred = image.gaussblur(2 * intensity)
++  blended = image * (1 - 0.5 * intensity) + blurred * (0.5 * intensity)
++  blended.clamp(0, 255)
++end
++
++# ----------------- Camera Preset Functions -----------------
++
++def load_camera_presets
++  presets = []
++  Dir.glob("cameras/*.dcp").each do |file|
++    begin
++      preset = load(file)  # Assumes each file returns an array when loaded.
++      presets.concat(preset) if preset.is_a?(Array)
++    rescue StandardError => e
++      $cli_logger.error "Error loading preset from #{file}: #{e.message}"
++    end
++  end
++  presets
++end
++
++def compute_average_preset(presets)
++  totals = Hash.new(0)
++  counts = Hash.new(0)
++  presets.each do |hash|
++    effect = hash[:effect] || hash["effect"]
++    intensity = (hash[:intensity] || hash["intensity"]).to_f rescue 0.0
++    next if effect.nil?
++    totals[effect] += intensity
++    counts[effect] += 1
++  end
++  totals.each_with_object({}) { |(effect, total), avg| avg[effect] = counts[effect] > 0 ? total / counts[effect] : 1.0 }
++end
++
++def generate_camera_variation(average_preset)
++  average_preset.each_with_object({}) do |(effect, intensity), variation|
++    variation[effect] = intensity * (1 + (rand - 0.5) * 0.2)
++  end
++end
++
++def apply_camera_preset(image, preset_variation)
++  preset_variation.each do |effect, intensity|
++    method_sym = EFFECTS[effect.to_sym]
++    next unless respond_to?(method_sym, true)
++    $cli_logger.info "Applying camera preset variation: #{effect} (intensity: #{intensity.round(2)})"
++    image = send(method_sym, image, intensity)
++  end
++  image
++end
++
++# ----------------- Main Interactive Workflow -----------------
++
++def main
++  # Perform a basic verification that libvips is accessible
++  begin
++    Vips.init("")
++    $cli_logger.info "Successfully initialized libvips #{Vips.version_string}"
++  rescue LoadError => e
++    $cli_logger.error "ERROR: Failed to initialize libvips: #{e.message}"
++    $cli_logger.error "Please ensure libvips is installed and LD_LIBRARY_PATH includes its location"
++    $cli_logger.error "On OpenBSD: export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH"
++    return
++  end
++
++  use_camera_presets = PROMPT.yes?("Apply camera preset-based variations? (Otherwise, use standard effects)")
++  
++  recipe = nil
++  if !use_camera_presets
++    apply_random = PROMPT.yes?("Apply a random combination of effects?")
++    recipe_file = PROMPT.ask("Load a custom effects recipe JSON file? (Leave blank to skip)", default: "").strip
++    if !recipe_file.empty? && File.exist?(recipe_file)
++      recipe = JSON.parse(File.read(recipe_file))
++      $cli_logger.info "Loaded recipe from #{recipe_file}"
++    end
++  end
++
++  file_patterns_input = PROMPT.ask("Enter file patterns separated by commas (default: **/*.jpg, **/*.jpeg, **/*.png, **/*.webp):", default: "").strip
++  file_patterns = file_patterns_input.empty? ? ["**/*.jpg", "**/*.jpeg", "**/*.png", "**/*.webp"] : file_patterns_input.split(",").map(&:strip)
++  variations = PROMPT.ask("How many variations per image? (default: 3):", convert: :int, default: "3").to_i
++
++  $cli_logger.info "Starting image processing..."
++  files = file_patterns.flat_map { |pattern| Dir.glob(pattern) }.uniq
++  if files.empty?
++    $cli_logger.error "No files matched the specified patterns."
++    return
++  end
++
++  average_preset = nil
++  if use_camera_presets
++    presets = load_camera_presets
++    if presets.empty?
++      $cli_logger.error "No camera presets found in 'cameras' folder."
++      return
++    end
++    average_preset = compute_average_preset(presets)
++    $cli_logger.info "Computed average camera preset: #{average_preset}"
++  end
++
++  files.each do |file|
++    next if file.include?("processed")
++    begin
++      $cli_logger.info "Processing file: #{file}"
++      image = Vips::Image.new_from_file(file)
++      processed_image = if use_camera_presets
++                          preset_variation = generate_camera_variation(average_preset)
++                          apply_camera_preset(image, preset_variation)
++                        elsif recipe
++                          apply_effects_from_recipe(image, recipe)
++                        elsif PROMPT.yes?("Apply random effects for #{file}?")
++                          selected = random_effects(3)
++                          apply_effects(image, selected)
++                        else
++                          $cli_logger.warn "No effects selected for file: #{file}, skipping."
++                          next
++                        end
++
++      variations.times do |i|
++        timestamp = Time.now.strftime("%Y%m%d%H%M%S")
++        output_file = file.sub(File.extname(file), "_processed_v#{i + 1}_#{timestamp}#{File.extname(file)}")
++        processed_image.write_to_file(output_file)
++        $cli_logger.info "Saved variation #{i + 1} as #{output_file}"
++      end
++    rescue StandardError => e
++      $cli_logger.error "Error processing file #{file}: #{e.message}"
++      $logger.debug(e.backtrace.join("\n"))
++    end
++  end
++
++  $cli_logger.info "Image processing completed."
++end
++
++main if __FILE__ == $0
+
+commit dd142a0dfd213bc217c6c1a46b3df2f891983d1a
+Author: dev <dev@dev.openbsd.amsterdam>
+Date:   Fri Feb 21 17:41:10 2025 +0100
+
+    TMP
+
+diff --git a/README.md b/README.md
+index b0b7aad..7828281 100644
+--- a/README.md
++++ b/README.md
+@@ -1,73 +1,107 @@
+-# POSTPRO Analog Post-Processing Suite
+-
+-POSTPRO is a Ruby-based image processing tool that uses [`libvips`](https://libvips.github.io/libvips/) to create cinematic effects. It provides a range of transformations to enhance photos and videos with a professional, film-quality touch.
+-
+-## Features
+-- **Diverse Cinematic Effects**: Includes HDR simulation, infrared emulation, vintage film looks, and more.
+-- **Interactive CLI**: Simple command-line interface for selecting effects and settings.
+-- **Batch Processing**: Efficiently process multiple images at once.
+-- **Customizable Effects**: Adjustable parameters for fine-tuning results.
+-
+-### Installation
+-Install `libvips` and required Ruby gems:
+-    
+-    # OpenBSD
+-    pkg_add libvips
+-    # Ubuntu
+-    apt-get install libvips
+-    # macOS
+-    brew install vips
+-
+-    # Install Ruby gems
+-    gem install --user-install ruby-vips tty-prompt
+-
+-## Usage
+-Run POSTPRO interactively:
+-
+-    $ ruby postpro.rb  
+-    Welcome to POSTPRO v1.0
+-        -- Advanced analog emulation for next-level cinematic color grading.
+-    Input file: input.jpg
+-    Apply a random combination of effects? Yes
+-    How many different images to generate? 5
+-    How many effects to combine? 3
+-    Image saved to output_1.jpg
+-    Image saved to output_2.jpg
+-    Image saved to output_3.jpg
+-    Image saved to output_4.jpg
+-    Image saved to output_5.jpg
+-    
+-## Before
+-![Before](https://gist.github.com/user-attachments/assets/eefd30be-fe81-464f-8723-d57332b1070e)
+-
+-## After
+-![After 1](https://gist.github.com/user-attachments/assets/477f1af7-e000-4b59-9e21-e205d891a795)
+-![After 2](https://gist.github.com/user-attachments/assets/ad488434-5103-452b-99d1-ea4590222033)
+-![After 3](https://gist.github.com/user-attachments/assets/7199c26c-1332-4e3a-bff7-682b8ceca2fb)
+-![After 4](https://gist.github.com/user-attachments/assets/3434f22b-7e6a-4f57-b9f6-a61a1b494a43)
+-![After 5](https://gist.github.com/user-attachments/assets/004197c9-119f-479f-bd76-9f2ca1c69e7c)
+-
+-## Available Effects
+-The following effects are available to apply to your images:
+-
+-- **HDR Simulation**: Enhances the dynamic range, providing more detail in shadows and highlights.
+-- **Day-for-Night Conversion**: Converts bright daytime scenes to appear as if shot at night.
+-- **Infrared Effect**: Swaps color channels to achieve surreal infrared effects.
+-- **Anamorphic Lens Simulation**: Adds horizontal lens flares and boosts color depth for a cinematic look.
+-- **Split Toning**: Applies different colors to shadows and highlights to create a dramatic mood.
+-- **Selective Color Adjustment**: Enhances specific colors while leaving others intact.
+-- **Skin Tone Preservation**: Maintains natural skin tones during other effects.
+-- **Lens Distortion**: Simulates barrel or pincushion lens distortion.
+-- **Film Halation**: Adds a soft glow around bright areas to simulate the effect of film halation.
+-- **Posterization**: Reduces the number of colors to create a poster-like effect.
+-- **Duotone**: Converts an image to two colors for striking visual styles.
+-- **Glitch Effects**: Adds digital artifacts and noise to simulate digital errors.
+-- **3D LUT Application**: Applies Look-Up Tables for complex color grading.
+-- **Color Matching**: Matches the color palette of one image to another for consistency.
+-- **Underwater Effect**: Simulates the color cast and light diffusion found underwater.
+-- **Night Vision**: Mimics the green-tinted appearance of night vision.
+-- **Heat Vision**: Adds thermal imaging effects, displaying variations in temperature.
+-- **Lens Flare Addition**: Adds lens flare artifacts for a dynamic light effect.
+-- **Soft Focus Glow**: Creates a soft glow effect for dreamy imagery.
+-- **Film Damage Simulation**: Adds scratches, dust, and jitters for a worn film look.
++# Postpro.rb – Analog and Cinematic Post-Processing
++
++**Version:** 12.9.0  
++**Last Modified:** 2025-02-03T00:00:00Z  
++**Author:** PubHealthcare  
++
++---
++
++Postpro.rb is an **interactive CLI** tool that applies analog and cinematic effects to images using [libvips](https://libvips.github.io/libvips/) via [ruby-vips](https://github.com/libvips/ruby-vips). It allows **recursive batch processing** of entire folders, layering multiple transformations—such as film grain, blur, halation, VHS-style degrade, and more—for a fully customized look.
++
++---
++
++## Key Features
++
++1. **Analog & Retro**  
++   - **Film Grain & Vignetting**: Classic film texture  
++   - **VHS Degrade & Light Leaks**: 80s/90s analog feel  
++
++2. **Cinematic Looks**  
++   - **Bloom & Halation**: Dreamy highlight glows  
++   - **Teal-and-Orange & Day-for-Night**: Hollywood-grade color grading  
++   - **Anamorphic Simulation**: Widescreen lens flares  
++
++3. **Layered Processing**  
++   - Combine multiple effects (grain, hue shifts, color fade, etc.) in one pass  
++   - Fine-tune each effect’s intensity  
++
++4. **Interactive CLI**  
++   - Choose random or custom JSON recipes  
++   - Specify file patterns (e.g., `**/*.jpg`) to batch-process recursively  
++
++5. **High Speed & Low Memory**  
++   - Built on libvips, known for its efficient, fast performance  
++
++---
++
++## Example Interactive Flow
++
++```bash
++$ ruby postpro.rb
++Apply a random combination of effects? (Y/n): y
++Enter file patterns (default: **/*.jpg, **/*.jpeg, **/*.png, **/*.webp): images/**/*.jpg
++How many variations per image? (default: 3): 4
++
++Starting image processing...
++Processing file: images/pic1.jpg
++Applied effect: film_grain (intensity: 1.2)
++Applied effect: teal_and_orange (intensity: 1.0)
++Applied effect: bloom_effect (intensity: 1.5)
++Saved variation 1 as images/pic1_processed_v1_20250203151145.jpg
++Saved variation 2 as images/pic1_processed_v2_20250203151145.jpg
++Saved variation 3 as images/pic1_processed_v3_20250203151145.jpg
++Saved variation 4 as images/pic1_processed_v4_20250203151145.jpg
++Processing completed.
++```
++
++- **Random Effects** or **Load a JSON recipe**  
++- **Recursive** matching: `images/**/*.{jpg,png}`  
++- **Multiple Variations**: e.g., 4 unique outputs per file  
++
++---
++
++## Installation
++
++1. **Install libvips**  
++   - **OpenBSD**: `pkg_add vips`  
++   - **Ubuntu/Debian**: `apt-get install libvips`  
++   - **macOS**: `brew install vips`
++
++2. **Install Ruby Gems**  
++   ```bash
++   gem install --user-install ruby-vips tty-prompt
++   ```
++
++### OpenBSD Tips
++
++On **OpenBSD**, ensure **libvips** is recognized:
++```sh
++doas pkg_add -U vips
++export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
++```
++Confirm that **ruby-vips** is installed and the `.so` is in your `LD_LIBRARY_PATH`.
++
++---
++
++## JSON Recipe Usage
++
++Create a JSON file (e.g., `myrecipe.json`):
++
++```json
++{
++  "film_grain": 1.0,
++  "day_for_night": 0.8,
++  "bloom_effect": 1.2
++}
++```
++
++Then, when prompted, enter the filename to **apply that exact recipe**.
++
++---
++
++## Advanced Notes
++
++- **Multiple Effects**: Stack **grain, hue shift, vhs_degrade, halation** in one pass for unique combos.  
++- **Performance**: libvips processes large images quickly with minimal memory.  
++- **Cinematic Controls**: Adjust intensities to preserve skin tones or push stylized extremes.
+ 
+diff --git a/postpro.rb b/postpro.rb
+old mode 100755
+new mode 100644
+index 12b9f2a..39ac134
+--- a/postpro.rb
++++ b/postpro.rb
+@@ -1,239 +1,232 @@
+ #!/usr/bin/env ruby
+-# encoding: utf-8
++# frozen_string_literal: true
++#   
++# IMPORTANT: gem install --user-install ruby-vips tty-prompt && export GEM_HOME=$HOME/.gem/ruby/3.3 GEM_PATH=$HOME/.gem/ruby/3.3:$GEM_PATH PATH=$HOME/.gem/ruby/3.3/bin:$PATH
+ 
+-# POSTPRO Analog Post-Processing Suite
+-# Uses Ruby and libvips to apply advanced analog emulation and color grading effects.
++require "vips"
++require "logger"
++require "tty-prompt"
++require "time"
+ 
+-require 'vips'
+-require 'json'
+-require 'fileutils'
+-require 'logger'
+-require 'tty-prompt'
+-require 'shellwords'
++# Logging setup
++$logger = Logger.new("postpro.log")
++$logger.level = Logger::DEBUG
++
++$cli_logger = Logger.new(STDOUT)
++$cli_logger.level = Logger::INFO
+ 
+-# Set up logging for traceability
+-LOGGER = Logger.new('postpro_combined.log')
+-LOGGER.level = Logger::DEBUG
+ PROMPT = TTY::Prompt.new
+ 
+-# Available profiles with descriptions
+-PROFILES = {
+-  hdr_simulation: "Enhances dynamic range with more detail in shadows and highlights.",
+-  day_for_night: "Transforms daytime footage to appear as though it was shot at night.",
+-  infrared_emulation: "Mimics infrared photography with surreal color renditions.",
+-  anamorphic_simulation: "Adds horizontal lens flares and oval bokeh to simulate anamorphic lenses.",
+-  split_toning: "Applies different colors to shadows and highlights for creative color grading.",
+-  selective_color_adjustment: "Allows isolation and adjustment of specific colors.",
+-  skin_tone_preservation: "Maintains natural skin tones while applying other effects.",
+-  lens_distortion: "Simulates various lens distortions like pincushion or barrel.",
+-  film_halation: "Recreates the glow or halo effect around bright areas of film.",
+-  color_channel_mixing: "Adjusts individual color channels for unique effects and corrections.",
+-  soft_focus_glow: "Adds a subtle glow for a dreamy or romantic atmosphere.",
+-  film_damage: "Adds scratches, dust, and frame jitters to emulate damaged film.",
+-  film_grain: "Adds realistic grain to simulate the texture of high-ISO film stocks.",
+-  vignette: "Applies a soft, dark edge fade to draw focus toward the center.",
+-  chromatic_aberration: "Simulates subtle color shifts seen in older lenses.",
+-  light_grain_overlay: "Adds a light grain overlay for an analog feel.",
+-  highlight_bloom: "Applies a faint bloom effect to bright areas for a dreamy look.",
+-  flicker_effect: "Adds slight brightness variations to simulate analog imperfections.",
+-  aging_color_shift: "Applies a faded color shift for an aged look.",
+-  edge_halation: "Softly highlights edges, adding a halo effect to bright areas.",
+-  dusty_overlay: "Adds dust particles randomly scattered over the frame.",
+-  soft_sepia: "Applies a soft sepia tone for a warm vintage feel.",
+-  film_reel_dividers: "Mimics the divider lines and borders of film reels.",
+-  muted_contrast: "Reduces contrast for a faded, dreamlike quality.",
+-  frame_jitter: "Adds slight frame shifts to simulate handheld footage.",
+-  gradient_fade: "Applies a soft gradient fade for a washed-out look.",
+-  lut_application: "Applies complex color grading presets using Look-Up Tables.",
+-  camera_emulation: "Applies specific camera profiles to simulate analog color responses.",
+-  underwater_effect: "Adds a color cast and diffusion for underwater scenes.",
+-  night_vision: "Simulates the classic green tint of night vision.",
+-  heat_vision: "Adds a thermal imaging effect for temperature differences.",
+-  color_matching: "Matches the color palette of one image to another for analog consistency."
+-}.freeze
+-
+-class ImageProcessor
+-  def initialize
+-    @logger = LOGGER
+-  end
++# Map effect names to their method symbols
++EFFECTS = {
++  film_grain: :film_grain,
++  light_leaks: :light_leaks,
++  lens_distortion: :lens_distortion,
++  sepia: :sepia,
++  bleach_bypass: :bleach_bypass,
++  lomo: :lomo,
++  golden_hour_glow: :golden_hour_glow,
++  cross_process: :cross_process,
++  bloom_effect: :bloom_effect,
++  film_halation: :film_halation,
++  teal_and_orange: :teal_and_orange,
++  day_for_night: :day_for_night,
++  anamorphic_simulation: :anamorphic_simulation,
++  chromatic_aberration: :chromatic_aberration,
++  vhs_degrade: :vhs_degrade,
++  color_fade: :color_fade
++}
++
++def random_effects(count)
++  EFFECTS.keys.sample(count)
++end
+ 
+-  # Apply a specific effect to an image
+-  def apply_effect(image, effect, intensity = 1.0, options = {})
+-    method_name = "apply_#{effect}".to_sym
+-    if respond_to?(method_name, true)
+-      intensity = validate_intensity(intensity) # Ensure consistent intensity validation
+-      LOGGER.debug("Applying effect: #{effect} with intensity: #{intensity}")
+-      begin
+-        send(method_name, image, intensity, options)
+-      rescue StandardError => e
+-        LOGGER.error("Failed to apply effect #{effect}: #{e.message}")
+-        image
+-      end
+-    else
+-      error_message = "Effect #{effect} not implemented."
+-      LOGGER.error(error_message)
+-      puts error_message # Notify the user as well
+-      image
+-    end
+-  end
++def adjust_intensity(image, base_intensity)
++  size_factor = Math.sqrt(image.width * image.height) / 1000.0
++  (base_intensity * size_factor).clamp(0.5, 3.0)
++end
+ 
+-  # Helper to validate intensity
+-  def validate_intensity(intensity)
+-    [[0.0, intensity].max, 1.0].min
++def apply_effects(image, effects_array)
++  effects_array.each do |effect_name|
++    method_sym = EFFECTS[effect_name]
++    next unless respond_to?(method_sym, true)
++    intensity = adjust_intensity(image, 1.0)
++    $cli_logger.info "Applied effect: #{effect_name} (intensity: #{intensity.round(2)})"
++    image = send(method_sym, image, intensity)
+   end
++  image
++end
+ 
+-  # Film Grain Effect
+-  def apply_film_grain(image, intensity, _options = {})
+-    grain = Vips::Image.gaussnoise(image.width, image.height, sigma: 5 * intensity)
+-    blended = image.linear(1, 0).add(grain.linear(0.2 * intensity, 0)).clamp(0, 255).cast(:uchar)
+-    blended
+-  rescue StandardError => e
+-    LOGGER.error("Error applying film grain effect: #{e.message}")
+-    image
++def apply_effects_from_recipe(image, recipe)
++  recipe.each do |effect, intensity|
++    method_sym = EFFECTS[effect.to_sym]
++    next unless respond_to?(method_sym, true)
++    $cli_logger.info "Applied effect: #{effect} (intensity: #{intensity})"
++    image = send(method_sym, image, intensity.to_f)
+   end
++  image
++end
+ 
+-  # Soft Focus Glow Effect
+-  def apply_soft_focus_glow(image, intensity, _options = {})
+-    glow1 = image.gaussblur(8 * intensity)
+-    glow2 = image.gaussblur(16 * intensity)
+-    combined_glow = (glow1 * 0.5 + glow2 * 0.5) * intensity
+-    blended = image.add(combined_glow).clamp(0, 255).cast(:uchar)
+-    blended
+-  rescue StandardError => e
+-    LOGGER.error("Error applying soft focus glow effect: #{e.message}")
+-    image
+-  end
++# --- Effects ---
+ 
+-  # HDR Simulation Effect
+-  def apply_hdr_simulation(image, intensity, _options = {})
+-    exposure = intensity * 2.0
+-    adjusted = image.linear([1.0 + exposure] * image.bands, [0])
+-    adjusted.clamp(0, 255).cast(:uchar)
+-  rescue StandardError => e
+-    LOGGER.error("Error applying HDR simulation effect: #{e.message}")
+-    image
+-  end
++def film_grain(image, intensity)
++  noise = Vips::Image.gaussnoise(image.width, image.height, mean: 128, sigma: 30 * intensity)
++  (image + noise).clamp(0, 255)
++end
+ 
+-  # Split Toning Effect
+-  def apply_split_toning(image, intensity, _options = {})
+-    hsv = image.colourspace('hsv')
+-    h = hsv[0]
+-    s = hsv[1].linear(1.0 + 0.3 * intensity, 0)
+-    v = hsv[2].linear(1.0 + 0.2 * intensity, 0)
+-    toned_image = Vips::Image.bandjoin([h, s, v]).colourspace('rgb')
+-    blend_images(image, toned_image, intensity * 0.3)
+-  rescue StandardError => e
+-    LOGGER.error("Error applying split toning effect: #{e.message}")
+-    image
+-  end
++def light_leaks(image, intensity)
++  overlay = Vips::Image.black(image.width, image.height)
++  overlay = overlay.draw_circle([255 * intensity, 50 * intensity, 0],
++                                image.width / 3, image.height / 3,
++                                image.width / 4, fill: true)
++  image.composite2(overlay, "add")
++end
+ 
+-  # Gradient Fade Effect
+-  def apply_gradient_fade(image, intensity, _options = {})
+-    gradient = Vips::Image.xyz(image.width, 1)[0].linear(1.0 / image.width, 0).resize(1, vscale: image.height)
+-    faded_image = image.multiply(gradient).linear(intensity, 0).clamp(0, 255).cast(:uchar)
+-    faded_image
+-  rescue StandardError => e
+-    LOGGER.error("Error applying gradient fade effect: #{e.message}")
+-    image
+-  end
++def lens_distortion(image, intensity)
++  identity = Vips::Image.identity(image.width, image.height)
++  image.mapim(identity.linear([1.0 + 0.2 * intensity], [0]))
++end
+ 
+-  # Film Halation Effect
+-  def apply_film_halation(image, intensity, _options = {})
+-    highlights = image.more_than(200)
+-    halo = highlights.gaussblur(15 * intensity).linear(0.1 * intensity, 0)
+-    blended = image.add(halo).clamp(0, 255).cast(:uchar)
+-    blended
+-  rescue StandardError => e
+-    LOGGER.error("Error applying film halation effect: #{e.message}")
+-    image
+-  end
++def sepia(image, intensity)
++  matrix = [
++    0.393 * intensity, 0.769 * intensity, 0.189 * intensity,
++    0.349 * intensity, 0.686 * intensity, 0.168 * intensity,
++    0.272 * intensity, 0.534 * intensity, 0.131 * intensity
++  ]
++  image.recomb(matrix)
++end
+ 
+-  # Film Halation Effect
+-  def apply_film_halation(image, intensity, _options = {})
+-    highlights = image.more_than(200)
+-    halo = highlights.gaussblur(15 * intensity) * (0.1 * intensity)
+-    blended = (image + halo).clamp(0, 255).cast(:uchar)
+-    blended
+-  rescue StandardError => e
+-    LOGGER.error("Error applying film halation effect: \#{e.message}")
+-    image
+-  end
++def bleach_bypass(image, intensity)
++  gray = image.colourspace("b-w")
++  blend = (image * 0.5 + gray * 0.5) * intensity
++  (image + blend).clamp(0, 255)
++end
+ 
+-  # Vignette Effect
+-  def apply_vignette(image, intensity, _options = {})
+-    radius = [image.width, image.height].min / 2.0
+-    vignette = Vips::Image.xyz(image.width, image.height)[0].linear(1.0 / radius, 0).invert.multiply(intensity).linear(0.5, 0.5)
+-    blended = (image * vignette).clamp(0, 255).cast(:uchar)
+-    blended
+-  rescue StandardError => e
+-    LOGGER.error("Error applying vignette effect: \#{e.message}")
+-    image
+-  end
++def lomo(image, intensity)
++  saturated = image * (1.0 + 0.1 * intensity)
++  vignette = Vips::Image.black(image.width, image.height)
++  vignette = vignette.draw_circle(128, image.width / 2, image.height / 2, image.width / 2, fill: true)
++  saturated.composite2(vignette, "multiply")
++end
+ 
+-  # Chromatic Aberration Effect
+-  def apply_chromatic_aberration(image, intensity, _options = {})
+-    r, g, b = image.bandsplit
+-    r = r.gravity('centre', image.width + intensity, image.height + intensity)
+-    b = b.gravity('centre', image.width - intensity, image.height - intensity)
+-    adjusted = Vips::Image.bandjoin([r, g, b]).cast(:uchar)
+-    adjusted
+-  rescue StandardError => e
+-    LOGGER.error("Error applying chromatic aberration effect: \#{e.message}")
+-    image
++def golden_hour_glow(image, intensity)
++  overlay = Vips::Image.black(image.width, image.height)
++  overlay = overlay.draw_circle([255, 200, 150],
++                                image.width / 2, image.height / 2,
++                                image.width / 3, fill: true)
++  image.composite2(overlay, "add")
++end
++
++def cross_process(image, intensity)
++  # If intensity > 0.5, invert the image for dramatic effect
++  image.invert if intensity > 0.5
++  image
++end
++
++def bloom_effect(image, intensity)
++  blur1 = image.gaussblur(5 * intensity)
++  blur2 = image.gaussblur(10 * intensity)
++  combined = (blur1 * 0.6 + blur2 * 0.4) * intensity
++  (image + combined).clamp(0, 255)
++end
++
++def film_halation(image, intensity)
++  highlights = image.more(220)
++  halo = highlights.gaussblur(15 * intensity).linear(0.1 * intensity, 0)
++  (image + halo).clamp(0, 255)
++end
++
++def teal_and_orange(image, intensity)
++  matrix = [
++    0.9, 0.1, 0.0,
++    0.0, 0.8, 0.2,
++    0.1, 0.2, 0.7
++  ]
++  image.recomb(matrix).linear(intensity, 0).clamp(0, 255)
++end
++
++def day_for_night(image, intensity)
++  darkened = image.linear(1.0 - 0.3 * intensity, 0).clip(0, 255)
++  bluish = darkened.add([0, 0, 60 * intensity]).clip(0, 255)
++  bluish
++end
++
++def anamorphic_simulation(image, intensity)
++  image.resize(1.0 + 0.1 * intensity, vscale: 1.0)
++end
++
++def chromatic_aberration(image, intensity)
++  r, g, b = image.bandsplit
++  r = r.roll(intensity, 0)
++  b = b.roll(-intensity, 0)
++  Vips::Image.bandjoin([r, g, b])
++end
++
++def vhs_degrade(image, intensity)
++  noise = Vips::Image.gaussnoise(image.width, image.height, sigma: 50 * intensity)
++  lines = Vips::Image.sines(image.width, image.height).linear(0.3, 128)
++  (image + noise - lines).clip(0, 255)
++end
++
++def color_fade(image, intensity)
++  image.linear(1 - intensity, 128 * intensity).clip(0, 255)
++end
++
++# --- Main Interactive Workflow ---
++
++def main
++  apply_random = PROMPT.yes?("Apply a random combination of effects?")
++  recipe_file = PROMPT.ask("Load a custom effects recipe JSON? (filename):", default: "")
++
++  patterns = PROMPT.ask("Enter file patterns (default: **/*.jpg, **/*.jpeg, **/*.png, **/*.webp):", default: "")
++  file_patterns = patterns.strip.split(",")
++  file_patterns = ["**/*.jpg", "**/*.jpeg", "**/*.png", "**/*.webp"] if file_patterns.empty?
++
++  variations = PROMPT.ask("How many variations per image? (default: 3):", convert: :int, default: "3").to_i
++
++  $cli_logger.info "Starting image processing..."
++  files = file_patterns.flat_map { |pattern| Dir.glob(pattern.strip) }
++  if files.empty?
++    $cli_logger.error "No files matched the pattern!"
++    return
+   end
+ 
+-  # Color Matching Effect
+-  def apply_color_matching(image, intensity, options = {})
+-    target_image_path = options[:target_image_path]
+-    if target_image_path.nil? || target_image_path.empty? || !File.exist?(target_image_path)
+-      LOGGER.error("Target image not found or not provided: \#{target_image_path}")
+-      return image
+-    end
+-    target = Vips::Image.new_from_file(target_image_path)
+-    target = target.resize([image.width.to_f / target.width, image.height.to_f / target.height].min) if target.width != image.width || target.height != image.height
+-    target = target.colourspace('rgb') if target.interpretation != :rgb
+-    image.hist_match(target).linear(intensity, 0).clamp(0, 255).cast(:uchar)
+-  rescue StandardError => e
+-    LOGGER.error("Error applying color matching effect: \#{e.message}")
+-    image
++  recipe = nil
++  if !recipe_file.empty? && File.exist?(recipe_file)
++    recipe = JSON.parse(File.read(recipe_file))
++    $cli_logger.info "Loaded recipe from #{recipe_file}"
+   end
+ 
+-  # Main Script Logic
+-  valid_files = Dir.glob("*.jpg") + Dir.glob("*.png")
+-  num_images = 1
+-
+-  valid_files.each do |input_file|
+-    next unless File.exist?(input_file) && File.file?(input_file)
+-
+-    num_images.times do
+-      begin
+-        image = Vips::Image.new_from_file(input_file)
+-        processed_image = image.copy
+-
+-        # Randomly apply the specified number of effects
+-        selected_effects = PROFILES.keys.sample(3)
+-        effect_configurations = []
+-
+-        selected_effects.each do |effect|
+-          intensity = validate_intensity(rand(0.5..1.0))
+-          effect_configurations << { effect: effect, intensity: intensity }
+-          processed_image = apply_effect(processed_image, effect, intensity)
+-        end
+-
+-        # Save the combination of effects as a JSON recipe
+-        json_recipe_path = "recipe_\#{File.basename(input_file, '.*')}_\#{Time.now.strftime('%Y%m%d%H%M%S')}_\#{rand(1000..9999)}.json"
+-        File.open(json_recipe_path, 'w') { |file| file.write(JSON.pretty_generate(effect_configurations)) }
+-        puts "Effect recipe saved to \#{json_recipe_path}"
+-
+-        # Save the processed image
+-        output_path = "processed_\#{File.basename(input_file, '.*')}_\#{Time.now.strftime('%Y%m%d%H%M%S')}_\#{rand(1000..9999)}.jpg"
+-        processed_image.write_to_file(output_path)
+-        puts "Image saved to \#{output_path}"
+-      rescue StandardError => e
+-        LOGGER.error("Failed to process file \#{input_file}: \#{e.message}")
+-        puts "Failed to process file: \#{input_file}"
++  files.each do |file|
++    next if File.basename(file).include?("processed")
++    begin
++      $cli_logger.info "Processing file: #{file}"
++      image = Vips::Image.new_from_file(file)
++
++      processed_image = if recipe
++                          apply_effects_from_recipe(image, recipe)
++                        elsif apply_random
++                          selected = random_effects(3)
++                          apply_effects(image, selected)
++                        else
++                          $cli_logger.warn "No effects selected. Skipping file."
++                          next
++                        end
++
++      variations.times do |i|
++        timestamp = Time.now.strftime("%Y%m%d%H%M%S")
++        output_file = file.sub(File.extname(file), "_processed_v#{i + 1}_#{timestamp}#{File.extname(file)}")
++        processed_image.write_to_file(output_file)
++        $cli_logger.info "Saved variation #{i + 1} as #{output_file}"
+       end
++    rescue StandardError => e
++      $cli_logger.error "Error processing #{file}: #{e.message}"
++      $cli_logger.error e.backtrace.join("\n")
+     end
+   end
++
++  $cli_logger.info "Processing completed."
+ end
+ 
++main if __FILE__ == $0
++
+
+commit d9a2d70d54c00cf36ef803dd544332446d32366b
+Author: dev <dev@dev.openbsd.amsterdam>
+Date:   Tue Nov 19 08:28:49 2024 +0100
+
+    TMP
+
+diff --git a/README.md b/README.md
+index e4b35a0..b0b7aad 100644
+--- a/README.md
++++ b/README.md
+@@ -1,140 +1,73 @@
+-# Postpro.rb
++# POSTPRO Analog Post-Processing Suite
+ 
+-**Postpro.rb** is a Ruby-based image post-processing tool using **libvips** to recreate the visual aesthetics of analog photography, VHS-era visuals, and professional cinematography. Whether you want to add retro character or experiment with modern artistic styles, Postpro.rb provides an intuitive solution for image enhancement.
+-
+-Postpro.rb includes features like grain, vignetting, color adjustments, and creative effects such as glow, blur, texture overlays, film burns, hue shifts, light leaks, and color fades. The tool is built for flexibility, allowing you to layer multiple effects to achieve the desired look.
++POSTPRO is a Ruby-based image processing tool that uses [`libvips`](https://libvips.github.io/libvips/) to create cinematic effects. It provides a range of transformations to enhance photos and videos with a professional, film-quality touch.
+ 
+ ## Features
+-
+-### Analog Photography Effects
+-
+-Emulate the distinct features of analog film photography:
+-
+-- **Grain Structure**: Introduces natural-looking grain for a film-like effect.
+-- **Color Balance Adjustments**: Control brightness, contrast, and saturation to match the palette of vintage film stocks.
+-- **Vignetting**: Adds subtle edge darkening to draw attention to the center of the frame.
+-
+-### VHS-Style Effects
+-
+-Apply VHS-style degradation for a nostalgic, retro vibe:
+-
+-- **Noise and Static**: Adds a layer of grain and randomness reminiscent of VHS playback.
+-- **Color Bleeding**: Shifts color channels to simulate chromatic aberration.
+-- **Resolution Reduction**: Downscales and upscales the image to achieve a softened VHS effect.
+-- **Warping and Distortion**: Simulates analog video playback artifacts.
+-
+-### Creative Aesthetic Effects
+-
+-Transform your image with additional modern artistic tools:
+-
+-- **Glow**: Creates an ethereal, dreamy look.
+-- **Blur**: Introduces soft focus effects.
+-- **Texture Overlay**: Allows layering of external textures like scratches or light streaks.
+-- **Hue Shifts and Light Leaks**: Adds dramatic lighting and hue variations for artistic flair.
+-- **Film Burn and Color Fades**: Mimics accidental light exposure or gradual color shifts.
+-
+-### Cinematographic and Professional Color Grading
+-
+-Achieve a professional, cinematic look by layering subtle color grades, using glow for highlights, or adding creative vignettes and filmic fades. Postpro.rb helps you replicate color grading often seen in professional filmmaking.
+-
+-## Dealing with Shared Libraries on OpenBSD
+-
+-For **OpenBSD** users, the **libvips** shared object (`.so` file) should be properly installed to ensure Postpro.rb functions without issues. The library needs to be available in the system's runtime linker's search path.
+-
+-### Installation Tips for OpenBSD:
+-
+-- Ensure the libvips package is installed using:
+-
+-    ```sh
+-    pkg_add vips
+-    ```
+-
+-- Make sure the `.so` file is located in a directory included in your `LD_LIBRARY_PATH`. Typically, OpenBSD's package manager installs `.so` files in `/usr/local/lib`.
+-  
+-- You may need to add `/usr/local/lib` to your environment variable:
+-
+-    ```sh
+-    export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+-    ```
+-
+-## Example Usage
+-
+-Here's a basic example of how to use Postpro.rb:
+-
+-    processor = Postpro::ImageProcessor.new('input.jpg', 'output.jpg')
+-    processor.apply_effects({
+-        grain_level: 0.05,
+-        vignetting_strength: 2.5,
+-        brightness: 1.1,
+-        contrast: 1.2,
+-        saturation: 0.8,
+-        noise_level: 0.1,
+-        color_bleed_shift: 3,
+-        resolution_scale: 0.5,
+-        warp_strength: 3,
+-        glow_strength: 1.5,
+-        blur_strength: 2.0,
+-        texture_overlay: 'texture.jpg',
+-        hue_shift: 30,
+-        film_burn_strength: 0.5,
+-        light_leak_strength: 1.0,
+-        color_fade_strength: 0.5,
+-        layer_effects: [
+-            { type: :grain, strength: 0.1 },
+-            { type: :vignetting, strength: 3.0 },
+-            { type: :glow, strength: 2.0 }
+-        ]
+-    })
+-
+-## Customization
+-
+-### Layering Effects
+-
+-Postpro.rb allows for **layered effects**, enabling you to combine multiple transformations for a more sophisticated final output. This creative layering includes effects like grain, glow, vignetting, and hue shifting in customized orders and with individual strengths.
+-
+-For example:
+-
+-    layer_effects: [
+-        { type: :grain, strength: 0.08 },
+-        { type: :hue_shift, shift_amount: 20 },
+-        { type: :blur, strength: 1.5 },
+-        { type: :light_leak, strength: 1.2 }
+-    ]
+-
+-### Adjusting Parameters
+-
+-Parameters for each effect can be modified to suit your aesthetic goals. For instance:
+-
+-- **Grain Level**: Adjust the intensity from subtle to prominent.
+-- **Vignetting Strength**: Increase for a dramatic look or decrease for a soft, natural effect.
+-- **Glow and Blur**: Modify to emphasize highlights or add dreamy softness.
+-
+-### Professional Tips for Cinematography
+-
+-Use color balance to enhance the mood of your images, inspired by film styles. Adjust saturation carefully to maintain natural skin tones, or add subtle glow for a more cinematic atmosphere.
+-
+-**Postpro.rb** can help you simulate classic film styles like Kodak Portra or Fuji Velvia, useful for both photographers and film enthusiasts aiming for a particular cinematic touch.
+-
+-## Real-Time Processing and Batch Automation
+-
+-Postpro.rb can be integrated for **real-time processing** or automated workflows in larger projects:
+-
+-- **Batch Processing**: Apply a set of effects to an entire folder of images.
+-  
+-        input_dir = 'path/to/input_directory'
+-        output_dir = 'path/to/output_directory'
+-
+-        Dir.glob("#{input_dir}/*.jpg").each do |file|
+-            output_file = File.join(output_dir, File.basename(file))
+-            processor = Postpro::ImageProcessor.new(
+-                input: file,
+-                output: output_file,
+-                grain_level: 0.05,
+-                brightness: 1.1,
+-                contrast: 1.2,
+-                vignetting_strength: 2.0,
+-                noise_level: 0.1
+-            )
+-            processor.apply_effects
+-        end
++- **Diverse Cinematic Effects**: Includes HDR simulation, infrared emulation, vintage film looks, and more.
++- **Interactive CLI**: Simple command-line interface for selecting effects and settings.
++- **Batch Processing**: Efficiently process multiple images at once.
++- **Customizable Effects**: Adjustable parameters for fine-tuning results.
++
++### Installation
++Install `libvips` and required Ruby gems:
++    
++    # OpenBSD
++    pkg_add libvips
++    # Ubuntu
++    apt-get install libvips
++    # macOS
++    brew install vips
++
++    # Install Ruby gems
++    gem install --user-install ruby-vips tty-prompt
++
++## Usage
++Run POSTPRO interactively:
++
++    $ ruby postpro.rb  
++    Welcome to POSTPRO v1.0
++        -- Advanced analog emulation for next-level cinematic color grading.
++    Input file: input.jpg
++    Apply a random combination of effects? Yes
++    How many different images to generate? 5
++    How many effects to combine? 3
++    Image saved to output_1.jpg
++    Image saved to output_2.jpg
++    Image saved to output_3.jpg
++    Image saved to output_4.jpg
++    Image saved to output_5.jpg
++    
++## Before
++![Before](https://gist.github.com/user-attachments/assets/eefd30be-fe81-464f-8723-d57332b1070e)
++
++## After
++![After 1](https://gist.github.com/user-attachments/assets/477f1af7-e000-4b59-9e21-e205d891a795)
++![After 2](https://gist.github.com/user-attachments/assets/ad488434-5103-452b-99d1-ea4590222033)
++![After 3](https://gist.github.com/user-attachments/assets/7199c26c-1332-4e3a-bff7-682b8ceca2fb)
++![After 4](https://gist.github.com/user-attachments/assets/3434f22b-7e6a-4f57-b9f6-a61a1b494a43)
++![After 5](https://gist.github.com/user-attachments/assets/004197c9-119f-479f-bd76-9f2ca1c69e7c)
++
++## Available Effects
++The following effects are available to apply to your images:
++
++- **HDR Simulation**: Enhances the dynamic range, providing more detail in shadows and highlights.
++- **Day-for-Night Conversion**: Converts bright daytime scenes to appear as if shot at night.
++- **Infrared Effect**: Swaps color channels to achieve surreal infrared effects.
++- **Anamorphic Lens Simulation**: Adds horizontal lens flares and boosts color depth for a cinematic look.
++- **Split Toning**: Applies different colors to shadows and highlights to create a dramatic mood.
++- **Selective Color Adjustment**: Enhances specific colors while leaving others intact.
++- **Skin Tone Preservation**: Maintains natural skin tones during other effects.
++- **Lens Distortion**: Simulates barrel or pincushion lens distortion.
++- **Film Halation**: Adds a soft glow around bright areas to simulate the effect of film halation.
++- **Posterization**: Reduces the number of colors to create a poster-like effect.
++- **Duotone**: Converts an image to two colors for striking visual styles.
++- **Glitch Effects**: Adds digital artifacts and noise to simulate digital errors.
++- **3D LUT Application**: Applies Look-Up Tables for complex color grading.
++- **Color Matching**: Matches the color palette of one image to another for consistency.
++- **Underwater Effect**: Simulates the color cast and light diffusion found underwater.
++- **Night Vision**: Mimics the green-tinted appearance of night vision.
++- **Heat Vision**: Adds thermal imaging effects, displaying variations in temperature.
++- **Lens Flare Addition**: Adds lens flare artifacts for a dynamic light effect.
++- **Soft Focus Glow**: Creates a soft glow effect for dreamy imagery.
++- **Film Damage Simulation**: Adds scratches, dust, and jitters for a worn film look.
+ 
+diff --git a/postpro.rb b/postpro.rb
+old mode 100644
+new mode 100755
+index f88ebee..12b9f2a
+--- a/postpro.rb
++++ b/postpro.rb
+@@ -1,222 +1,239 @@
+-# Postpro.rb
+-# 
+-# A post-processing tool that uses libvips to emulate the aesthetics of analog photography and VHS styles.
+-# This script provides a variety of effects, including grain, vignetting, color adjustments, and warping.
+-# Additionally, new creative effects such as glow, blur, texture overlays, film burn, hue shift, light leak, and color fade have been added to create unique, customizable image aesthetics.
+-#
++#!/usr/bin/env ruby
++# encoding: utf-8
+ 
+-require 'vips'
+-
+-module Postpro
+-  class ImageProcessor
+-    attr_accessor :image_path, :output_path
++# POSTPRO Analog Post-Processing Suite
++# Uses Ruby and libvips to apply advanced analog emulation and color grading effects.
+ 
+-    def initialize(image_path, output_path)
+-      @image_path = image_path
+-      @output_path = output_path
+-      @image = Vips::Image.new_from_file(image_path, access: :sequential)
+-    end
++require 'vips'
++require 'json'
++require 'fileutils'
++require 'logger'
++require 'tty-prompt'
++require 'shellwords'
++
++# Set up logging for traceability
++LOGGER = Logger.new('postpro_combined.log')
++LOGGER.level = Logger::DEBUG
++PROMPT = TTY::Prompt.new
++
++# Available profiles with descriptions
++PROFILES = {
++  hdr_simulation: "Enhances dynamic range with more detail in shadows and highlights.",
++  day_for_night: "Transforms daytime footage to appear as though it was shot at night.",
++  infrared_emulation: "Mimics infrared photography with surreal color renditions.",
++  anamorphic_simulation: "Adds horizontal lens flares and oval bokeh to simulate anamorphic lenses.",
++  split_toning: "Applies different colors to shadows and highlights for creative color grading.",
++  selective_color_adjustment: "Allows isolation and adjustment of specific colors.",
++  skin_tone_preservation: "Maintains natural skin tones while applying other effects.",
++  lens_distortion: "Simulates various lens distortions like pincushion or barrel.",
++  film_halation: "Recreates the glow or halo effect around bright areas of film.",
++  color_channel_mixing: "Adjusts individual color channels for unique effects and corrections.",
++  soft_focus_glow: "Adds a subtle glow for a dreamy or romantic atmosphere.",
++  film_damage: "Adds scratches, dust, and frame jitters to emulate damaged film.",
++  film_grain: "Adds realistic grain to simulate the texture of high-ISO film stocks.",
++  vignette: "Applies a soft, dark edge fade to draw focus toward the center.",
++  chromatic_aberration: "Simulates subtle color shifts seen in older lenses.",
++  light_grain_overlay: "Adds a light grain overlay for an analog feel.",
++  highlight_bloom: "Applies a faint bloom effect to bright areas for a dreamy look.",
++  flicker_effect: "Adds slight brightness variations to simulate analog imperfections.",
++  aging_color_shift: "Applies a faded color shift for an aged look.",
++  edge_halation: "Softly highlights edges, adding a halo effect to bright areas.",
++  dusty_overlay: "Adds dust particles randomly scattered over the frame.",
++  soft_sepia: "Applies a soft sepia tone for a warm vintage feel.",
++  film_reel_dividers: "Mimics the divider lines and borders of film reels.",
++  muted_contrast: "Reduces contrast for a faded, dreamlike quality.",
++  frame_jitter: "Adds slight frame shifts to simulate handheld footage.",
++  gradient_fade: "Applies a soft gradient fade for a washed-out look.",
++  lut_application: "Applies complex color grading presets using Look-Up Tables.",
++  camera_emulation: "Applies specific camera profiles to simulate analog color responses.",
++  underwater_effect: "Adds a color cast and diffusion for underwater scenes.",
++  night_vision: "Simulates the classic green tint of night vision.",
++  heat_vision: "Adds a thermal imaging effect for temperature differences.",
++  color_matching: "Matches the color palette of one image to another for analog consistency."
++}.freeze
++
++class ImageProcessor
++  def initialize
++    @logger = LOGGER
++  end
+ 
+-    def apply_effects(effects = {})
+-      @image = apply_grain(@image, effects[:grain_level]) if effects[:grain_level]
+-      @image = apply_vignetting(@image, effects[:vignetting_strength]) if effects[:vignetting_strength]
+-      @image = adjust_color_balance(@image, effects) if effects.slice(:brightness, :contrast, :saturation).any?
+-      @image = add_noise(@image, effects[:noise_level]) if effects[:noise_level]
+-      @image = apply_color_bleed(@image, effects[:color_bleed_shift]) if effects[:color_bleed_shift]
+-      @image = apply_resolution_reduction(@image, effects[:resolution_scale]) if effects[:resolution_scale]
+-      @image = apply_warp(@image, effects[:warp_strength]) if effects[:warp_strength]
+-      @image = apply_glow(@image, effects[:glow_strength]) if effects[:glow_strength]
+-      @image = apply_blur(@image, effects[:blur_strength]) if effects[:blur_strength]
+-      @image = apply_texture_overlay(@image, effects[:texture_overlay]) if effects[:texture_overlay]
+-      @image = apply_hue_shift(@image, effects[:hue_shift]) if effects[:hue_shift]
+-      @image = apply_film_burn_effect(@image, effects[:film_burn_strength]) if effects[:film_burn_strength]
+-      @image = apply_light_leak(@image, effects[:light_leak_strength]) if effects[:light_leak_strength]
+-      @image = apply_color_fade(@image, effects[:color_fade_strength]) if effects[:color_fade_strength]
+-
+-      # Apply creative layering to achieve unique aesthetic results
+-      if effects[:layer_effects]
+-        @image = apply_creative_layering(@image, effects[:layer_effects])
++  # Apply a specific effect to an image
++  def apply_effect(image, effect, intensity = 1.0, options = {})
++    method_name = "apply_#{effect}".to_sym
++    if respond_to?(method_name, true)
++      intensity = validate_intensity(intensity) # Ensure consistent intensity validation
++      LOGGER.debug("Applying effect: #{effect} with intensity: #{intensity}")
++      begin
++        send(method_name, image, intensity, options)
++      rescue StandardError => e
++        LOGGER.error("Failed to apply effect #{effect}: #{e.message}")
++        image
+       end
+-
+-      save_image(@image, output_path)
+-    end
+-
+-    private
+-
+-    def apply_grain(image, level = 0.05)
+-      noise = Vips::Image.gaussnoise(image.width, image.height) * (level * 255)
+-      grainy_image = (image + noise).clip(0, 255)
+-      grainy_image
+-    end
+-
+-    def apply_vignetting(image, strength = 2.0)
+-      width, height = image.width, image.height
+-      center_x, center_y = width / 2, height / 2
+-
+-      x = Vips::Image.range(width).cast('float') - center_x
+-      y = Vips::Image.range(height).cast('float') - center_y
+-      distance = ((x ** 2) + (y ** 2)).sqrt
+-
+-      max_distance = ((center_x ** 2) + (center_y ** 2)).sqrt
+-      vignette_mask = (1 - (distance / max_distance)) ** strength
+-      vignette_mask = vignette_mask.clip(0, 1).bandjoin([vignette_mask] * (image.bands - 1))
+-
+-      vignetted_image = (image * vignette_mask).clip(0, 255)
+-      vignetted_image
+-    end
+-
+-    def adjust_color_balance(image, params = {})
+-      brightness = params[:brightness] || 1.0
+-      contrast = params[:contrast] || 1.0
+-      saturation = params[:saturation] || 1.0
+-
+-      adjusted = image.linear(contrast, (brightness - 1) * 128)
+-      hsl_image = adjusted.colourspace('hsl')
+-      h, s, l = hsl_image[0], hsl_image[1], hsl_image[2]
+-      adjusted_saturation = s * saturation
+-      adjusted_image = h.bandjoin([adjusted_saturation, l]).colourspace('srgb')
+-      adjusted_image
++    else
++      error_message = "Effect #{effect} not implemented."
++      LOGGER.error(error_message)
++      puts error_message # Notify the user as well
++      image
+     end
++  end
+ 
+-    def add_noise(image, level = 0.05)
+-      noise = Vips::Image.gaussnoise(image.width, image.height) * (level * 255)
+-      noisy_image = (image + noise).clip(0, 255)
+-      noisy_image
+-    end
++  # Helper to validate intensity
++  def validate_intensity(intensity)
++    [[0.0, intensity].max, 1.0].min
++  end
+ 
+-    def apply_color_bleed(image, shift_amount = 3)
+-      r, g, b = image[0], image[1], image[2]
+-      r_shifted = r.embed(shift_amount, 0, image.width + shift_amount, image.height, extend: :black).crop(shift_amount, 0, image.width, image.height)
+-      b_shifted = b.embed(0, 0, image.width + shift_amount, image.height, extend: :black).crop(shift_amount, 0, image.width, image.height)
++  # Film Grain Effect
++  def apply_film_grain(image, intensity, _options = {})
++    grain = Vips::Image.gaussnoise(image.width, image.height, sigma: 5 * intensity)
++    blended = image.linear(1, 0).add(grain.linear(0.2 * intensity, 0)).clamp(0, 255).cast(:uchar)
++    blended
++  rescue StandardError => e
++    LOGGER.error("Error applying film grain effect: #{e.message}")
++    image
++  end
+ 
+-      color_bleeded_image = r_shifted.bandjoin([g, b_shifted])
+-      color_bleeded_image
+-    end
++  # Soft Focus Glow Effect
++  def apply_soft_focus_glow(image, intensity, _options = {})
++    glow1 = image.gaussblur(8 * intensity)
++    glow2 = image.gaussblur(16 * intensity)
++    combined_glow = (glow1 * 0.5 + glow2 * 0.5) * intensity
++    blended = image.add(combined_glow).clamp(0, 255).cast(:uchar)
++    blended
++  rescue StandardError => e
++    LOGGER.error("Error applying soft focus glow effect: #{e.message}")
++    image
++  end
+ 
+-    def apply_resolution_reduction(image, scale = 0.5)
+-      downscaled = image.resize(scale, kernel: :linear)
+-      upscaled = downscaled.resize(1 / scale, kernel: :linear)
+-      upscaled
+-    end
++  # HDR Simulation Effect
++  def apply_hdr_simulation(image, intensity, _options = {})
++    exposure = intensity * 2.0
++    adjusted = image.linear([1.0 + exposure] * image.bands, [0])
++    adjusted.clamp(0, 255).cast(:uchar)
++  rescue StandardError => e
++    LOGGER.error("Error applying HDR simulation effect: #{e.message}")
++    image
++  end
+ 
+-    def apply_warp(image, strength = 3)
+-      width, height = image.width, image.height
+-      x = Vips::Image.range(width).cast('float')
+-      y = Vips::Image.range(height).cast('float')
++  # Split Toning Effect
++  def apply_split_toning(image, intensity, _options = {})
++    hsv = image.colourspace('hsv')
++    h = hsv[0]
++    s = hsv[1].linear(1.0 + 0.3 * intensity, 0)
++    v = hsv[2].linear(1.0 + 0.2 * intensity, 0)
++    toned_image = Vips::Image.bandjoin([h, s, v]).colourspace('rgb')
++    blend_images(image, toned_image, intensity * 0.3)
++  rescue StandardError => e
++    LOGGER.error("Error applying split toning effect: #{e.message}")
++    image
++  end
+ 
+-      center_x = width / 2
+-      center_y = height / 2
++  # Gradient Fade Effect
++  def apply_gradient_fade(image, intensity, _options = {})
++    gradient = Vips::Image.xyz(image.width, 1)[0].linear(1.0 / image.width, 0).resize(1, vscale: image.height)
++    faded_image = image.multiply(gradient).linear(intensity, 0).clamp(0, 255).cast(:uchar)
++    faded_image
++  rescue StandardError => e
++    LOGGER.error("Error applying gradient fade effect: #{e.message}")
++    image
++  end
+ 
+-      dx = x - center_x
+-      dy = y - center_y
+-      distance = ((dx ** 2) + (dy ** 2)).sqrt
+-      max_distance = ((center_x ** 2) + (center_y ** 2)).sqrt
++  # Film Halation Effect
++  def apply_film_halation(image, intensity, _options = {})
++    highlights = image.more_than(200)
++    halo = highlights.gaussblur(15 * intensity).linear(0.1 * intensity, 0)
++    blended = image.add(halo).clamp(0, 255).cast(:uchar)
++    blended
++  rescue StandardError => e
++    LOGGER.error("Error applying film halation effect: #{e.message}")
++    image
++  end
+ 
+-      warp_mask = (1 - (distance / max_distance) ** 2) * strength
+-      warped_image = image.affine([1, warp_mask.max, 0, 1], 0, 0)
+-      warped_image
+-    end
++  # Film Halation Effect
++  def apply_film_halation(image, intensity, _options = {})
++    highlights = image.more_than(200)
++    halo = highlights.gaussblur(15 * intensity) * (0.1 * intensity)
++    blended = (image + halo).clamp(0, 255).cast(:uchar)
++    blended
++  rescue StandardError => e
++    LOGGER.error("Error applying film halation effect: \#{e.message}")
++    image
++  end
+ 
+-    def apply_glow(image, strength = 1.5)
+-      blurred = image.gaussblur(strength)
+-      glow_image = (image + blurred * 0.5).clip(0, 255)
+-      glow_image
+-    end
++  # Vignette Effect
++  def apply_vignette(image, intensity, _options = {})
++    radius = [image.width, image.height].min / 2.0
++    vignette = Vips::Image.xyz(image.width, image.height)[0].linear(1.0 / radius, 0).invert.multiply(intensity).linear(0.5, 0.5)
++    blended = (image * vignette).clamp(0, 255).cast(:uchar)
++    blended
++  rescue StandardError => e
++    LOGGER.error("Error applying vignette effect: \#{e.message}")
++    image
++  end
+ 
+-    def apply_blur(image, strength = 2.0)
+-      blurred_image = image.gaussblur(strength)
+-      blurred_image
+-    end
++  # Chromatic Aberration Effect
++  def apply_chromatic_aberration(image, intensity, _options = {})
++    r, g, b = image.bandsplit
++    r = r.gravity('centre', image.width + intensity, image.height + intensity)
++    b = b.gravity('centre', image.width - intensity, image.height - intensity)
++    adjusted = Vips::Image.bandjoin([r, g, b]).cast(:uchar)
++    adjusted
++  rescue StandardError => e
++    LOGGER.error("Error applying chromatic aberration effect: \#{e.message}")
++    image
++  end
+ 
+-    def apply_texture_overlay(image, texture_path)
+-      texture = Vips::Image.new_from_file(texture_path).resize(image.width.to_f / texture.width, kernel: :linear)
+-      overlaid_image = (image * 0.8 + texture * 0.2).clip(0, 255)
+-      overlaid_image
+-    end
++  # Color Matching Effect
++  def apply_color_matching(image, intensity, options = {})
++    target_image_path = options[:target_image_path]
++    if target_image_path.nil? || target_image_path.empty? || !File.exist?(target_image_path)
++      LOGGER.error("Target image not found or not provided: \#{target_image_path}")
++      return image
++    end
++    target = Vips::Image.new_from_file(target_image_path)
++    target = target.resize([image.width.to_f / target.width, image.height.to_f / target.height].min) if target.width != image.width || target.height != image.height
++    target = target.colourspace('rgb') if target.interpretation != :rgb
++    image.hist_match(target).linear(intensity, 0).clamp(0, 255).cast(:uchar)
++  rescue StandardError => e
++    LOGGER.error("Error applying color matching effect: \#{e.message}")
++    image
++  end
+ 
+-    def apply_hue_shift(image, shift_amount = 30)
+-      hsl_image = image.colourspace('hsl')
+-      h, s, l = hsl_image[0], hsl_image[1], hsl_image[2]
+-      h = (h + shift_amount) % 360
+-      hue_shifted_image = h.bandjoin([s, l]).colourspace('srgb')
+-      hue_shifted_image
+-    end
++  # Main Script Logic
++  valid_files = Dir.glob("*.jpg") + Dir.glob("*.png")
++  num_images = 1
+ 
+-    def apply_film_burn_effect(image, strength = 0.5)
+-      burn_overlay = Vips::Image.gaussnoise(image.width, image.height, sigma: 30) * (strength * 255)
+-      burn_overlay = burn_overlay.colourspace('srgb') if image.bands > 1
+-      film_burned_image = (image + burn_overlay).clip(0, 255)
+-      film_burned_image
+-    end
++  valid_files.each do |input_file|
++    next unless File.exist?(input_file) && File.file?(input_file)
+ 
+-    def apply_light_leak(image, strength = 1.0)
+-      width, height = image.width, image.height
+-      leak = Vips::Image.gaussnoise(width, height, sigma: 50) * (strength * 128)
+-      leak_mask = leak > (strength * 100)
+-      light_leak_image = (image + leak_mask * 255 * strength).clip(0, 255)
+-      light_leak_image
+-    end
++    num_images.times do
++      begin
++        image = Vips::Image.new_from_file(input_file)
++        processed_image = image.copy
+ 
+-    def apply_color_fade(image, strength = 0.5)
+-      faded_image = image.linear(1 - strength, 128 * strength)
+-      faded_image.clip(0, 255)
+-    end
++        # Randomly apply the specified number of effects
++        selected_effects = PROFILES.keys.sample(3)
++        effect_configurations = []
+ 
+-    def apply_creative_layering(image, layers)
+-      layers.each do |layer_effect|
+-        case layer_effect[:type]
+-        when :grain
+-          image = apply_grain(image, layer_effect[:strength])
+-        when :vignetting
+-          image = apply_vignetting(image, layer_effect[:strength])
+-        when :noise
+-          image = add_noise(image, layer_effect[:strength])
+-        when :hue_shift
+-          image = apply_hue_shift(image, layer_effect[:shift_amount])
+-        when :film_burn
+-          image = apply_film_burn_effect(image, layer_effect[:strength])
+-        when :light_leak
+-          image = apply_light_leak(image, layer_effect[:strength])
+-        when :blur
+-          image = apply_blur(image, layer_effect[:strength])
+-        when :glow
+-          image = apply_glow(image, layer_effect[:strength])
+-        when :texture_overlay
+-          image = apply_texture_overlay(image, layer_effect[:texture_path])
++        selected_effects.each do |effect|
++          intensity = validate_intensity(rand(0.5..1.0))
++          effect_configurations << { effect: effect, intensity: intensity }
++          processed_image = apply_effect(processed_image, effect, intensity)
+         end
+-      end
+-      image
+-    end
+ 
+-    def save_image(image, path)
+-      image.write_to_file(path)
++        # Save the combination of effects as a JSON recipe
++        json_recipe_path = "recipe_\#{File.basename(input_file, '.*')}_\#{Time.now.strftime('%Y%m%d%H%M%S')}_\#{rand(1000..9999)}.json"
++        File.open(json_recipe_path, 'w') { |file| file.write(JSON.pretty_generate(effect_configurations)) }
++        puts "Effect recipe saved to \#{json_recipe_path}"
++
++        # Save the processed image
++        output_path = "processed_\#{File.basename(input_file, '.*')}_\#{Time.now.strftime('%Y%m%d%H%M%S')}_\#{rand(1000..9999)}.jpg"
++        processed_image.write_to_file(output_path)
++        puts "Image saved to \#{output_path}"
++      rescue StandardError => e
++        LOGGER.error("Failed to process file \#{input_file}: \#{e.message}")
++        puts "Failed to process file: \#{input_file}"
++      end
+     end
+   end
+ end
+ 
+-# Example usage
+-# processor = Postpro::ImageProcessor.new('input.jpg', 'output.jpg')
+-# processor.apply_effects({
+-#   grain_level: 0.05,
+-#   vignetting_strength: 2.5,
+-#   brightness: 1.1,
+-#   contrast: 1.2,
+-#   saturation: 0.8,
+-#   noise_level: 0.1,
+-#   color_bleed_shift: 3,
+-#   resolution_scale: 0.5,
+-#   warp_strength: 3,
+-#   glow_strength: 1.5,
+-#   blur_strength: 2.0,
+-#   texture_overlay: 'texture.jpg',
+-#   hue_shift: 30,
+-#   film_burn_strength: 0.5,
+-#   light_leak_strength: 1.0,
+-#   color_fade_strength: 0.5,
+-#   layer_effects: [
+-#     { type: :grain, strength: 0.1 },
+-#     { type: :vignetting, strength: 3.0 },
+-#     { type: :glow, strength: 2.0 }
+-#   ]
+-# })
+-
+
+commit 85ebc126e79f879ce3ba68941b4c6ca6165a56bd
+Author: dev <dev@dev.openbsd.amsterdam>
+Date:   Wed Oct 23 17:13:21 2024 +0200
+
+    TMP
+
+diff --git a/README.md b/README.md
+new file mode 100644
+index 0000000..e4b35a0
+--- /dev/null
++++ b/README.md
+@@ -0,0 +1,140 @@
++# Postpro.rb
++
++**Postpro.rb** is a Ruby-based image post-processing tool using **libvips** to recreate the visual aesthetics of analog photography, VHS-era visuals, and professional cinematography. Whether you want to add retro character or experiment with modern artistic styles, Postpro.rb provides an intuitive solution for image enhancement.
++
++Postpro.rb includes features like grain, vignetting, color adjustments, and creative effects such as glow, blur, texture overlays, film burns, hue shifts, light leaks, and color fades. The tool is built for flexibility, allowing you to layer multiple effects to achieve the desired look.
++
++## Features
++
++### Analog Photography Effects
++
++Emulate the distinct features of analog film photography:
++
++- **Grain Structure**: Introduces natural-looking grain for a film-like effect.
++- **Color Balance Adjustments**: Control brightness, contrast, and saturation to match the palette of vintage film stocks.
++- **Vignetting**: Adds subtle edge darkening to draw attention to the center of the frame.
++
++### VHS-Style Effects
++
++Apply VHS-style degradation for a nostalgic, retro vibe:
++
++- **Noise and Static**: Adds a layer of grain and randomness reminiscent of VHS playback.
++- **Color Bleeding**: Shifts color channels to simulate chromatic aberration.
++- **Resolution Reduction**: Downscales and upscales the image to achieve a softened VHS effect.
++- **Warping and Distortion**: Simulates analog video playback artifacts.
++
++### Creative Aesthetic Effects
++
++Transform your image with additional modern artistic tools:
++
++- **Glow**: Creates an ethereal, dreamy look.
++- **Blur**: Introduces soft focus effects.
++- **Texture Overlay**: Allows layering of external textures like scratches or light streaks.
++- **Hue Shifts and Light Leaks**: Adds dramatic lighting and hue variations for artistic flair.
++- **Film Burn and Color Fades**: Mimics accidental light exposure or gradual color shifts.
++
++### Cinematographic and Professional Color Grading
++
++Achieve a professional, cinematic look by layering subtle color grades, using glow for highlights, or adding creative vignettes and filmic fades. Postpro.rb helps you replicate color grading often seen in professional filmmaking.
++
++## Dealing with Shared Libraries on OpenBSD
++
++For **OpenBSD** users, the **libvips** shared object (`.so` file) should be properly installed to ensure Postpro.rb functions without issues. The library needs to be available in the system's runtime linker's search path.
++
++### Installation Tips for OpenBSD:
++
++- Ensure the libvips package is installed using:
++
++    ```sh
++    pkg_add vips
++    ```
++
++- Make sure the `.so` file is located in a directory included in your `LD_LIBRARY_PATH`. Typically, OpenBSD's package manager installs `.so` files in `/usr/local/lib`.
++  
++- You may need to add `/usr/local/lib` to your environment variable:
++
++    ```sh
++    export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
++    ```
++
++## Example Usage
++
++Here's a basic example of how to use Postpro.rb:
++
++    processor = Postpro::ImageProcessor.new('input.jpg', 'output.jpg')
++    processor.apply_effects({
++        grain_level: 0.05,
++        vignetting_strength: 2.5,
++        brightness: 1.1,
++        contrast: 1.2,
++        saturation: 0.8,
++        noise_level: 0.1,
++        color_bleed_shift: 3,
++        resolution_scale: 0.5,
++        warp_strength: 3,
++        glow_strength: 1.5,
++        blur_strength: 2.0,
++        texture_overlay: 'texture.jpg',
++        hue_shift: 30,
++        film_burn_strength: 0.5,
++        light_leak_strength: 1.0,
++        color_fade_strength: 0.5,
++        layer_effects: [
++            { type: :grain, strength: 0.1 },
++            { type: :vignetting, strength: 3.0 },
++            { type: :glow, strength: 2.0 }
++        ]
++    })
++
++## Customization
++
++### Layering Effects
++
++Postpro.rb allows for **layered effects**, enabling you to combine multiple transformations for a more sophisticated final output. This creative layering includes effects like grain, glow, vignetting, and hue shifting in customized orders and with individual strengths.
++
++For example:
++
++    layer_effects: [
++        { type: :grain, strength: 0.08 },
++        { type: :hue_shift, shift_amount: 20 },
++        { type: :blur, strength: 1.5 },
++        { type: :light_leak, strength: 1.2 }
++    ]
++
++### Adjusting Parameters
++
++Parameters for each effect can be modified to suit your aesthetic goals. For instance:
++
++- **Grain Level**: Adjust the intensity from subtle to prominent.
++- **Vignetting Strength**: Increase for a dramatic look or decrease for a soft, natural effect.
++- **Glow and Blur**: Modify to emphasize highlights or add dreamy softness.
++
++### Professional Tips for Cinematography
++
++Use color balance to enhance the mood of your images, inspired by film styles. Adjust saturation carefully to maintain natural skin tones, or add subtle glow for a more cinematic atmosphere.
++
++**Postpro.rb** can help you simulate classic film styles like Kodak Portra or Fuji Velvia, useful for both photographers and film enthusiasts aiming for a particular cinematic touch.
++
++## Real-Time Processing and Batch Automation
++
++Postpro.rb can be integrated for **real-time processing** or automated workflows in larger projects:
++
++- **Batch Processing**: Apply a set of effects to an entire folder of images.
++  
++        input_dir = 'path/to/input_directory'
++        output_dir = 'path/to/output_directory'
++
++        Dir.glob("#{input_dir}/*.jpg").each do |file|
++            output_file = File.join(output_dir, File.basename(file))
++            processor = Postpro::ImageProcessor.new(
++                input: file,
++                output: output_file,
++                grain_level: 0.05,
++                brightness: 1.1,
++                contrast: 1.2,
++                vignetting_strength: 2.0,
++                noise_level: 0.1
++            )
++            processor.apply_effects
++        end
++
+diff --git a/postpro.rb b/postpro.rb
+new file mode 100644
+index 0000000..f88ebee
+--- /dev/null
++++ b/postpro.rb
+@@ -0,0 +1,222 @@
++# Postpro.rb
++# 
++# A post-processing tool that uses libvips to emulate the aesthetics of analog photography and VHS styles.
++# This script provides a variety of effects, including grain, vignetting, color adjustments, and warping.
++# Additionally, new creative effects such as glow, blur, texture overlays, film burn, hue shift, light leak, and color fade have been added to create unique, customizable image aesthetics.
++#
++
++require 'vips'
++
++module Postpro
++  class ImageProcessor
++    attr_accessor :image_path, :output_path
++
++    def initialize(image_path, output_path)
++      @image_path = image_path
++      @output_path = output_path
++      @image = Vips::Image.new_from_file(image_path, access: :sequential)
++    end
++
++    def apply_effects(effects = {})
++      @image = apply_grain(@image, effects[:grain_level]) if effects[:grain_level]
++      @image = apply_vignetting(@image, effects[:vignetting_strength]) if effects[:vignetting_strength]
++      @image = adjust_color_balance(@image, effects) if effects.slice(:brightness, :contrast, :saturation).any?
++      @image = add_noise(@image, effects[:noise_level]) if effects[:noise_level]
++      @image = apply_color_bleed(@image, effects[:color_bleed_shift]) if effects[:color_bleed_shift]
++      @image = apply_resolution_reduction(@image, effects[:resolution_scale]) if effects[:resolution_scale]
++      @image = apply_warp(@image, effects[:warp_strength]) if effects[:warp_strength]
++      @image = apply_glow(@image, effects[:glow_strength]) if effects[:glow_strength]
++      @image = apply_blur(@image, effects[:blur_strength]) if effects[:blur_strength]
++      @image = apply_texture_overlay(@image, effects[:texture_overlay]) if effects[:texture_overlay]
++      @image = apply_hue_shift(@image, effects[:hue_shift]) if effects[:hue_shift]
++      @image = apply_film_burn_effect(@image, effects[:film_burn_strength]) if effects[:film_burn_strength]
++      @image = apply_light_leak(@image, effects[:light_leak_strength]) if effects[:light_leak_strength]
++      @image = apply_color_fade(@image, effects[:color_fade_strength]) if effects[:color_fade_strength]
++
++      # Apply creative layering to achieve unique aesthetic results
++      if effects[:layer_effects]
++        @image = apply_creative_layering(@image, effects[:layer_effects])
++      end
++
++      save_image(@image, output_path)
++    end
++
++    private
++
++    def apply_grain(image, level = 0.05)
++      noise = Vips::Image.gaussnoise(image.width, image.height) * (level * 255)
++      grainy_image = (image + noise).clip(0, 255)
++      grainy_image
++    end
++
++    def apply_vignetting(image, strength = 2.0)
++      width, height = image.width, image.height
++      center_x, center_y = width / 2, height / 2
++
++      x = Vips::Image.range(width).cast('float') - center_x
++      y = Vips::Image.range(height).cast('float') - center_y
++      distance = ((x ** 2) + (y ** 2)).sqrt
++
++      max_distance = ((center_x ** 2) + (center_y ** 2)).sqrt
++      vignette_mask = (1 - (distance / max_distance)) ** strength
++      vignette_mask = vignette_mask.clip(0, 1).bandjoin([vignette_mask] * (image.bands - 1))
++
++      vignetted_image = (image * vignette_mask).clip(0, 255)
++      vignetted_image
++    end
++
++    def adjust_color_balance(image, params = {})
++      brightness = params[:brightness] || 1.0
++      contrast = params[:contrast] || 1.0
++      saturation = params[:saturation] || 1.0
++
++      adjusted = image.linear(contrast, (brightness - 1) * 128)
++      hsl_image = adjusted.colourspace('hsl')
++      h, s, l = hsl_image[0], hsl_image[1], hsl_image[2]
++      adjusted_saturation = s * saturation
++      adjusted_image = h.bandjoin([adjusted_saturation, l]).colourspace('srgb')
++      adjusted_image
++    end
++
++    def add_noise(image, level = 0.05)
++      noise = Vips::Image.gaussnoise(image.width, image.height) * (level * 255)
++      noisy_image = (image + noise).clip(0, 255)
++      noisy_image
++    end
++
++    def apply_color_bleed(image, shift_amount = 3)
++      r, g, b = image[0], image[1], image[2]
++      r_shifted = r.embed(shift_amount, 0, image.width + shift_amount, image.height, extend: :black).crop(shift_amount, 0, image.width, image.height)
++      b_shifted = b.embed(0, 0, image.width + shift_amount, image.height, extend: :black).crop(shift_amount, 0, image.width, image.height)
++
++      color_bleeded_image = r_shifted.bandjoin([g, b_shifted])
++      color_bleeded_image
++    end
++
++    def apply_resolution_reduction(image, scale = 0.5)
++      downscaled = image.resize(scale, kernel: :linear)
++      upscaled = downscaled.resize(1 / scale, kernel: :linear)
++      upscaled
++    end
++
++    def apply_warp(image, strength = 3)
++      width, height = image.width, image.height
++      x = Vips::Image.range(width).cast('float')
++      y = Vips::Image.range(height).cast('float')
++
++      center_x = width / 2
++      center_y = height / 2
++
++      dx = x - center_x
++      dy = y - center_y
++      distance = ((dx ** 2) + (dy ** 2)).sqrt
++      max_distance = ((center_x ** 2) + (center_y ** 2)).sqrt
++
++      warp_mask = (1 - (distance / max_distance) ** 2) * strength
++      warped_image = image.affine([1, warp_mask.max, 0, 1], 0, 0)
++      warped_image
++    end
++
++    def apply_glow(image, strength = 1.5)
++      blurred = image.gaussblur(strength)
++      glow_image = (image + blurred * 0.5).clip(0, 255)
++      glow_image
++    end
++
++    def apply_blur(image, strength = 2.0)
++      blurred_image = image.gaussblur(strength)
++      blurred_image
++    end
++
++    def apply_texture_overlay(image, texture_path)
++      texture = Vips::Image.new_from_file(texture_path).resize(image.width.to_f / texture.width, kernel: :linear)
++      overlaid_image = (image * 0.8 + texture * 0.2).clip(0, 255)
++      overlaid_image
++    end
++
++    def apply_hue_shift(image, shift_amount = 30)
++      hsl_image = image.colourspace('hsl')
++      h, s, l = hsl_image[0], hsl_image[1], hsl_image[2]
++      h = (h + shift_amount) % 360
++      hue_shifted_image = h.bandjoin([s, l]).colourspace('srgb')
++      hue_shifted_image
++    end
++
++    def apply_film_burn_effect(image, strength = 0.5)
++      burn_overlay = Vips::Image.gaussnoise(image.width, image.height, sigma: 30) * (strength * 255)
++      burn_overlay = burn_overlay.colourspace('srgb') if image.bands > 1
++      film_burned_image = (image + burn_overlay).clip(0, 255)
++      film_burned_image
++    end
++
++    def apply_light_leak(image, strength = 1.0)
++      width, height = image.width, image.height
++      leak = Vips::Image.gaussnoise(width, height, sigma: 50) * (strength * 128)
++      leak_mask = leak > (strength * 100)
++      light_leak_image = (image + leak_mask * 255 * strength).clip(0, 255)
++      light_leak_image
++    end
++
++    def apply_color_fade(image, strength = 0.5)
++      faded_image = image.linear(1 - strength, 128 * strength)
++      faded_image.clip(0, 255)
++    end
++
++    def apply_creative_layering(image, layers)
++      layers.each do |layer_effect|
++        case layer_effect[:type]
++        when :grain
++          image = apply_grain(image, layer_effect[:strength])
++        when :vignetting
++          image = apply_vignetting(image, layer_effect[:strength])
++        when :noise
++          image = add_noise(image, layer_effect[:strength])
++        when :hue_shift
++          image = apply_hue_shift(image, layer_effect[:shift_amount])
++        when :film_burn
++          image = apply_film_burn_effect(image, layer_effect[:strength])
++        when :light_leak
++          image = apply_light_leak(image, layer_effect[:strength])
++        when :blur
++          image = apply_blur(image, layer_effect[:strength])
++        when :glow
++          image = apply_glow(image, layer_effect[:strength])
++        when :texture_overlay
++          image = apply_texture_overlay(image, layer_effect[:texture_path])
++        end
++      end
++      image
++    end
++
++    def save_image(image, path)
++      image.write_to_file(path)
++    end
++  end
++end
++
++# Example usage
++# processor = Postpro::ImageProcessor.new('input.jpg', 'output.jpg')
++# processor.apply_effects({
++#   grain_level: 0.05,
++#   vignetting_strength: 2.5,
++#   brightness: 1.1,
++#   contrast: 1.2,
++#   saturation: 0.8,
++#   noise_level: 0.1,
++#   color_bleed_shift: 3,
++#   resolution_scale: 0.5,
++#   warp_strength: 3,
++#   glow_strength: 1.5,
++#   blur_strength: 2.0,
++#   texture_overlay: 'texture.jpg',
++#   hue_shift: 30,
++#   film_burn_strength: 0.5,
++#   light_leak_strength: 1.0,
++#   color_fade_strength: 0.5,
++#   layer_effects: [
++#     { type: :grain, strength: 0.1 },
++#     { type: :vignetting, strength: 3.0 },
++#     { type: :glow, strength: 2.0 }
++#   ]
++# })
++
