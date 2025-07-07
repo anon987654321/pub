@@ -3,6 +3,10 @@
 #
 # ENHANCED HEDGE FUND IMPLEMENTATION WITH ROBOT SWARM TRADERS,
 # MULTIPLE STRATEGIES, AND API INTEGRATIONS
+#
+# Business Domain: Finance & Investment
+# Cross-References: ../README.md, ./nordic-prosperity-fund.md, ./research/trading-notes.md
+# Framework: master.json v111.3-autonomous
 
 require 'yaml'
 require 'binance'

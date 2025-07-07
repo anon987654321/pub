@@ -1,4 +1,7 @@
-# Nordic Prosperity Fund – Pioneering Sustainable Wealth with AI^3 and Ruby
+# Nordic Prosperity Fund – Pioneering Sustainable Wealth with AI³ and Ruby
+
+**Business Plan** | **Domain**: Finance & Investment | **Framework**: master.json v111.3-autonomous  
+**Cross-References**: [Trading Systems](./swarm-trading-system.rb) | [Research Notes](./research/trading-notes.md) | [Technology Portfolio](../technology/)
 
 ---
 
