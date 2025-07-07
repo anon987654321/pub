@@ -31,7 +31,16 @@ CHECKSUM: sha256:4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5
    setup_postgresql() {     log "Setting up PostgreSQL"     DB_NAME="${APP_NAME}_db"     DB_USER="${APP_NAME}_user"     DB_PASS="securepassword$(openssl rand -hex 8)"     doas psql -U postgres -c "CREATE DATABASE $DB_NAME;" >> "$LOG_FILE" 2>&1 || { log "Error: Failed to create database"; exit 1; }     doas psql -U postgres -c "CREATE USER $DB_USER WITH PASSWORD '$DB_PASS';" >> "$LOG_FILE" 2>&1 || { log "Error: Failed to create user"; exit 1; }     doas psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE $DB_NAME TO $DB_USER;" >> "$LOG_FILE" 2>&1 || { log "Error: Failed to grant privileges"; exit 1; }     cat > config/database.yml <<EOFdefault: &default  adapter: postgresql  encoding: unicode  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>  username: $DB_USER  password: $DB_PASS  host: localhostdevelopment:  <<: *default  database: $DB_NAMEproduction:  <<: *default  database: $DB_NAMEEOF     bin/rails db:create migrate >> "$LOG_FILE" 2>&1 || { log "Error: Failed to setup database"; exit 1; }     commit_to_git "Setup PostgreSQL"   }
    setup_redis() {     log "Setting up Redis"     doas rcctl enable redis >> "$LOG_FILE" 2>&1 || { log "Error: Failed to enable redis"; exit 1; }     doas rcctl start redis >> "$LOG_FILE" 2>&1 || { log "Error: Failed to start redis"; exit 1; }     commit_to_git "Setup Redis"   }
    setup_yarn() {     log "Setting up Yarn"     npm install -g yarn >> "$LOG_FILE" 2>&1 || { log "Error: Failed to install yarn"; exit 1; }     yarn install >> "$LOG_FILE" 2>&1 || { log "Error: Yarn install failed"; exit 1; }     commit_to_git "Setup Yarn"   }
-   setup_rails() {     log "Creating Rails app"     doas useradd -m -s "/bin/ksh" -L rails "$APP_NAME" >> "$LOG_FILE" 2>&1 || true     doas mkdir -p "$APP_DIR"     doas chown -R "$APP_NAME:$APP_NAME" "/home/$APP_NAME"     su - "$APP_NAME" -c "cd /home/$APP_NAME && rails new app -d postgresql --skip-test --skip-bundle --css=scss --asset-pipeline=propshaft" >> "$LOG_FILE" 2>&1 || { log "Error: Failed to create Rails app"; exit 1; }     cd "$APP_DIR"     echo "gem 'falcon'" >> Gemfile     bundle install >> "$LOG_FILE" 2>&1 || { log "Error: Bundle install failed"; exit 1; }     commit_to_git "Created Rails app"   }
+   setup_rails() {     log "Creating Rails app"     doas useradd -m -s "/bin/ksh" -L rails "$APP_NAME" >> "$LOG_FILE" 2>&1 || true     doas mkdir -p "$APP_DIR"     doas chown -R "$APP_NAME:$APP_NAME" "/home/$APP_NAME"     su - "$APP_NAME" -c "cd /home/$APP_NAME && rails _8.0.0_ new app -d postgresql --skip-test --skip-bundle --css=scss --asset-pipeline=propshaft" >> "$LOG_FILE" 2>&1 || { log "Error: Failed to create Rails app"; exit 1; }     cd "$APP_DIR"     cat >> Gemfile <<'GEMFILE'
+gem 'falcon', '~> 0.47'
+gem 'solid_queue', '~> 1.0'
+gem 'solid_cache', '~> 1.0'
+gem 'hotwire-rails', '~> 0.1'
+gem 'turbo-rails', '~> 2.0'
+gem 'stimulus-rails', '~> 1.3'
+gem 'propshaft', '~> 1.0'
+GEMFILE
+     bundle install >> "$LOG_FILE" 2>&1 || { log "Error: Bundle install failed"; exit 1; }     commit_to_git "Created Rails app"   }
    setup_authentication() {     log "Setting up Devise, devise-guests, omniauth-vipps"     echo "gem 'devise', 'devise-guests', 'omniauth-openid-connect'" >> Gemfile     bundle install >> "$LOG_FILE" 2>&1     bin/rails generate devise:install >> "$LOG_FILE" 2>&1     bin/rails generate devise User >> "$LOG_FILE" 2>&1     echo "config.guest_user = true" >> config/initializers/devise.rb     mkdir -p lib/omniauth/strategies     cat > lib/omniauth/strategies/vipps.rb <<EOFrequire 'omniauth-openid-connect'module OmniAuth  module Strategies    class Vipps < OmniAuth::Strategies::OpenIDConnect      option :name, 'vipps'      option :client_options, {        identifier: ENV['VIPPS_CLIENT_ID'],        secret: ENV['VIPPS_CLIENT_SECRET'],        authorization_endpoint: 'https://api.vipps.no/oauth/authorize',        token_endpoint: 'https://api.vipps.no/oauth/token',        userinfo_endpoint: 'https://api.vipps.no/userinfo'      }      uid { raw_info['sub'] }      info { { email: raw_info['email'], name: raw_info['name'] } }    end  endendEOF     echo "Rails.application.config.middleware.use OmniAuth::Builder do  provider :vipps, ENV['VIPPS_CLIENT_ID'], ENV['VIPPS_CLIENT_SECRET']end" >> config/initializers/omniauth.rb     commit_to_git "Setup authentication"   }
    setup_realtime_features() {     log "Setting up Falcon, ActionCable, streaming"     echo "gem 'stimulus_reflex', 'actioncable'" >> Gemfile     bundle install >> "$LOG_FILE" 2>&1     bin/rails stimulus_reflex:install >> "$LOG_FILE" 2>&1     yarn add @hotwired/turbo-rails @hotwired/stimulus stimulus_reflex stimulus-components >> "$LOG_FILE" 2>&1     commit_to_git "Setup realtime features"   }
    setup_active_storage() {     log "Setting up Active Storage"     bin/rails active_storage:install >> "$LOG_FILE" 2>&1     commit_to_git "Setup Active Storage"   }
@@ -289,8 +298,8 @@ gem 'devise-guests', '0.8.3'
 gem 'omniauth-vipps', '0.3.0'
 gem 'stimulus_reflex', '3.5.0'
 gem 'actioncable', '8.0.0'
-gem 'solid_queue', '0.4.0'
-gem 'solid_cache', '0.3.0'
+gem 'solid_queue', '~> 1.0'
+gem 'solid_cache', '~> 1.0'
 EOF
   bundle install >> "$LOG_FILE" 2>&1 || { log "Error: Bundle install failed"; exit 1; }
   commit_to_git "Created Rails app"

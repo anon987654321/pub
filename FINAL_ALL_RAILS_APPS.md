@@ -28,7 +28,7 @@ set -e
 # Shared utility functions for Rails apps on OpenBSD 7.5, unprivileged user, NNG/SEO/Schema optimized
 
 BASE_DIR="/home/dev/rails"
-RAILS_VERSION="8.0.0.beta1"
+RAILS_VERSION="8.0.0"
 RUBY_VERSION="3.3.0"
 NODE_VERSION="20"
 BRGEN_IP="46.23.95.45"

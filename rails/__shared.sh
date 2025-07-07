@@ -4,7 +4,7 @@ set -e
 # Shared utility functions for Rails apps on OpenBSD 7.5, unprivileged user, NNG/SEO/Schema optimized
 
 BASE_DIR="/home/dev/rails"
-RAILS_VERSION="8.0.0.beta1"
+RAILS_VERSION="8.0.0"
 RUBY_VERSION="3.3.0"
 NODE_VERSION="20"
 BRGEN_IP="46.23.95.45"
@@ -68,11 +68,29 @@ setup_rails() {
   if [ -f "Gemfile" ]; then
     log "Gemfile exists, skipping Rails new"
   else
-    rails new . -f --skip-bundle --database=postgresql
+    rails new . -f --skip-bundle --database=postgresql --asset-pipeline=propshaft --css=scss
     if [ $? -ne 0 ]; then
       error "Failed to create Rails app '$1'"
     fi
   fi
+  
+  # Add modern Rails 8 gems to Gemfile
+  cat <<EOF >> Gemfile
+
+# Rails 8 Modern Stack
+gem 'solid_queue', '~> 1.0'
+gem 'solid_cache', '~> 1.0'
+gem 'falcon', '~> 0.47'
+gem 'hotwire-rails', '~> 0.1'
+gem 'turbo-rails', '~> 2.0'
+gem 'stimulus-rails', '~> 1.3'
+gem 'propshaft', '~> 1.0'
+
+# Enhanced Stimulus Components
+gem 'stimulus_reflex', '~> 3.5'
+gem 'cable_ready', '~> 5.0'
+EOF
+
   bundle install
   if [ $? -ne 0 ]; then
     error "Failed to run bundle install"
@@ -95,6 +113,66 @@ setup_redis() {
     log "Redis not running. Please start it manually (e.g., redis-server &) before proceeding."
     error "Redis not running"
   fi
+}
+
+setup_solid_queue() {
+  log "Setting up Solid Queue for background jobs"
+  
+  # Generate Solid Queue configuration
+  bin/rails generate solid_queue:install
+  if [ $? -ne 0 ]; then
+    error "Failed to generate Solid Queue configuration"
+  fi
+  
+  # Configure Solid Queue in application.rb
+  cat <<EOF >> config/application.rb
+
+    # Solid Queue configuration
+    config.active_job.queue_adapter = :solid_queue
+    config.solid_queue.connects_to = { writing: :primary }
+EOF
+
+  # Add database configuration for Solid Queue
+  cat <<EOF >> config/database.yml
+
+# Solid Queue database configuration
+solid_queue:
+  <<: *default
+  database: <%= ENV.fetch('DATABASE_URL', "#{Rails.application.credentials.database_url || 'postgresql://localhost/solid_queue'}") %>
+  migrations_paths: db/queue_migrate
+EOF
+
+  log "Solid Queue setup completed"
+}
+
+setup_solid_cache() {
+  log "Setting up Solid Cache for caching"
+  
+  # Generate Solid Cache configuration
+  bin/rails generate solid_cache:install
+  if [ $? -ne 0 ]; then
+    error "Failed to generate Solid Cache configuration"
+  fi
+  
+  # Configure Solid Cache in application.rb
+  cat <<EOF >> config/application.rb
+
+    # Solid Cache configuration
+    config.cache_store = :solid_cache_store
+EOF
+
+  # Add Solid Cache initializer
+  cat <<EOF > config/initializers/solid_cache.rb
+# Solid Cache configuration
+Rails.application.configure do
+  config.solid_cache.connects_to = { writing: :primary }
+  config.solid_cache.key_hash_stage = :fnv1a_64
+  config.solid_cache.encrypt = true
+  config.solid_cache.size_limit = 256.megabytes
+end
+EOF
+
+  log "Solid Cache setup completed"
 }
 
 install_gem() {
@@ -831,11 +909,82 @@ EOF
 }
 
 setup_stimulus_components() {
-  log "Setting up Stimulus components for enhanced UX"
-  yarn add stimulus-lightbox stimulus-infinite-scroll stimulus-character-counter stimulus-textarea-autogrow stimulus-carousel stimulus-use stimulus-debounce
+  log "Setting up Stimulus components for enhanced UX from stimulus-components.com"
+  
+  # Install core stimulus components from stimulus-components.com
+  yarn add stimulus-lightbox stimulus-infinite-scroll stimulus-character-counter stimulus-textarea-autogrow stimulus-carousel stimulus-use stimulus-debounce stimulus-dropdown stimulus-clipboard stimulus-tabs stimulus-popover stimulus-tooltip
   if [ $? -ne 0 ]; then
     error "Failed to install Stimulus components"
   fi
+  
+  # Create modern stimulus controllers
+  mkdir -p app/javascript/controllers
+  
+  # Modern lightbox controller
+  cat <<EOF > app/javascript/controllers/lightbox_controller.js
+import { Controller } from "@hotwired/stimulus"
+import { Lightbox } from "stimulus-lightbox"
+
+export default class extends Controller {
+  static targets = ["image"]
+  
+  connect() {
+    this.lightbox = new Lightbox(this.element, {
+      keyboard: true,
+      closeOnOutsideClick: true
+    })
+  }
+  
+  disconnect() {
+    this.lightbox.destroy()
+  }
+}
+EOF
+
+  # Modern dropdown controller
+  cat <<EOF > app/javascript/controllers/dropdown_controller.js
+import { Controller } from "@hotwired/stimulus"
+import { useClickOutside } from "stimulus-use"
+
+export default class extends Controller {
+  static targets = ["menu"]
+  static classes = ["open"]
+  
+  connect() {
+    useClickOutside(this)
+  }
+  
+  toggle() {
+    this.menuTarget.classList.toggle(this.openClass)
+  }
+  
+  clickOutside() {
+    this.menuTarget.classList.remove(this.openClass)
+  }
+}
+EOF
+
+  # Modern clipboard controller
+  cat <<EOF > app/javascript/controllers/clipboard_controller.js
+import { Controller } from "@hotwired/stimulus"
+
+export default class extends Controller {
+  static targets = ["source", "button"]
+  static classes = ["success"]
+  
+  copy() {
+    navigator.clipboard.writeText(this.sourceTarget.textContent)
+      .then(() => {
+        this.buttonTarget.classList.add(this.successClass)
+        setTimeout(() => {
+          this.buttonTarget.classList.remove(this.successClass)
+        }, 2000)
+      })
+  }
+}
+EOF
+
+  log "Modern Stimulus components setup completed"
 }
 
 setup_vote_controller() {
@@ -880,13 +1029,15 @@ EOF
 }
 
 setup_full_app() {
-  log "Setting up full Rails app '$1' with NNG/SEO/Schema enhancements"
+  log "Setting up full Rails app '$1' with NNG/SEO/Schema enhancements and Rails 8 modern stack"
   init_app "$1"
   setup_postgresql "$1"
   setup_redis
   setup_ruby
   setup_yarn
   setup_rails "$1"
+  setup_solid_queue
+  setup_solid_cache
   setup_core
   setup_devise
   setup_storage
