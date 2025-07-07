@@ -1,0 +1,100 @@
+# AI³ Configuration File
+# Main configuration for the AI³ interactive multi-LLM RAG CLI system
+
+# LLM Configuration
+llm:
+  primary: "xai"                    # Primary LLM provider: xai, anthropic, openai, ollama
+  fallback_enabled: true            # Enable automatic fallback
+  temperature: 0.7                  # Default temperature for responses
+  max_tokens: 1000                  # Default max tokens
+  timeout: 30                       # Request timeout in seconds
+
+# Cognitive Framework Settings
+cognitive:
+  max_working_memory: 7             # 7±2 working memory limit
+  circuit_breaker_threshold: 8      # Cognitive overload threshold
+  context_switch_limit: 3           # Max context switches before break
+  flow_state_monitoring: true       # Enable flow state tracking
+  attention_restoration_duration: 30 # Break duration in seconds
+
+# Session Management
+session:
+  max_sessions: 10                  # Maximum concurrent sessions
+  eviction_strategy: "cognitive_load_aware"  # Session eviction strategy
+  encryption_enabled: true          # Encrypt session data
+  cleanup_interval: 3600            # Session cleanup interval (seconds)
+
+# RAG Configuration
+rag:
+  enabled: true                     # Enable RAG functionality
+  vector_db_path: "data/vector_store.db"  # Vector database location
+  chunk_size: 500                   # Document chunk size
+  chunk_overlap: 50                 # Chunk overlap size
+  similarity_threshold: 0.7         # Minimum similarity for results
+  max_results: 5                    # Maximum search results
+
+# Web Scraping
+scraper:
+  enabled: true                     # Enable web scraping
+  max_depth: 2                      # Maximum crawl depth
+  timeout: 30                       # Page load timeout
+  screenshot_enabled: true          # Enable screenshots
+  screenshot_dir: "data/screenshots" # Screenshot directory
+  user_agent: "AI3-Bot/1.0"        # User agent string
+
+# Security Settings (OpenBSD)
+security:
+  pledge_enabled: false             # Enable OpenBSD pledge (requires OpenBSD)
+  unveil_enabled: false             # Enable OpenBSD unveil (requires OpenBSD)
+  file_access_restricted: true      # Restrict file access
+  command_execution_enabled: false  # Enable system command execution
+
+# Database Settings
+database:
+  sessions_db: "data/sessions.db"   # Session database location
+  vector_db: "data/vector_store.db" # Vector database location
+  backup_enabled: true              # Enable automatic backups
+  backup_interval: 86400            # Backup interval (24 hours)
+
+# Logging
+logging:
+  level: "info"                     # Log level: debug, info, warn, error
+  file: "logs/ai3.log"              # Log file location
+  max_size: 10485760                # Max log file size (10MB)
+  rotate_count: 5                   # Number of rotated log files
+
+# Cache Settings
+cache:
+  enabled: true                     # Enable caching
+  ttl: 3600                         # Cache TTL in seconds
+  max_size: 1000                    # Maximum cache entries
+  directory: "tmp/cache"            # Cache directory
+
+# UI Settings
+ui:
+  prompt_style: "modern"            # Prompt style: classic, modern, minimal
+  color_enabled: true               # Enable colored output
+  animations_enabled: true          # Enable loading animations
+  page_size: 10                     # Items per page in lists
+
+# Assistant Settings
+assistants:
+  auto_discovery: true              # Auto-discover assistant files
+  cognitive_profiles: true          # Enable cognitive profiling
+  load_balancing: true              # Enable load balancing
+  default_assistant: "general"      # Default assistant when none specified
+
+# Development Settings
+development:
+  debug_mode: false                 # Enable debug mode
+  performance_monitoring: true      # Monitor performance metrics
+  cognitive_insights: true          # Show cognitive insights
+  verbose_logging: false            # Enable verbose logging
+
+# API Keys (will be loaded from environment or separate file)
+# These are placeholder references - actual keys should be in .env or ~/.ai3_keys
+api_keys:
+  xai_api_key: "${XAI_API_KEY}"
+  anthropic_api_key: "${ANTHROPIC_API_KEY}"
+  openai_api_key: "${OPENAI_API_KEY}"
+  replicate_api_key: "${REPLICATE_API_KEY}"
