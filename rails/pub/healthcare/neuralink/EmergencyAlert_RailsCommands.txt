@@ -1,5 +1,5 @@
 # Emergency Alert App Rails Commands
-rails new EmergencyAlert --database=postgresql --javascript=esbuild --css=sass --skip-docker
+rails new EmergencyAlert --database=postgresql --javascript=esbuild --css=sass --asset-pipeline=propshaft --skip-docker
 rails generate model User name:string email:string
 rails generate model AlertType name:string
 rails generate model EmergencyAlert user:references alert_type:references status:string

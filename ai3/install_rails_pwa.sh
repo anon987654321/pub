@@ -37,15 +37,15 @@ done
 
 # Check Ruby and Rails versions
 required_ruby="3.3"
-required_rails="7.1"
+required_rails="8.0"
 if ! ruby -v | grep -q "$required_ruby"; then
     log "Error: Ruby version must be >= $required_ruby"
     echo "Error: Ruby version must be >= $required_ruby" >&2
     exit 1
 fi
 if ! rails -v | grep -q "$required_rails"; then
-    log "Error: Rails version must be $required_rails"
-    echo "Error: Rails version must be $required_rails" >&2
+    log "Error: Rails version must be >= $required_rails"
+    echo "Error: Rails version must be >= $required_rails" >&2
     exit 1
 fi
 
