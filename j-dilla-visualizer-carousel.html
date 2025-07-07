@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>J Dilla Visualizer Carousel - Complete Collection</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+  <style>
+    /* Master.json v12.3.0 Compliance - 2-space indentation, double quotes */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      background: #000;
+      color: #fff;
+      overflow: hidden;
+    }
+
+    /* Swiper Container */
+    .swiper {
+      width: 100vw;
+      height: 100vh;
+    }
+
+    .swiper-slide {
+      width: 100%;
+      height: 100%;
+      background: #000;
+      position: relative;
+    }
+
+    /* Navigation Controls */
+    .carousel-nav {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 1000;
+      display: flex;
+      gap: 10px;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #333;
+    }
+
+    .nav-btn {
+      background: #1a1a1a;
+      border: 1px solid #444;
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      transition: all 0.2s ease;
+    }
+
+    .nav-btn:hover {
+      background: #333;
+      border-color: #666;
+    }
+
+    .nav-btn.active {
+      background: #8a2be2;
+      border-color: #8a2be2;
+    }
+
+    /* Audio Control Panel */
+    .audio-panel {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      background: rgba(0, 0, 0, 0.9);
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid #333;
+      min-width: 250px;
+    }
+
+    .track-info {
+      margin-bottom: 10px;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .track-title {
+      font-weight: 600;
+      color: #8a2be2;
+    }
+
+    .track-artist {
+      color: #ccc;
+      font-size: 12px;
+    }
+
+    .audio-controls {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .control-btn {
+      background: #1a1a1a;
+      border: 1px solid #444;
+      color: #fff;
+      padding: 6px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 11px;
+      flex: 1;
+      text-align: center;
+    }
+
+    .control-btn:hover {
+      background: #333;
+    }
+
+    .volume-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .volume-slider {
+      flex: 1;
+      height: 4px;
+      background: #333;
+      border-radius: 2px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    /* Placeholder Slide Styles */
+    .placeholder-slide {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+      text-align: center;
+      padding: 40px;
+      width: 100%;
+      height: 100%;
+    }
+
+    .placeholder-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      background: linear-gradient(45deg, #8a2be2, #ff6b6b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .placeholder-subtitle {
+      font-size: 1.2rem;
+      color: #ccc;
+      margin-bottom: 30px;
+      max-width: 600px;
+      line-height: 1.6;
+    }
+
+    .placeholder-features {
+      list-style: none;
+      text-align: left;
+      max-width: 500px;
+    }
+
+    .placeholder-features li {
+      padding: 8px 0;
+      color: #aaa;
+      position: relative;
+      padding-left: 20px;
+    }
+
+    .placeholder-features li:before {
+      content: "→";
+      position: absolute;
+      left: 0;
+      color: #8a2be2;
+      font-weight: bold;
+    }
+
+    /* Starfield Specific Styles */
+    .starfield-slide {
+      background: black;
+      width: 100%;
+      height: 100%;
+    }
+
+    .starfield-slide #audio-controls {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      color: white;
+      z-index: 100;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 10px;
+      border-radius: 4px;
+    }
+
+    .starfield-slide #audio-controls button {
+      background: #333;
+      border: 1px solid #555;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 3px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+
+    /* Swiper Navigation */
+    .swiper-button-next,
+    .swiper-button-prev {
+      color: #8a2be2 !important;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 50%;
+      width: 44px !important;
+      height: 44px !important;
+    }
+
+    .swiper-pagination-bullet {
+      background: #666 !important;
+      opacity: 0.7 !important;
+    }
+
+    .swiper-pagination-bullet-active {
+      background: #8a2be2 !important;
+      opacity: 1 !important;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .carousel-nav,
+      .audio-panel {
+        position: fixed;
+        bottom: 20px;
+        top: auto;
+        left: 50%;
+        transform: translateX(-50%);
+        width: calc(100% - 40px);
+        max-width: 400px;
+      }
+
+      .audio-panel {
+        bottom: 80px;
+      }
+
+      .placeholder-title {
+        font-size: 2rem;
+      }
+
+      .placeholder-subtitle {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Carousel Navigation -->
+  <div class="carousel-nav">
+    <button class="nav-btn active" data-slide="0">Starfield Warp</button>
+    <button class="nav-btn" data-slide="1">Ultimate Experience</button>
+    <button class="nav-btn" data-slide="2">Master.json Engine</button>
+    <button class="nav-btn" data-slide="3">Reserved Slot 1</button>
+    <button class="nav-btn" data-slide="4">Reserved Slot 2</button>
+  </div>
+
+  <!-- Audio Control Panel -->
+  <div class="audio-panel">
+    <div class="track-info">
+      <div class="track-title" id="current-track-title">Microphone Master [Extended]</div>
+      <div class="track-artist" id="current-track-artist">J Dilla</div>
+    </div>
+    <div class="audio-controls">
+      <button class="control-btn" id="play-pause-btn">Play</button>
+      <button class="control-btn" id="prev-track-btn">Previous</button>
+      <button class="control-btn" id="next-track-btn">Next</button>
+      <button class="control-btn" id="shuffle-btn">Shuffle</button>
+    </div>
+    <div class="volume-control">
+      <span style="font-size: 12px;">Vol:</span>
+      <input type="range" class="volume-slider" id="volume-slider" min="0" max="100" value="70">
+      <span style="font-size: 12px;" id="volume-display">70%</span>
+    </div>
+  </div>
+
+  <!-- Swiper Container -->
+  <div class="swiper">
+    <div class="swiper-wrapper">
+      
+      <!-- Slide 1: Starfield Warp Tunnel -->
+      <div class="swiper-slide">
+        <div class="starfield-slide" id="starfield-container">
+          <div id="audio-controls">
+            <button id="btStartAudioVisualization">Start Audio Visualization</button>
+            <div id="txtStatus">Waiting Patiently For You... Please Click the Start Button.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 2: Ultimate J Dilla Experience -->
+      <div class="swiper-slide">
+        <div class="placeholder-slide">
+          <h1 class="placeholder-title">Ultimate J Dilla Experience</h1>
+          <p class="placeholder-subtitle">
+            Comprehensive UI with performance monitoring and advanced controls.
+            This visualizer would feature real-time audio analysis with cognitive load management.
+          </p>
+          <ul class="placeholder-features">
+            <li>Real-time performance monitoring</li>
+            <li>Advanced audio visualization controls</li>
+            <li>Cognitive load management system</li>
+            <li>Interactive UI components</li>
+            <li>Flow state preservation features</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Slide 3: Master.json Compliant -->
+      <div class="swiper-slide">
+        <div class="placeholder-slide">
+          <h1 class="placeholder-title">Master.json Compliant Engine</h1>
+          <p class="placeholder-subtitle">
+            Advanced visual engine built according to master.json v12.3.0 specifications.
+            Features progressive disclosure and working memory optimization.
+          </p>
+          <ul class="placeholder-features">
+            <li>Master.json v12.3.0 compliance</li>
+            <li>Progressive disclosure interface</li>
+            <li>Working memory limits (7±2 concepts)</li>
+            <li>Cognitive circuit breakers</li>
+            <li>2-space indentation religiously</li>
+            <li>Double quotes everywhere</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Slide 4: Reserved Slot 1 -->
+      <div class="swiper-slide">
+        <div class="placeholder-slide">
+          <h1 class="placeholder-title">Reserved Visualizer Slot</h1>
+          <p class="placeholder-subtitle">
+            This slot is reserved for future J Dilla visualizer expansion.
+            Ready for seamless integration of new visualization engines.
+          </p>
+          <ul class="placeholder-features">
+            <li>Future visualizer slot</li>
+            <li>Master.json principles ready</li>
+            <li>Cognitive design patterns</li>
+            <li>Audio integration prepared</li>
+            <li>Expandable architecture</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Slide 5: Reserved Slot 2 -->
+      <div class="swiper-slide">
+        <div class="placeholder-slide">
+          <h1 class="placeholder-title">Future Expansion Ready</h1>
+          <p class="placeholder-subtitle">
+            Additional reserved slot for continued growth of the J Dilla visualizer collection.
+            Maintaining architectural consistency and performance standards.
+          </p>
+          <ul class="placeholder-features">
+            <li>Additional expansion capacity</li>
+            <li>Consistent design patterns</li>
+            <li>Performance optimization ready</li>
+            <li>Cross-browser compatibility</li>
+            <li>Mobile-friendly architecture</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+    
+    <!-- Navigation -->
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-pagination"></div>
+  </div>
+
+  <!-- YouTube Player (Hidden) -->
+  <div id="youtube-player" style="display: none;"></div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script src="https://www.youtube.com/iframe_api"></script>
+  
+  <script>
+    // Extended J Dilla Playlist (14 tracks)
+    const tracks = [
+      { id: "9EGHwkDix78", title: "Microphone Master [Extended]", artist: "J Dilla", url: "https://www.youtube.com/watch?v=9EGHwkDix78" },
+      { id: "WC09qDzU9y4", title: "Due Time", artist: "AFTA-1", url: "https://youtu.be/WC09qDzU9y4" },
+      { id: "9ycJsnzJ-hA", title: "In Space", artist: "J Dilla", url: "https://youtu.be/9ycJsnzJ-hA" },
+      { id: "9OPypHXlJUQ", title: "Chinubian", artist: "Jneiro Jarel", url: "https://youtu.be/9OPypHXlJUQ" },
+      { id: "_-17rzyBrKY", title: "Rhodes Ahead", artist: "Karriem Riggins", url: "https://youtu.be/_-17rzyBrKY" },
+      { id: "RpDcz90_oWY", title: "Ooooaaa", artist: "Karriem Riggins", url: "https://youtu.be/RpDcz90_oWY" },
+      { id: "B1ZvmzfUJv0", title: "Back in Brazil", artist: "Karriem Riggins", url: "https://youtu.be/B1ZvmzfUJv0" },
+      { id: "JGUqRBJ4bIo", title: "Embryo", artist: "Baatin", url: "https://youtu.be/JGUqRBJ4bIo" },
+      { id: "nelU7OMF7VY", title: "Orbitz", artist: "Karriem Riggins", url: "https://youtu.be/nelU7OMF7VY" },
+      { id: "jnP3tRG-LZs", title: "Sounds Like Love (Extended)", artist: "J Dilla", url: "https://www.youtube.com/watch?v=jnP3tRG-LZs" },
+      { id: "t6T-Q6HMbEo", title: "Get It Together (Instrumental)", artist: "J-88 (Slum Village)", url: "https://www.youtube.com/watch?v=t6T-Q6HMbEo" },
+      { id: "zoGTC7uROZE", title: "Hustle (Instrumental Mix)", artist: "J Dilla", url: "https://www.youtube.com/watch?v=zoGTC7uROZE" },
+      { id: "7611GgbJAbM", title: "Stupid Lies (Instrumental) (HQ)", artist: "J Dilla", url: "https://www.youtube.com/watch?v=7611GgbJAbM" },
+      { id: "j0z_-7TfPeM", title: "Fantastic (Instrumental)", artist: "J Dilla", url: "https://www.youtube.com/watch?v=j0z_-7TfPeM" }
+    ];
+
+    // Global Variables
+    let swiper;
+    let youtubePlayer;
+    let currentTrackIndex = 0;
+    let isPlaying = false;
+    let isShuffled = false;
+    let audioContext;
+    let analyser;
+    let dataArray;
+
+    // Starfield Visualizer Variables (PRESERVED EXACTLY)
+    var audio, audioSrc;
+    var analyserBufferLength;
+    var w, h;
+    var btStart, txtStatus, canvas, context;
+    var imageData, data;
+    var mouseActive = false, mouseDown = false;
+    var mousePos = { x: 0, y: 0 };
+    var mouseFollowSpeed = 0.015;
+    var fov = 250, speed = 0.75;
+    var particles = [], particlesCenter = [];
+    var time = 0, colorInvertValue = 0;
+
+    // Initialize everything when DOM is ready
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize Swiper
+      swiper = new Swiper('.swiper', {
+        direction: 'horizontal',
+        slidesPerView: 1,
+        spaceBetween: 0,
+        speed: 600,
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+        },
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true,
+        },
+        keyboard: {
+          enabled: true,
+        },
+        mousewheel: {
+          enabled: true,
+        },
+        on: {
+          slideChange: function() {
+            updateActiveNavButton(this.activeIndex);
+            
+            // Initialize starfield if on first slide
+            if (this.activeIndex === 0) {
+              setTimeout(() => {
+                initStarfield();
+              }, 200);
+            }
+          }
+        }
+      });
+
+      // Navigation Button Handlers
+      document.querySelectorAll('.nav-btn').forEach((btn, index) => {
+        btn.addEventListener('click', () => {
+          swiper.slideTo(index);
+        });
+      });
+
+      // Audio Control Event Listeners
+      document.getElementById('play-pause-btn').addEventListener('click', togglePlayPause);
+      document.getElementById('prev-track-btn').addEventListener('click', previousTrack);
+      document.getElementById('next-track-btn').addEventListener('click', nextTrack);
+      document.getElementById('shuffle-btn').addEventListener('click', toggleShuffle);
+      document.getElementById('volume-slider').addEventListener('input', (e) => {
+        setVolume(parseInt(e.target.value));
+      });
+
+      // Keyboard shortcuts
+      document.addEventListener('keydown', (e) => {
+        switch(e.code) {
+          case 'Space':
+            e.preventDefault();
+            togglePlayPause();
+            break;
+          case 'ArrowLeft':
+            e.preventDefault();
+            previousTrack();
+            break;
+          case 'ArrowRight':
+            e.preventDefault();
+            nextTrack();
+            break;
+          case 'ArrowUp':
+            e.preventDefault();
+            swiper.slidePrev();
+            break;
+          case 'ArrowDown':
+            e.preventDefault();
+            swiper.slideNext();
+            break;
+        }
+      });
+
+      // Initialize starfield on first slide
+      setTimeout(() => {
+        initStarfield();
+      }, 500);
+    });
+
+    function updateActiveNavButton(activeIndex) {
+      document.querySelectorAll('.nav-btn').forEach((btn, index) => {
+        btn.classList.toggle('active', index === activeIndex);
+      });
+    }
+
+    // YouTube Player API
+    function onYouTubeIframeAPIReady() {
+      youtubePlayer = new YT.Player('youtube-player', {
+        height: '0',
+        width: '0',
+        videoId: tracks[0].id,
+        playerVars: {
+          'autoplay': 0,
+          'controls': 0,
+          'disablekb': 1,
+          'enablejsapi': 1,
+          'modestbranding': 1,
+          'playsinline': 1,
+          'rel': 0,
+          'showinfo': 0,
+        },
+        events: {
+          'onReady': onPlayerReady,
+          'onStateChange': onPlayerStateChange,
+        }
+      });
+    }
+
+    function onPlayerReady(event) {
+      console.log('YouTube player ready');
+      youtubePlayer.setVolume(70);
+      updateTrackInfo();
+    }
+
+    function onPlayerStateChange(event) {
+      if (event.data === YT.PlayerState.PLAYING) {
+        isPlaying = true;
+        document.getElementById('play-pause-btn').textContent = 'Pause';
+        
+        // Initialize audio context for visualization
+        if (!audioContext) {
+          try {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            analyser = audioContext.createAnalyser();
+            analyser.fftSize = 512 * 32;
+            analyser.smoothingTimeConstant = 0.65;
+            dataArray = new Uint8Array(analyser.frequencyBinCount);
+            analyserBufferLength = analyser.frequencyBinCount;
+          } catch (e) {
+            console.warn('Audio context creation failed:', e);
+          }
+        }
+      } else if (event.data === YT.PlayerState.PAUSED) {
+        isPlaying = false;
+        document.getElementById('play-pause-btn').textContent = 'Play';
+      } else if (event.data === YT.PlayerState.ENDED) {
+        nextTrack();
+      }
+    }
+
+    // Audio Control Functions
+    function togglePlayPause() {
+      if (!youtubePlayer) return;
+      
+      if (isPlaying) {
+        youtubePlayer.pauseVideo();
+      } else {
+        youtubePlayer.playVideo();
+      }
+    }
+
+    function previousTrack() {
+      currentTrackIndex = (currentTrackIndex - 1 + tracks.length) % tracks.length;
+      loadTrack();
+    }
+
+    function nextTrack() {
+      if (isShuffled) {
+        currentTrackIndex = Math.floor(Math.random() * tracks.length);
+      } else {
+        currentTrackIndex = (currentTrackIndex + 1) % tracks.length;
+      }
+      loadTrack();
+    }
+
+    function toggleShuffle() {
+      isShuffled = !isShuffled;
+      const btn = document.getElementById('shuffle-btn');
+      btn.style.backgroundColor = isShuffled ? '#8a2be2' : '#1a1a1a';
+      btn.textContent = isShuffled ? 'Shuffled' : 'Shuffle';
+    }
+
+    function loadTrack() {
+      if (!youtubePlayer) return;
+      
+      const track = tracks[currentTrackIndex];
+      youtubePlayer.loadVideoById(track.id);
+      updateTrackInfo();
+    }
+
+    function updateTrackInfo() {
+      const track = tracks[currentTrackIndex];
+      document.getElementById('current-track-title').textContent = track.title;
+      document.getElementById('current-track-artist').textContent = track.artist;
+    }
+
+    function setVolume(volume) {
+      if (youtubePlayer) {
+        youtubePlayer.setVolume(volume);
+        document.getElementById('volume-display').textContent = volume + '%';
+      }
+    }
+
+    // Starfield Visualizer Functions (PRESERVED EXACTLY)
+    function initStarfield() {
+      const container = document.getElementById('starfield-container');
+      if (!container || container.querySelector('canvas')) return;
+
+      canvas = document.createElement('canvas');
+      canvas.addEventListener('mousedown', mouseDownHandler, false);
+      canvas.addEventListener('mouseup', mouseUpHandler, false);
+      canvas.addEventListener('mousemove', mouseMoveHandler, false);
+      canvas.addEventListener('mouseenter', mouseEnterHandler, false); 
+      canvas.addEventListener('mouseleave', mouseLeaveHandler, false); 
+
+      container.appendChild(canvas);
+      context = canvas.getContext('2d');
+
+      window.addEventListener('resize', onResize, false);
+      onResize();
+      addParticles();
+      render();
+      clearImageData();
+      render();
+      context.putImageData(imageData, 0, 0);
+
+      btStart = document.getElementById('btStartAudioVisualization');
+      btStart.addEventListener('mousedown', userStart, false);
+
+      txtStatus = document.getElementById('txtStatus');
+      txtStatus.innerHTML = 'Waiting Patiently For You... Please Click the Start Button.';
+    }
+
+    function userStart() {
+      btStart.removeEventListener('mousedown', userStart);
+      btStart.addEventListener('mousedown', audioBtHandler, false);
+      btStart.innerHTML = 'Pause Audio';
+
+      txtStatus.innerHTML = 'Loading Audio...';
+      audioSetup();
+      animate();
+    }
+
+    function audioSetup() {
+      txtStatus.innerHTML = 'Audio System Ready - Use main controls to play music';
+      
+      if (!audioContext) {
+        try {
+          audioContext = new (window.AudioContext || window.webkitAudioContext)();
+          analyser = audioContext.createAnalyser();
+          analyser.connect(audioContext.destination);
+          analyser.smoothingTimeConstant = 0.65;
+          analyser.fftSize = 512 * 32;
+          analyserBufferLength = analyser.frequencyBinCount;
+        } catch (e) {
+          console.warn('Audio context setup failed:', e);
+        }
+      }
+    }
+
+    function clearImageData() {
+      for (var i = 0, l = data.length; i < l; i += 4) {
+        data[i] = 0;
+        data[i + 1] = 0;
+        data[i + 2] = 0;
+        data[i + 3] = 255;
+      }
+    }
+
+    function setPixel(x, y, r, g, b, a) {
+      var i = (x + y * imageData.width) * 4;
+      data[i] = r;
+      data[i + 1] = g;
+      data[i + 2] = b;
+      data[i + 3] = a;
+    }
+
+    function drawLine(x1, y1, x2, y2, r, g, b, a) {
+      var dx = Math.abs(x2 - x1);
+      var dy = Math.abs(y2 - y1);
+      var sx = (x1 < x2) ? 1 : -1;
+      var sy = (y1 < y2) ? 1 : -1;
+      var err = dx - dy;
+
+      var lx = x1, ly = y1;    
+      while (true) {
+        if (lx > 0 && lx < w && ly > 0 && ly < h) {
+          setPixel(lx, ly, r, g, b, a);
+        }
+        if (lx === x2 && ly === y2) break;
+        var e2 = 2 * err;
+        if (e2 > -dx) { err -= dy; lx += sx; }
+        if (e2 < dy) { err += dx; ly += sy; }
+      }
+    }
+
+    function getCirclePosition(centerX, centerY, radius, index, segments) {
+      var angle = index * ( (Math.PI * 2) / segments ) + time;
+      var x = centerX + Math.cos(angle) * radius;
+      var y = centerY + Math.sin(angle) * radius;
+      return { x: x, y: y };
+    }
+
+    function drawCircle(centerPosition, radius, segments) {
+      var coordinates = [];
+      var radiusSave;
+      var diff = 0;
+
+      for (var i = 0; i <= segments; i++) {
+        var radiusRandom = radius;
+        if (i === 0) radiusSave = radiusRandom;
+        if (i === segments) radiusRandom = radiusSave;
+        var centerX = centerPosition.x;
+        var centerY = centerPosition.y;
+        var position = getCirclePosition(centerX, centerY, radiusRandom, i, segments);
+        coordinates.push({ x: position.x, y: position.y, index: i + diff, radius: radiusRandom, segments: segments, centerX: centerX, centerY: centerY });
+      }
+      return coordinates;
+    }
+
+    function addParticle(x, y, z, audioBufferIndex) {
+      var particle = { x: x, y: y, z: z, x2d: 0, y2d: 0, audioBufferIndex: audioBufferIndex };
+      return particle;
+    }
+
+    function addParticles() {
+      var audioBufferIndexMin = 8;
+      var audioBufferIndexMax = 1024;
+      var audioBufferIndex = audioBufferIndexMin;
+
+      var centerPosition = { x: 0, y: 0 };
+      var center = { x: 0, y: 0 };
+      var c = 0;
+      var w1 = Math.random() * (w / 1);
+      var h1 = Math.random() * (h / 1);
+
+      for (var z = -fov; z < fov; z += 4) {
+        var coordinates = drawCircle(centerPosition, 75, 64);
+        var particlesRow = [];
+        center.x = ((w / 2) - w1) * (c / 15) + w / 2;
+        center.y = ((h / 2) - h1) * (c / 15) + w / 2;
+        c++;
+        particlesCenter.push(center);
+        audioBufferIndex = Math.floor(Math.random() * audioBufferIndexMax) + audioBufferIndexMin;
+
+        for (var i = 0, l = coordinates.length; i < l; i++) {
+          var coordinate = coordinates[i];
+          var particle = addParticle(coordinate.x, coordinate.y, z, audioBufferIndex);
+          particle.index = coordinate.index;
+          particle.radius = coordinate.radius;
+          particle.radiusAudio = particle.radius;
+          particle.segments = coordinate.segments;
+          particle.centerX = coordinate.centerX;
+          particle.centerY = coordinate.centerY;
+          particlesRow.push(particle);
+          if (i < coordinates.length / 2) audioBufferIndex++;
+          else audioBufferIndex--;
+          if (audioBufferIndex > audioBufferIndexMax) audioBufferIndex = audioBufferIndexMin;
+          if (audioBufferIndex < audioBufferIndexMin) audioBufferIndex = audioBufferIndexMax;
+        }
+        particles.push(particlesRow);
+      }
+    }
+
+    function onResize() {
+      w = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+      h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+      if (canvas) {
+        canvas.width = w;
+        canvas.height = h;
+        context.fillStyle = '#000000';
+        context.fillRect(0, 0, w, h);
+        imageData = context.getImageData(0, 0, w, h);
+        data = imageData.data;
+      }
+    }
+
+    function audioBtHandler(event) {
+      txtStatus.innerHTML = 'Use main audio controls (top right) to control playback';
+    }
+
+    function mouseDownHandler(event) {
+      mouseDown = true;
+    }
+
+    function mouseUpHandler(event) {
+      mouseDown = false;
+    }
+
+    function mouseEnterHandler(event) {
+      mouseActive = true;
+    }
+
+    function mouseLeaveHandler(event) {
+      mouseActive = false;
+      mousePos.x = w / 2;
+      mousePos.y = h / 2;
+      mouseDown = false;
+    }
+
+    function mouseMoveHandler(event) {
+      mousePos = getMousePos(canvas, event);
+    }
+
+    function getMousePos(canvas, event) {
+      var rect = canvas.getBoundingClientRect();
+      return { x: event.clientX - rect.left, y: event.clientY - rect.top };
+    }
+
+    function render() {
+      var frequencySource;
+      if (analyser && dataArray) {
+        analyser.getByteFrequencyData(dataArray);
+        frequencySource = dataArray;
+      }
+
+      var sortArray = false;
+      for (var i = 0, l = particles.length; i < l; i++) {
+        var particlesRow = particles[i];
+        var particlesRowBack;
+        if (i > 0) {
+          particlesRowBack = particles[i - 1];
+        }
+
+        var center = particlesCenter[i];
+        if (mouseActive) {
+          center.x = ((w / 2) - mousePos.x) * ((particlesRow[0].z - fov) / 500) + w / 2;
+          center.y = ((h / 2) - mousePos.y) * ((particlesRow[0].z - fov) / 500) + h / 2;
+        } else {
+          center.x += ((w / 2) - center.x) * mouseFollowSpeed;
+          center.y += ((h / 2) - center.y) * mouseFollowSpeed;
+        }
+
+        for (var j = 0, k = particlesRow.length; j < k; j++) {
+          var particle = particlesRow[j];
+          var scale = fov / (fov + particle.z);
+          particle.x2d = (particle.x * scale) + center.x;
+          particle.y2d = (particle.y * scale) + center.y;
+
+          if (frequencySource && particle.audioBufferIndex < frequencySource.length) {
+            var frequency = frequencySource[particle.audioBufferIndex];
+            var frequencyAdd = frequency / 8;
+            particle.radiusAudio = particle.radius + frequencyAdd;
+          } else {
+            particle.radiusAudio = particle.radius;
+          }
+
+          if (mouseDown) {
+            particle.z += speed;
+            if (particle.z > fov) {
+              particle.z -= (fov * 2);
+              sortArray = true;
+            }
+          } else {
+            particle.z -= speed;
+            if (particle.z < -fov) {
+              particle.z += (fov * 2);
+              sortArray = true;
+            }
+          }
+
+          var lineColorValue = 0;
+          if (j > 0) {
+            var p = particlesRow[j - 1];
+            lineColorValue = Math.round(i / l * 200);
+            drawLine(particle.x2d | 0, particle.y2d | 0, p.x2d | 0, p.y2d | 0, 0, Math.round(lineColorValue / 2), lineColorValue, 255);
+          }
+
+          var position;
+          if (j < k - 1) {
+            position = getCirclePosition(particle.centerX, particle.centerY, particle.radiusAudio, particle.index, particle.segments);
+          } else {
+            var p1 = particlesRow[0];
+            position = getCirclePosition(p1.centerX, p1.centerY, p1.radiusAudio, p1.index, p1.segments);
+          }
+          particle.x = position.x;
+          particle.y = position.y;
+
+          if (i > 0 && i < l - 1) {
+            var pB;
+            if (j === 0) {
+              pB = particlesRowBack[particlesRowBack.length - 1];
+            } else {
+              pB = particlesRowBack[j - 1];
+            }
+            drawLine(particle.x2d | 0, particle.y2d | 0, pB.x2d | 0, pB.y2d | 0, 0, Math.round(lineColorValue / 2), lineColorValue, 255);
+          }
+        }
+      }
+
+      if (sortArray) {
+        particles = particles.sort(function(a, b) {
+          return (b[0].z - a[0].z);
+        });
+      }
+
+      if (mouseDown) {
+        time -= 0.005;
+      } else {
+        time += 0.005;
+      }
+
+      if (mouseDown) {
+        if (colorInvertValue < 255)
+          colorInvertValue += 5;
+        else
+          colorInvertValue = 255;
+        softInvert(colorInvertValue);
+      } else {
+        if (colorInvertValue > 0)
+          colorInvertValue -= 5;
+        else
+          colorInvertValue = 0;
+        if (colorInvertValue > 0)
+          softInvert(colorInvertValue);
+      }
+    }
+
+    function softInvert(value) {
+      for (var j = 0, n = data.length; j < n; j += 4) {
+        data[j] = Math.abs(value - data[j]);
+        data[j + 1] = Math.abs(value - data[j + 1]);
+        data[j + 2] = Math.abs(value - data[j + 2]);
+        data[j + 3] = 255;
+      }
+    }
+
+    function animate() {
+      clearImageData();
+      render();
+      if (context && imageData) {
+        context.putImageData(imageData, 0, 0);
+      }
+      requestAnimationFrame(animate);
+    }
+
+    window.requestAnimFrame = (function() {
+      return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function(callback) {
+        window.setTimeout(callback, 1000 / 60);
+      };
+    })();
+  </script>
+</body>
+</html>
