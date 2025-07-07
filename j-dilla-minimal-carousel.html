@@ -565,6 +565,8 @@
 
       btStart = document.getElementById('btStartAudioVisualization');
       btStart.addEventListener('mousedown', userStart, false);
+      btStart.addEventListener('touchstart', userStart, false);
+      btStart.addEventListener('click', userStart, false);
 
       txtStatus = document.getElementById('txtStatus');
       txtStatus.innerHTML = 'Waiting Patiently For You... Please Click the Start Button.';
