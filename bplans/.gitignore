@@ -1,0 +1,23 @@
+# Backup files and temporary content to exclude from consolidated structure
+*backup*
+*_backup*
+*.tmp
+*.bak
+.DS_Store
+Thumbs.db
+
+# Large unconsolidated files (preserved but not for active development)
+FINAL_ALL_BUSINESS_PLANS.md
+MEGA_ALL_BPLANS.md
+MEGA_ALL_APPS.md
+
+# Individual source files (preserved but consolidated)
+hedgefund.md
+hedgefund.rb
+la2.html
+nato.html
+speis.md
+__barnevernet.md
+
+# Research backup files
+norwegianhedge/__research/_*
