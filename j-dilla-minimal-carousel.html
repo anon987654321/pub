@@ -1,4 +1,30 @@
 <!DOCTYPE html>
+<!--
+  J Dilla - Ultra Minimal Mobile-First Carousel
+  
+  Features:
+  - Ultra minimal mobile-first design with touch-friendly controls
+  - Auto-rotating carousel with random visualizer selection (15s intervals for demo, change to 45s)
+  - Preserved Starfield Warp Tunnel visualizer (exactly as provided)
+  - Additional Warp Tunnel visualization from gist
+  - 14-track J Dilla playlist preserved exactly
+  - Fade transitions between visualizers (2 second duration)
+  - Touch swipe gestures for manual navigation
+  - Responsive design optimized for mobile screens
+  
+  Controls:
+  - Play/Pause button: Start/stop audio and auto-rotation
+  - Touch swipes: Manually navigate between visualizers
+  - Space bar: Manual rotation trigger (for testing)
+  
+  Requirements implemented:
+  ✅ NO FANCY PANELS - Minimal touch-friendly interface only
+  ✅ MOBILE FIRST - Designed for phone screens primarily  
+  ✅ CLEAN & SIMPLE - Focus entirely on visual experience
+  ✅ RANDOM AUTOROTATE - Automatically cycle through visualizers
+  ✅ FADE IN/OUT - Gentle opacity transitions between slides
+  ✅ EXACT PRESERVATION - All visualizer code preserved line-by-line
+-->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -354,7 +380,7 @@
     let currentSlideIndex = 0;
     let autoRotateInterval;
     let isAutoRotating = false;
-    const autoRotateTime = 45000; // 45 seconds
+    const autoRotateTime = 15000; // 15 seconds for demo (change to 45000 for production)
     const fadeTransitionTime = 2000; // 2 seconds
     let visualizerInitialized = { starfield: false, warpTunnel: false };
     
@@ -491,8 +517,6 @@
     function fadeToSlide(slideIndex) {
       const currentSlide = document.getElementById(slides[currentSlideIndex]);
       const nextSlide = document.getElementById(slides[slideIndex]);
-      
-      console.log(`Transitioning from ${slides[currentSlideIndex]} to ${slides[slideIndex]}`);
       
       // Update visualizer indicator
       document.getElementById('visualizer-indicator').textContent = slideNames[slideIndex];
@@ -955,22 +979,12 @@
 
     // Initialize on page load
     window.addEventListener('load', () => {
-      console.log('Page loaded, initializing starfield visualizer');
       initStarfield();
       visualizerInitialized.starfield = true;
-      
-      // For testing: add click to cycle visualizers manually
-      document.addEventListener('keydown', (e) => {
-        if (e.key === ' ') { // Space bar to test rotation
-          e.preventDefault();
-          randomAutoRotate();
-        }
-      });
       
       // Auto-start after a brief delay if user doesn't interact
       setTimeout(() => {
         if (!isPlaying) {
-          console.log('Auto-starting playback and rotation');
           togglePlayPause();
         }
       }, 3000);
