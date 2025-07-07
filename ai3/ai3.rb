@@ -26,13 +26,14 @@ require_relative 'lib/multi_llm_manager'
 require_relative 'lib/enhanced_session_manager'
 require_relative 'lib/rag_engine'
 require_relative 'lib/assistant_registry'
+require_relative 'lib/universal_scraper'
 
 # Main AI³ CLI Application
 class AI3CLI
   VERSION = "12.3.0"
   
   attr_reader :config, :cognitive_orchestrator, :llm_manager, :session_manager, 
-              :rag_engine, :assistant_registry, :current_assistant, :prompt, :pastel
+              :rag_engine, :assistant_registry, :current_assistant, :prompt, :pastel, :scraper
 
   def initialize
     @pastel = Pastel.new
@@ -307,7 +308,56 @@ class AI3CLI
   end
 
   def handle_scrape_command(args)
-    puts "🕷️ Web scraping feature coming soon..."
+    return puts "❌ Please provide a URL to scrape" unless args
+    
+    url = args.strip
+    return puts "❌ Invalid URL format" unless url.match?(/^https?:\/\//)
+    
+    # Initialize scraper if not already done
+    @scraper ||= initialize_scraper
+    
+    spinner = TTY::Spinner.new("[:spinner] #{I18n.t('ai3.scraper.scraping', url: url, default: 'Scraping...')}...", format: :dots)
+    spinner.auto_spin
+    
+    begin
+      # Perform scraping
+      result = @scraper.scrape(url)
+      
+      spinner.stop
+      
+      if result[:success]
+        puts "✅ #{I18n.t('ai3.scraper.content_extracted', default: 'Content extracted successfully')}"
+        puts "📄 Title: #{result[:title]}" if result[:title]
+        puts "📸 Screenshot: #{result[:screenshot]}" if result[:screenshot]
+        puts "🔗 Links found: #{result[:links]&.size || 0}" if result[:links]
+        
+        # Show content preview
+        if result[:content] && !result[:content].empty?
+          preview = result[:content][0..300]
+          preview += "..." if result[:content].length > 300
+          puts "\n📄 Content Preview:"
+          puts "#{@pastel.dim(preview)}\n"
+        end
+        
+        # Add to RAG if enabled
+        if @config.dig('rag', 'enabled')
+          add_scraped_content_to_rag(result)
+        end
+        
+        # Ask if user wants to chat about the content
+        if @prompt.yes?("💬 Would you like to chat about this content?")
+          enhanced_query = "Based on the content from #{url}: #{result[:content][0..500]}... Please analyze and summarize this content."
+          handle_chat_command(enhanced_query)
+        end
+        
+      else
+        puts "❌ #{I18n.t('ai3.scraper.error', error: result[:error], default: 'Scraping failed')}: #{result[:error]}"
+      end
+      
+    rescue StandardError => e
+      spinner.stop
+      puts "❌ Scraping error: #{e.message}"
+    end
   end
 
   def handle_switch_command(args)
@@ -399,6 +449,40 @@ class AI3CLI
 
   def list_tools
     puts "🔧 Available tools: RAG, Web Scraping, Session Management, Cognitive Monitoring"
+  end
+
+  # Initialize scraper with cognitive integration
+  def initialize_scraper
+    scraper_config = {
+      screenshot_dir: @config.dig('scraper', 'screenshot_dir') || 'data/screenshots',
+      max_depth: @config.dig('scraper', 'max_depth') || 2,
+      timeout: @config.dig('scraper', 'timeout') || 30,
+      user_agent: @config.dig('scraper', 'user_agent') || 'AI3-Bot/1.0'
+    }
+    
+    scraper = UniversalScraper.new(scraper_config)
+    scraper.set_cognitive_monitor(@cognitive_orchestrator)
+    scraper
+  end
+
+  # Add scraped content to RAG engine
+  def add_scraped_content_to_rag(scrape_result)
+    return unless scrape_result[:success] && scrape_result[:content]
+    
+    document = {
+      content: scrape_result[:content],
+      title: scrape_result[:title],
+      url: scrape_result[:url],
+      scraped_at: scrape_result[:timestamp]
+    }
+    
+    collection = 'scraped_content'
+    
+    if @rag_engine.add_document(document, collection: collection)
+      puts "📚 Content added to knowledge base (collection: #{collection})"
+    else
+      puts "⚠️ Failed to add content to knowledge base"
+    end
   end
 
   # Cognitive load indicator for prompt
