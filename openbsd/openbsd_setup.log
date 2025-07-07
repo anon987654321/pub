@@ -1,9 +1,0 @@
-{"timestamp":"2025-07-02T03:42:08Z","level":"INFO","message":"Starting OpenBSD setup"}
-{"timestamp":"2025-07-02T03:42:08Z","level":"INFO","message":"Installing system packages"}
-{"timestamp":"2025-07-02T03:44:02Z","level":"INFO","message":"System packages installed"}
-{"timestamp":"2025-07-02T03:44:02Z","level":"INFO","message":"Configuring pf firewall"}
-{"timestamp":"2025-07-02T03:44:02Z","level":"INFO","message":"Firewall configured"}
-{"timestamp":"2025-07-02T03:44:02Z","level":"INFO","message":"Setting up NSD and DNSSEC"}
-{"timestamp":"2025-07-02T03:44:02Z","level":"INFO","message":"DNS setup complete"}
-{"timestamp":"2025-07-02T03:44:02Z","level":"INFO","message":"Setting up core services"}
-{"timestamp":"2025-07-02T03:44:03Z","level":"INFO","message":"Error: Command failed: rcctl start relayd"}
