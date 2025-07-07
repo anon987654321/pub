@@ -1,0 +1,143 @@
+# English localization for AI³ CLI
+en:
+  ai3:
+    welcome: "Welcome to AI³ - Interactive Multi-LLM RAG CLI"
+    version: "AI³ v12.3.0 - Cognitive Architecture Framework"
+    
+    commands:
+      chat: "Chat with current assistant"
+      rag: "RAG-enhanced query"
+      task: "Execute specific task"
+      scrape: "Web scraping with screenshots"
+      switch: "Change primary LLM"
+      list: "List resources"
+      status: "Cognitive load status"
+      help: "Show help"
+      exit: "Exit the CLI"
+      
+    prompts:
+      command: "ai3> "
+      assistant_selection: "Select assistant:"
+      llm_selection: "Select LLM provider:"
+      confirm: "Confirm action (y/N):"
+      
+    messages:
+      starting: "🚀 Starting AI³ system..."
+      loading: "⏳ Loading..."
+      processing: "🧠 Processing with cognitive orchestration..."
+      cognitive_overload: "🧠 Cognitive overload detected - applying circuit breaker"
+      cognitive_break: "🌱 Cognitive break recommended"
+      session_created: "📝 Session created"
+      session_restored: "🔄 Session restored"
+      fallback_activated: "🔄 LLM fallback activated"
+      
+    status:
+      cognitive_load: "Cognitive Load"
+      flow_state: "Flow State"
+      active_sessions: "Active Sessions"
+      current_assistant: "Current Assistant"
+      current_llm: "Current LLM"
+      
+    errors:
+      no_api_key: "❌ API key not configured for %{provider}"
+      provider_unavailable: "❌ Provider %{provider} is unavailable"
+      cognitive_overload_critical: "🔴 Critical cognitive overload - system protection activated"
+      command_not_found: "❌ Command not found: %{command}"
+      assistant_not_found: "❌ Assistant not found: %{assistant}"
+      
+    cognitive:
+      states:
+        optimal: "Optimal"
+        focused: "Focused"
+        challenged: "Challenged"
+        overloaded: "Overloaded"
+        
+      circuit_breaker:
+        activated: "⚡ Circuit breaker activated"
+        cooldown: "❄️ Circuit breaker cooldown: %{seconds}s"
+        reset: "🔧 Circuit breaker reset"
+        
+      working_memory:
+        capacity: "Working Memory: %{current}/%{max}"
+        compressed: "📦 Memory compressed"
+        overflow: "⚠️ Memory overflow - applying compression"
+        
+    assistants:
+      general: "General Purpose Assistant"
+      offensive_ops: "Offensive Operations Specialist"
+      influencer: "Social Media Influencer Assistant"
+      lawyer: "Legal Assistant and Advisor"
+      trader: "Financial Trading Assistant"
+      architect: "Software Architecture Assistant"
+      hacker: "Ethical Hacking Assistant"
+      chatbot_snapchat: "Snapchat Chatbot Assistant"
+      chatbot_onlyfans: "OnlyFans Content Assistant"
+      personal: "Personal Assistant"
+      music: "Music Production Assistant"
+      material_repurposing: "Material Science Specialist"
+      seo: "SEO and Digital Marketing Assistant"
+      medical: "Medical Information Assistant"
+      propulsion_engineer: "Propulsion Engineering Specialist"
+      linux_openbsd_driver_translator: "Linux/OpenBSD Driver Specialist"
+      
+    llm_providers:
+      xai: "X.AI/Grok"
+      anthropic: "Anthropic/Claude"
+      openai: "OpenAI/o3-mini"
+      ollama: "Ollama/DeepSeek-R1:1.5b"
+      
+    rag:
+      searching: "🔍 Searching knowledge base..."
+      results_found: "📚 Found %{count} relevant results"
+      no_results: "❌ No relevant results found"
+      indexing: "📖 Indexing document..."
+      indexed: "✅ Document indexed successfully"
+      
+    scraper:
+      scraping: "🕷️ Scraping %{url}..."
+      screenshot_taken: "📸 Screenshot saved"
+      content_extracted: "📄 Content extracted"
+      error: "❌ Scraping failed: %{error}"
+      
+    security:
+      pledge_enabled: "🔒 OpenBSD pledge enabled"
+      unveil_enabled: "🔒 OpenBSD unveil enabled"
+      access_denied: "🚫 Access denied by security policy"
+      
+    performance:
+      response_time: "Response time: %{time}ms"
+      cache_hit: "💾 Cache hit"
+      cache_miss: "🔄 Cache miss"
+      
+    help:
+      usage: |
+        AI³ Interactive Multi-LLM RAG CLI - Usage Guide
+        
+        Basic Commands:
+          chat <query>           - Chat with current assistant
+          rag <query>            - RAG-enhanced query
+          task <name> [args]     - Execute specific task
+          scrape <url>           - Web scraping with screenshots
+          switch <llm>           - Change primary LLM
+          list [type]            - List assistants, LLMs, or tools
+          status                 - Show cognitive load status
+          help                   - Show this help
+          exit                   - Exit the CLI
+          
+        Examples:
+          chat How do I secure my network?
+          rag Norwegian laws about privacy
+          task analyze_market Bitcoin
+          scrape https://example.com
+          switch anthropic
+          list assistants
+          status
+          
+        Cognitive Features:
+          - 7±2 working memory management
+          - Automatic cognitive load balancing
+          - Circuit breaker protection
+          - Flow state preservation
+          - Attention restoration
+          
+        For more information, visit: https://github.com/ai3-project/ai3
