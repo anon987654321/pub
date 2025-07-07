@@ -1,0 +1,100 @@
+
+So for me that formula is meaningless.  I put no stock on volume or number
+of traders or anything like that.  To me the most relevant part is
+volatility, which doesn't tell me anything about market direction, but it
+does give me the potential magnitude of move the underlying might have.
+That puts risk and potential profit into some meaningful perspective.
+When volatility goes up, bitcoin is expected to move more and I can win or
+lose more, and when volatility goes down, bitcoin moves less and I can win
+or lose less.
+
+>> So our swarm of bots will increase trades during times of low volatility
+
+Whoever came up with that formula, though, I guess represents the overall
+thinking that bitcoin behaves like a commodity and has an upward drift
+(the skew I mentioned; price tends to go up more than it goes down), and
+when number of traders increase more people are (perhaps) going to be
+buying bitcoin.  It may be true.  Or not, I don't know.
+
+In any case, I'm of the school of thought that markets are random and any
+given day a market has ~50% chance to go up or down.  I would rather use
+the Implied Volatility of the next 7 days to figure out the 68%
+probability range in the underlying than assume that every day is an up
+day.  Just to note, if first up day has 50% probability, second has 25%
+probability, third 12.5% probability, fourth 6.25% probability, and fifth
+day has 3.125% probability.  Or put another way, if underlying went up 4
+consecutive days, there's 96.875% probability that the fifth day won't be
+an up day.  Streaks of course happen and markets can be irrational and go
+up or down a long time (due to greed or fear).
+
+I don't know how to predict potential profit, with the expection when
+trading options.  Options have a builtin time decay, meaning options value
+go down as time goes by.  So, if I sell an option today for $10, 30 days
+from now the same option may trade at $1 and I get to keep the difference.
+Due to the builtin decay, it's possible to come up with some profit
+estimate for some time period.  I don't know how to do that in just "buy
+and hold" trading or scalping (which both I consider to be just a 50-50
+shots) as I don't believe it's possible to predict market direction.  I of
+course love to scalp :)
+
+--
+
+>> Boten vår bruker IV til å spå prissvingningene for de neste syv dagene
+
+I started thinking about that article, which I didn't read, but it's
+probably some guy just coming up with some number, but let me give you my
+guess where bitcoin might be year from now, and I'll give you the actual
+math behind it.  This is how market makers would do it.
+
+Here's the back-of-the-envelope way of calculating the expected move for
+bitcoin with 68% probability (1 standard deviation):
+
+   price * IV% * sqrt(DTE / 365)
+
+Where price is obviously the price of bitcoin, IV is the Implied
+Volatility of bitcoin (which I shall guestimate), and DTE is
+days-to-expiration, and in this example I'll set that to 365, ie. year
+from now.  If you want 30 days from now, use 30 instead.
+
+I used one of the bitcoin options exchanges (www.deribit.com) to calculate
+the average out-of-the-money options Implied Volatility and I shall set
+that to a value of 250%.  I think that's pretty fair, but it's just a
+guess.  We can't know the true IV of bitcoin until we have real market
+makers making real markets for bitcoin, but I think that value is
+reasonable considering how volatile bitcoin has been lately.
+
+   4100 * (250 / 100) * sqrt(365 / 365) = 10250
+
+So, year from now bitcoin will trade with 68% probability between $0 and
+$14350.
+
+Now, that's just a linear value, but in reality bitcoin trades with a
+skew, so the real number is probably some lognormal distribution, so the
+real 68% range might be for example $500 - $15000.  The IV will probably
+also increase as we get to higher prices, so the upper range could be
+actually much higher as time goes by.
+
+But, from this we can also say, that's there 16% probability that bitcoin
+trades above $15000 year from now, or 16% probability it trades below $500
+year from now.
+
+So, that's me making markets for bitcoin year from now.  But we need real
+market makers making real markets for bitcoin to truly now what the
+expected price range for bitcoin might be.  Also, the IV matters here
+greatly.  The IV of bitcoin might actually be a lot higher, in which case
+the upper range could be a lot higher, or it might actually be a lot
+lower.  We just don't know that yet.
+
+The at-the-money implied volatility at deribit exchange was around 130%,
+so for the nest 30 days, the expected range of bitcoin with 68%
+probability is between $2572 and $5628.  I think that's reasonable
+considering how bitcoin has been moving lately.
+
+In any case, I think there's <1% chance bitcoin trades at $100000 year
+from now, unless the IV spikes up greatly (which it could of course).
+
+     Pekka
+
+--
+
+

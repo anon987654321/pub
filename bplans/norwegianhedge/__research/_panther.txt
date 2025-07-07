@@ -1,0 +1,355 @@
+--- Log opened Sun Jan 13 17:10:05 2019
+17:10 Irssi: Starting query in Freenode with DivineRight
+17:10 <DivineRight> Where in Norway are you? I had a roomate from Tromso once.
+17:10 <DivineRight> He taught me to say fy faen :)
+17:11 <J> im from bergen :)
+17:11 <J> hehe
+17:11 <J> very good!
+17:11 <DivineRight> I knew someone from Bergen, too.
+17:12 <J> this is what im working on now: https://www.audible.com/pd/Advances-in-Financial-Machine-Learning-Audiobook/B07DLBSSDF#customer-reviews + https://gekko.wizb.it/
+17:12 <J> really? how'd you get to meet them?
+17:12 <J> i know there's a lot here on freenode
+17:12 <J> (compared to the population)
+17:13 <DivineRight> I went to a university with them.
+17:13 <J> oh cool
+17:14 <DivineRight> What are you doing with that book?
+17:14 <J> where and what did you study? if i may ask
+17:14 <J> just getting a better understanding of the matter. im trying to design my own superfast bots
+17:15 <DivineRight> That was at Penn State U in Pennsylvania, US where I got a PhD in math.
+17:15 <J> you have a
+17:15 <J> no way
+17:15 <J> aren't you headhunted by people from wall street almost daily?
+17:15 <J> like that's even part of my business plan!! find people with phds in math
+17:15 <DivineRight> Nope, I am disabled right now from a car accident.
+17:16 <J> sorry to hear
+17:16 <DivineRight> But, afte I got it, I did several other things...
+17:16 <DivineRight> .. I was an enterprise planning and process control analyst for the director of operations of a company that makes 70% of the packaging for the fast food industry.
+17:16 <DivineRight> .. then..
+17:17 <DivineRight> .. I was one of the most senior systems and network administrators for the biggest ISP in thw world... that is the job I loved and lost...
+17:17 <DivineRight> Our ex-CEO is in federal prison for the rest of his life.
+17:18 <DivineRight> Finally, I taught at a university as an adjunct prof until 2012, when I was there, I also got a MS in Applied Statistics.
+17:18  * DivineRight smiles
+17:19 <DivineRight> I just got a few books on the subject of the one you pasted.
+17:20 <DivineRight> Machine Learning
+17:20 <DivineRight> For Financial
+17:20 <DivineRight> Engineering
+17:20 <DivineRight> FINANCIAL SIGNAL
+17:20 <DivineRight> PROCESSING AND
+17:20 <DivineRight> MACHINE LEARNING
+17:20  * DivineRight smiles
+17:21 <J> :D
+17:21 <DivineRight> AI an ML are 2 interests of mine.
+17:21 <J> well, i just happen to have a very rich investor so.. maybe we could team up?
+17:22 <J> if your "patterns" are ever for sale
+17:22 <J> and then you could get to visit your friends in bergen while at it :D
+17:23 <DivineRight> I don't have a pettern yet.
+17:23 <J> my investor
+17:23 <J> which is my best friend and business partner's step dad, he has two cousins. apparently berkeley grads
+17:23 <J> and they have a pattern. making like 150mill a year
+17:23 <DivineRight> Nice
+17:24 <J> which reminds me, nyse is gonna shut them down..
+17:24 <J> 2sec
+17:24 <DivineRight> Shut down in what way?
+17:24 <J> january 15
+17:24 <J> i have no idea
+17:25 <J> my friend tried to get them drunk when they flew over for christmas
+17:25 <J> and get them to talk
+17:25 <DivineRight> ha
+17:25 <J> but was not successful :D
+17:27 <DivineRight> It usually isn't
+17:27 <DivineRight> Anyway, if they were drunk, they might make a mistake. :)
+17:28 <DivineRight> I have to get going right now. I have physical therapy in an hour.
+17:28 <DivineRight> If you wanna chat later, I will be here.
+17:29 <J> I'll take you up on that. Gotta get some rest though.
+17:29  * DivineRight smiles
+17:29 <J> Have a good one, nice meeting ya!
+17:29 <DivineRight> Thanks, you too :)
+17:32 Irssi: DivineRight [~Lord@c-24-34-180-108.hsd1.ct.comcast.net] [Feuerzauber] has joined to Freenode
+--- Log opened Mon Jan 14 00:58:28 2019
+00:58 Irssi: Starting query in Freenode with DivineRight
+00:58 <J> Hello again!
+00:58 <J> Schedule an appointment or something?
+00:59 <DivineRight> Hiya
+01:00 <DivineRight> Are you asking me about an appointment?
+01:00 <DivineRight> I have 10 appointments next week.
+01:00 <DivineRight> So far...
+01:04 <J> No just some basic chatter
+01:04 <J> See where we're at, if we can make this work
+01:05 <DivineRight> I only have very basic ideas about setting up an automated trading system.
+01:07 <J> well we also have a finn who's very good with stocks, options etc. ie. made me a spreadsheet based on the black-scholes model to simulate a fictional options market. but i do believe your expertise stretches a bit further?
+01:07 <J> we also have one of the world's most talented javascript developers who'll take care of all the nooks and crannies
+01:08 <DivineRight> I know that black-scholes is an invalid model.
+01:09 <DivineRight> I have so many books.. I barely know what to do with them all.
+01:09 <J> Ok?
+01:10 <J> Well I don't know what to say then other than the position is yours
+01:10 <DivineRight> I reallyt need to set up a nice database so I can find what I want when I want it.
+01:11 <DivineRight> I was planning to do this at some point, but as I said, I don't have anything set up right now.
+01:11 <J> Stuff like that I've actually worked on with that Finn, or similar at least. He made his own NodeJS scraper runner, and created individual scrapers for various sites which we fed into PostgreSQL
+01:11 <J> Cool
+01:12 <J> Well we'd have to complete our business plan and get the signatures first as well. Do you by any chance think you could have a quick read through it once its done?
+01:13 <J> Assuming you're in ofcourse
+01:16 <DivineRight> I am pretty good with business plans.. apart from anything else I completed a course in creating them, and I have a huge set of example plans for all kinds of businesses.
+01:16 <DivineRight> I would like to know a lot more about what you are intending to do.
+01:17 <J> Awesome! I've never been able to find one for what we're about to get into though. Like, fancy graphs and prediction models would be pretty useless I guess?
+01:18 <J> Well, we'd like to start off a conglomerate basically. Starting with trading, then as blockchain technology mature we move on to creating decentralized apps
+--- Log opened Mon Jan 14 01:21:15 2019
+01:21 Irssi: Starting query in Freenode with DivineRight
+01:21 <J> Sorry about that
+01:21 <DivineRight> It happens
+01:22 <DivineRight> Which is also why anything that is automatically performing services needs to be located in a secured datacenter with a significant and redundant connection to the internet backbone.
+01:22 <J> Indeed
+01:22 <J> I reckon your regular VPS provider won't do in this case?
+01:23 <DivineRight> Probably not.. the machine and its connection need to be monitored, and the connection fixed, etc.. in case anything goes down.
+01:24 <J> Can we use Amazon AWS?
+01:24 <J> Either way we can talk about this later
+01:24 <DivineRight> I don't know much about that, but I wouldn't use amazon.
+01:25 <J> For now we're NorwegianBTC.com but we have more state-like Norwegian domains. Money is no issue
+01:25 <DivineRight> If I could, I would buy a machine, and install the OS and any software on it for exactly what it was going to be doing, and then have it co-located in a datacenter where it would be physically secure and monitored.
+01:26 <J> You could come live on and off in Norway with free healthcare, nature, nice churches too if my spidey senses are right? Your name looks kinda religious :)
+01:26  * DivineRight smiles
+01:26 <DivineRight> Kings rule by Divine Right :)
+01:26 <DivineRight> This is not the nick I usually use, tho.
+01:26 <J> That's a good idea. It's in our bplan actually to buy dedicated laptops running only OpenBSD and being used only for our business
+01:27 <DivineRight> I usually use the nick Panther.
+01:27 <J> Very cool :)
+01:28 <J> I suppose there's no need for NDA on this business plan, it would just be an insult
+01:28 <DivineRight> I am not too sure Norway would give US citizens free healthcare, tho.
+01:28 <J> I'll show it to you once I'm more confident I won't be making a fool of myself
+01:28 <DivineRight> I get free healthcare here in the US. :)
+01:29 <J> Ah, then it's all good :)
+01:29 <DivineRight> I actually run an irc network.. I have been for a long time.
+01:30 <J> Btw, I managed to snag the domain pub.healthcare (reminiscent of pubmed.com) which will use Lisk to transfer patient journals from everyone in Norway onto a Lisk "sidechain"
+01:30 <J> Then you must know a thing or two about redundancy, monitoring and such? Great
+01:30 <DivineRight> I am not sure what that means.
+01:32 <J> No you wanted to know about the company. So we'll start doing trade, then move on to blockchain apps. And most certainly design our own exchange, as design, architecture and web development are my strong sides. Mostly the two former :)
+01:33 <J> My head is filled with a million questions. I think it's best I write them down properly before asking. Giving you some time to consider joining.
+01:33  * DivineRight smiles
+01:33 <DivineRight> I used to run the radius authentication server that proxied login requests to the corporate web server to the appropriate kerberos realms.
+01:34 <DivineRight> Among 1000 othet things...
+01:34 <J> hehe
+01:35 <J> I have a serious soft spot for Unix as well
+01:35 <DivineRight> Nice :)
+01:35 <DivineRight> I was also in charge of BSD/OS developement.
+01:35 <J> By the way, you mentioned a database. Could Neo4j become a thing?
+01:35 <J> No!
+01:35 <J> I only said Unix because I didn't wanna offend you incase you were a Linux user
+01:36  * DivineRight smiles
+01:36 <J> BSD has been with me through thick and thin. Hehe
+01:37 <DivineRight> I use windows sadly right now, mostly because the DAW I have for my midi controller runs on windows, and I happen to like it.
+01:37 <J> lol you too huh
+01:37 <DivineRight> And I haven't had the time to see if it will run well in a VM.
+01:37 <J> I don't mind Windows that much tbh
+01:38 <J> I have my doubts
+01:38 <J> Would you happen to be an Ableton user?
+01:38 <DivineRight> Yep :)
+01:38 <DivineRight> I have 10
+01:38 <J> I was about to replace user with developer there for a sec :)
+01:38 <J> Licenses?
+01:39 <J> Oh Ableton 10
+01:39 <DivineRight> The license came for 9 when I got the kbd, and they gave m,e a free upgrade to 10.
+01:40 <J> :-)
+01:40 <DivineRight> I have a lot of other things, tho... Anvil, Audacity, Finale, lmms, MuseScore, ProTools, Reaper and Sibelius.
+01:40 <J> Odd question maybe but are you into Christian music?
+01:40 <DivineRight> I have a degree in music, so I am into a lot of different kinds.
+01:40 <J> I used to play a lot of church organ as a kid. Now I just use my lappie's keyboard
+01:40 <J> Wow
+01:40 <DivineRight> Nice :)
+01:40 <J> Again wow
+01:41 <DivineRight> I spent a lot of time in the uni.. I have 9 degrees.
+01:41 <DivineRight> 14 years
+01:41 <J> So what makes someone with 9 degrees even be remotely interested in this job?
+01:42 <J> Besides the money being no issue thing. But I would have assumed you'd have your own slick operation already set up?
+01:42 <J> Where are my manners. Your health condition, I'm sorry
+01:42 <DivineRight> Yes, I have had a lot of things happen... deaths in the family, my health, etc...
+01:43 <DivineRight> I go to physical therapy 6 days per week.
+01:43 <DivineRight> err 5
+01:43 <J> It's all on the up and up I take it?
+01:43 <DivineRight> The PT?
+01:44 <J> yup
+01:44 <DivineRight> One degree I almost got was a MS in exercise and sports science :)
+01:44 <J> lol
+01:44  * DivineRight loves to train
+01:45 <J> There are lots of them here, mountains as big as yours
+01:45 <J> And
+01:45 <DivineRight> I know a litle about that.. I wrote a geology book that I need to edit and publish.
+01:45 <J> Our investor is the owner of http://bergen-marine.com/ (I'm currently redesigning it) so you'd also have free access to the fjords if you wanna go boating :)
+01:45 <J> lol
+01:46 <DivineRight> Those look nice.
+01:46 <DivineRight> I live near the coast.
+01:46 <DivineRight> My ex-gfs family have boats.
+01:47 <J> Same (with the ex thing)
+01:47 <DivineRight> The US navy tried to recruit me for a while to be a nuclear engineering officer.
+01:48 <J> Connecticut, very cool
+01:48 <DivineRight> I live about 4 blocks from Yale.
+01:49 <DivineRight> I don't know about that datbase you asked about, but it looks interesting.
+01:49 <J> Why'd you turn them down? I'm guessing there's a great chance you'd get kidnapped by foreign governments
+01:49 <DivineRight> There is that but for other reasons.
+01:50 <DivineRight> I turned them down because I had a scholarship to mecical school, to a MD/PhD program.
+01:50 <J> Is that one of your 9 degrees?
+01:50 <DivineRight> Nope :( I stupidly left that after 2 years.
+01:51 <DivineRight> I have BS/BA in math, chem, bio, physics, music, and german, PhD in math, MS in applied stats, and Doctor of Divinity.
+01:52 <J> Sweet
+01:52 <J> Doctor of Divinity being like Theology?
+01:52 <DivineRight> It is like applied theology :)
+01:53 <J> I gotta look that up :)
+01:53 <DivineRight> philosophy, theology, psychology, sociology
+01:53 <J> Oh those too, now I see
+01:54 <J> Well, I'm just honored you're even willing to consider this
+01:55 <J> The company is me and my buddy Andre. It's his step dad who will be investing
+01:55 <DivineRight> What does he expect out of investing in this?
+01:56 <J> Right now I'm leaning on a prosperous life for his step son and his kids
+01:56 <J> He's never been the kind to give them money. Ever.
+01:56 <J> But come a proper business plan, it's game on.
+01:56 <J> In terms of numbers, I'll ask my friend.
+01:57 <DivineRight> Numbers of what?
+01:58 <J> Incase you were thinking of returns, or stakes in the company
+01:58 <DivineRight> I kinda meant.. does he expect to be doing anything? Sometimes people who invest can't help themselves from tinkering with things.
+01:58 <J> Oh
+01:58 <J> Nah it's fine
+01:59 <J> He'll put Andre in charge. Andre's been his top boat salesman for the past decade so. He's a good guy, not a grain of evil in him. Unless his friends, family or coworkers are threatened
+02:00 <DivineRight> The returns all have to be worked out in the business plan.. the revenue model, gross margin, working capital, operational expenses, etc... 
+02:00 <J> I was under the impression a realistic revenue model for this line of field was impossible
+02:01 <J> But I've written a couple of business plans before so I understand what you mean
+02:01 <J> * for this line of work
+--- Log closed Mon Jan 14 02:06:28 2019
+--- Log opened Mon Jan 14 02:06:41 2019
+02:06 <DivineRight> I think by now I have over 10,000 ebooks.
+02:06 <J> What I mean is - wouldn't you need a working strategy to at least be able to run simulations for that?
+02:07 <J> lol
+02:07 <J> Once that eInk stuff becomes available on the market I'll buy as many ebooks as I possibly can :)
+02:07 <DivineRight> wotz eInk?
+02:08 <J> its like a computer screen but without the lights so you wont get sore eyes
+02:10 <DivineRight> Nice
+02:10 <DivineRight> I have mine set to turn a reddish color after 2100.
+02:11 <J> mine isn't that advanced but I always dial it down too. It's like looking into the sun!
+02:12 <DivineRight> I also have glasses that filter out some of the blue light.
+02:12 <DivineRight> Oh
+02:12 <J> Nice! Finally an excuse to use glasses :)
+02:13 <J> But yeah do you have a list of demands?
+02:13 <DivineRight> That makes me sound like I am holding hostages. :P
+02:13 <J> Should you join, do you picture full-time employment or more of a project-to-project basis?
+02:13 <J> lol
+02:13 <J> yeah it does
+02:14 <J> You better get used to it because I'm very good at building language barriers :)
+02:16 <J> I had a problem at school where my main goal in English was to use the most advanced sounding words possible. That set me back a bit, but I should be fluent now.
+02:16 <DivineRight> It sounds interesting, and I am not sure what if any demands I have.
+02:16 <J> Lived a couple of years in LA while my mom took her PhD at UCLA, but I only remember faint parts
+02:17 <DivineRight> I spend like 4 hours each day going to the gym, and I have other things I need to do, including seeing doctors and my students.
+02:17 <J> Maybe you can consider this while working out then?
+02:17 <DivineRight> I have a student I am teaching physics and calculus to right now.
+02:17 <J> No wait you're with a PT, I forgot
+02:18 <J> Great
+02:18 <DivineRight> I am not usually with a PT, but when I am in the gym, I am in another world. :)
+02:18 <J> Hehe, I think I know what you mean.
+02:19 <J> So yeah, talk soon yea?
+02:19 <DivineRight> Sometimes I can't even talk when someone asks me something.. I am totally focused on the work.
+02:19 <DivineRight> Sure
+02:19 <DivineRight> I am always online.
+02:19 <J> I admire that
+02:19 <DivineRight> I am not keep using this nick, tho.
+02:20 <DivineRight> err.. am not going to 
+02:20 <J> I got this music project going with this dude. He's like that too. He hates multi-tasking so our rap group has had to take the back seat while he finishes his masters.
+02:20 <J> GOing back to Panther?
+02:20 <DivineRight> I always do at some point.
+02:20 <J> I'm gonna change mine too to something more meaningful
+02:21 <J> I'll just scan the userlist for ~Lord, should we lose contact lol
+02:21 <DivineRight> :)
+02:21 <DivineRight> Oh
+02:21 <J> Pardon?
+02:21 <DivineRight> heh.. I also have a friend here from Denmark.. he is getting a PhD in stats.. he might not have seen me.
+02:22 <DivineRight> Prolly looked for Panther and thot i was not here.
+02:22 <J> aaaah hehe
+02:22 <DivineRight> It must be late there.. it is almost my bed time here.
+02:22 <J> I was like "does he unknowingly have a dane walking around in his house??"
+02:23 <DivineRight> ha
+02:23 <J> Yes it is and the eye lids are getting heavy
+02:23 <DivineRight> Nope
+02:23 <DivineRight> He lives on the west coast in some town that begins with E
+02:23 <J> Denmark is awesome
+02:23 <J> hehe
+02:24 <J> in denmark you mean?
+02:24 <DivineRight> Yep
+02:24 <J> only danish name i can think of is esbjerg?
+02:24 <J> or that might be a surname
+02:24 <DivineRight> That is it.
+02:25 <J> egersund, no that's norway. as you probably know our spelling is almost identical. pronounciation, well lets just say youtube is flooded with mock videos :D
+02:25 <J> raelly? yay
+02:26 <J> (fun ones in good faith -- we dont mock danes)
+02:26 <J> So yeah thank you for the chat!
+02:27 <DivineRight> Denmark and Norway were one kingdom at one point.
+02:27 <DivineRight> Thanks to you, too.
+02:27 <J> Yeah those were the days!
+02:27 <J> Peace out!
+02:27 <DivineRight> Sleep well
+02:28 <J> Oh man that is something im in dire need of right now lol
+02:28 <J> I'll find you in #music
+02:28 <DivineRight> ok
+02:29 <J> should you change name
+--- Log closed Mon Jan 14 02:29:11 2019
+--- Log opened Mon Jan 14 02:30:03 2019
+02:30 Irssi: Starting query in Freenode with DivineRight
+02:31 <J> Sorry just real quick, how come you're not in ##econometrics?
+02:31 <J> My business plan is full of quotes from there. Can't attest to the validity of them but looks legit
+02:32 <DivineRight> I thot about it... I taught econometrics once, so I could go in there, but I am already in 17 channels on this net, and 10 channels on 4 other nets, so it gets a little cluttered.
+02:36 <J> Ah. Yeah I figured it'd be something like that. Probably wouldn't be of much value to you.
+02:37 <J> I'll have the full plan translated ASAP: https://imgur.com/a/TMetL4S
+02:38 <J> And with that I'm out :)
+02:38 <J> Bye
+--- Log closed Mon Jan 14 02:38:18 2019
+
+
+16:31 Irssi: Starting query in Freenode with Panther
+16:31 <Panther> I have to get going soon, but I got another book
+16:31 <Panther> SuperCash
+16:31 <Panther> The New Hedge Fund Capitalism
+--- Log closed Sun Feb 10 16:37:35 2019
+--- Log opened Sun Feb 10 16:42:08 2019
+16:42 <J> Hey!
+16:42 <J> Did you manage to read the other two?
+--- Log closed Sun Feb 10 16:47:35 2019
+--- Log opened Sun Feb 10 16:50:08 2019
+16:50 <Panther> Not much.. I have been busy, and the next 2 weeks are going to be super busy for me.
+16:51 <J> Ok. I'll use that time wisely to finish my part of the bplan.
+16:51 <J> BUt there's one problem regarding access to the big exchanges.
+16:51 <J> I'll show you the log if you don't mind:
+16:52 <J> https://gist.github.com/dt1973/cb5f79a6e27d26a39cde5540614efd6f
+16:53 <Panther> You can, tho, I am guessing you need an account of some sort. Also, technically, if you are buying securities in someone else's name, you likely also need a broker's license.
+16:56  * Panther is right, then :)
+16:57 <Panther> You don't need to compete at the millisecond level to make money.
+16:58 <Panther> Arbitrage is not the only way to take advantage of solid trading strategies.
+16:59 <J> hehe
+17:00 <J> Sounds good
+17:00 <J> But I think maybe we should design that milli or nanosecond system still. This Redox OS based on Rust is like everything BSD/Linux oughta be
+17:01 <J> Something like 15.000 loc instead of 500.000 :D
+17:01 <Panther> But you do need an account of some type. No one is going to let you trade unless they are sure you are going to pay, for example.
+17:01 <J> Yes. We'll factor that into the budget.
+17:02 <J> We're gonna make this happen. My friend yesterday saying it would never work. We won't be talking that much anymore :D
+17:03 <J> Still a bro, but I don't wanna hear that stuff. We got so many good things going for us.
+17:03 <J> If possible can you list the trading strategies we'll be using?
+17:03 <J> I'll also have to start the hunt for a reliable Rust developer. Assuming we'll be 100% rust
+17:05 <Panther> I don't think it makes sense to commit to a specific language at this point.
+17:06 <J> Maybe not
+17:07 <J> But eventually we're gonna have to switch to a microkernel right? And rust is both low level and modern the way I understand. Wouldn't it save us the trouble of converting or making interpreters later?
+17:07 <Panther> I have to get going, tho... I need to go to the store, then get ready to go to therapy.
+17:07 <J> Ok we can make a schedule of when we'll implement the various languages
+17:07 <J> Alright man
+17:07 <J> Appreciate stopping by
+17:08 <J> Good health and all that :)
+17:08 <J> Bye
+17:08 <Panther> I think that deciding on the specifics of the implementation is better left until there are more details known about what is specifically needed. :)
+17:10 <Panther> What that one guy says is right... in general, you have to choose where and how you are going to compete, and trying to compete at the level of developing the fastest system, microkernels, etc.. is very very expensive and time consuming, and I think in the beginning, if we spend all of our time working on that, we will have no time to be concerned with the actual strategies, which is after 
+17:10 <Panther> all the most important part.
+17:10 <J> THat makes very much sense
+17:10 <J> Yes indeed
+17:11 <Panther> Once you ahve a sound working system, and you have money to put into more R&D on things like that, then you can go after developers who can do that kind of work.
+17:11 <J> I just remember as a kid when I fell in love with unix I always wanted to create the future unix with microkernels. Now I just found out Redox had already done it. So hopefully well only have to add a few extensions, i dont know.
+17:11 <J> ur right though, it's best to hold
+17:11 <J> True true!
+17:12 <J> We'll settle for this
+17:12 <J> Cheers mate talk soon
+17:13 <Panther> take care and have fun :)
+--- Log closed Sun Feb 10 17:18:35 2019
+--- Log opened Sun Feb 10 17:20:58 2019
+17:20 <J> :)
+--- Log closed Sun Feb 10 17:26:35 2019
+

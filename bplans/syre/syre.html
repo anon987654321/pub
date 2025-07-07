@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="description" content="SYRE - Forretningsplan for Innovasjon Norge">
+  <title>SYRE - Forretningsplan for Innovasjon Norge</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.babylonjs.com/babylon.js"></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    @page { size: A4; margin: 20mm; }
+    
+    :root {
+      --primary-color: #000000;
+      --background-color: #ffffff;
+      --text-color: #333333;
+      --accent-color: #8a2be2;
+      --font-family: 'Roboto Mono', monospace;
+      --heading-font-family: 'Roboto', sans-serif;
+      --base-font-size: 16px;
+      --line-height: 1.5;
+      --modular-scale: 1.25;
+    }
+    
+    * { box-sizing: border-box; }
+    
+    body {
+      margin: 0;
+      padding: 20mm;
+      font-family: var(--font-family);
+      font-size: var(--base-font-size);
+      line-height: var(--line-height);
+      background-color: var(--background-color);
+      color: var(--text-color);
+      quotes: '«' '»' ''' ''';
+    }
+    
+    .page {
+      min-height: 257mm;
+      page-break-after: always;
+      position: relative;
+      padding-bottom: 30mm;
+    }
+    
+    .page:last-child { page-break-after: avoid; }
+    
+    .footer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 8mm;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: calc(var(--base-font-size) * 0.7);
+      color: #999;
+    }
+    
+    .confidentiality {
+      font-weight: 500;
+      color: #d32f2f;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-size: calc(var(--base-font-size) * 0.65);
+    }
+    
+    h1 {
+      font-family: var(--heading-font-family);
+      font-size: calc(var(--base-font-size) * var(--modular-scale) * var(--modular-scale) * var(--modular-scale));
+      font-weight: 700;
+      color: var(--primary-color);
+      margin-bottom: 2rem;
+      line-height: 1.2;
+      text-align: center;
+    }
+    
+    h2 {
+      font-family: var(--heading-font-family);
+      font-size: calc(var(--base-font-size) * var(--modular-scale) * var(--modular-scale));
+      font-weight: 700;
+      color: var(--primary-color);
+      margin: 3rem 0 2rem 0;
+      line-height: 1.2;
+    }
+    
+    h3 {
+      font-family: var(--heading-font-family);
+      font-size: calc(var(--base-font-size) * var(--modular-scale));
+      font-weight: 700;
+      color: var(--primary-color);
+      margin: 2rem 0 1rem 0;
+      line-height: 1.2;
+    }
+    
+    h4 {
+      font-family: var(--heading-font-family);
+      font-size: var(--base-font-size);
+      font-weight: 700;
+      color: var(--primary-color);
+      margin: 1.5rem 0 0.5rem 0;
+      line-height: 1.2;
+    }
+    
+    p, ul, ol { margin-bottom: 1.5rem; }
+    
+    header {
+      position: relative;
+      height: 400px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+    }
+    
+    .text-wrapper {
+      position: relative;
+      width: 800px;
+      height: 400px;
+    }
+    
+    #fractalText {
+      width: 800px;
+      height: 400px;
+      transform: scale(1.2);
+      transform-origin: left center;
+    }
+    
+    .tagline {
+      font-size: calc(var(--base-font-size) * 0.9);
+      font-weight: 500;
+      color: var(--text-color);
+      margin-top: 1rem;
+    }
+    
+    /* Visualization containers with ultra spacing */
+    .viz-container {
+      margin: 4rem 0;
+      width: 100%;
+      height: 400px;
+      position: relative;
+    }
+    
+    .viz-large {
+      height: 500px;
+      margin: 6rem 0;
+    }
+    
+    .viz-title {
+      font-family: var(--heading-font-family);
+      font-size: calc(var(--base-font-size) * 1.1);
+      font-weight: 700;
+      color: var(--primary-color);
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    
+    /* 3D Neural Network Canvas */
+    #neuralNetworkCanvas {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: radial-gradient(ellipse at center, #0a0a0a 0%, #000000 100%);
+    }
+    
+    /* Holographic Market Canvas */
+    #hologramCanvas {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: linear-gradient(45deg, #000011 0%, #001122 50%, #000011 100%);
+    }
+    
+    /* Particle Revenue System */
+    #particleCanvas {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: radial-gradient(circle at 30% 70%, #1a0066 0%, #000033 100%);
+    }
+    
+    /* Quantum Financial Model */
+    #quantumCanvas {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: linear-gradient(135deg, #001a33 0%, #002244 25%, #003366 50%, #002244 75%, #001a33 100%);
+    }
+    
+    /* Technology Heatmap */
+    #techHeatmap {
+      width: 100%;
+      height: 100%;
+      background: #000;
+    }
+    
+    .heatmap-cell {
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .heatmap-cell:hover {
+      stroke: #8a2be2;
+      stroke-width: 2;
+    }
+    
+    /* Tables ultra-minimal */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 2rem 0;
+      font-family: var(--font-family);
+      font-size: calc(var(--base-font-size) * 0.9);
+    }
+    
+    th, td {
+      padding: 1rem;
+      text-align: left;
+    }
+    
+    th {
+      font-weight: 500;
+      color: var(--primary-color);
+      border-bottom: 1px solid #ddd;
+    }
+    
+    td {
+      border-bottom: 1px solid #f5f5f5;
+    }
+    
+    /* TOC ultra-minimal */
+    .toc li { margin-bottom: 1rem; }
+    .toc ol { margin-top: 1rem; padding-left: 20px; }
+    
+    /* Links */
+    a { color: var(--accent-color); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    
+    /* Warning box minimal */
+    .warning-box {
+      padding: 1rem;
+      margin: 2rem 0;
+      border-left: 3px solid #d32f2f;
+      background: #fafafa;
+      font-size: calc(var(--base-font-size) * 0.85);
+    }
+    
+    .warning-title {
+      font-weight: 700;
+      color: #d32f2f;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    /* Signatures */
+    .signatures {
+      margin-top: 4rem;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3rem;
+      text-align: center;
+    }
+    
+    .signatures p {
+      margin: 1rem 0;
+      border-top: 1px solid var(--text-color);
+      padding-top: 1rem;
+      font-family: var(--heading-font-family);
+      font-weight: 700;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      body { font-size: calc(var(--base-font-size) * 0.9); padding: 15mm; }
+      header { height: 350px; }
+      .text-wrapper, #fractalText { width: 600px; height: 300px; }
+      #fractalText { transform: scale(0.7); }
+      .signatures { grid-template-columns: 1fr; }
+      .viz-container { height: 300px; margin: 3rem 0; }
+    }
+    
+    @media (max-width: 480px) {
+      body { font-size: calc(var(--base-font-size) * 0.85); padding: 10mm; }
+      header { height: 300px; }
+      .text-wrapper, #fractalText { width: 400px; height: 200px; }
+      #fractalText { transform: scale(0.6); }
+      .viz-container { height: 250px; margin: 2rem 0; }
+    }
+    
+    @media print {
+      .page { page-break-after: always; }
+      .page:last-child { page-break-after: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Front Page with Fractal Logo -->
+  <div class="page">
+    <header>
+      <div class="text-wrapper">
+        <h1 style="display: none;">SYRE</h1>
+        <svg id="fractalText" viewBox="0 0 800 400" preserveAspectRatio="xMinYMid meet" role="heading" aria-level="1">
+          <defs>
+            <filter id="displacementFilter">
+              <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="3" result="noise">
+                <animate attributeName="baseFrequency" values="0.01;0.02;0.01" dur="20s" repeatCount="indefinite"/>
+              </feTurbulence>
+              <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" xChannelSelector="R" yChannelSelector="G">
+                <animate attributeName="scale" values="2;10;2" dur="10s" repeatCount="indefinite"/>
+              </feDisplacementMap>
+            </filter>
+            <filter id="glowEffect">
+              <feGaussianBlur stdDeviation="3" result="blur"/>
+              <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.8 0" result="glow"/>
+              <feBlend in="SourceGraphic" in2="glow" mode="screen"/>
+            </filter>
+            <pattern id="fractalPattern" patternUnits="userSpaceOnUse" width="2400" height="1200" patternTransform="translate(-800, -400)">
+              <g transform="translate(1200, 600)">
+                <!-- Layer 0: Flower of Life (Sacred Geometry) -->
+                <g class="fractal-layer0">
+                  <circle cx="0" cy="0" r="150" fill="none" stroke="url(#gradient0)" stroke-width="5">
+                    <animateTransform attributeName="transform" type="rotate" values="0 0 0;90 0 0;180 0 0;270 0 0;360 0 0" dur="80s" repeatCount="indefinite" calcMode="discrete"/>
+                    <animateTransform attributeName="transform" type="scale" values="0.5;1.5;0.5" dur="25s" repeatCount="indefinite" additive="sum"/>
+                  </circle>
+                  <g transform="translate(0, -150)">
+                    <circle cx="0" cy="0" r="150" fill="none" stroke="url(#gradient0)" stroke-width="5"/>
+                  </g>
+                  <g transform="translate(0, 150)">
+                    <circle cx="0" cy="0" r="150" fill="none" stroke="url(#gradient0)" stroke-width="5"/>
+                  </g>
+                  <g transform="translate(-129.9, 75)">
+                    <circle cx="0" cy="0" r="150" fill="none" stroke="url(#gradient0)" stroke-width="5"/>
+                  </g>
+                  <g transform="translate(129.9, -75)">
+                    <circle cx="0" cy="0" r="150" fill="none" stroke="url(#gradient0)" stroke-width="5"/>
+                  </g>
+                  <g transform="translate(-129.9, -75)">
+                    <circle cx="0" cy="0" r="150" fill="none" stroke="url(#gradient0)" stroke-width="5"/>
+                  </g>
+                  <g transform="translate(129.9, 75)">
+                    <circle cx="0" cy="0" r="150" fill="none" stroke="url(#gradient0)" stroke-width="5"/>
+                  </g>
+                </g>
+                <!-- Layer 1: Octahedrons (Crystalline Structure) -->
+                <g class="fractal-layer1">
+                  <polygon points="0,-300 212.1,0 0,300 -212.1,0 0,-300 0,300 212.1,0 -212.1,0" fill="url(#gradient1)" opacity="1">
+                    <animateTransform attributeName="transform" type="rotate" values="0 0 0;90 0 0;180 0 0;270 0 0;360 0 0" dur="60s" repeatCount="indefinite" calcMode="discrete"/>
+                    <animate attributeName="opacity" values="0.5;1;0.5" dur="20s" repeatCount="indefinite"/>
+                  </polygon>
+                  <g transform="scale(0.5) translate(0, -150)">
+                    <polygon points="0,-150 106.05,0 0,150 -106.05,0 0,-150 0,150 106.05,0 -106.05,0" fill="url(#gradient1)" opacity="1">
+                      <animateTransform attributeName="transform" type="rotate" values="360 0 0;270 0 0;180 0 0;90 0 0;0 0 0" dur="50s" repeatCount="indefinite" calcMode="discrete"/>
+                      <animate attributeName="opacity" values="0.5;1;0.5" dur="18s" repeatCount="indefinite"/>
+                    </polygon>
+                  </g>
+                </g>
+                <!-- Layer 2: Hexagonal Lattice -->
+                <g class="fractal-layer2">
+                  <polygon points="0,0 150,86.6 150,-86.6 0,-173.2 -150,-86.6 -150,86.6" fill="url(#gradient2)" opacity="0.7">
+                    <animateTransform attributeName="transform" type="rotate" values="0 0 0;90 0 0;180 0 0;270 0 0;360 0 0" dur="40s" repeatCount="indefinite" calcMode="discrete"/>
+                    <animateTransform attributeName="transform" type="scale" values="0.5;1.5;0.5" dur="15s" repeatCount="indefinite" additive="sum"/>
+                  </polygon>
+                  <g transform="translate(259.8, 0)">
+                    <polygon points="0,0 150,86.6 150,-86.6 0,-173.2 -150,-86.6 -150,86.6" fill="url(#gradient2)" opacity="0.7">
+                      <animateTransform attributeName="transform" type="rotate" values="360 0 0;270 0 0;180 0 0;90 0 0;0 0 0" dur="35s" repeatCount="indefinite" calcMode="discrete"/>
+                      <animateTransform attributeName="transform" type="scale" values="0.5;1.5;0.5" dur="12s" repeatCount="indefinite" additive="sum"/>
+                    </polygon>
+                  </g>
+                  <g transform="translate(-259.8, 0)">
+                    <polygon points="0,0 150,86.6 150,-86.6 0,-173.2 -150,-86.6 -150,86.6" fill="url(#gradient2)" opacity="0.7">
+                      <animateTransform attributeName="transform" type="rotate" values="0 0 0;90 0 0;180 0 0;270 0 0;360 0 0" dur="35s" repeatCount="indefinite" calcMode="discrete"/>
+                      <animateTransform attributeName="transform" type="scale" values="0.5;1.5;0.5" dur="12s" repeatCount="indefinite" additive="sum"/>
+                    </polygon>
+                  </g>
+                  <g transform="translate(129.9, 225)">
+                    <polygon points="0,0 150,86.6 150,-86.6 0,-173.2 -150,-86.6 -150,86.6" fill="url(#gradient2)" opacity="0.7">
+                      <animateTransform attributeName="transform" type="rotate" values="360 0 0;270 0 0;180 0 0;90 0 0;0 0 0" dur="30s" repeatCount="indefinite" calcMode="discrete"/>
+                      <animateTransform attributeName="transform" type="scale" values="0.5;1.5;0.5" dur="10s" repeatCount="indefinite" additive="sum"/>
+                    </polygon>
+                  </g>
+                  <g transform="translate(-129.9, -225)">
+                    <polygon points="0,0 150,86.6 150,-86.6 0,-173.2 -150,-86.6 -150,86.6" fill="url(#gradient2)" opacity="0.7">
+                      <animateTransform attributeName="transform" type="rotate" values="0 0 0;90 0 0;180 0 0;270 0 0;360 0 0" dur="30s" repeatCount="indefinite" calcMode="discrete"/>
+                      <animateTransform attributeName="transform" type="scale" values="0.5;1.5;0.5" dur="10s" repeatCount="indefinite" additive="sum"/>
+                    </polygon>
+                  </g>
+                </g>
+                <!-- Layer 3: Chrysanthemum Spirals (Radial Patterns) -->
+                <g class="fractal-layer3">
+                  <g transform="scale(0.5)">
+                    <path d="M0,0 Q100,100 200,0 Q100,-100 0,0 Q-100,100 -200,0 Q-100,-100 0,0 Q100,100 200,0 Q100,-100 0,0 Q-100,100 -200,0 Q-100,-100 0,0" fill="none" stroke="url(#gradient3)" stroke-width="6">
+                      <animateTransform attributeName="transform" type="rotate" values="0 0 0;90 0 0;180 0 0;270 0 0;360 0 0" dur="50s" repeatCount="indefinite" calcMode="discrete"/>
+                      <animate attributeName="d" values="M0,0 Q100,100 200,0 Q100,-100 0,0 Q-100,100 -200,0 Q-100,-100 0,0;M0,0 Q150,150 300,0 Q150,-150 0,0 Q-150,150 -300,0 Q-150,-150 0,0;M0,0 Q100,100 200,0 Q100,-100 0,0 Q-100,100 -200,0 Q-100,-100 0,0" dur="15s" repeatCount="indefinite"/>
+                    </path>
+                  </g>
+                  <g transform="scale(0.3)">
+                    <path d="M0,0 Q100,100 200,0 Q100,-100 0,0 Q-100,100 -200,0 Q-100,-100 0,0 Q100,100 200,0 Q100,-100 0,0 Q-100,100 -200,0 Q-100,-100 0,0" fill="none" stroke="url(#gradient3)" stroke-width="4">
+                      <animateTransform attributeName="transform" type="rotate" values="360 0 0;270 0 0;180 0 0;90 0 0;0 0 0" dur="40s" repeatCount="indefinite" calcMode="discrete"/>
+                      <animate attributeName="d" values="M0,0 Q100,100 200,0 Q100,-100 0,0 Q-100,100 -200,0 Q-100,-100 0,0;M0,0 Q150,150 300,0 Q150,-150 0,0 Q-150,150 -300,0 Q-150,-150 0,0;M0,0 Q100,100 200,0 Q100,-100 0,0 Q-100,100 -200,0 Q-100,-100 0,0" dur="12s" repeatCount="indefinite"/>
+                    </path>
+                  </g>
+                </g>
+              </g>
+            </pattern>
+            <radialGradient id="gradient0" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+              <stop offset="0%" style="stop-color:#e6e6e6; stop-opacity:0.8;">
+                <animate attributeName="stop-opacity" values="0.8;1;0.8" dur="10s" repeatCount="indefinite"/>
+                <animate attributeName="stop-color" values="#e6e6e6;#ff99cc;#87cefa;#d8bfd8;#dda0dd;#e6e6e6" dur="10s" repeatCount="indefinite"/>
+              </stop>
+              <stop offset="100%" style="stop-color:#ff99cc; stop-opacity:0.8;">
+                <animate attributeName="stop-opacity" values="0.8;1;0.8" dur="10s" repeatCount="indefinite"/>
+                <animate attributeName="stop-color" values="#ff99cc;#87cefa;#d8bfd8;#dda0dd;#e6e6e6;#ff99cc" dur="10s" repeatCount="indefinite"/>
+              </stop>
+            </radialGradient>
+            <radialGradient id="gradient1" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+              <stop offset="0%" style="stop-color:#ff99cc; stop-opacity:0.8;">
+                <animate attributeName="stop-opacity" values="0.8;1;0.8" dur="5s" repeatCount="indefinite"/>
+                <animate attributeName="stop-color" values="#ff99cc;#87cefa;#d8bfd8;#e6e6e6;#dda0dd;#ff99cc" dur="5s" repeatCount="indefinite"/>
+              </stop>
+              <stop offset="100%" style="stop-color:#87cefa; stop-opacity:0.8;">
+                <animate attributeName="stop-opacity" values="0.8;1;0.8" dur="5s" repeatCount="indefinite"/>
+                <animate attributeName="stop-color" values="#87cefa;#d8bfd8;#e6e6e6;#dda0dd;#ff99cc;#87cefa" dur="5s" repeatCount="indefinite"/>
+              </stop>
+            </radialGradient>
+            <radialGradient id="gradient2" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+              <stop offset="0%" style="stop-color:#d8bfd8; stop-opacity:0.8;">
+                <animate attributeName="stop-opacity" values="0.8;1;0.8" dur="7s" repeatCount="indefinite"/>
+                <animate attributeName="stop-color" values="#d8bfd8;#e6e6e6;#dda0dd;#ff99cc;#87cefa;#d8bfd8" dur="7s" repeatCount="indefinite"/>
+              </stop>
+              <stop offset="100%" style="stop-color:#dda0dd; stop-opacity:0.8;">
+                <animate attributeName="stop-opacity" values="0.8;1;0.8" dur="7s" repeatCount="indefinite"/>
+                <animate attributeName="stop-color" values="#dda0dd;#ff99cc;#87cefa;#d8bfd8;#e6e6e6;#dda0dd" dur="7s" repeatCount="indefinite"/>
+              </stop>
+            </radialGradient>
+            <radialGradient id="gradient3" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+              <stop offset="0%" style="stop-color:#e6e6e6; stop-opacity:0.8;">
+                <animate attributeName="stop-opacity" values="0.8;1;0.8" dur="10s" repeatCount="indefinite"/>
+                <animate attributeName="stop-color" values="#e6e6e6;#dda0dd;#ff99cc;#87cefa;#d8bfd8;#e6e6e6" dur="10s" repeatCount="indefinite"/>
+              </stop>
+              <stop offset="100%" style="stop-color:#ff99cc; stop-opacity:0.8;">
+                <animate attributeName="stop-opacity" values="0.8;1;0.8" dur="10s" repeatCount="indefinite"/>
+                <animate attributeName="stop-color" values="#ff99cc;#87cefa;#d8bfd8;#e6e6e6;#dda0dd;#ff99cc" dur="10s" repeatCount="indefinite"/>
+              </stop>
+            </radialGradient>
+          </defs>
+          <text x="0" y="200" font-family="'Roboto', sans-serif" font-size="256px" font-weight="bold" text-anchor="start" dominant-baseline="central" fill="url(#fractalPattern)" filter="url(#displacementFilter) url(#glowEffect)">
+            SYRE
+            <tspan font-size="32px" dy="-0.5em">™</tspan>
+          </text>
+        </svg>
+        <p class="tagline">Revolusjonerende 3D-printede, skreddersydde sko bygget med bærekraftig teknologi og kunstig intelligens</p>
+      </div>
+    </header>
+    
+    <p style="margin-top: 3rem;"><strong>Forretningsplan for Innovasjon Norge</strong><br>
+    Søknadsbeløp: NOK 2 000 000 | Prosjektperiode: 24 måneder | Dato: 28. mai 2025</p>
+    
+    <div class="footer">
+      <div class="confidentiality">Strengt konfidensiell - Kun for Innovasjon Norge</div>
+      <div>SYRE AS | Side 1</div>
+    </div>
+  </div>
+
+  <!-- Confidentiality and TOC Page -->
+  <div class="page">
+    
+    <div class="warning-box">
+      <div class="warning-title">Konfidensiell</div>
+      <p><strong>Dette dokumentet inneholder konfidensiell og eiendomsbeskyttet informasjon tilhørende SYRE AS.</strong></p>
+      <p>Ved å motta og lese dette dokumentet bekrefter mottakeren at all informasjon er strengt konfidensiell, kun ment for Innovasjon Norge og deres autoriserte representanter, og at uautorisert kopiering, distribusjon eller deling er strengt forbudt.</p>
+    </div>
+
+    <h2>Innholdsfortegnelse</h2>
+    <ol class="toc">
+      <li><h4>Sammendrag av prosjektet</h4></li>
+      <li><h4>Selskapet og grunnleggerteamet</h4></li>
+      <li><h4>Markedsanalyse og konkurransefortrinn</h4></li>
+      <li><h4>Produktinnovasjon og teknologisk plattform</h4></li>
+      <li><h4>Forretningsmodell og verdiskapning</h4></li>
+      <li><h4>Gjennomføringsplan og milepæler</h4></li>
+      <li><h4>Finansieringsplan og budsjett</h4></li>
+      <li><h4>Risikohåndtering og kvalitetssikring</h4></li>
+      <li><h4>Samfunnsengasjement og bærekraft</h4></li>
+      <li><h4>Intellektuelle rettigheter og patenter</h4></li>
+      <li><h4>Fremtidige vekstmuligheter og ekspansjon</h4></li>
+      <li><h4>Konklusjon og anbefalinger</h4></li>
+    </ol>
+    
+    <div class="footer">
+      <div class="confidentiality">Strengt konfidensiell - Kun for Innovasjon Norge</div>
+      <div>SYRE AS | Side 2</div>
+    </div>
+  </div>
+
+  <!-- Executive Summary with 3D Neural Network -->
+  <div class="page">
+    <h2>1. Sammendrag av prosjektet</h2>
+    
+    <h3>Prosjektets essens og revolusjonære tilnærming</h3>
+    <p>SYRE utvikler neste generasjons 3D-printeteknologi for produksjon av fullstendig skreddersydde, bærekraftige sko. Gjennom vår proprietære Ruby-baserte parametriske designalgoritme, avansert AI-drevet materialoptimalisering via <a href="https://github.com/langchainrb">Langchain.rb</a>, og revolusjonerende <a href="https://example.com/master.json">master.json</a> konstitusjonelle AI-rammeverk (v99.3-constitutional-revolution), skaper vi en helt ny kategori innen fottøyindustrien.</p>
+    
+    <!-- 3D Neural Network Visualization -->
+    <div class="viz-container viz-large">
+      <div class="viz-title">SYRE AI-arkitektur - 3D Neural Network</div>
+      <canvas id="neuralNetworkCanvas"></canvas>
+    </div>
+    
+    <h3>Nøkkeltall og markedspotensial</h3>
+    <ul>
+      <li><strong>Globalt 3D-printet fottøymarked:</strong> USD 9,06 milliarder innen 2030 (CAGR 16,9%)</li>
+      <li><strong>Norsk målmarked:</strong> NOK 500 millioner (premium skreddersydd fottøy)</li>
+      <li><strong>Første kommersielle salg:</strong> Q4 2025 med 5 000 par</li>
+      <li><strong>Skaleringsmål 2027:</strong> 50 000 par årlig gjennom AI-drevne mikrofabrikker</li>
+      <li><strong>Sosial påvirkning:</strong> 10 000 gratis par til personer under fattigdomsgrensen innen 2027</li>
+    </ul>
+    
+    <div class="footer">
+      <div class="confidentiality">Strengt konfidensiell - Kun for Innovasjon Norge</div>
+      <div>SYRE AS | Side 3</div>
+    </div>
+  </div>
+
+  <!-- Market Analysis with Holographic Projections -->
+  <div class="page">
+    <h2>3. Markedsanalyse og konkurransefortrinn</h2>
+    
+    <h3>Globalt marked for 3D-printet fottøy</h3>
+    <p>Det globale markedet for 3D-printet fottøy opplever eksplosiv vekst, drevet av teknologisk modenhet, økt forbrukerbevissthet rundt bærekraft, og demand for personaliserte produkter.</p>
+    
+    <!-- Holographic Market Projections -->
+    <div class="viz-container viz-large">
+      <div class="viz-title">Holografiske markedsprojeksjoner - Wireframe analyse</div>
+      <canvas id="hologramCanvas"></canvas>
+    </div>
+    
+    <h3>Nordisk fottøymarked</h3>
+    <ul>
+      <li><strong>Totalt norsk fottøymarked:</strong> NOK 5 milliarder årlig</li>
+      <li><strong>Premium-segment:</strong> NOK 500 millioner (10% av markedet, vokser 12% årlig)</li>
+      <li><strong>Skreddersydd fottøy:</strong> NOK 50 millioner (vokser 15% årlig)</li>
+      <li><strong>Bærekraftig fottøy:</strong> NOK 120 millioner (vokser 18% årlig)</li>
+    </ul>
+    
+    <div class="footer">
+      <div class="confidentiality">Strengt konfidensiell - Kun for Innovasjon Norge</div>
+      <div>SYRE AS | Side 4</div>
+    </div>
+  </div>
+
+  <!-- Technology Heatmap Analysis -->
+  <div class="page">
+    <h2>4. Produktinnovasjon og teknologisk plattform</h2>
+    
+    <h3>Teknologisk konkurranseanalyse</h3>
+    <p>SYREs teknologiplattform kombinerer flere gjennombruddsinnovasjoner som posisjonerer oss unikt i markedet:</p>
+    
+    <!-- Technology Heatmap -->
+    <div class="viz-container viz-large">
+      <div class="viz-title">Teknologi-heatmap - Konkurranseposisjonering</div>
+      <svg id="techHeatmap"></svg>
+    </div>
+    
+    <h3>Våre kjernekomponenter</h3>
+    <ul>
+      <li><strong>Parametrisk arkitekturdesign:</strong> Algoritmer som skaper organiske, tilpasningsdyktige skoformer optimalisert for hver enkelt fot</li>
+      <li><strong>AI³-materialinnovasjon:</strong> Partnerskap med PubHealthcare og deres AI³-plattform som utvikler 100% biologisk nedbrytbare materialer med 50% raskere nedbrytning</li>
+      <li><strong>Konstitusjonell AI-sikkerhet:</strong> Master.json-rammeverk sikrer 99,999% etterlevelse av prinsipper for uskadelighet, ærlighet og hjelpsomhet</li>
+      <li><strong>AR-tilpasningsapp:</strong> Følger strenge standarder for ytelse (LCP < 2,5s), tilgjengelighet (WCAG 2.2 AA) og personvern (GDPR)</li>
+    </ul>
+    
+    <div class="footer">
+      <div class="confidentiality">Strengt konfidensiell - Kun for Innovasjon Norge</div>
+      <div>SYRE AS | Side 5</div>
+    </div>
+  </div>
+
+  <!-- Financial Plan with Particle Revenue System -->
+  <div class="page">
+    <h2>7. Finansieringsplan og budsjett</h2>
+    
+    <h3>Totalt finansieringsbehov</h3>
+    <p>SYRE søker NOK 2 millioner fra Innovasjon Norge som del av en total finansieringsrunde på NOK 6 millioner over prosjektperioden på 24 måneder.</p>
+    
+    <!-- Particle Revenue System -->
+    <div class="viz-container viz-large">
+      <div class="viz-title">Particle Revenue System - Fysikkbasert inntektsflyt</div>
+      <canvas id="particleCanvas"></canvas>
+    </div>
+    
+    <h3>Finansieringsstruktur</h3>
+    <ul>
+      <li><strong>Innovasjon Norge:</strong> NOK 2 000 000 (33%)</li>
+      <li><strong>Eksisterende investorer:</strong> NOK 3 000 000 (50%)</li>
+      <li><strong>Folkefinansiering:</strong> NOK 1 000 000 (17%)</li>
+    </ul>
+    
+    <h3>Inntektsprognoser</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>År</th>
+          <th>Omsetning (NOK mill.)</th>
+          <th>Bruttomargin</th>
+          <th>Antall par</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>2025</td>
+          <td>1,0</td>
+          <td>60%</td>
+          <td>5 000</td>
+        </tr>
+        <tr>
+          <td>2026</td>
+          <td>4,0</td>
+          <td>68%</td>
+          <td>20 000</td>
+        </tr>
+        <tr>
+          <td>2027</td>
+          <td>10,0</td>
+          <td>72%</td>
+          <td>50 000</td>
+        </tr>
+        <tr>
+          <td>2028</td>
+          <td>22,0</td>
+          <td>75%</td>
+          <td>100 000</td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <div class="footer">
+      <div class="confidentiality">Strengt konfidensiell - Kun for Innovasjon Norge</div>
+      <div>SYRE AS | Side 6</div>
+    </div>
+  </div>
+
+  <!-- Quantum Financial Models -->
+  <div class="page">
+    <h2>8. Risikohåndtering og kvalitetssikring</h2>
+    
+    <h3>Avansert finansiell modellering</h3>
+    <p>SYRE benytter kvante-inspirerte finansielle modeller for å forutsi og håndtere komplekse markedsscenarier og risikofaktorer.</p>
+    
+    <!-- Quantum Financial Model -->
+    <div class="viz-container viz-large">
+      <div class="viz-title">Quantum Financial Models - 4D abstrakt finansiell representasjon</div>
+      <canvas id="quantumCanvas"></canvas>
+    </div>
+    
+    <h3>Risikohåndtering</h3>
+    <ul>
+      <li><strong>Teknisk risiko:</strong> SYRE er på TRL 6 (prototype testet) og BRL 5 (markedsvalidering). Risikoen ved oppskalering håndteres gjennom samarbeid med 3D-printhuber og bruk av AI³s material repurposing-assistent</li>
+      <li><strong>Markedsrisiko:</strong> Diversifisert produktportefølje og fleksibel produksjonsmodell reduserer eksponering</li>
+      <li><strong>Finansiell risiko:</strong> Konservative prognoser og milestone-basert finansiering sikrer kontrollert vekst</li>
+      <li><strong>Konkurranserisiko:</strong> Sterke IP-rettigheter og kontinuerlig innovasjon opprettholder konkurransefortrinn</li>
+    </ul>
+    
+    <h3>Kvalitetssikring</h3>
+    <ul>
+      <li><strong>Produktkvalitet:</strong> ISO 9001-sertifiserte prosesser og AI-dreven kvalitetskontroll</li>
+      <li><strong>Bærekraft:</strong> Life Cycle Assessment (LCA) for alle produkter og materialer</li>
+      <li><strong>Kundetilfredshet:</strong> Kontinuerlig NPS-måling og feedback-integrasjon</li>
+      <li><strong>Teknisk ytelse:</strong> Automatisert testing og validering gjennom hele produksjonssyklusen</li>
+    </ul>
+    
+    <div class="footer">
+      <div class="confidentiality">Strengt konfidensiell - Kun for Innovasjon Norge</div>
+      <div>SYRE AS | Side 7</div>
+    </div>
+  </div>
+
+  <!-- Conclusion and Signatures -->
+  <div class="page">
+    <h2>12. Konklusjon og anbefalinger</h2>
+    
+    <h3>Strategisk sammendrag</h3>
+    <p>SYRE representerer en unik mulighet for Innovasjon Norge å støtte et revolusjonerende norsk teknologiselskap som kombinerer:</p>
+    
+    <ul>
+      <li><strong>Verdensledende teknologi:</strong> Proprietære AI-algoritmer og parametrisk design</li>
+      <li><strong>Bærekraftig innovasjon:</strong> 100% biologisk nedbrytbare materialer og sirkulær økonomi</li>
+      <li><strong>Sosial påvirkning:</strong> Målrettet støtte til utsatte grupper og lokalsamfunn</li>
+      <li><strong>Kommersiell suksess:</strong> Sterke finansielle prognoser og validert markedsbehov</li>
+      <li><strong>Norsk eksport:</strong> Premium teknologi posisjonert for globale markeder</li>
+    </ul>
+    
+    <h3>Anbefaling</h3>
+    <p>Vi anbefaler sterkt at Innovasjon Norge støtter SYRE-prosjektet med NOK 2 millioner over 24 måneder. Denne investeringen vil:</p>
+    
+    <ul>
+      <li>Posisjonere Norge som global leder innen bærekraftig 3D-printteknologi</li>
+      <li>Skape høykompetanse arbeidsplasser og eksportinntekter</li>
+      <li>Demonstrere norsk innovasjonsevne innen AI og materialvitenskap</li>
+      <li>Bidra til FNs bærekraftsmål gjennom miljøvennlig produksjon og sosial inkludering</li>
+    </ul>
+    
+    <h3>Takk for deres tid og vurdering</h3>
+    <p>Vi ser frem til muligheten for samarbeid og utvikling av bærekraftige løsninger som kan gjøre Norge til en global teknologileder.</p>
+    
+    <div class="signatures">
+      <div>
+        <p>Balder Laupsa Mæhle</p>
+        <p style="font-size: 0.8rem; font-weight: 400;">Daglig leder</p>
+      </div>
+      <div>
+        <p>Ragnhild Laupsa Mæhle</p>
+        <p style="font-size: 0.8rem; font-weight: 400;">Teknisk direktør</p>
+      </div>
+      <div>
+        <p>Johann Tepstad</p>
+        <p style="font-size: 0.8rem; font-weight: 400;">Designdirektør</p>
+      </div>
+    </div>
+    
+    <div class="footer">
+      <div class="confidentiality">Strengt konfidensiell - Kun for Innovasjon Norge</div>
+      <div>SYRE AS | Side 8</div>
+    </div>
+  </div>
+
+  <script>
+    // 3D Neural Network Visualization
+    function initNeuralNetwork() {
+      const canvas = document.getElementById('neuralNetworkCanvas');
+      const engine = new BABYLON.Engine(canvas, true);
+      const scene = new BABYLON.Scene(engine);
+      
+      // Camera setup
+      const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI/2, Math.PI/3, 10, BABYLON.Vector3.Zero(), scene);
+      camera.attachControls(canvas, true);
+      
+      // Lighting
+      const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 0), scene);
+      light.intensity = 0.7;
+      
+      // Neural network layers
+      const layers = [8, 16, 32, 16, 8, 4]; // Network architecture
+      const nodes = [];
+      const connections = [];
+      
+      // Create nodes
+      layers.forEach((nodeCount, layerIndex) => {
+        const layerNodes = [];
+        for (let i = 0; i < nodeCount; i++) {
+          const sphere = BABYLON.MeshBuilder.CreateSphere(`node_${layerIndex}_${i}`, {diameter: 0.1}, scene);
+          const x = (layerIndex - layers.length/2) * 2;
+          const y = (i - nodeCount/2) * 0.3;
+          const z = Math.sin(layerIndex + i) * 0.5;
+          sphere.position = new BABYLON.Vector3(x, y, z);
+          
+          // Neural activation animation
+          sphere.material = new BABYLON.StandardMaterial(`mat_${layerIndex}_${i}`, scene);
+          sphere.material.emissiveColor = new BABYLON.Color3(0.5 + Math.random()*0.5, 0.3, 0.8);
+          
+          // Pulsing animation
+          BABYLON.Animation.CreateAndStartAnimation("pulse", sphere, "scaling", 30, 60, 
+            new BABYLON.Vector3(1, 1, 1), 
+            new BABYLON.Vector3(1.2, 1.2, 1.2), 
+            BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+          
+          layerNodes.push(sphere);
+        }
+        nodes.push(layerNodes);
+      });
+      
+      // Create connections
+      for (let l = 0; l < layers.length - 1; l++) {
+        for (let i = 0; i < nodes[l].length; i++) {
+          for (let j = 0; j < nodes[l+1].length; j++) {
+            if (Math.random() > 0.3) { // Sparse connections
+              const line = BABYLON.MeshBuilder.CreateLines(`connection_${l}_${i}_${j}`, {
+                points: [nodes[l][i].position, nodes[l+1][j].position]
+              }, scene);
+              line.color = new BABYLON.Color3(0.3, 0.7, 1.0);
+              line.alpha = 0.3 + Math.random() * 0.4;
+              connections.push(line);
+            }
+          }
+        }
+      }
+      
+      // Data flow animation
+      setInterval(() => {
+        connections.forEach(conn => {
+          conn.alpha = 0.1 + Math.random() * 0.6;
+        });
+      }, 200);
+      
+      // Render loop
+      engine.runRenderLoop(() => {
+        scene.render();
+      });
+      
+      // Resize handling
+      window.addEventListener("resize", () => {
+        engine.resize();
+      });
+    }
+    
+    // Holographic Market Projections
+    function initHologram() {
+      const canvas = document.getElementById('hologramCanvas');
+      const engine = new BABYLON.Engine(canvas, true);
+      const scene = new BABYLON.Scene(engine);
+      
+      // Camera
+      const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI/4, Math.PI/4, 15, BABYLON.Vector3.Zero(), scene);
+      camera.attachControls(canvas, true);
+      
+      // Lighting
+      const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+      light.intensity = 0.3;
+      
+      // Market data points
+      const marketData = [
+        {year: 2023, value: 1.64, growth: 0},
+        {year: 2024, value: 2.1, growth: 28},
+        {year: 2025, value: 2.8, growth: 33},
+        {year: 2026, value: 3.7, growth: 32},
+        {year: 2027, value: 4.9, growth: 32},
+        {year: 2028, value: 6.5, growth: 33},
+        {year: 2029, value: 7.8, growth: 20},
+        {year: 2030, value: 9.06, growth: 16}
+      ];
+      
+      // Create holographic wireframe
+      const points = marketData.map((data, index) => {
+        return new BABYLON.Vector3(index - 4, data.value - 5, 0);
+      });
+      
+      // Main growth curve
+      const curve = BABYLON.MeshBuilder.CreateLines("curve", {points: points}, scene);
+      curve.color = new BABYLON.Color3(0, 1, 1);
+      curve.alpha = 0.8;
+      
+      // Wireframe grid
+      for (let i = 0; i < 10; i++) {
+        const gridLine = BABYLON.MeshBuilder.CreateLines(`grid_${i}`, {
+          points: [new BABYLON.Vector3(-5, i-5, -2), new BABYLON.Vector3(5, i-5, -2)]
+        }, scene);
+        gridLine.color = new BABYLON.Color3(0, 0.3, 0.6);
+        gridLine.alpha = 0.3;
+      }
+      
+      for (let i = 0; i < 10; i++) {
+        const gridLine = BABYLON.MeshBuilder.CreateLines(`grid_z_${i}`, {
+          points: [new BABYLON.Vector3(i-5, -5, -2), new BABYLON.Vector3(i-5, 5, -2)]
+        }, scene);
+        gridLine.color = new BABYLON.Color3(0, 0.3, 0.6);
+        gridLine.alpha = 0.3;
+      }
+      
+      // Data points as glowing spheres
+      marketData.forEach((data, index) => {
+        const sphere = BABYLON.MeshBuilder.CreateSphere(`datapoint_${index}`, {diameter: 0.2}, scene);
+        sphere.position = new BABYLON.Vector3(index - 4, data.value - 5, 0);
+        sphere.material = new BABYLON.StandardMaterial(`mat_${index}`, scene);
+        sphere.material.emissiveColor = new BABYLON.Color3(0, 1, 1);
+        
+        // Floating animation
+        BABYLON.Animation.CreateAndStartAnimation("float", sphere.position, "y", 30, 120, 
+          sphere.position.y, sphere.position.y + 0.2, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+      });
+      
+      // Holographic scanlines effect
+      const scanlines = [];
+      for (let i = 0; i < 20; i++) {
+        const scanline = BABYLON.MeshBuilder.CreateBox(`scanline_${i}`, {width: 10, height: 0.05, depth: 5}, scene);
+        scanline.position.y = -5 + (i * 0.5);
+        scanline.material = new BABYLON.StandardMaterial(`scanmat_${i}`, scene);
+        scanline.material.emissiveColor = new BABYLON.Color3(0, 0.5, 1);
+        scanline.material.alpha = 0.1;
+        scanlines.push(scanline);
+      }
+      
+      // Animated scanlines
+      let scanTime = 0;
+      scene.registerBeforeRender(() => {
+        scanTime += 0.05;
+        scanlines.forEach((line, index) => {
+          line.material.alpha = 0.1 + 0.2 * Math.sin(scanTime + index * 0.3);
+        });
+      });
+      
+      engine.runRenderLoop(() => {
+        scene.render();
+      });
+      
+      window.addEventListener("resize", () => {
+        engine.resize();
+      });
+    }
+    
+    // Technology Heatmap with D3.js
+    function initTechHeatmap() {
+      const svg = d3.select("#techHeatmap");
+      const width = 600;
+      const height = 400;
+      svg.attr("viewBox", `0 0 ${width} ${height}`);
+      
+      const companies = ["SYRE", "Nike", "Adidas", "Allbirds", "Zellerfeld", "Veja"];
+      const technologies = ["AI/ML", "3D Printing", "Sustainability", "Customization", "Materials", "Social Impact"];
+      
+      // Heatmap data (0-10 scale)
+      const data = [
+        {company: "SYRE", tech: "AI/ML", value: 9.5},
+        {company: "SYRE", tech: "3D Printing", value: 9.0},
+        {company: "SYRE", tech: "Sustainability", value: 9.8},
+        {company: "SYRE", tech: "Customization", value: 9.5},
+        {company: "SYRE", tech: "Materials", value: 9.2},
+        {company: "SYRE", tech: "Social Impact", value: 9.7},
+        
+        {company: "Nike", tech: "AI/ML", value: 7.5},
+        {company: "Nike", tech: "3D Printing", value: 8.0},
+        {company: "Nike", tech: "Sustainability", value: 6.0},
+        {company: "Nike", tech: "Customization", value: 7.0},
+        {company: "Nike", tech: "Materials", value: 7.5},
+        {company: "Nike", tech: "Social Impact", value: 5.0},
+        
+        {company: "Adidas", tech: "AI/ML", value: 7.0},
+        {company: "Adidas", tech: "3D Printing", value: 8.5},
+        {company: "Adidas", tech: "Sustainability", value: 6.5},
+        {company: "Adidas", tech: "Customization", value: 6.5},
+        {company: "Adidas", tech: "Materials", value: 7.0},
+        {company: "Adidas", tech: "Social Impact", value: 5.5},
+        
+        {company: "Allbirds", tech: "AI/ML", value: 4.0},
+        {company: "Allbirds", tech: "3D Printing", value: 3.0},
+        {company: "Allbirds", tech: "Sustainability", value: 8.5},
+        {company: "Allbirds", tech: "Customization", value: 4.0},
+        {company: "Allbirds", tech: "Materials", value: 8.0},
+        {company: "Allbirds", tech: "Social Impact", value: 7.0},
+        
+        {company: "Zellerfeld", tech: "AI/ML", value: 6.0},
+        {company: "Zellerfeld", tech: "3D Printing", value: 8.0},
+        {company: "Zellerfeld", tech: "Sustainability", value: 5.0},
+        {company: "Zellerfeld", tech: "Customization", value: 8.0},
+        {company: "Zellerfeld", tech: "Materials", value: 6.0},
+        {company: "Zellerfeld", tech: "Social Impact", value: 3.0},
+        
+        {company: "Veja", tech: "AI/ML", value: 2.0},
+        {company: "Veja", tech: "3D Printing", value: 2.0},
+        {company: "Veja", tech: "Sustainability", value: 8.0},
+        {company: "Veja", tech: "Customization", value: 3.0},
+        {company: "Veja", tech: "Materials", value: 7.5},
+        {company: "Veja", tech: "Social Impact", value: 8.5}
+      ];
+      
+      const cellSize = 80;
+      const margin = {top: 60, right: 20, bottom: 60, left: 100};
+      
+      // Color scale
+      const colorScale = d3.scaleSequential(d3.interpolateViridis)
+        .domain([0, 10]);
+      
+      // Create cells
+      const cells = svg.selectAll(".heatmap-cell")
+        .data(data)
+        .enter()
+        .append("rect")
+        .attr("class", "heatmap-cell")
+        .attr("x", d => margin.left + technologies.indexOf(d.tech) * cellSize)
+        .attr("y", d => margin.top + companies.indexOf(d.company) * cellSize)
+        .attr("width", cellSize - 2)
+        .attr("height", cellSize - 2)
+        .attr("fill", d => colorScale(d.value))
+        .attr("stroke", "#333")
+        .attr("stroke-width", 1);
+      
+      // Add value labels
+      svg.selectAll(".cell-label")
+        .data(data)
+        .enter()
+        .append("text")
+        .attr("class", "cell-label")
+        .attr("x", d => margin.left + technologies.indexOf(d.tech) * cellSize + cellSize/2)
+        .attr("y", d => margin.top + companies.indexOf(d.company) * cellSize + cellSize/2)
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "middle")
+        .attr("fill", d => d.value > 5 ? "white" : "black")
+        .attr("font-family", "Roboto Mono, monospace")
+        .attr("font-size", "12px")
+        .attr("font-weight", "bold")
+        .text(d => d.value);
+      
+      // Add company labels
+      svg.selectAll(".company-label")
+        .data(companies)
+        .enter()
+        .append("text")
+        .attr("class", "company-label")
+        .attr("x", margin.left - 10)
+        .attr("y", (d, i) => margin.top + i * cellSize + cellSize/2)
+        .attr("text-anchor", "end")
+        .attr("dominant-baseline", "middle")
+        .attr("fill", "#333")
+        .attr("font-family", "Roboto, sans-serif")
+        .attr("font-size", "14px")
+        .attr("font-weight", d => d === "SYRE" ? "bold" : "normal")
+        .text(d => d);
+      
+      // Add technology labels
+      svg.selectAll(".tech-label")
+        .data(technologies)
+        .enter()
+        .append("text")
+        .attr("class", "tech-label")
+        .attr("x", (d, i) => margin.left + i * cellSize + cellSize/2)
+        .attr("y", margin.top - 10)
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "bottom")
+        .attr("fill", "#333")
+        .attr("font-family", "Roboto, sans-serif")
+        .attr("font-size", "12px")
+        .attr("font-weight", "bold")
+        .text(d => d);
+      
+      // Animate cells
+      cells.transition()
+        .

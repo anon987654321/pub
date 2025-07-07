@@ -1,0 +1,250 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="nb">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline';">
+  <meta name="description" content="Veileder om islam og Koranen for kristne prester i Den norske kirke, fremmer interreligiøs forståelse.">
+  <meta name="keywords" content="Islam, Koranen, kristendom, interreligiøs dialog, Tawhid, Jesus">
+  <meta name="author" content="Den norske kirke">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <title>Veileder om Islam og Koranen</title>
+  <style>
+    :root {
+      --primary-color: #2c3e50; /* Dark slate blue for headings, high contrast */
+      --background-color: #ecf0f1; /* Light gray background for readability */
+      --text-color: #34495e; /* Dark gray for body text, soft contrast */
+      --accent-color: #3498db; /* Soft blue for links and highlights, WCAG compliant */
+      --syre-primary: #e74c3c; /* Coral for emphasis, accessible contrast */
+      --syre-secondary: #8e44ad; /* Purple for secondary elements */
+      --syre-tertiary: #f1c40f; /* Yellow for warnings or calls to action */
+      --neutral-light: #dfe6e9; /* Very light gray for borders */
+      --neutral-dark: #7f8c8d; /* Medium gray for secondary text */
+      --font-family: 'Open Sans', sans-serif;
+      --heading-font-family: 'Lora', serif;
+      --base-font-size: 16px;
+      --line-height: 1.6;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-family);
+      font-size: var(--base-font-size);
+      line-height: var(--line-height);
+      color: var(--text-color);
+      background-color: var(--background-color);
+      padding: 3rem 1rem;
+      max-width: 60ch;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-family: var(--heading-font-family);
+      font-weight: 700;
+      font-style: normal;
+      color: var(--primary-color);
+      font-size: 3rem;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    h2 {
+      font-family: var(--heading-font-family);
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-top: 2.5rem;
+      color: var(--primary-color);
+    }
+
+    h3 {
+      font-family: var(--heading-font-family);
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-top: 1.5rem;
+      color: var(--primary-color);
+    }
+
+    p {
+      margin-bottom: 1.25rem;
+      text-align: left;
+    }
+
+    ul {
+      margin-bottom: 1.25rem;
+      padding-left: 1.5rem;
+      list-style: none;
+    }
+
+    li {
+      margin-bottom: 0.5rem;
+      position: relative;
+    }
+
+    li::before {
+      content: '•';
+      position: absolute;
+      left: -0.75rem;
+      color: var(--accent-color);
+    }
+
+    a {
+      color: var(--accent-color);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s;
+    }
+
+    a:hover, a:focus {
+      color: #2980b9; /* Slightly darker blue for hover, still WCAG compliant */
+      text-decoration: underline;
+      outline: 2px solid var(--accent-color);
+    }
+
+    .quote {
+      font-style: italic;
+      margin: 1rem 0;
+      padding-left: 1.5rem;
+      border-left: 3px solid var(--syre-tertiary);
+      color: var(--neutral-dark);
+      background: #fff;
+      border-radius: 4px;
+    }
+
+    footer {
+      font-family: var(--font-family);
+      font-size: 0.85rem;
+      color: var(--neutral-dark);
+      text-align: center;
+      padding: 2rem 0;
+      margin-top: 4rem;
+      border-top: 1px solid var(--neutral-light);
+    }
+
+    address {
+      font-style: italic;
+      color: var(--neutral-dark);
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    @media (min-width: 768px) {
+      body {
+        padding: 4rem 2rem;
+      }
+
+      p, ul {
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+
+    @media print {
+      body {
+        padding: 20mm;
+        background: #fff;
+      }
+
+      main {
+        max-width: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section>
+      <article>
+        <header>
+          <h1>Veileder om Islam og Koranen</h1>
+          <address>
+            <p>Den norske kirke, Domkirken, Sydnesplass 7, 5007 Bergen</p>
+            <time datetime="2025-06-25T18:15:00+02:00">25. juni 2025</time>
+          </address>
+        </header>
+        <h2>En bro for forståelse</h2>
+        <p>Denne veiledningen hjelper prester i <b><a href="https://kirken.no" aria-label="Den norske kirke">Den norske kirke</a></b> å forstå islam og <b><a href="https://quran.com" aria-label="Koranen på Quran.com">Koranen</a></b>, og fremmer dialog med empati. Den fokuserer på nøkkelkonsepter som Iblis, Jesus (Isa), Tawhid, og Koranens unike stil, basert på troverdige kilder.</p>
+        <h2>Nøkkelkonsepter</h2>
+        <h3>Iblis</h3>
+        <p>Iblis, en jinn, nektet å bøye seg for Adam (<b><a href="https://quran.com/2/34" aria-label="Koranen 2:34">Koranen 2:34</a></b>). Han frister, men har ingen makt over troende.</p>
+        <div class="quote">
+          <strong>2:34</strong>: «Da Vi sa til englene: ‘Bøy dere for Adam,’ bøyde de seg, unntatt Iblis. Han nektet, var stolt og ble vantro» (<b><a href="https://quran.com/2/34" aria-label="Koranen 2:34">Quran.com</a></b>).
+        </div>
+        <h3>Jesus (Isa)</h3>
+        <p>Isa er en profet født av Maria, men ikke guddommelig (<b><a href="https://quran.com/3/45" aria-label="Koranen 3:45">Koranen 3:45</a></b>). Han utførte mirakler og ble ikke korsfestet.</p>
+        <div class="quote">
+          <strong>3:45</strong>: «Englene sa: ‘Maria, Allah gir deg en sønn, Messias, Jesus, æret i denne verden og i det hinsidige’» (<b><a href="https://quran.com/3/45" aria-label="Koranen 3:45">Quran.com</a></b>).
+        </div>
+        <h3>Tawhid</h3>
+        <p>Tawhid bekrefter Allahs enhet uten partnere (<b><a href="https://quran.com/112" aria-label="Koranen 112">Koranen 112</a></b>).</p>
+        <div class="quote">
+          <strong>112:1-4</strong>: «Si: ‘Han er Allah, Én, den evige tilflukt. Han avler ikke, er ikke født, og ingen er Ham lik’» (<b><a href="https://quran.com/112" aria-label="Koranen 112">Quran.com</a></b>).
+        </div>
+        <h3>Koranens stil</h3>
+        <p>Koranens i‘jaz, dens unike litterære stil, anses som guddommelig (<b><a href="https://quran.com/17/88" aria-label="Koranen 17:88">Koranen 17:88</a></b>).</p>
+        <div class="quote">
+          <strong>17:88</strong>: «Om mennesker og jinn samlet seg for å lage noe som denne Koranen, kunne de ikke lage dens like» (<b><a href="https://quran.com/17/88" aria-label="Koranen 17:88">Quran.com</a></b>).
+        </div>
+        <h2>Dialog: Bygg broer</h2>
+        <p>Islam og kristendom deler troen på én Gud. For effektiv dialog:
+          <ul>
+            <li>Lytt med respekt (<b><a href="https://www.bibelen.no" aria-label="Bibelen på Bibelen.no">Apg 17:22-23</a></b>).</li>
+            <li>Fokuser på felles verdier.</li>
+            <li>Les Koranen på <b><a href="https://quran.com" aria-label="Quran.com">Quran.com</a></b>.</li>
+            <li>Møt muslimer med åpenhet.</li>
+          </ul>
+        </p>
+        <footer>
+          <p>© 2025 Den norske kirke</p>
+        </footer>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

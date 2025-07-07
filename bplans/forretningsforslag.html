@@ -1,0 +1,436 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="nb">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline';">
+  <meta name="description" content="PubHealthcare: Forretningsforslag for AI³ og Rails-apper.">
+  <meta name="keywords" content="PubHealthcare, AI³, Rust, OpenBSD, Ruby on Rails, Thor Sommerseth, Baibl">
+  <meta name="author" content="PubHealthcare AS">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
+  <title>PubHealthcare: Forretningsforslag</title>
+  <style>
+    :root {
+      --primary-color: #2e2e2e; /* Deeper gray for a modern architectural tone */
+      --background-color: #fafafa; /* Very light gray for a clean slate */
+      --text-color: #404040; /* Darker gray for body text */
+      --accent-color: #1976d2; /* Rich blue for links, architectural elegance */
+      --syre-primary: #c62828; /* Deep red for emphasis */
+      --syre-secondary: #5d4037; /* Warm brown for secondary elements */
+      --syre-tertiary: #ffca28; /* Warm yellow for calls to action */
+      --neutral-light: #e0e0e0; /* Light gray for borders */
+      --neutral-dark: #757575; /* Medium gray for secondary text */
+      --font-family: 'Source Sans Pro', sans-serif; /* Elegant humanist sans-serif */
+      --heading-font-family: 'Montserrat', sans-serif; /* Modern, architectural sans-serif */
+      --base-font-size: 17px; /* Slightly larger base */
+      --line-height: 1.75; /* Increased for sophisticated spacing */
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-family);
+      font-size: var(--base-font-size);
+      line-height: var(--line-height);
+      color: var(--text-color);
+      background-color: var(--background-color);
+      padding: 4rem 2rem; /* Enhanced padding for elegance */
+      max-width: 70ch; /* Wider for architectural balance */
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-family: var(--heading-font-family);
+      font-weight: 700;
+      font-style: normal;
+      color: var(--primary-color);
+      font-size: 3.6rem; /* Larger for architectural impact */
+      text-align: center;
+      margin-bottom: 3.5rem; /* Increased spacing */
+    }
+
+    h2 {
+      font-family: var(--heading-font-family);
+      font-size: 2.2rem; /* Enhanced for hierarchy */
+      font-weight: 700;
+      margin-top: 3.5rem; /* Increased spacing */
+      text-align: center; /* Centered for balance */
+      color: var(--primary-color);
+    }
+
+    h3 {
+      font-family: var(--heading-font-family);
+      font-size: 1.8rem; /* Adjusted for consistency */
+      font-weight: 700;
+      margin-top: 2.5rem; /* Increased spacing */
+      text-align: center; /* Centered */
+      color: var(--primary-color);
+    }
+
+    p {
+      margin-bottom: 2rem; /* Increased for elegance */
+      text-align: justify; /* Architectural alignment */
+    }
+
+    ul {
+      margin-bottom: 2rem;
+      padding-left: 2rem; /* Adjusted for sophistication */
+    }
+
+    li {
+      margin-bottom: 1rem; /* Increased spacing */
+    }
+
+    a {
+      color: var(--accent-color);
+      text-decoration: none;
+      font-weight: 700;
+      transition: color 0.3s;
+    }
+
+    a:hover, a:focus {
+      color: #1565c0; /* Darker blue for hover */
+      text-decoration: underline;
+      outline: 2px solid var(--accent-color);
+    }
+
+    .warning_box {
+      padding: 1.8rem; /* Increased for premium feel */
+      margin: 3.5rem auto; /* Centered with increased margin */
+      border-left: 6px solid var(--accent-color); /* Thicker */
+      background: #fff;
+      border-radius: 12px; /* More rounded */
+      max-width: 90%; /* Constrained for elegance */
+    }
+
+    .warning_title {
+      font-family: var(--heading-font-family);
+      font-weight: 700;
+      color: var(--accent-color);
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      text-align: center; /* Centered */
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 3.5rem auto; /* Centered */
+      font-family: var(--font-family);
+      font-size: 1.1rem; /* Larger for clarity */
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Softer shadow */
+    }
+
+    th, td {
+      padding: 1.2rem 1.8rem; /* Increased padding */
+      text-align: center; /* Architectural alignment */
+      border-bottom: 2px solid var(--neutral-light); /* Thicker */
+    }
+
+    th {
+      font-family: var(--heading-font-family);
+      font-weight: 700;
+      color: #fff;
+      background: var(--accent-color);
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    td {
+      background: #fff;
+    }
+
+    tr:nth-child(even) td {
+      background: #f9fafb;
+    }
+
+    tr:hover td {
+      background: #e3f2fd; /* Lighter blue hover */
+      transition: background 0.2s;
+    }
+
+    tr.total-row th, tr.total-row td {
+      font-weight: 600;
+      background: var(--syre-tertiary);
+      color: var(--primary-color);
+    }
+
+    footer {
+      font-family: var(--font-family);
+      font-size: 1rem; /* Larger for balance */
+      color: var(--neutral-dark);
+      text-align: center;
+      padding: 3rem 0; /* Increased */
+      margin-top: 5rem; /* Increased */
+      border-top: 2px solid var(--neutral-light); /* Thicker */
+    }
+
+    .confidentiality {
+      color: var(--accent-color);
+      text-transform: uppercase;
+    }
+
+    @media (min-width: 768px) {
+      body {
+        padding: 5rem 3rem; /* Enhanced padding */
+      }
+
+      p, ul, .warning_box {
+        max-width: 75ch; /* Wider */
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+
+    @media (max-width: 600px) {
+      table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+
+      th, td {
+        min-width: 140px; /* Adjusted */
+      }
+    }
+
+    @media print {
+      body {
+        padding: 20mm;
+        background: #fff;
+      }
+
+      main {
+        max-width: none;
+      }
+
+      footer {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+      }
+    }
+
+    address {
+      font-style: italic;
+      color: var(--neutral-dark);
+      margin-bottom: 2rem; /* Increased */
+      text-align: center;
+    }
+
+    .toggle-link {
+      display: inline-block;
+      color: var(--accent-color);
+      text-decoration: none;
+      font-family: var(--heading-font-family);
+      font-weight: 700;
+      padding: 0.8rem 1.8rem; /* Adjusted */
+      border-radius: 10px; /* More rounded */
+      cursor: pointer;
+      transition: color 0.3s, background-color 0.3s;
+    }
+
+    .toggle-link:hover {
+      color: #fff;
+      background-color: #1565c0;
+      text-decoration: none;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .visible {
+      display: block;
+    }
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      try {
+        const toggleLink = document.querySelector('#budget-toggle');
+        const budgetTable = document.querySelector('#budget-table');
+        if (toggleLink && budgetTable) {
+          toggleLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (budgetTable.classList.contains('hidden')) {
+              budgetTable.classList.remove('hidden');
+              budgetTable.classList.add('visible');
+              toggleLink.textContent = 'Skjul budsjett';
+            } else {
+              budgetTable.classList.remove('visible');
+              budgetTable.classList.add('hidden');
+              toggleLink.textContent = 'Vis budsjett';
+            }
+          });
+        }
+      } catch (error) {
+        console.warn('Budsjettvisning feilet:', error.message);
+      }
+    });
+  </script>
+</head>
+<body>
+  <main>
+    <section>
+      <article>
+        <header>
+          <h1>Forretningsforslag</h1>
+          <address>
+            <p>PubHealthcare AS, Kanalveien 10, 5068 Bergen, <b><a href="mailto:info@pub.healthcare" aria-label="E-post til PubHealthcare AS">info@pub.healthcare</a></b></p>
+            <time datetime="2025-06-25T19:21:00+02:00">25. juni 2025</time>
+          </address>
+        </header>
+        <h2>AI³: Norges superdatamaskin</h2>
+        <p>PubHealthcare AS inviterer til å investere NOK 110 000 i <b><a href="https://github.com/ai3-sovereign/ai3-os" aria-label="AI³ prosjekt">AI³</a></b>, Norges nye superdatamaskin og Unix-lignende LLM OS bygget på <b><a href="https://www.openbsd.org" aria-label="OpenBSD nettsted">OpenBSD</a></b> med <b><a href="https://www.rust-lang.org" aria-label="Rust programmeringsspråk">Rust</a></b>. Rust sikrer minnesikkerhet ved å eliminere feil som buffer overflows, mens OpenBSDs chroot, pledge og unveil gir uovertruffen sikkerhet for datahåndtering. Sammen skaper de en plattform med lokal kontroll og etiske prinsipper, med mål om 10 000 brukere innen Q4 2026 (<b><a href="https://www.pitchbook.com" aria-label="PitchBook nettsted">PitchBook, 2025</a></b>).</p>
+        <h2>Teknologi: Rust, OpenBSD og Rails</h2>
+        <p>AI³ opererer med fire prinsipper: <strong>Harmless</strong>, <strong>Honest</strong>, <strong>Helpful</strong>, og <strong>Sovereign</strong>. En lokal <b><a href="https://www.deepseek.com" aria-label="DeepSeek nettsted">DeepSeek</a></b>-språkmodell valideres via <b><a href="https://github.com/ai3-sovereign/ai3-os/blob/main/constitutional_memory_manager.rb" aria-label="Constitutional Memory Manager">ConstitutionalMemoryManager</a></b>. <b><a href="https://github.com/ai3-sovereign/ai3-os/blob/main/autonomous_background_agent.rb" aria-label="Autonomous Background Agent">AutonomousBackgroundAgent</a></b> forbedrer systemet autonomt, og <b><a href="https://github.com/ai3-sovereign/ai3-os/blob/main/enhanced_constitutional_cli.rb" aria-label="Enhanced Constitutional CLI">EnhancedConstitutionalCLI</a></b> gir enkel tilgang. Våre <b><a href="https://rubyonrails.org" aria-label="Ruby on Rails nettsted">Rails</a></b>-apper, som Brgen (helsetjenester) og Hjerterom (veldedighet), akselererer utvikling med 30% (<b><a href="https://rubyonrails.org/doctrine" aria-label="Rails Doctrine">Rails Doctrine</a></b>) og integrerer med <b><a href="https://www.helsenorge.no/helselink" aria-label="Helselink nettsted">Helselink</a></b>. Sikkerhet overgår <b><a href="https://www.datatilsynet.no/regelverk-og-skjema/gdpr/" aria-label="GDPR veiledning">GDPR</a></b>.</p>
+        <h2>Baibl</h2>
+        <p>Denne Rails-appen, utviklet av PubHealthcare, er en lingvistisk forskningsplattform som analyserer Bibelen, Koranen og Toraen uten religiøs tilknytning, støttet av AI³s superdatamaskin.</p>
+        <h2>Investering og omdømme</h2>
+        <p>Investeringen gir 5% eierandel, verdsatt til NOK 1,5 millioner ved 10 000 brukere i 2026. For Thor Sommerseth forsterker en Rails-plattform (NOK 80 000) ditt omdømme, verdsatt til NOK 10 millioner (<b><a href="https://www.proff.no" aria-label="Proff.no">Proff.no</a></b>), med bedre synlighet på «Thor Sommerseth prest» (<b><a href="https://ahrefs.com" aria-label="Ahrefs">Ahrefs</a></b>).</p>
+        <h3>Budsjett</h3>
+        <p>Investeringen dekker juli–september 2025:</p>
+        <a href="#" class="toggle-link" id="budget-toggle" aria-label="Veksle visning av budsjettabell">Skjul budsjett</a>
+        <table id="budget-table" class="visible" role="grid" aria-label="Budsjett for PubHealthcare">
+          <tr>
+            <th scope="col">Post</th>
+            <th scope="col">Beskrivelse</th>
+            <th scope="col">Kostnad (NOK)</th>
+            <th scope="col">Kilde</th>
+          </tr>
+          <tr>
+            <td>Bærbar PC</td>
+            <td>MacBook Pro 16 M4 Max, 1TB</td>
+            <td>39 990</td>
+            <td><b><a href="https://www.komplett.no/product/1316252" aria-label="Komplett.no MacBook">Komplett.no</a></b></td>
+          </tr>
+          <tr>
+            <td>Nettbrett</td>
+            <td>Apple iPad 10, 64GB</td>
+            <td>6 990</td>
+            <td><b><a href="https://www.komplett.no/category/11299" aria-label="Komplett.no iPad">Komplett.no</a></b></td>
+          </tr>
+          <tr>
+            <td>Virtuell maskin</td>
+            <td>OpenBSD Amsterdam, 3 mnd</td>
+            <td>800</td>
+            <td><b><a href="https://www.openbsd.amsterdam" aria-label="OpenBSD Amsterdam">OpenBSD Amsterdam</a></b></td>
+          </tr>
+          <tr>
+            <td>Domener</td>
+            <td>Fornyelser, 5 .no-domener</td>
+            <td>1 000</td>
+            <td><b><a href="https://www.domeneshop.no" aria-label="Domeneshop.no">Domeneshop.no</a></b></td>
+          </tr>
+          <tr>
+            <td>Livsopphold</td>
+            <td>Grunnleggende behov</td>
+            <td>6 000</td>
+            <td><b><a href="https://www.numbeo.com/cost-of-living/in/Bergen" aria-label="Numbeo Bergen">Numbeo</a></b></td>
+          </tr>
+          <tr>
+            <td>Uforutsett</td>
+            <td>Kontingens, 3%</td>
+            <td>3 000</td>
+            <td>-</td>
+          </tr>
+          <tr>
+            <td>E-postmarkedsføring</td>
+            <td>Email Octopus, gratis plan</td>
+            <td>0</td>
+            <td><b><a href="https://emailoctopus.com/pricing" aria-label="Email Octopus prising">Email Octopus</a></b></td>
+          </tr>
+          <tr>
+            <td>PPC-annonsering</td>
+            <td>Google AdWords, 3 mnd</td>
+            <td>31 500</td>
+            <td><b><a href="https://www.google.com/ads" aria-label="Google Ads">Google Ads</a></b></td>
+          </tr>
+          <tr>
+            <td>AI-abonnementer</td>
+            <td>GitHub Copilot, Weaviate</td>
+            <td>2 500</td>
+            <td><b><a href="https://weaviate.io/pricing" aria-label="Weaviate prising">Weaviate</a></b></td>
+          </tr>
+          <tr>
+            <td>Markedsføringsreiser</td>
+            <td>Amsterdam, Longyearbyen</td>
+            <td>7 720</td>
+            <td><b><a href="https://www.skyscanner.com" aria-label="Skyscanner">Skyscanner</a></b></td>
+          </tr>
+          <tr>
+            <td>Markedsmateriell</td>
+            <td>Vinylklistremerker, 100 stk</td>
+            <td>500</td>
+            <td><b><a href="https://www.stickergiant.com" aria-label="StickerGiant">StickerGiant</a></b></td>
+          </tr>
+          <tr>
+            <td>Utviklingshonorar</td>
+            <td>Systemutvikler, 10 timer</td>
+            <td>9 500</td>
+            <td>-</td>
+          </tr>
+          <tr class="total-row">
+            <th scope="row" colspan="2">Total</th>
+            <td>110 000</td>
+            <td>-</td>
+          </tr>
+        </table>
+        <p>Kontakt oss på info@pub.healthcare</p>
+        <footer>
+          <p>© 2025 PubHealthcare AS</p>
+        </footer>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

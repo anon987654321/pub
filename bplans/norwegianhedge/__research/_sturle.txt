@@ -1,0 +1,81 @@
+
+> Minimum investering for å kunne begynne å trade på LocalBitcoins er 0.4btc. Er det en realistisk sum å begynne med, og hvor høy avkastning kan man da, hvis man er heldig, regne med det første året?
+
+Med berre 0.4 BTC kjem du ikkje til å ha stor avkastning.  Det første som skjer er at nokon kjøper 0.0042 BTC ein fredag ettermiddag.  Då har du under 0.4 BTC heile helga, og annonsa er usynleg.  Du ser ikkje pengane før måndag morgon.  Kanskje vedkommande ikkje har betalt likevel.  Då går det ein dag ekstra på dispute før du har fått attende dei 0.0042 BTC.  Ha i so fall ei minstegrense for kjøp på minst 0.3 BTC, slik at du ikkje får mange helger utan forteneste.  Det er kanskje betre å starte med 1 BTC og ei maksgrense på 0.2 BTC pr kunde.  Då kan du ha minst fem sal gåande på ein gong, og får erfaring til å starte med.
+
+Fortenesta er primært avhengig av marginen din og kor rask omsetninga di er.  Dvs at du må ha høgast mogeleg margin mellom kjøps- og salskurs, men samstundes låg nok til at du får kundar, og heile tida kjøper og sel.  Den balansen er vanskeleg å finne, og krev mykje prøving og feiling.
+
+Hugs at Localbitcoins tek 1% i gebyr frå den som har annonsa.  Med mindre enn 2% spread mellom kjøp- og salsannonse, taper du pengar.
+
+> Hvis du skulle begynt på nytt med 0btc og kroner ikke var et hinder, hvor mye ville du da ha investert i btc på LocalBitcoins? Ville du investert noe i andre børser? Evt. bitcoinfond/futures/opsjoner?
+
+Om du vil investere, ikkje handle, er det viktig å fordele investeringane breitt.
+
+> Hvordan får man salg på LocalBitcoins hvis man er ny uten reputation og ikke på topp 6-listen på forsiden?
+
+God kurs, men ikkje so god at folk trur det er svindel.
+
+> Må man selge med null fortjeneste i begynnelsen for å opparbeide meg reputation?
+
+Det kan godt hende, ja.  Både for å få erfaring og godt rykte.  Om du sel med null eller negativ forteneste, må du setje ei låg maksgrense pr kunde.  Elles kjøper nokon alt, og du får ein handel i staden for fem.
+
+> Tar du alltid fast 10% fortjeneste?
+
+Nei, det varierer.  Og godt under 10%.  No er har eg vel mellom 4,5% og 7% spread, men hugs at Localbitcoins tek 2% av det.
+
+> Får du like mange kjøp som salg?
+
+Nei.  Men kvart kjøp er gjennomsnittleg større enn eit gjennomnsnittleg sal.  Vanlegvis klarer eg å halde balansen nokon lunde.  Eg kjøper òg frå utlandet, men då for store summar.  Elles går alt opp i gebyr.  Kjøp frå utlandet har ein veldig stor ulempe, og det er at det tek lang tid før pengane kjem fram og du får bitcoina du har kjøpt.
+
+> Hvilke risikoer er forbundet med norske bankkontoer? Er chargebacks et reelt problem?
+
+Det er mange.  Eg kan ta dei tre vanlegaste:
+
+Problem nummer 1 er dei som legg noko til sals på finn.no, og krev delar av betalinga på forskot.  Dei oppgjev ditt kontonummer, og lagar samstundes ein handel på same sum på Localbitcoins.  Du ser pengane på konto og slepp bitcoin.  Neste dag ser du kven pengane er frå og at meldinga på overføringa tyder på at den som betalte trur han eller ho har betalt for noko heilt anna.  Då kan du rekne med at "seljaren" har slutta å kommunisere, og at vedkommande som overførte pengar er på veg til politiet.  Det einaste fornufige å gjere i slike tilfelle, er å få tak i den som overførte pengane og returnere dei.  Elles er du i eit lass av trøbbel med både banken og politiet.
+
+Problem nummer 2 er kredittkortsvindel.  Nokon kan til dømes kjøpe eit eller anna, og betale med kredittkort.  Deretter avbestiller dei, og ber butikken returnere pengane til sin konto, og oppgjev ditt kontonummer for refusjon av pengane.  Elles likt nummer 1.  Ein annan variant av dette, som eg har opplevd, er ein som tippa på hest med stolne kredittkort og oppga mitt kontonummer for utbetaling av gevinsten.
+
+Problem nummer 3 er dei som har funne ut at dei kan få skjermen sin til å syne kva det måtte vere, og som det hastar veldig for.  Dei lagar ei kvittering for utført overføring på skjermen, sender deg den, og lagar eit veldig leven når du ikkje vil sleppe med ein gong.  Sjansen for at det er svindel er større dess meir det hastar, og dersom vedkommande tyr til utsjelling kan du vere 100% sikker.
+
+Eg siler ut dei fleste på to reglar.  Den eine er at kjøparane ikkje får lov til å kjøpe for ein rund kronesum, og at dei må betale nøyaktig sum.  Det silar ut mange av finn.no-svindlarane.  I tillegg får eg alle til å skrive noko til meg, nemleg kva bank dei overførte til, og gjerne frå.  Når det viser seg at "Kari" frå Jølster ikkje forstår norsk, men må ha alt forklart på engelsk, er det god grunn til å mistenkje ugler i mosen.  Over halvparten av svindlarane er utlendingar.
+
+> Anbefaler du å skaffe konto i så mange norske banker som mulig, spesielt de med straksbetaling? Majoriteten av norske bitcoinkjøpere/selgere har vel konto i Nordea?
+
+No kan alle norske bankar ta imot straksbetaling, trur eg.  Eg vil likevel ha dei til Nordea, men det har med sortering å gjere.  SSF legg ikkje straksbetalingane inn kronologisk.  Nei, det er ikkje ein fordel med mange bankkonti.  Det skaper mykje meirarbeid på fleire måtar.  For det første er det mange bankar å logge inn i.  Det tek tid.  For det andre er likviditeten din spreidd.  Når nokon vil selje deg ein bitcoin, og du har 1000 kroner her, 1500 der, 800 i ein tredje bank og resten i ein fjerde, lagar du eit veldig styr for deg sjølv.  Du bitt opp mykje kapital.  Dersom du heile tida overfører mellom dine eigne konti i ulike bankar, triggar det dessutan varsellampene i bankane.  Dei kjem til å ta kontakt for å finne ut kva du driv med.
+
+> Tar du i bruk automatiske trading bots?
+
+Ja.
+
+> Tar du i bruk handelsindikatorer/candlestick pattern recognition?
+
+Nei.
+
+> Tar du i bruk historisk data?
+
+Nei.
+
+> Tar du i bruk high frequency trading?
+
+Nei.
+
+> Tar du i bruk arbitrage trading mellom børser?
+
+Ja, når fortenesta er høg nok, eller eg ynskjer å flytte pengar frå ein børs til ein annan.
+
+> Tar du i bruk arbitrage trading mellom bitcoin og altcoin?
+
+Nei.  Derimot mellom bitcoin/EUR/USD.
+
+> Tjener du mye mer på trading enn du ville gjort hvis du bare holdt på bitcoins?
+
+Ja, elles hadde eg ikkje drive med det.
+
+> Hvordan vurderer du trades som er verdt det vs. trades som ikke er det?
+
+Potensiell forteneste mot potensiell risiko.
+
+> Hvor forskjellig er bitcointrading fra vanlig børshandel?
+
+Den største skilnaden er at bitcoin-børsane aldri stengjer.
+
