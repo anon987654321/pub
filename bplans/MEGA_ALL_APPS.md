@@ -289,8 +289,8 @@ gem 'devise-guests', '0.8.3'
 gem 'omniauth-vipps', '0.3.0'
 gem 'stimulus_reflex', '3.5.0'
 gem 'actioncable', '8.0.0'
-gem 'solid_queue', '0.4.0'
-gem 'solid_cache', '0.3.0'
+gem 'solid_queue', '~> 1.0'
+gem 'solid_cache', '~> 1.0'
 EOF
   bundle install >> "$LOG_FILE" 2>&1 || { log "Error: Bundle install failed"; exit 1; }
   commit_to_git "Created Rails app"

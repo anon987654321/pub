@@ -1,3 +1,6 @@
 source 'https://rubygems.org'
-ruby '3.0.0'
+ruby '3.3.0'
 gem 'rails', '~> 8.0'
+gem 'solid_queue', '~> 1.0'
+gem 'solid_cache', '~> 1.0'
+gem 'propshaft', '~> 1.0'
