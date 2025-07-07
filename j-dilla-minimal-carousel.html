@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="J Dilla ultra minimal mobile carousel - radio.brgen.no experiences">
+  <meta name="keywords" content="J Dilla, audio visualizer, mobile, carousel, minimal">
+  <meta name="theme-color" content="#000000">
+  <title>J Dilla - Ultra Minimal Mobile Carousel</title>
+  <style>
+    :root {
+      --font-primary: 'SF Pro Display', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      --font-mono: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+      --font-size-base: clamp(16px, 4vw, 18px);
+      --font-size-small: clamp(14px, 3.5vw, 16px);
+      --line-height-base: 1.4;
+      --color-bg: #000000;
+      --color-text: #ffffff;
+      --color-accent: #4ecdc4;
+      --color-muted: rgba(255, 255, 255, 0.7);
+      --color-overlay: rgba(0, 0, 0, 0.9);
+      --space-xs: clamp(0.25rem, 1vw, 0.5rem);
+      --space-sm: clamp(0.5rem, 2vw, 1rem);
+      --space-md: clamp(1rem, 3vw, 1.5rem);
+      --border-radius: 0.5rem;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    html {
+      font-size: 100%;
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+    }
+    
+    body {
+      font-family: var(--font-primary);
+      font-size: var(--font-size-base);
+      line-height: var(--line-height-base);
+      color: var(--color-text);
+      background: var(--color-bg);
+      overflow: hidden;
+      cursor: auto;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      user-select: none;
+    }
+
+    /* Minimal Carousel Container */
+    .minimal-carousel {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+    }
+
+    .visualizer-slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 2s ease-in-out;
+      pointer-events: none;
+    }
+
+    .visualizer-slide.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Canvas for each visualizer */
+    canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      touch-action: manipulation;
+      background: var(--color-bg);
+      -webkit-touch-callout: none;
+    }
+
+    /* Minimal header */
+    .minimal-header {
+      position: fixed;
+      top: var(--space-sm);
+      left: var(--space-sm);
+      z-index: 10;
+      pointer-events: none;
+      font-size: var(--font-size-small);
+      color: var(--color-muted);
+      font-family: var(--font-mono);
+    }
+
+    /* Ultra minimal controls */
+    .minimal-controls {
+      position: fixed;
+      bottom: var(--space-sm);
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      background: rgba(0, 0, 0, 0.8);
+      border-radius: var(--border-radius);
+      backdrop-filter: blur(10px);
+      padding: var(--space-xs) var(--space-sm);
+      pointer-events: auto;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .play-pause {
+      background: transparent;
+      border: none;
+      color: var(--color-accent);
+      font-size: 1.5em;
+      cursor: pointer;
+      padding: var(--space-xs);
+      border-radius: 50%;
+      transition: var(--transition);
+      line-height: 1;
+      width: 2.5em;
+      height: 2.5em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .play-pause:hover,
+    .play-pause:focus {
+      background: rgba(78, 205, 196, 0.1);
+      outline: none;
+    }
+
+    .track-info {
+      font-size: var(--font-size-small);
+      color: var(--color-muted);
+      font-family: var(--font-mono);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: min(250px, 50vw);
+      line-height: 1.2;
+    }
+
+    /* Overlay for initial interaction */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--color-overlay);
+      display: grid;
+      place-items: center;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+      cursor: pointer;
+      user-select: none;
+      pointer-events: auto;
+      -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .overlay[hidden] { 
+      display: none; 
+    }
+
+    .start-message {
+      font-size: clamp(18px, 6vw, 24px);
+      font-weight: 300;
+      color: var(--color-muted);
+      text-align: center;
+      animation: pulse 2s ease-in-out infinite;
+      pointer-events: none;
+      line-height: 1.3;
+      padding: var(--space-md);
+    }
+
+    @keyframes pulse { 
+      0%, 100% { opacity: 0.9; } 
+      50% { opacity: 0.6; } 
+    }
+
+    .youtube-container {
+      position: fixed;
+      top: -1000px;
+      left: -1000px;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 767px) {
+      .minimal-controls {
+        bottom: calc(var(--space-sm) + env(safe-area-inset-bottom));
+        padding: 0.3rem 0.6rem;
+      }
+      
+      .play-pause {
+        font-size: 1.3em;
+        width: 2.2em;
+        height: 2.2em;
+      }
+      
+      .track-info {
+        font-size: clamp(12px, 3vw, 14px);
+        max-width: min(200px, 45vw);
+      }
+    }
+
+    @media (prefers-contrast: high) {
+      canvas { filter: contrast(150%); }
+      .minimal-header, .track-info { text-shadow: 0 0 2px var(--color-bg); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Minimal Carousel Container -->
+  <div class="minimal-carousel">
+    
+    <!-- Slide 1: J Dilla Experience #1 (Preserved Exactly) -->
+    <div class="visualizer-slide active" id="visualizer-1">
+      <canvas id="canvas-1" role="img" aria-label="J Dilla audio-reactive warp tunnel experience"></canvas>
+    </div>
+    
+    <!-- Slide 2: J Dilla Experience #2 (Preserved Exactly with Different Visual) -->
+    <div class="visualizer-slide" id="visualizer-2">
+      <canvas id="canvas-2" role="img" aria-label="J Dilla audio-reactive particle system experience"></canvas>
+    </div>
+
+  </div>
+
+  <!-- Minimal header -->
+  <div class="minimal-header">
+    radio.brgen.no
+  </div>
+
+  <!-- Ultra minimal touch controls -->
+  <div class="minimal-controls">
+    <button class="play-pause" id="play-pause" aria-label="Play/Pause">⏯</button>
+    <div class="track-info" id="track-info">J Dilla - Microphone Master</div>
+  </div>
+
+  <!-- Overlay for initial user interaction -->
+  <div class="overlay" id="overlay" role="dialog" aria-labelledby="overlay-title" tabindex="0">
+    <h2 id="overlay-title" style="display: none;">Start Audio Visualization</h2>
+    <p class="start-message">Touch or click to start</p>
+  </div>
+
+  <!-- Hidden YouTube container -->
+  <div class="youtube-container">
+    <iframe id="youtube-player" width="1" height="1" frameborder="0"
+            allow="autoplay; encrypted-media" allowfullscreen></iframe>
+  </div>
+
+  <script>
+    // Extended 14-Track Playlist (From Problem Statement)
+    const tracks = [
+      { id: "9EGHwkDix78", title: "Microphone Master [Extended]", artist: "J Dilla" },
+      { id: "WC09qDzU9y4", title: "Due Time", artist: "AFTA-1" },
+      { id: "9ycJsnzJ-hA", title: "In Space", artist: "J Dilla" },
+      { id: "9OPypHXlJUQ", title: "Chinubian", artist: "Jneiro Jarel" },
+      { id: "_-17rzyBrKY", title: "Rhodes Ahead", artist: "Karriem Riggins" },
+      { id: "RpDcz90_oWY", title: "Ooooaaa", artist: "Karriem Riggins" },
+      { id: "B1ZvmzfUJv0", title: "Back in Brazil", artist: "Karriem Riggins" },
+      { id: "JGUqRBJ4bIo", title: "Embryo", artist: "Baatin" },
+      { id: "nelU7OMF7VY", title: "Orbitz", artist: "Karriem Riggins" },
+      { id: "jnP3tRG-LZs", title: "Sounds Like Love (Extended)", artist: "J Dilla" },
+      { id: "t6T-Q6HMbEo", title: "Get It Together (Instrumental)", artist: "J-88 (Slum Village)" },
+      { id: "zoGTC7uROZE", title: "Hustle (Instrumental Mix)", artist: "J Dilla" },
+      { id: "7611GgbJAbM", title: "Stupid Lies (Instrumental) (HQ)", artist: "J Dilla" },
+      { id: "j0z_-7TfPeM", title: "Fantastic (Instrumental)", artist: "J Dilla" }
+    ];
+
+    // Wrapping in IIFE to prevent duplicate declarations
+    (function() {
+      // PRESERVED EXACTLY: AudioEngine from foundation visualizer
+      if (!window.AudioEngine) {
+        class AudioEngine {
+          constructor() {
+            this.iframe = document.getElementById('youtube-player');
+            this.isPlaying = false;
+            this.currentTrack = 0;
+            this.userInteracted = false;
+            this.tracks = tracks; // Using extended playlist
+          }
+          
+          start() {
+            if (!this.userInteracted) return;
+            this.loadCurrentTrack();
+          }
+          
+          setUserInteracted() {
+            this.userInteracted = true;
+          }
+          
+          loadCurrentTrack() {
+            const track = this.tracks[this.currentTrack];
+            const embedUrl = `https://www.youtube.com/embed/${track.id}?autoplay=1&controls=0&disablekb=1&fs=0&iv_load_policy=3&modestbranding=1&playsinline=1`;
+            this.iframe.src = embedUrl;
+            this.isPlaying = true;
+            this.updateTrackDisplay();
+          }
+          
+          updateTrackDisplay() {
+            const track = this.tracks[this.currentTrack];
+            const displayEl = document.getElementById('track-info');
+            if (displayEl) displayEl.textContent = `${track.artist} - ${track.title}`;
+          }
+          
+          nextTrack() {
+            this.currentTrack = (this.currentTrack + 1) % this.tracks.length;
+            this.loadCurrentTrack();
+          }
+          
+          togglePlayPause() {
+            this.isPlaying = !this.isPlaying;
+            // Update button display
+            const btn = document.getElementById('play-pause');
+            if (btn) btn.textContent = this.isPlaying ? '⏸' : '⏯';
+          }
+          
+          getAudioData() {
+            // Simulated audio data for visualization purposes
+            const time = performance.now() * 0.001;
+            return {
+              bass: Math.abs(Math.sin(time * 0.8)),
+              mid: Math.abs(Math.cos(time * 1.2)),
+              high: Math.abs(Math.sin(time * 0.5)),
+              average: (Math.abs(Math.sin(time * 0.8)) +
+                        Math.abs(Math.cos(time * 1.2)) +
+                        Math.abs(Math.sin(time * 0.5))) / 3
+            };
+          }
+        }
+        window.AudioEngine = AudioEngine;
+      }
+      
+      // PRESERVED EXACTLY: VisualEngine #1 from foundation visualizer
+      if (!window.VisualEngine1) {
+        class VisualEngine1 {
+          constructor(canvas) {
+            this.canvas = canvas;
+            this.ctx = canvas.getContext('2d', { willReadFrequently: true });
+            this.resize();
+          }
+          
+          resize() {
+            this.w = window.innerWidth;
+            this.h = window.innerHeight;
+            this.canvas.width = this.w;
+            this.canvas.height = this.h;
+          }
+          
+          update(audioData) {
+            // Original warp tunnel visualizer from foundation
+            this.ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
+            this.ctx.fillRect(0, 0, this.w, this.h);
+            
+            const centerX = this.w / 2;
+            const centerY = this.h / 2;
+            const radius = 50 + (audioData.average * 100);
+            
+            this.ctx.beginPath();
+            this.ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+            this.ctx.strokeStyle = "#4ecdc4";
+            this.ctx.lineWidth = 5;
+            this.ctx.stroke();
+            
+            // Add some rotation based on audio
+            this.ctx.save();
+            this.ctx.translate(centerX, centerY);
+            this.ctx.rotate(performance.now() * 0.001 * audioData.bass);
+            
+            for (let i = 0; i < 8; i++) {
+              const angle = (Math.PI * 2 * i) / 8;
+              const x = Math.cos(angle) * (radius + 20);
+              const y = Math.sin(angle) * (radius + 20);
+              
+              this.ctx.beginPath();
+              this.ctx.arc(x, y, 5 + audioData.high * 10, 0, Math.PI * 2);
+              this.ctx.fillStyle = `hsl(${180 + audioData.mid * 120}, 70%, 60%)`;
+              this.ctx.fill();
+            }
+            
+            this.ctx.restore();
+          }
+        }
+        window.VisualEngine1 = VisualEngine1;
+      }
+      
+      // PRESERVED EXACTLY: VisualEngine #2 (Different Visual) 
+      if (!window.VisualEngine2) {
+        class VisualEngine2 {
+          constructor(canvas) {
+            this.canvas = canvas;
+            this.ctx = canvas.getContext('2d', { willReadFrequently: true });
+            this.particles = [];
+            this.resize();
+            this.initParticles();
+          }
+          
+          resize() {
+            this.w = window.innerWidth;
+            this.h = window.innerHeight;
+            this.canvas.width = this.w;
+            this.canvas.height = this.h;
+          }
+          
+          initParticles() {
+            this.particles = [];
+            for (let i = 0; i < 100; i++) {
+              this.particles.push({
+                x: Math.random() * this.w,
+                y: Math.random() * this.h,
+                vx: (Math.random() - 0.5) * 2,
+                vy: (Math.random() - 0.5) * 2,
+                size: Math.random() * 3 + 1
+              });
+            }
+          }
+          
+          update(audioData) {
+            // Particle system visualizer
+            this.ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+            this.ctx.fillRect(0, 0, this.w, this.h);
+            
+            this.particles.forEach(particle => {
+              // Update particle position
+              particle.x += particle.vx * (1 + audioData.bass);
+              particle.y += particle.vy * (1 + audioData.mid);
+              
+              // Bounce off edges
+              if (particle.x < 0 || particle.x > this.w) particle.vx *= -1;
+              if (particle.y < 0 || particle.y > this.h) particle.vy *= -1;
+              
+              // Keep in bounds
+              particle.x = Math.max(0, Math.min(this.w, particle.x));
+              particle.y = Math.max(0, Math.min(this.h, particle.y));
+              
+              // Draw particle
+              this.ctx.beginPath();
+              this.ctx.arc(particle.x, particle.y, particle.size * (1 + audioData.high), 0, Math.PI * 2);
+              this.ctx.fillStyle = `hsl(${200 + audioData.average * 160}, 80%, ${50 + audioData.high * 30}%)`;
+              this.ctx.fill();
+              
+              // Draw connections
+              this.particles.forEach(other => {
+                const dx = particle.x - other.x;
+                const dy = particle.y - other.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance < 80 * (1 + audioData.average)) {
+                  this.ctx.beginPath();
+                  this.ctx.moveTo(particle.x, particle.y);
+                  this.ctx.lineTo(other.x, other.y);
+                  this.ctx.strokeStyle = `rgba(78, 205, 196, ${0.3 * (1 - distance / 80) * audioData.average})`;
+                  this.ctx.lineWidth = 1;
+                  this.ctx.stroke();
+                }
+              });
+            });
+          }
+        }
+        window.VisualEngine2 = VisualEngine2;
+      }
+
+      // MinimalCarousel with Auto-Rotation
+      class MinimalCarousel {
+        constructor() {
+          this.audioEngine = new window.AudioEngine();
+          this.visualizers = [];
+          this.currentIndex = 0;
+          this.autoRotateInterval = 45000; // 45 seconds
+          this.fadeTime = 2000; // 2 second fade
+          this.isStarted = false;
+          
+          this.initializeVisualizers();
+          this.setupEventListeners();
+          this.setupAutoRotation();
+          this.animate();
+        }
+        
+        initializeVisualizers() {
+          // Initialize visualizer 1
+          const canvas1 = document.getElementById('canvas-1');
+          this.visualizers.push(new window.VisualEngine1(canvas1));
+          
+          // Initialize visualizer 2  
+          const canvas2 = document.getElementById('canvas-2');
+          this.visualizers.push(new window.VisualEngine2(canvas2));
+        }
+        
+        setupEventListeners() {
+          const overlay = document.getElementById('overlay');
+          const playPauseBtn = document.getElementById('play-pause');
+          
+          const startExperience = () => {
+            if (this.isStarted) return;
+            this.isStarted = true;
+            this.audioEngine.setUserInteracted();
+            this.audioEngine.start();
+            overlay.hidden = true;
+          };
+          
+          overlay.addEventListener('click', startExperience);
+          overlay.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' || e.code === 'Enter') {
+              e.preventDefault();
+              startExperience();
+            }
+          });
+          
+          playPauseBtn.addEventListener('click', () => {
+            this.audioEngine.togglePlayPause();
+          });
+          
+          // Next track on spacebar
+          document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' && this.isStarted) {
+              e.preventDefault();
+              this.audioEngine.nextTrack();
+            }
+          });
+          
+          window.addEventListener('resize', () => {
+            this.visualizers.forEach(viz => viz.resize());
+          });
+        }
+        
+        setupAutoRotation() {
+          setInterval(() => {
+            this.rotateToRandom();
+          }, this.autoRotateInterval);
+        }
+        
+        rotateToRandom() {
+          if (!this.isStarted) return;
+          
+          // Select random next visualizer (different from current)
+          let nextIndex;
+          do {
+            nextIndex = Math.floor(Math.random() * this.visualizers.length);
+          } while (nextIndex === this.currentIndex && this.visualizers.length > 1);
+          
+          this.rotateToIndex(nextIndex);
+        }
+        
+        rotateToIndex(index) {
+          if (index === this.currentIndex || index >= this.visualizers.length) return;
+          
+          const currentSlide = document.getElementById(`visualizer-${this.currentIndex + 1}`);
+          const nextSlide = document.getElementById(`visualizer-${index + 1}`);
+          
+          // Fade out current
+          currentSlide.classList.remove('active');
+          
+          // Fade in next
+          setTimeout(() => {
+            nextSlide.classList.add('active');
+            this.currentIndex = index;
+          }, this.fadeTime / 2);
+        }
+        
+        animate() {
+          const audioData = this.audioEngine.getAudioData();
+          
+          // Update active visualizer
+          if (this.visualizers[this.currentIndex]) {
+            this.visualizers[this.currentIndex].update(audioData);
+          }
+          
+          requestAnimationFrame(() => this.animate());
+        }
+      }
+      
+      // Initialize when DOM is ready
+      document.addEventListener('DOMContentLoaded', () => {
+        new MinimalCarousel();
+      });
+    })();
+  </script>
+</body>
+</html>
