@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #!/usr/bin/env ruby
 
 # Usage: "Find <target> and start executing offensive operations."

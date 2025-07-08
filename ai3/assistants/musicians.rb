@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # encoding: utf-8
 # Musicians Assistant - Enhanced with 10-agent swarm orchestration
 # Migrated and enhanced from ai3_old/assistants/musicians.rb

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # personal_assistant.rb
 
 class PersonalAssistant

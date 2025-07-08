@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class MaterialRepurposing
   def process_input(input)
-    'This is a response from Material Repurposing'
+    "This is a response from Material Repurposing"
   end
 end
 

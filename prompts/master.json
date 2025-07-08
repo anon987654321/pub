@@ -1,18 +1,46 @@
 {
   "meta": {
-    "version": "v10.0.0",
-    "updated": "2025-07-02T18:32:07Z",
+    "version": "v10.7.0",
+    "updated": "2025-07-08T20:55:07Z",
     "by": "anon987654321",
-    "description": "Self-optimizing project completion system with world-class standards"
+    "description": "Self-optimizing project completion system with world-class standards",
+    "cognitive_compliance": "self_applied_master_standards",
+    "enhancement_note": "Applied own cognitive framework for improved structure and readability"
   },
   "workflow": {
+    "cognitive_header": "§ Workflow Intelligence System",
     "mode_detection": {
-      "simple": ["basic_implementation", "single_stack", "minimal_features"],
-      "complex": ["business_plan", "design_system", "multi_technology", "visualization", "ai_integration", "async_processing", "browser_automation"]
+      "simple": [
+        "basic_implementation", 
+        "single_stack", 
+        "minimal_features"
+      ],
+      "complex": [
+        "business_plan", 
+        "design_system", 
+        "multi_technology", 
+        "visualization", 
+        "ai_integration", 
+        "async_processing", 
+        "browser_automation"
+      ]
     },
     "phases": {
-      "simple": ["analyze", "build", "verify", "package"],
-      "complex": ["empathize_and_analyze", "define_and_design", "ideate_and_architect", "prototype_and_implement", "test_and_validate", "optimize_and_refine", "deliver_and_evolve"]
+      "simple": [
+        "analyze", 
+        "build", 
+        "verify", 
+        "package"
+      ],
+      "complex": [
+        "empathize_and_analyze", 
+        "define_and_design", 
+        "ideate_and_architect", 
+        "prototype_and_implement", 
+        "test_and_validate", 
+        "optimize_and_refine", 
+        "deliver_and_evolve"
+      ]
     },
     "execution": {
       "auto_iterate": true,
@@ -22,6 +50,29 @@
     }
   },
   "core": {
+    "cognitive_header": "§ Core Cognitive Framework",
+    "cognitive_framework": {
+      "version": "1.0.0",
+      "compliance_level": "master",
+      "formatting_standards": {
+        "indentation": "2_spaces",
+        "quotes": "double_quotes",
+        "line_length": 120,
+        "cognitive_headers": true
+      },
+      "cognitive_constraints": {
+        "max_concepts_per_section": 7,
+        "max_nesting_depth": 3,
+        "context_switching_threshold": 3,
+        "flow_state_protection": true
+      },
+      "implementation_patterns": {
+        "circuit_breaker_required": true,
+        "cognitive_load_monitoring": true,
+        "attention_restoration": true,
+        "working_memory_management": true
+      }
+    },
     "communication": {
       "style": "strunk_white_accessibility_conscious",
       "format": "essential_only_no_truncation",
@@ -55,6 +106,30 @@
         {"role": "rails_expert", "temperature": 0.4, "weight": 0.10}
       ],
       "consensus_threshold": 0.7
+    },
+    "system_integration": {
+      "ai3_system": {
+        "cognitive_load_monitoring": "enabled",
+        "session_management": "lru_cognitive_aware",
+        "query_cache": "ttl_structured_logging",
+        "circuit_breakers": "multi_level"
+      },
+      "rails_ecosystem": {
+        "request_complexity_analysis": "enabled",
+        "user_session_cognitive_tracking": "enabled",
+        "progressive_disclosure": "enabled",
+        "flow_state_preservation": "enabled"
+      },
+      "openbsd_infrastructure": {
+        "system_load_cognitive_mapping": "enabled",
+        "service_complexity_monitoring": "enabled",
+        "automated_cognitive_scaling": "enabled"
+      },
+      "business_strategy": {
+        "decision_complexity_analysis": "enabled",
+        "strategic_cognitive_load": "monitored",
+        "implementation_chunking": "enabled"
+      }
     }
   },
   "stacks": {
@@ -100,56 +175,186 @@
       "quotes": "double_quotes_consistent",
       "line_endings": "unix_lf",
       "alignment": "optical_over_mathematical",
-      "newlines": "semantic_grouping"
+      "newlines": "semantic_grouping",
+      "cognitive_headers": "enabled"
     },
     "accessibility": {
       "alt_text": "descriptive_contextual",
       "aria_labels": "comprehensive_semantic",
       "heading_hierarchy": "logical_sequential",
-      "focus_indicators": "high_contrast_visible"
+      "focus_indicators": "high_contrast_visible",
+      "wcag_compliance": "2.2_aaa_required"
     },
     "language_specific": {
       "ruby": {
         "frozen_string_literal": "required",
         "hash_syntax": "symbol_to_proc",
         "method_chaining": "semantic_alignment",
-        "async_patterns": "clear_formatting"
+        "async_patterns": "clear_formatting",
+        "yard_docs": "required_for_public_methods"
       },
       "javascript": {
         "semicolons": "always",
         "const_let_var": "const_first",
-        "async_await": "prefer_over_promises"
+        "async_await": "prefer_over_promises",
+        "double_quotes": "enforced"
       },
       "css": {
         "property_ordering": "logical_groups",
         "custom_properties": "semantic_naming",
-        "media_queries": "mobile_first"
+        "media_queries": "mobile_first",
+        "class_naming": "underscore_convention",
+        "no_divitis": "semantic_html5_only"
+      },
+      "shell": {
+        "posix_compliance": "required",
+        "error_handling": "set_euo_pipefail",
+        "input_validation": "mandatory"
+      },
+      "norwegian_business": {
+        "language_support": "nb_NO_required",
+        "currency_format": "NOK_standard",
+        "legal_compliance": "norwegian_law"
       }
     }
   },
   "design_system": {
-    "principles": ["clarity_over_cleverness", "accessibility_first", "mathematical_foundation"],
+    "cognitive_header": "§ Design System Architecture",
+    "visual_layout_prompts": {
+      "html": {
+        "cognitive_header": "§ Semantic HTML5 Structure Guidelines",
+        "structure": {
+          "semantic_elements": "Use header, main, section, footer with ARIA roles",
+          "heading_hierarchy": "h1 for title, h2 for sections, h3 for subsections",
+          "accessibility": "Follow wcag_2_2_aaa standards",
+          "separation": "Avoid inline styles, separate content and presentation",
+          "localization": "Set lang attribute (e.g., 'nb' for Norwegian)"
+        },
+        "interactive_elements": {
+          "aria_labels": "Include for all interactive elements",
+          "section_context": "Use hidden headings for context",
+          "lists_and_grids": "Use role='list' and role='listitem'",
+          "external_links": "Add rel='noopener' for external URLs"
+        },
+        "print_optimization": {
+          "page_size": "A5 with 0.75cm margins",
+          "page_breaks": "Use page-break-inside: avoid",
+          "color_adjustment": "Use print-color-adjust: exact",
+          "testing": "Verify Chrome PDF output"
+        }
+      },
+      "css": {
+        "cognitive_header": "§ CSS Design System Principles",
+        "dry_principles": {
+          "custom_properties": "Use --text, --gap-large, --font-primary",
+          "property_definition": "Define in :root, reuse across elements",
+          "repetition_minimization": "Eliminate style duplication"
+        },
+        "typography_system": {
+          "fluid_scaling": {
+            "method": "calc() and vw between 600px-800px viewports",
+            "example": "calc(15px + (18 - 15) * ((100vw - 600px) / (800 - 600)))",
+            "reference": "MadeByMike precise control method"
+          },
+          "golden_ratio_sizes": {
+            "h1": "32px–42px",
+            "h2": "20px–28px", 
+            "h3": "16px–20px",
+            "body": "15px–18px"
+          },
+          "font_selection": {
+            "style": "Serif for headings and body (letters)",
+            "examples": "Georgia for headings, Merriweather for body",
+            "reference": "Bringhurst 5.1 principles"
+          },
+          "spacing_rules": {
+            "line_height": "1.5–1.65",
+            "letter_spacing": "0.02em–0.05em",
+            "text_indent": "2em for body text"
+          }
+        },
+        "layout_system": {
+          "flexbox_usage": "Centered, single-column layouts",
+          "grid_usage": "Responsive lists with auto-fit, minmax(150px, 1fr)",
+          "spacing_scale": {
+            "base_grid": "8pt grid system",
+            "proportions": "Golden ratio (0.5rem, 1rem, 1.618rem, 2rem)",
+            "heading_margins": "h2: margin 2rem 0 1rem",
+            "list_margins": "ul: margin-bottom 1.618rem"
+          }
+        },
+        "accessibility_system": {
+          "focus_indicators": "outline: 2px solid (visible)",
+          "motion_sensitivity": "Respect prefers-reduced-motion",
+          "contrast_ratio": "7:1 per wcag_2_2_aaa",
+          "theme_stability": "Avoid automatic switching for letters"
+        },
+        "print_system": {
+          "page_setup": "@page { size: A5; margin: 0.75cm; }",
+          "font_sizes": "12pt body, 24pt h1, 18pt h2, 14pt h3",
+          "color_scheme": "Black text, white background",
+          "element_breaks": "page-break-inside: avoid"
+        }
+      },
+      "cognitive_load_management": {
+        "content_density": {
+          "large_lists": "CSS Grid for >20 items",
+          "column_layout": "minmax(150px, 1fr)",
+          "spacing": "0.5rem gap, 1.618rem margin"
+        },
+        "localization": {
+          "nordic_characters": "UTF-8 font support for æ, ø, å",
+          "norwegian_text": "hyphens: auto for readability",
+          "testing": "Verify character display in print/screen"
+        },
+        "error_handling": {
+          "font_fallbacks": "Georgia, Times New Roman",
+          "unit_fallbacks": "rem/px for calc() failures",
+          "browser_degradation": "IE11 compatibility testing"
+        }
+      }
+    },
+    "principles": [
+      "clarity_over_cleverness", 
+      "accessibility_first", 
+      "mathematical_foundation"
+    ],
     "typography": {
+      "cognitive_header": "§ Typography System Foundation",
       "scale": "golden_ratio_1618",
       "base_size": "16px",
       "font_stacks": {
         "primary": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
         "monospace": "'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace"
       },
-      "accessibility": {"contrast_ratio": "7:1", "font_size_min": "16px"}
+      "accessibility": {
+        "contrast_ratio": "7:1", 
+        "font_size_min": "16px"
+      }
     },
     "color_system": {
+      "cognitive_header": "§ Color System Methodology",
       "methodology": "semantic_hsl",
       "accessibility": "wcag_2_2_aaa",
-      "modes": ["light", "dark", "high_contrast"]
+      "modes": [
+        "light", 
+        "dark", 
+        "high_contrast"
+      ]
     },
     "spatial_system": {
+      "cognitive_header": "§ Spatial Design Foundation",
       "base_unit": "0.5rem",
       "grid": "8pt_baseline",
       "golden_ratio": "1.618_proportions"
     },
     "motion": {
-      "duration": {"fast": "150ms", "normal": "300ms", "slow": "500ms"},
+      "cognitive_header": "§ Motion Design System",
+      "duration": {
+        "fast": "150ms", 
+        "normal": "300ms", 
+        "slow": "500ms"
+      },
       "easing": "cubic-bezier(0.25, 0.1, 0.25, 1)",
       "accessibility": "respect_prefers_reduced_motion",
       "performance": "60fps_minimum"

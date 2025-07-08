@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Weaviate Integration - Stub implementation for AI³ migration
 # This is a placeholder to maintain compatibility during migration
 

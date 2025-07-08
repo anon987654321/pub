@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AudioEngineerAssistant
   def initialize
     @tools = [:equalizer, :reverb, :compressor, :limiter, :delay, :chorus, :flanger, :noise_gate]

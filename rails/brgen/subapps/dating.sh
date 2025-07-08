@@ -1,5 +1,5 @@
 #!/usr/bin/env zsh
-set -e
+set -euo pipefail
 
 # Brgen Dating setup: Location-based dating platform with Mapbox, live search, infinite scroll, and anonymous features on OpenBSD 7.5, unprivileged user
 
