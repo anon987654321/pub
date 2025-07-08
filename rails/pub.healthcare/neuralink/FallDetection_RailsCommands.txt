@@ -1,8 +1,0 @@
-# Fall Detection App Rails Commands
-rails new FallDetection --database=postgresql --javascript=esbuild --css=sass --skip-docker
-rails generate model User name:string email:string
-rails generate model FallEvent user:references datetime:datetime location:string
-rails generate controller Users
-rails generate controller FallEvents
-rails db:migrate
-bundle add devise
