@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Assistant Orchestrator - Unified request processing framework
 # Migrated and enhanced from ai3_old/assistants/assistant_api.rb
 

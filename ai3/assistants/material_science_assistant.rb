@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # MaterialScienceAssistant: Provides material science assistance capabilities
 
 require 'openai'

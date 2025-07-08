@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Enhanced Filesystem Utilities - Migrated from ai3_old/lib/filesystem_tool.rb
 # Comprehensive file operations with OpenBSD security compliance
 

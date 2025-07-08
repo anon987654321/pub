@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Query Cache - Advanced LRU TTL cache system migrated from ai3_old
 # Manages caching of user queries and their responses with cognitive optimization
 

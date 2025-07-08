@@ -1,9 +1,9 @@
 {
   "meta": {
-    "version": "v10.0.0",
+    "version": "v10.3.0",
     "updated": "2025-07-02T18:32:07Z",
     "by": "anon987654321",
-    "description": "Self-optimizing project completion system with world-class standards"
+    "description": "Self-optimizing project completion system with world-class standards and cognitive framework integration"
   },
   "workflow": {
     "mode_detection": {
@@ -22,6 +22,28 @@
     }
   },
   "core": {
+    "cognitive_framework": {
+      "version": "1.0.0",
+      "compliance_level": "master",
+      "formatting_standards": {
+        "indentation": "2_spaces",
+        "quotes": "double_quotes",
+        "line_length": 120,
+        "cognitive_headers": true
+      },
+      "cognitive_constraints": {
+        "max_concepts_per_section": 7,
+        "max_nesting_depth": 3,
+        "context_switching_threshold": 3,
+        "flow_state_protection": true
+      },
+      "implementation_patterns": {
+        "circuit_breaker_required": true,
+        "cognitive_load_monitoring": true,
+        "attention_restoration": true,
+        "working_memory_management": true
+      }
+    },
     "communication": {
       "style": "strunk_white_accessibility_conscious",
       "format": "essential_only_no_truncation",
@@ -55,6 +77,30 @@
         {"role": "rails_expert", "temperature": 0.4, "weight": 0.10}
       ],
       "consensus_threshold": 0.7
+    },
+    "system_integration": {
+      "ai3_system": {
+        "cognitive_load_monitoring": "enabled",
+        "session_management": "lru_cognitive_aware",
+        "query_cache": "ttl_structured_logging",
+        "circuit_breakers": "multi_level"
+      },
+      "rails_ecosystem": {
+        "request_complexity_analysis": "enabled",
+        "user_session_cognitive_tracking": "enabled",
+        "progressive_disclosure": "enabled",
+        "flow_state_preservation": "enabled"
+      },
+      "openbsd_infrastructure": {
+        "system_load_cognitive_mapping": "enabled",
+        "service_complexity_monitoring": "enabled",
+        "automated_cognitive_scaling": "enabled"
+      },
+      "business_strategy": {
+        "decision_complexity_analysis": "enabled",
+        "strategic_cognitive_load": "monitored",
+        "implementation_chunking": "enabled"
+      }
     }
   },
   "stacks": {
@@ -100,30 +146,46 @@
       "quotes": "double_quotes_consistent",
       "line_endings": "unix_lf",
       "alignment": "optical_over_mathematical",
-      "newlines": "semantic_grouping"
+      "newlines": "semantic_grouping",
+      "cognitive_headers": "enabled"
     },
     "accessibility": {
       "alt_text": "descriptive_contextual",
       "aria_labels": "comprehensive_semantic",
       "heading_hierarchy": "logical_sequential",
-      "focus_indicators": "high_contrast_visible"
+      "focus_indicators": "high_contrast_visible",
+      "wcag_compliance": "2.2_aaa_required"
     },
     "language_specific": {
       "ruby": {
         "frozen_string_literal": "required",
         "hash_syntax": "symbol_to_proc",
         "method_chaining": "semantic_alignment",
-        "async_patterns": "clear_formatting"
+        "async_patterns": "clear_formatting",
+        "yard_docs": "required_for_public_methods"
       },
       "javascript": {
         "semicolons": "always",
         "const_let_var": "const_first",
-        "async_await": "prefer_over_promises"
+        "async_await": "prefer_over_promises",
+        "double_quotes": "enforced"
       },
       "css": {
         "property_ordering": "logical_groups",
         "custom_properties": "semantic_naming",
-        "media_queries": "mobile_first"
+        "media_queries": "mobile_first",
+        "class_naming": "underscore_convention",
+        "no_divitis": "semantic_html5_only"
+      },
+      "shell": {
+        "posix_compliance": "required",
+        "error_handling": "set_euo_pipefail",
+        "input_validation": "mandatory"
+      },
+      "norwegian_business": {
+        "language_support": "nb_NO_required",
+        "currency_format": "NOK_standard",
+        "legal_compliance": "norwegian_law"
       }
     }
   },

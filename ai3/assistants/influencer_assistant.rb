@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # ai3/assistants/influencer_assistant.rb
 
 require_relative '../lib/universal_scraper'
