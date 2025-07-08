@@ -1,7 +1,7 @@
 {
   "meta": {
-    "version": "v10.3.0",
-    "updated": "2025-07-02T18:32:07Z",
+    "version": "v10.6.0",
+    "updated": "2025-07-08T20:55:07Z",
     "by": "anon987654321",
     "description": "Self-optimizing project completion system with world-class standards and cognitive framework integration"
   },
@@ -190,6 +190,29 @@
     }
   },
   "design_system": {
+    "visual_layout_prompts": {
+      "html": {
+        "structure": "Use semantic HTML5 elements (header, main, section, footer) with ARIA roles (banner, main, contentinfo) for accessibility. Ensure logical heading hierarchy (h1 for title, h2 for major sections and subsections, h3 for minor subsections) per wcag_2_2_aaa. Avoid inline styles; separate content and presentation. Set lang attribute to match content (e.g., 'nb' for Norwegian).",
+        "accessibility": "Include aria-labels for interactive elements and hidden headings for section context. Use role='list' and role='listitem' for custom lists and grids. Ensure all links have rel='noopener' for external URLs.",
+        "print": "Optimize for A5 page size with 0.75cm margins. Use page-break-inside: avoid for sections, tables, and lists to prevent truncation. Ensure print output matches screen using print-color-adjust: exact. Test for Chrome PDF output."
+      },
+      "css": {
+        "dry": "Use CSS custom properties (e.g., --text, --gap-large, --font-primary) for all reusable styles (colors, spacing, fonts) to minimize repetition. Define properties in :root and reuse across elements.",
+        "typography": "Use calc() and vw for fluid typography scaling between 600px and 800px viewports, per MadeByMike's precise control method (e.g., font-size: calc(15px + (18 - 15) * ((100vw - 600px) / (800 - 600)))). Apply golden ratio (1.618) for font sizes (h1: 32px–42px, h2: 20px–28px, h3: 16px–20px, p: 15px–18px). Use serif fonts for both headings (e.g., Georgia) and body text (e.g., Merriweather) in letters, per Bringhurst 5.1. Set line-height to 1.5–1.65, letter-spacing to 0.02em–0.05em, text-indent to 2em for body text.",
+        "typography.fallback": "Provide fallback font sizes in rem units (e.g., 1rem for body, 2rem for h1) for browsers with limited calc() or vw support. Ensure local fonts (e.g., Georgia, Times New Roman) are prioritized over external fonts for reliability.",
+        "layout": "Use flexbox for centered, single-column layouts and CSS Grid for responsive lists (auto-fit, minmax(150px, 1fr)). Apply 8pt grid and golden ratio proportions for padding, margins, and gaps (0.5rem, 1rem, 1.618rem, 2rem). Ensure consistent spacing for h2 elements (margin: 2rem 0 1rem) regardless of position within or between sections, using margin collapse to avoid double spacing. Set section margin-top to 0 and lists (ul) margin-bottom to 1.618rem for visual consistency, per Bringhurst 8.1.",
+        "content_density": "For dense lists (e.g., >20 items), use CSS Grid with multiple columns (minmax(150px, 1fr)) in screen and print. Ensure minimum 0.5rem gap between items and 1.618rem margin below lists for readability. Split lists across pages in print if needed, using page-break-inside: avoid.",
+        "localization": "Ensure proper rendering of Nordic characters (æ, ø, å) with font-family supporting UTF-8. Use hyphens: auto for Norwegian text to enhance readability. Test typography for correct character display in print and screen.",
+        "color": "Default to light mode (text: hsl(0, 0%, 10%), background: hsl(0, 0%, 100%)) for print-focused documents like letters. Support dark and high-contrast modes only when explicitly specified. Ensure 7:1 contrast ratio per wcag_2_2_aaa. Use monochrome colors (#000000 text, #FFFFFF background) for print.",
+        "accessibility": "Include visible focus indicators (outline: 2px solid). Respect prefers-reduced-motion with no transitions when enabled. Avoid automatic theme switching (e.g., prefers-color-scheme) for letters.",
+        "print": "Set @page { size: A5; margin: 0.75cm; }. Use font-size: 12pt for body, 24pt for h1, 18pt for h2, 14pt for h3 in print. Remove backgrounds, use black text, and disable link decorations. Ensure elements avoid page breaks with page-break-inside: avoid. Use print-color-adjust: exact for consistent Chrome PDF output.",
+        "error_handling": "Provide fallback fonts (e.g., Georgia, Times New Roman) for unavailable web fonts. Use rem or px units as fallback for calc() failures. Ensure graceful degradation in older browsers (e.g., IE11) by testing fixed font sizes and layout stability.",
+        "infrastructure_documentation": "Ensure technical documentation (e.g., letters describing infrastructure) accurately reflects server configurations, including domain counts, application names, and technologies (e.g., OpenBSD, DNSSEC, relayd, falcon, PostgreSQL). Cross-reference with deployment scripts (e.g., openbsd.sh) to verify consistency of domains and apps."
+      },
+      "svg": {
+        "usage": "Use SVG for icons or simple graphics in non-print contexts. Include role='img' and accessible titles. Optimize for performance with minimal paths and efficient compression."
+      }
+    },
     "principles": ["clarity_over_cleverness", "accessibility_first", "mathematical_foundation"],
     "typography": {
       "scale": "golden_ratio_1618",
