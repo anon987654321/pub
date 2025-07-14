@@ -16,37 +16,66 @@ Caching: Stores LLM responses, scraped data, and multimedia outputs.
 Installation
 Prerequisites
 
-OpenBSD (required for pledge/unveil and doas)
-Ruby 3.2+
-zsh for installation scripts
-Optional: API keys for XAI, Anthropic, OpenAI, Replicate
-Optional: Weaviate instance for RAG
+- OpenBSD (required for pledge/unveil and doas)
+- Ruby 3.2+
+- Bundler gem manager
+- Optional: API keys for XAI, Anthropic, OpenAI, Replicate
+- Optional: Weaviate instance for RAG
 
 Steps
 
-Clone the repository:git clone <repository_url>
-cd ai3
+1. Clone the repository:
+   ```bash
+   git clone <repository_url>
+   cd ai3
+   ```
 
+2. Install Ruby dependencies:
+   ```bash
+   bundle install
+   ```
 
-Run the core installation script:./install.sh
+3. Set up API keys (create ~/.ai3_keys file):
+   ```bash
+   # Optional: Create API keys file
+   touch ~/.ai3_keys
+   ```
 
+4. Make ai3.rb executable:
+   ```bash
+   chmod +x ai3.rb
+   ```
 
-Installs Ruby gems via Gemfile.
-Prompts for API keys (stored in ~/.ai3_keys).
-Sets ai3.rb as executable.
-
-
-Install assistants:./install_ass.sh
-
-
-Generates 15 assistant Ruby files in assistants/.
-Configures config.yml and en.yml.
-
-
+5. Install assistants (if install_ass.sh script exists):
+   ```bash
+   ./install_ass.sh
+   ```
 
 Post-Installation
 
-Run the CLI:ruby ai3.rb
+Run the CLI:
+```bash
+ruby ai3.rb
+```
+
+## Dependency Management
+
+This project uses Bundler for dependency management. The `.bundle/` directory is not committed to version control as it contains platform-specific gem installations.
+
+- `Gemfile` - Contains gem specifications
+- `Gemfile.lock` - Locks specific gem versions (should be committed)
+- `.bundle/` - Local gem installation directory (ignored in git)
+
+To update dependencies:
+```bash
+bundle update
+```
+
+To install gems in a specific location:
+```bash
+bundle config set --local path 'vendor/bundle'
+bundle install
+```
 
 
 

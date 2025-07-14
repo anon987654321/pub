@@ -1,0 +1,56 @@
+# frozen_string_literal: true
+
+source "https://rubygems.org"
+
+ruby ">= 3.2.0"
+
+# Core TTY components for CLI interface
+gem "tty-prompt"
+gem "tty-spinner"
+gem "tty-box"
+gem "pastel"
+
+# Configuration and environment management
+gem "dotenv"
+gem "i18n"
+
+# AI/LLM integrations
+gem "anthropic"
+gem "openai", "~> 3.7"
+gem "ollama-ai"
+gem "langchain", "~> 0.1"
+gem "replicate"
+
+# HTTP client and networking
+gem "faraday"
+gem "typhoeus"
+gem "httparty"
+
+# Web scraping and browser automation
+gem "ferrum"
+gem "nokogiri"
+
+# Data storage and caching
+gem "sqlite3"
+gem "lru_redux"
+
+# Data processing and analysis
+gem "json"
+gem "yaml"
+
+# Development and testing
+group :development do
+  gem "rubocop"
+  gem "reek"
+end
+
+group :test do
+  gem "rspec"
+  gem "faker"
+end
+
+# Optional dependencies for specific features
+gem "bcrypt"
+gem "concurrent-ruby"
+gem "wisper"
+gem "async"
