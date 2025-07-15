@@ -41,14 +41,25 @@ index 9886cb9..dcb8e6a 100644
 -
 +# OpenBSD Setup for Scalable Rails and Secure Email
 +
-+This script configures OpenBSD 7.7 as a robust, modular platform for Ruby on Rails applications and a single-user email service, embodying the Unix philosophy of doing one thing well to power a focused, secure system for hyperlocal platforms with DNSSEC.
++This script configures OpenBSD 7.7 as a robust,
+modular platform for Ruby on Rails applications and a single-user email service,
+embodying the Unix philosophy of doing one thing well to power a focused,
+secure system for hyperlocal platforms with DNSSEC.
 +
 +## Setup Instructions
 +
 +1. **Prerequisites**:
 +   - OpenBSD 7.7 installed on master (PowerPC Mac Mini) and slave (VM).
-+   - Directories (`/var/nsd`, `/var/www/acme`, `/var/postgresql/data`, `/var/redis`, `/var/vmail`) have correct ownership/permissions (e.g., `/var/www/acme` as `root:_httpd`, 755).
-+   - Rails apps (`brgen`, `amber`, `bsdports`) ready to upload to `/home/<app>/<app>` with `Gemfile` and `database.yml`.
++   - Directories (`/var/nsd`,
+`/var/www/acme`,
+`/var/postgresql/data`,
+`/var/redis`,
+`/var/vmail`) have correct ownership/permissions (e.g.,
+`/var/www/acme` as `root:_httpd`,
+755).
++   - Rails apps (`brgen`,
+`amber`,
+`bsdports`) ready to upload to `/home/<app>/<app>` with `Gemfile` and `database.yml`.
 +   - Unprivileged user `gfuser` with `mutt` installed for email access.
 +   - Internet connectivity for package installation.
 +   - Domain (e.g., `brgen.no`) registered with Domeneshop.no, ready for DS records.
@@ -62,8 +73,27 @@ index 9886cb9..dcb8e6a 100644
 +   - `--help`: Show usage.
 +
 +3. **Stages**:
-+   - **Stage 1**: Installs `ruby-3.3.5`, `ldns-utils`, `postgresql-server`, `redis`, and `zap` using OpenBSD 7.7’s default `pkg_add`. Configures `ns.brgen.no` (46.23.95.45) as master nameserver with DNSSEC (ECDSAP256SHA256 keys, signed zones), allowing zone transfers to `ns.hyp.net` (194.63.248.53, managed by Domeneshop.no) via TCP 53 and sending NOTIFY via UDP 53, with `pf` permitting TCP/UDP 53 traffic on `ext_if` (vio0). Generates TLSA records for HTTPS services. Issues certificates via Let’s Encrypt. Pauses to let you upload Rails apps (`brgen`, `amber`, `bsdports`) to `/home/<app>/<app>` with `Gemfile` and `database.yml`. Press Enter to proceed, then submit DS records from `/var/nsd/zones/master/*.ds` to Domeneshop.no. Test with `dig @46.23.95.45 brgen.no SOA`, `dig @46.23.95.45 denvr.us A`, `dig DS brgen.no +short`, and `dig TLSA _443._tcp.brgen.no`. Wait for propagation (24–48 hours) before `--resume`. `ns.hyp.net` requires no local setup (configure slave separately).
-+   - **Stage 2**: Sets up PostgreSQL, Redis, PF firewall, relayd with security headers, and Rails apps with Falcon server. Logs go to `/var/log/messages`. Applies CSS micro-text (e.g., 7.5pt) for app footer branding if applicable.
++   - **Stage 1**: Installs `ruby-3.3.5`,
+`ldns-utils`,
+`postgresql-server`,
+`redis`,
+and `zap` using OpenBSD 7.7’s default `pkg_add`. Configures `ns.brgen.no` (46.23.95.45) as master nameserver with DNSSEC (ECDSAP256SHA256 keys,
+signed zones),
+allowing zone transfers to `ns.hyp.net` (194.63.248.53,
+managed by Domeneshop.no) via TCP 53 and sending NOTIFY via UDP 53,
+with `pf` permitting TCP/UDP 53 traffic on `ext_if` (vio0). Generates TLSA records for HTTPS services. Issues certificates via Let’s Encrypt. Pauses to let you upload Rails apps (`brgen`,
+`amber`,
+`bsdports`) to `/home/<app>/<app>` with `Gemfile` and `database.yml`. Press Enter to proceed,
+then submit DS records from `/var/nsd/zones/master/*.ds` to Domeneshop.no. Test with `dig @46.23.95.45 brgen.no SOA`,
+`dig @46.23.95.45 denvr.us A`,
+`dig DS brgen.no +short`,
+and `dig TLSA _443._tcp.brgen.no`. Wait for propagation (24–48 hours) before `--resume`. `ns.hyp.net` requires no local setup (configure slave separately).
++   - **Stage 2**: Sets up PostgreSQL,
+Redis,
+PF firewall,
+relayd with security headers,
+and Rails apps with Falcon server. Logs go to `/var/log/messages`. Applies CSS micro-text (e.g.,
+7.5pt) for app footer branding if applicable.
 +   - **Stage 3**: Configures OpenSMTPD for `bergen@pub.attorney`, accessible via `mutt` for `gfuser`.
 +
 +4. **Verification**:
@@ -148,7 +178,10 @@ index 8803a81..ad17132 100644
 -  ["pub.healthcare"]=""
 -  ["pub.attorney"]=""
 -  ["bsdports.org"]=""
-+# Configures OpenBSD 7.7 for NSD & DNSSEC, Ruby on Rails, PF firewall, and single-user email.
++# Configures OpenBSD 7.7 for NSD & DNSSEC,
+Ruby on Rails,
+PF firewall,
+and single-user email.
 +# Usage: doas zsh openbsd.sh [--help | --resume | --mail]
 +
 +set -e
@@ -675,7 +708,10 @@ index 8803a81..ad17132 100644
 -  rcctl start relayd
 -  log "relayd.conf configured and relayd started."
 +  # Pause for Rails app upload
-+  echo "Please upload Rails apps (brgen, amber, bsdports) to their respective homedirs (/home/<app>/<app>), ensuring each has Gemfile and config/database.yml. Press Enter to continue once complete." >&2
++  echo "Please upload Rails apps (brgen,
+amber,
+bsdports) to their respective homedirs (/home/<app>/<app>),
+ensuring each has Gemfile and config/database.yml. Press Enter to continue once complete." >&2
 +  read -r
 +
 +  # Schedule certificate and TLSA renewal
@@ -686,7 +722,10 @@ index 8803a81..ad17132 100644
 +  rm "$crontab_tmp"
 +
 +  echo "stage_1_complete" > "$STATE_FILE"
-+  echo "Stage 1 complete. ns.brgen.no (46.23.95.45) is authoritative with DNSSEC and allows zone transfers to ns.hyp.net (194.63.248.53, managed by Domeneshop.no). Submit DS records from /var/nsd/zones/master/*.ds to Domeneshop.no. Test with 'dig @46.23.95.45 brgen.no SOA', 'dig @46.23.95.45 denvr.us A', and 'dig DS brgen.no +short'. Wait for propagation (24–48 hours) before running 'doas zsh openbsd.sh --resume'." >&2
++  echo "Stage 1 complete. ns.brgen.no (46.23.95.45) is authoritative with DNSSEC and allows zone transfers to ns.hyp.net (194.63.248.53,
+managed by Domeneshop.no). Submit DS records from /var/nsd/zones/master/*.ds to Domeneshop.no. Test with 'dig @46.23.95.45 brgen.no SOA',
+'dig @46.23.95.45 denvr.us A',
+and 'dig DS brgen.no +short'. Wait for propagation (24–48 hours) before running 'doas zsh openbsd.sh --resume'." >&2
 +  exit 0
  }
  
@@ -740,11 +779,17 @@ index 8803a81..ad17132 100644
 -  hide-version: yes
 -  zonesdir: "/var/nsd/zones/master"
 +# Allow SSH with rate limiting
-+pass in on $ext_if inet proto tcp to $ext_if port 22 keep state (max-src-conn 50, max-src-conn-rate 10/5, overload <bruteforce> flush global)
++pass in on $ext_if inet proto tcp to $ext_if port 22 keep state (max-src-conn 50,
+max-src-conn-rate 10/5,
+overload <bruteforce> flush global)
 +
 +# Allow DNS traffic
-+pass in on $ext_if inet proto { tcp, udp } to $BRGEN_IP port 53 keep state (max-src-conn 100, max-src-conn-rate 15/5, overload <bruteforce> flush global)
-+pass out on $ext_if inet proto { tcp, udp } from $BRGEN_IP port 53 keep state
++pass in on $ext_if inet proto { tcp,
+udp } to $BRGEN_IP port 53 keep state (max-src-conn 100,
+max-src-conn-rate 15/5,
+overload <bruteforce> flush global)
++pass out on $ext_if inet proto { tcp,
+udp } from $BRGEN_IP port 53 keep state
 +pass out on $ext_if inet proto udp to $HYP_IP port 53 keep state
 +EOF
 +  if ! doas pfctl -nf "/etc/pf.conf"; then
@@ -1081,7 +1126,10 @@ index 8803a81..ad17132 100644
 +  cat >> "/etc/pf.conf" <<'EOF'
 +
 +# Allow SMTP traffic per pf.conf(5)
-+pass in on $ext_if inet proto tcp to $ext_if port { 25, 587 } keep state (max-src-conn 100, max-src-conn-rate 15/5, overload <bruteforce> flush global)
++pass in on $ext_if inet proto tcp to $ext_if port { 25,
+587 } keep state (max-src-conn 100,
+max-src-conn-rate 15/5,
+overload <bruteforce> flush global)
 +EOF
 +  if ! doas pfctl -nf "/etc/pf.conf"; then
 +    echo "ERROR: pf.conf invalid" >&2
@@ -1168,14 +1216,23 @@ index dc50434..9886cb9 100644
 +
 +## Why OpenBSD?
 +
-+OpenBSD is the epitome of security and simplicity. Its proactive security model, minimalist design, and robust auditing make it the go-to Unix-like OS for mission-critical systems. Unlike Linux, plagued by complexity and vulnerabilities in projects like systemd, OpenSSL (Heartbleed), or Docker, OpenBSD emphasizes clean code and sensible defaults.
++OpenBSD is the epitome of security and simplicity. Its proactive security model,
+minimalist design,
+and robust auditing make it the go-to Unix-like OS for mission-critical systems. Unlike Linux,
+plagued by complexity and vulnerabilities in projects like systemd,
+OpenSSL (Heartbleed),
+or Docker,
+OpenBSD emphasizes clean code and sensible defaults.
 +
 +### Highlights of OpenBSD:
 +
 +- **Secure by Design**: Default installation minimizes attack surface.  
 +- **Proven Track Record**: Audited codebase with few CVEs compared to Linux alternatives.  
 +- **LibreSSL Integration**: Forked and improved from OpenSSL, mitigating past flaws like Heartbleed.  
-+- **Base System Consistency**: Includes secure daemons like `httpd`, `nsd`, `relayd`, and `pf` for essential services.  
++- **Base System Consistency**: Includes secure daemons like `httpd`,
+`nsd`,
+`relayd`,
+and `pf` for essential services.  
 +- **Innovations**: Introduced technologies like `unveil` and `pledge`, limiting application permissions.  
 +
 +## Features of This Setup
@@ -1408,11 +1465,14 @@ index c86034f..8803a81 100644
  
 -# Allow SSH, HTTP, and HTTPS
 +# Allow incoming SSH, HTTP, and HTTPS traffic
- pass in on \$ext_if proto tcp to \$ext_if port { 22, 80, 443 } keep state
+ pass in on \$ext_if proto tcp to \$ext_if port { 22,
+80,
+443 } keep state
  
 -# Allow DNS
 +# Allow incoming DNS traffic (TCP and UDP)
- pass in on \$ext_if proto { tcp, udp } to \$ext_if port 53 keep state
+ pass in on \$ext_if proto { tcp,
+udp } to \$ext_if port 53 keep state
 +
 +# Allow ICMP traffic (ping, etc.)
 +pass inet proto icmp all icmp-type { echoreq, unreach, timex, paramprob }
@@ -1768,7 +1828,9 @@ index 5ac0250..dc50434 100644
 -
  ### Multi-Domain Support
 -
- You’ve got a ton of domains with various subdomains? We’ve got you covered! This script auto-generates the necessary Rails application ports, DNS settings, and configuration.
+ You’ve got a ton of domains with various subdomains? We’ve got you covered! This script auto-generates the necessary Rails application ports,
+DNS settings,
+and configuration.
 -
  ### DNSSEC with NSD
 -
@@ -1780,11 +1842,14 @@ index 5ac0250..dc50434 100644
 -
  ### Relayd for Secure Traffic Routing
 -
- Relayd sets up HTTP strict transport security headers, Content Security Policy, and more to protect your apps.
+ Relayd sets up HTTP strict transport security headers,
+Content Security Policy,
+and more to protect your apps.
 -
  ### Automatic App Start Scripts
 -
- For each domain, a unique startup script is created and added to `rc.d`. Apps are served with unique ports and locked down for maximum security.
+ For each domain,
+a unique startup script is created and added to `rc.d`. Apps are served with unique ports and locked down for maximum security.
 -
  ---
 -
@@ -1830,10 +1895,13 @@ index b7245c7..c86034f 100644
        echo "$port"
        return
      fi
-@@ -86,14 +86,9 @@ pass in on \$ext_if proto tcp to \$ext_if port { 22, 80, 443 } keep state
+@@ -86,14 +86,9 @@ pass in on \$ext_if proto tcp to \$ext_if port { 22,
+80,
+443 } keep state
  
  # Allow DNS
- pass in on \$ext_if proto { tcp, udp } to \$ext_if port 53 keep state
+ pass in on \$ext_if proto { tcp,
+udp } to \$ext_if port 53 keep state
 -
 -# Ruby on Rails
 -anchor "relayd/*"
@@ -2061,7 +2129,9 @@ index b02ea42..5ac0250 100644
 +### Multi-Domain Support
  
 -The firewall (`pf`) is configured to control inbound and outbound traffic, enhancing server security. It includes brute-force protection for SSH using `sshguard`, rate-limiting, and access controls for DNS, HTTP, and HTTPS, ensuring only authorized access.
-+You’ve got a ton of domains with various subdomains? We’ve got you covered! This script auto-generates the necessary Rails application ports, DNS settings, and configuration.
++You’ve got a ton of domains with various subdomains? We’ve got you covered! This script auto-generates the necessary Rails application ports,
+DNS settings,
+and configuration.
  
 -### Traffic Management with `relayd(8)` and `relayd.conf(5)`
 +### DNSSEC with NSD
@@ -2080,13 +2150,16 @@ index b02ea42..5ac0250 100644
 +### Relayd for Secure Traffic Routing
  
 -### Rails Application Startup and Management with `rc.d(8)` and `rcctl(8)`
-+Relayd sets up HTTP strict transport security headers, Content Security Policy, and more to protect your apps.
++Relayd sets up HTTP strict transport security headers,
+Content Security Policy,
+and more to protect your apps.
  
 -Each Rails application is configured with a startup script in `/etc/rc.d/`. These scripts allow `rcctl` to manage application start and stop processes, using Falcon as the application server. Security measures like `unveil` and `pledge` are used to restrict system calls and file system access.
 +### Automatic App Start Scripts
  
 -## Usage Instructions
-+For each domain, a unique startup script is created and added to `rc.d`. Apps are served with unique ports and locked down for maximum security.
++For each domain,
+a unique startup script is created and added to `rc.d`. Apps are served with unique ports and locked down for maximum security.
  
 -1. **Prepare the Server**: Ensure you have a fresh OpenBSD installation with `doas` configured for your user.
 +---
@@ -2280,7 +2353,9 @@ index 7bb32c9..b7245c7 100644
 -# Allow DNS
 -pass in on egress proto { tcp, udp } to port 53 keep state
 +# Allow SSH, HTTP, and HTTPS
-+pass in on \$ext_if proto tcp to \$ext_if port { 22, 80, 443 } keep state
++pass in on \$ext_if proto tcp to \$ext_if port { 22,
+80,
+443 } keep state
  
 -# Allow HTTP/HTTPS
 -pass in on egress proto tcp to port { 80, 443 } keep state
@@ -2707,23 +2782,38 @@ diff --git a/README.md b/README.md
 index aa7979e..b02ea42 100644
 --- a/README.md
 +++ b/README.md
-@@ -6,8 +6,8 @@ This setup script automates the deployment of an OpenBSD VPS as a secure, optimi
+@@ -6,8 +6,8 @@ This setup script automates the deployment of an OpenBSD VPS as a secure,
+optimi
  
  ## Features
  
 -- **Automated Software Installation**: Installs necessary components, including `ruby`, `postgresql-server`, `redis`, and `varnish` for web acceleration.
 -- **Dynamic Port Management**: Prevents port conflicts through automated port assignment.
-+- **Automated Software Installation**: Installs necessary components, including `ruby`, `postgresql-server`, `redis`, `varnish`, `monit`, and `sshguard` for security and monitoring.
++- **Automated Software Installation**: Installs necessary components,
+including `ruby`,
+`postgresql-server`,
+`redis`,
+`varnish`,
+`monit`,
+and `sshguard` for security and monitoring.
 +- **Dynamic Port Management**: Prevents port conflicts through automated port assignment using a random port generator.
  - **Firewall Configuration (`pf.conf(5)` and `pfctl(8)`)**: Configures OpenBSD’s Packet Filter to secure the server by controlling access and limiting vulnerabilities.
- - **Traffic Routing with `relayd(8)`**: Configures `relayd` as a reverse proxy to manage HTTP/HTTPS traffic, directing it securely to Rails applications.
- - **DNS Management with `nsd(8)`**: Uses `nsd` to configure DNS zones for each domain and subdomain, with DNSSEC enabled for added security.
+ - **Traffic Routing with `relayd(8)`**: Configures `relayd` as a reverse proxy to manage HTTP/HTTPS traffic,
+directing it securely to Rails applications.
+ - **DNS Management with `nsd(8)`**: Uses `nsd` to configure DNS zones for each domain and subdomain,
+with DNSSEC enabled for added security.
 @@ -30,13 +30,14 @@ Using `acme-client(8)` with Let’s Encrypt, the script automatically handles SS
  
  ### Firewall Configuration with `pf.conf(5)` and `pfctl(8)`
  
 -The firewall (`pf`) is configured to control inbound and outbound traffic, enhancing server security. It includes brute-force protection for SSH, rate-limiting, and access controls for DNS, HTTP, and HTTPS, ensuring only authorized access.
-+The firewall (`pf`) is configured to control inbound and outbound traffic, enhancing server security. It includes brute-force protection for SSH using `sshguard`, rate-limiting, and access controls for DNS, HTTP, and HTTPS, ensuring only authorized access.
++The firewall (`pf`) is configured to control inbound and outbound traffic,
+enhancing server security. It includes brute-force protection for SSH using `sshguard`,
+rate-limiting,
+and access controls for DNS,
+HTTP,
+and HTTPS,
+ensuring only authorized access.
  
  ### Traffic Management with `relayd(8)` and `relayd.conf(5)`
  
@@ -2731,7 +2821,8 @@ index aa7979e..b02ea42 100644
 +
  - **ACME Challenge Routing**: Routes SSL certificate validation requests to `acme-client`.
 -- **Application Request Routing**: Forwards user traffic to the Rails applications, enhancing scalability and security.
-+- **Application Request Routing**: Forwards user traffic to the Rails applications via Varnish, enhancing scalability and security.
++- **Application Request Routing**: Forwards user traffic to the Rails applications via Varnish,
+enhancing scalability and security.
  
  ### DNS Management with `nsd(8)` and `nsd.conf(5)`
  
@@ -2740,7 +2831,8 @@ index aa7979e..b02ea42 100644
  ### Rails Application Startup and Management with `rc.d(8)` and `rcctl(8)`
  
 -Each Rails application is configured with a startup script in `/etc/rc.d/`. These scripts allow `rcctl` to manage application start and stop processes, using Falcon as the application server.
-+Each Rails application is configured with a startup script in `/etc/rc.d/`. These scripts allow `rcctl` to manage application start and stop processes, using Falcon as the application server. Security measures like `unveil` and `pledge` are used to restrict system calls and file system access.
++Each Rails application is configured with a startup script in `/etc/rc.d/`. These scripts allow `rcctl` to manage application start and stop processes,
+using Falcon as the application server. Security measures like `unveil` and `pledge` are used to restrict system calls and file system access.
 +
 +## Usage Instructions
 +
@@ -2760,13 +2852,16 @@ index aa7979e..b02ea42 100644
 +    ./openbsd.sh
 +    ```
 +
-+5. **Deploy Your Rails Applications**: Place your Rails applications in `/home/<app_name>/<app_name>`, where `<app_name>` corresponds to each name in `RAILS_APPS`.
++5. **Deploy Your Rails Applications**: Place your Rails applications in `/home/<app_name>/<app_name>`,
+where `<app_name>` corresponds to each name in `RAILS_APPS`.
 +
 +## Notes
 +
-+- **Ensure Domain Ownership**: Before running the script, make sure you own or control all the domains listed in `ALL_DOMAINS`.
++- **Ensure Domain Ownership**: Before running the script,
+make sure you own or control all the domains listed in `ALL_DOMAINS`.
 +- **DNS Configuration**: You may need to set up glue records or adjust your registrar's settings to point to your NSD server.
-+- **Review the Script**: It's good practice to review and understand the script before running it, especially since it makes significant changes to your system configuration.
++- **Review the Script**: It's good practice to review and understand the script before running it,
+especially since it makes significant changes to your system configuration.
 +
 +## Acknowledgments
 +
@@ -3241,7 +3336,12 @@ index a9a7228..aa7979e 100644
  ## Overview
  
 -This script automates the setup of an OpenBSD environment configured for Ruby on Rails development. It includes the installation of required packages, configuration of firewall rules using Packet Filter (pf), relayd setup for reverse proxying, and NSD setup for DNS management.
-+This setup script automates the deployment of an OpenBSD VPS as a secure, optimized hosting environment for Ruby on Rails applications. It handles essential installations, security configurations, domain management, and SSL certification, creating a production-ready server setup.
++This setup script automates the deployment of an OpenBSD VPS as a secure,
+optimized hosting environment for Ruby on Rails applications. It handles essential installations,
+security configurations,
+domain management,
+and SSL certification,
+creating a production-ready server setup.
  
  ## Features
  
@@ -3250,13 +3350,20 @@ index a9a7228..aa7979e 100644
 -- **Firewall Configuration (pf)**: Configures OpenBSD's Packet Filter to enhance security, including brute-force attack protection and trusted IP handling for SSH.
 -- **Reverse Proxy Configuration (relayd)**: Sets up relayd for HTTP traffic to support load balancing and forwarding.
 -- **DNS Configuration (NSD)**: Automates the creation of zone files for managing DNS entries across various domains and subdomains.
-+- **Automated Software Installation**: Installs necessary components, including `ruby`, `postgresql-server`, `redis`, and `varnish` for web acceleration.
++- **Automated Software Installation**: Installs necessary components,
+including `ruby`,
+`postgresql-server`,
+`redis`,
+and `varnish` for web acceleration.
 +- **Dynamic Port Management**: Prevents port conflicts through automated port assignment.
 +- **Firewall Configuration (`pf.conf(5)` and `pfctl(8)`)**: Configures OpenBSD’s Packet Filter to secure the server by controlling access and limiting vulnerabilities.
-+- **Traffic Routing with `relayd(8)`**: Configures `relayd` as a reverse proxy to manage HTTP/HTTPS traffic, directing it securely to Rails applications.
-+- **DNS Management with `nsd(8)`**: Uses `nsd` to configure DNS zones for each domain and subdomain, with DNSSEC enabled for added security.
++- **Traffic Routing with `relayd(8)`**: Configures `relayd` as a reverse proxy to manage HTTP/HTTPS traffic,
+directing it securely to Rails applications.
++- **DNS Management with `nsd(8)`**: Uses `nsd` to configure DNS zones for each domain and subdomain,
+with DNSSEC enabled for added security.
 +- **SSL Automation with `acme-client(8)`**: Uses `acme-client` with Let’s Encrypt for automated SSL certificate issuance and renewal.
-+- **Rails Application Management (`rc.d(8)` scripts)**: Generates startup scripts for each Rails application, enabling seamless control through `rcctl(8)`.
++- **Rails Application Management (`rc.d(8)` scripts)**: Generates startup scripts for each Rails application,
+enabling seamless control through `rcctl(8)`.
  
 -## Prerequisites
 +## Configuration Details
@@ -3267,7 +3374,10 @@ index a9a7228..aa7979e 100644
 +### Domains and Subdomains
  
 -## Usage
-+The script supports multiple domains and subdomains, specified in the `ALL_DOMAINS` list. Each domain configuration includes DNS records, SSL certificates, and `relayd` routing rules.
++The script supports multiple domains and subdomains,
+specified in the `ALL_DOMAINS` list. Each domain configuration includes DNS records,
+SSL certificates,
+and `relayd` routing rules.
  
 -### Running the Script
 +### Port Management
@@ -3279,13 +3389,22 @@ index a9a7228..aa7979e 100644
 +### SSL Certificates and Secure Connections
  
 -Ensure the script has executable permissions:
-+Using `acme-client(8)` with Let’s Encrypt, the script automatically handles SSL certificate issuance and renewal for all domains, ensuring secure HTTPS connections. OpenBSD’s `httpd(8)` is configured to respond to ACME challenges, automating the SSL setup.
++Using `acme-client(8)` with Let’s Encrypt,
+the script automatically handles SSL certificate issuance and renewal for all domains,
+ensuring secure HTTPS connections. OpenBSD’s `httpd(8)` is configured to respond to ACME challenges,
+automating the SSL setup.
  
 -    chmod +x __openbsd.sh
 +### Firewall Configuration with `pf.conf(5)` and `pfctl(8)`
  
 -### Configuration File
-+The firewall (`pf`) is configured to control inbound and outbound traffic, enhancing server security. It includes brute-force protection for SSH, rate-limiting, and access controls for DNS, HTTP, and HTTPS, ensuring only authorized access.
++The firewall (`pf`) is configured to control inbound and outbound traffic,
+enhancing server security. It includes brute-force protection for SSH,
+rate-limiting,
+and access controls for DNS,
+HTTP,
+and HTTPS,
+ensuring only authorized access.
  
 -The domains to be managed are loaded from `/etc/openbsd_domains.conf`. This file should contain the domain definitions in the format expected by the script, allowing for easy updates without modifying the script itself.
 +### Traffic Management with `relayd(8)` and `relayd.conf(5)`
@@ -3299,7 +3418,8 @@ index a9a7228..aa7979e 100644
 +### DNS Management with `nsd(8)` and `nsd.conf(5)`
  
 -The script installs several necessary packages:
-+The `configure_nsd` function automates DNS zone configuration for each domain, enabling DNSSEC to ensure integrity and authenticity of DNS records.
++The `configure_nsd` function automates DNS zone configuration for each domain,
+enabling DNSSEC to ensure integrity and authenticity of DNS records.
  
 -- `ruby`: Ruby programming language.
 -- `postgresql-server`: Database server for Rails.
@@ -3309,7 +3429,8 @@ index a9a7228..aa7979e 100644
 +### Rails Application Startup and Management with `rc.d(8)` and `rcctl(8)`
  
 -The latest version of each package is determined and installed using OpenBSD's `pkg_add` tool.
-+Each Rails application is configured with a startup script in `/etc/rc.d/`. These scripts allow `rcctl` to manage application start and stop processes, using Falcon as the application server.
++Each Rails application is configured with a startup script in `/etc/rc.d/`. These scripts allow `rcctl` to manage application start and stop processes,
+using Falcon as the application server.
  
 -### 2. Packet Filter (pf) Configuration
 -
@@ -3503,7 +3624,8 @@ index 245296a..18d7a33 100644
 +pass in on vio0 proto tcp to port 22 keep state
 +
 +# Allow DNS
-+pass in on vio0 proto { tcp, udp } from any to port 53 keep state
++pass in on vio0 proto { tcp,
+udp } from any to port 53 keep state
 +
 +# Allow HTTP/HTTPS
 +pass in on vio0 proto tcp to port { 80, 443 } keep state
@@ -4163,7 +4285,11 @@ index 83594ee..245296a 100644
 -# Block stateless traffic and return RSTs
 -block return
 +# PF (Packet Filter) Configuration
-+# This configures the OpenBSD firewall, blocking unwanted traffic and allowing only essential services like SSH, HTTP, HTTPS, and DNS
++# This configures the OpenBSD firewall,
+blocking unwanted traffic and allowing only essential services like SSH,
+HTTP,
+HTTPS,
+and DNS
 +echo "Configuring pf(4)..." | tee -a $log_file
 +doas tee /etc/pf.conf > /dev/null << EOF
 +ext_if = "$ext_if"
@@ -4188,16 +4314,20 @@ index 83594ee..245296a 100644
 -# Rate-limit SSH for other IPs
 -pass in on $EXT_IF inet proto tcp from any to $EXT_IF port 22 keep state (max-src-conn 15, max-src-conn-rate 5/3, overload <bruteforce> flush global)
 +# Allow SSH with relaxed rate-limiting to prevent accidental lockout
-+pass in on \$ext_if inet proto tcp from any to \$ext_if port 22 keep state (max-src-conn 50, max-src-conn-rate 20/60, overload <bruteforce> flush global)
++pass in on \$ext_if inet proto tcp from any to \$ext_if port 22 keep state (max-src-conn 50,
+max-src-conn-rate 20/60,
+overload <bruteforce> flush global)
  
 -# Allow DNS requests and zone transfers
 -pass in on $EXT_IF inet proto { tcp, udp } from any to $EXT_IF port 53 keep state
 +# Allow DNS (both TCP and UDP)
-+pass in on \$ext_if inet proto { tcp, udp } from any to \$ext_if port 53 keep state
++pass in on \$ext_if inet proto { tcp,
+udp } from any to \$ext_if port 53 keep state
  
  # Allow HTTP and HTTPS traffic
 -pass in on $EXT_IF inet proto tcp from any to $EXT_IF port { 80, 443 } keep state
-+pass in on \$ext_if inet proto tcp from any to \$ext_if port { 80, 443 } keep state
++pass in on \$ext_if inet proto tcp from any to \$ext_if port { 80,
+443 } keep state
  
 -# Include relayd rules if installed
 +# Enable packet scrubbing (fragment reassembly)
@@ -4570,13 +4700,17 @@ index 0000000..a9a7228
 +
 +## Overview
 +
-+This script automates the setup of an OpenBSD environment configured for Ruby on Rails development. It includes the installation of required packages, configuration of firewall rules using Packet Filter (pf), relayd setup for reverse proxying, and NSD setup for DNS management.
++This script automates the setup of an OpenBSD environment configured for Ruby on Rails development. It includes the installation of required packages,
+configuration of firewall rules using Packet Filter (pf),
+relayd setup for reverse proxying,
+and NSD setup for DNS management.
 +
 +## Features
 +
 +- **Automatic Package Installation**: Installs required packages such as Ruby, PostgreSQL, Redis, and others.
 +- **Dynamic Domain Loading**: Loads domains from an external configuration file for easy management and maintainability.
-+- **Firewall Configuration (pf)**: Configures OpenBSD's Packet Filter to enhance security, including brute-force attack protection and trusted IP handling for SSH.
++- **Firewall Configuration (pf)**: Configures OpenBSD's Packet Filter to enhance security,
+including brute-force attack protection and trusted IP handling for SSH.
 +- **Reverse Proxy Configuration (relayd)**: Sets up relayd for HTTP traffic to support load balancing and forwarding.
 +- **DNS Configuration (NSD)**: Automates the creation of zone files for managing DNS entries across various domains and subdomains.
 +
@@ -4600,7 +4734,8 @@ index 0000000..a9a7228
 +
 +### Configuration File
 +
-+The domains to be managed are loaded from `/etc/openbsd_domains.conf`. This file should contain the domain definitions in the format expected by the script, allowing for easy updates without modifying the script itself.
++The domains to be managed are loaded from `/etc/openbsd_domains.conf`. This file should contain the domain definitions in the format expected by the script,
+allowing for easy updates without modifying the script itself.
 +
 +## Detailed Steps
 +
@@ -4642,7 +4777,8 @@ index 0000000..a9a7228
 +## Error Handling
 +
 +- The script includes retry mechanisms for package installation and configuration steps to handle transient issues.
-+- If any critical step fails after multiple attempts, the script will exit and log the failure.
++- If any critical step fails after multiple attempts,
+the script will exit and log the failure.
 +
 +## Notes
 +
@@ -4656,7 +4792,8 @@ index 0000000..a9a7228
 +      ["anotherdomain.com"]=("api" "app" "static")
 +    )
 +
-+This format allows you to specify the main domains and their respective subdomains, which the script will use to generate the appropriate DNS zone files.
++This format allows you to specify the main domains and their respective subdomains,
+which the script will use to generate the appropriate DNS zone files.
 +
 +## Disclaimer
 +
@@ -4774,13 +4911,17 @@ index 0000000..83594ee
 +block quick from <bruteforce>
 +
 +# Rate-limit SSH for other IPs
-+pass in on $EXT_IF inet proto tcp from any to $EXT_IF port 22 keep state (max-src-conn 15, max-src-conn-rate 5/3, overload <bruteforce> flush global)
++pass in on $EXT_IF inet proto tcp from any to $EXT_IF port 22 keep state (max-src-conn 15,
+max-src-conn-rate 5/3,
+overload <bruteforce> flush global)
 +
 +# Allow DNS requests and zone transfers
-+pass in on $EXT_IF inet proto { tcp, udp } from any to $EXT_IF port 53 keep state
++pass in on $EXT_IF inet proto { tcp,
+udp } from any to $EXT_IF port 53 keep state
 +
 +# Allow HTTP and HTTPS traffic
-+pass in on $EXT_IF inet proto tcp from any to $EXT_IF port { 80, 443 } keep state
++pass in on $EXT_IF inet proto tcp from any to $EXT_IF port { 80,
+443 } keep state
 +
 +# Include relayd rules if installed
 +anchor "relayd/*"
@@ -4935,14 +5076,25 @@ index 0000000..83594ee
 ```
 # OpenBSD Setup for Scalable Rails and Secure Email
 
-This script configures OpenBSD 7.7 as a robust, modular platform for Ruby on Rails applications and a single-user email service, embodying the Unix philosophy of doing one thing well to power a focused, secure system for hyperlocal platforms with DNSSEC.
+This script configures OpenBSD 7.7 as a robust,
+modular platform for Ruby on Rails applications and a single-user email service,
+embodying the Unix philosophy of doing one thing well to power a focused,
+secure system for hyperlocal platforms with DNSSEC.
 
 ## Setup Instructions
 
 1. **Prerequisites**:
    - OpenBSD 7.7 installed on master (PowerPC Mac Mini) and slave (VM).
-   - Directories (`/var/nsd`, `/var/www/acme`, `/var/postgresql/data`, `/var/redis`, `/var/vmail`) have correct ownership/permissions (e.g., `/var/www/acme` as `root:_httpd`, 755).
-   - Rails apps (`brgen`, `amber`, `bsdports`) ready to upload to `/home/<app>/<app>` with `Gemfile` and `database.yml`.
+   - Directories (`/var/nsd`,
+`/var/www/acme`,
+`/var/postgresql/data`,
+`/var/redis`,
+`/var/vmail`) have correct ownership/permissions (e.g.,
+`/var/www/acme` as `root:_httpd`,
+755).
+   - Rails apps (`brgen`,
+`amber`,
+`bsdports`) ready to upload to `/home/<app>/<app>` with `Gemfile` and `database.yml`.
    - Unprivileged user `gfuser` with `mutt` installed for email access.
    - Internet connectivity for package installation.
    - Domain (e.g., `brgen.no`) registered with Domeneshop.no, ready for DS records.
@@ -4956,8 +5108,27 @@ This script configures OpenBSD 7.7 as a robust, modular platform for Ruby on Rai
    - `--help`: Show usage.
 
 3. **Stages**:
-   - **Stage 1**: Installs `ruby-3.3.5`, `ldns-utils`, `postgresql-server`, `redis`, and `zap` using OpenBSD 7.7’s default `pkg_add`. Configures `ns.brgen.no` (46.23.95.45) as master nameserver with DNSSEC (ECDSAP256SHA256 keys, signed zones), allowing zone transfers to `ns.hyp.net` (194.63.248.53, managed by Domeneshop.no) via TCP 53 and sending NOTIFY via UDP 53, with `pf` permitting TCP/UDP 53 traffic on `ext_if` (vio0). Generates TLSA records for HTTPS services. Issues certificates via Let’s Encrypt. Pauses to let you upload Rails apps (`brgen`, `amber`, `bsdports`) to `/home/<app>/<app>` with `Gemfile` and `database.yml`. Press Enter to proceed, then submit DS records from `/var/nsd/zones/master/*.ds` to Domeneshop.no. Test with `dig @46.23.95.45 brgen.no SOA`, `dig @46.23.95.45 denvr.us A`, `dig DS brgen.no +short`, and `dig TLSA _443._tcp.brgen.no`. Wait for propagation (24–48 hours) before `--resume`. `ns.hyp.net` requires no local setup (configure slave separately).
-   - **Stage 2**: Sets up PostgreSQL, Redis, PF firewall, relayd with security headers, and Rails apps with Falcon server. Logs go to `/var/log/messages`. Applies CSS micro-text (e.g., 7.5pt) for app footer branding if applicable.
+   - **Stage 1**: Installs `ruby-3.3.5`,
+`ldns-utils`,
+`postgresql-server`,
+`redis`,
+and `zap` using OpenBSD 7.7’s default `pkg_add`. Configures `ns.brgen.no` (46.23.95.45) as master nameserver with DNSSEC (ECDSAP256SHA256 keys,
+signed zones),
+allowing zone transfers to `ns.hyp.net` (194.63.248.53,
+managed by Domeneshop.no) via TCP 53 and sending NOTIFY via UDP 53,
+with `pf` permitting TCP/UDP 53 traffic on `ext_if` (vio0). Generates TLSA records for HTTPS services. Issues certificates via Let’s Encrypt. Pauses to let you upload Rails apps (`brgen`,
+`amber`,
+`bsdports`) to `/home/<app>/<app>` with `Gemfile` and `database.yml`. Press Enter to proceed,
+then submit DS records from `/var/nsd/zones/master/*.ds` to Domeneshop.no. Test with `dig @46.23.95.45 brgen.no SOA`,
+`dig @46.23.95.45 denvr.us A`,
+`dig DS brgen.no +short`,
+and `dig TLSA _443._tcp.brgen.no`. Wait for propagation (24–48 hours) before `--resume`. `ns.hyp.net` requires no local setup (configure slave separately).
+   - **Stage 2**: Sets up PostgreSQL,
+Redis,
+PF firewall,
+relayd with security headers,
+and Rails apps with Falcon server. Logs go to `/var/log/messages`. Applies CSS micro-text (e.g.,
+7.5pt) for app footer branding if applicable.
    - **Stage 3**: Configures OpenSMTPD for `bergen@pub.attorney`, accessible via `mutt` for `gfuser`.
 
 4. **Verification**:
@@ -5175,7 +5346,8 @@ block in log
 pass out quick
 table <bruteforce> persist
 block quick from <bruteforce>
-pass in on \$ext_if inet proto { tcp, udp } to $BRGEN_IP port 53 keep state
+pass in on \$ext_if inet proto { tcp,
+udp } to $BRGEN_IP port 53 keep state
 pass out on \$ext_if inet proto udp to $HYP_IP port 53
 EOF
   doas pfctl -nf "/etc/pf.conf" || { echo "ERROR: pf.conf invalid"; exit 1; }
@@ -5368,9 +5540,15 @@ block in log
 pass out quick
 table <bruteforce> persist
 block quick from <bruteforce>
-pass in on \$ext_if inet proto tcp to \$ext_if port 22 keep state (max-src-conn 50, max-src-conn-rate 20/60, overload <bruteforce> flush global)
-pass in on \$ext_if inet proto { tcp, udp } to $BRGEN_IP port 53 keep state
-pass in on \$ext_if inet proto tcp to $BRGEN_IP port { 80, 443, 25, 587 } keep state
+pass in on \$ext_if inet proto tcp to \$ext_if port 22 keep state (max-src-conn 50,
+max-src-conn-rate 20/60,
+overload <bruteforce> flush global)
+pass in on \$ext_if inet proto { tcp,
+udp } to $BRGEN_IP port 53 keep state
+pass in on \$ext_if inet proto tcp to $BRGEN_IP port { 80,
+443,
+25,
+587 } keep state
 anchor "relayd/*"
 EOF
   doas pfctl -nf "/etc/pf.conf" || { echo "ERROR: pf.conf invalid"; exit 1; }
@@ -5592,10 +5770,16 @@ stage_1() {
   configure_acme
   issue_certs
   schedule_renewal
-  echo "Please upload Rails apps (brgen, amber, bsdports) to their respective homedirs (/home/_<app>/<app>), ensuring each has Gemfile and config/database.yml. Press Enter to continue once complete."
+  echo "Please upload Rails apps (brgen,
+amber,
+bsdports) to their respective homedirs (/home/_<app>/<app>),
+ensuring each has Gemfile and config/database.yml. Press Enter to continue once complete."
   read -r
   echo "stage_1_complete" > "$STATE_FILE"
-  echo "Stage 1 complete. Submit DS records from /var/nsd/zones/master/*.ds to Domeneshop.no. Test with 'dig @46.23.95.45 brgen.no SOA', 'dig @46.23.95.45 denvr.us A', 'dig DS brgen.no +short', 'dig TLSA _443._tcp.brgen.no'. Wait 24–48 hours for propagation before running 'doas zsh openbsd.sh --resume'."
+  echo "Stage 1 complete. Submit DS records from /var/nsd/zones/master/*.ds to Domeneshop.no. Test with 'dig @46.23.95.45 brgen.no SOA',
+'dig @46.23.95.45 denvr.us A',
+'dig DS brgen.no +short',
+'dig TLSA _443._tcp.brgen.no'. Wait 24–48 hours for propagation before running 'doas zsh openbsd.sh --resume'."
   exit 0
 }
 
@@ -5636,4 +5820,4 @@ main "$@"
 
 # EOF: Line count and checksum generated by master.jso
 ```
-
+

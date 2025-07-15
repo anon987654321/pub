@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # session_manager.rb - Enhanced Version
 
 class SessionManager

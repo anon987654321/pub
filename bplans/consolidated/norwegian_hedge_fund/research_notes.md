@@ -1,6 +1,8 @@
 # Nordic Prosperity Fund - Research Notes & Trading Strategies
 
-This document consolidates research findings, trading strategies, and market analysis for the Nordic Prosperity Fund's automated trading systems.
+This document consolidates research findings,
+trading strategies,
+and market analysis for the Nordic Prosperity Fund's automated trading systems.
 
 ## Trading Strategy Research
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # lib/tools/filesystem_tool.rb
 #
 # FilesystemTool: Provides safe file reading and writing.

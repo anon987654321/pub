@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Musicians Assistant – Provides musical suggestions and creative input.
 #
 # Restored full logic from musicians.r_ and musicians.rb.

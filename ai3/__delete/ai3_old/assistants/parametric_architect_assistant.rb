@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 
 # Parametric Architect Assistant
 # This assistant works closely with the Material Repurposing Assistant to design sustainable, high-efficiency buildings using repurposed materials.

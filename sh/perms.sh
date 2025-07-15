@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #!/usr/bin/env zsh
 # Changes file ownership and permissions.
 # Usage: ./perms.sh <owner> <group> <file_perms> <folder_perms>

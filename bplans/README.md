@@ -7,7 +7,8 @@
 
 ## Executive Overview
 
-This repository consolidates strategic business plans across three core domains following cognitive architecture principles with 7±2 information batching. Each domain represents a pillar of our multi-faceted business strategy, leveraging Nordic competitive advantages through advanced technology integration.
+This repository consolidates strategic business plans across three core domains following cognitive architecture principles with 7±2 information batching. Each domain represents a pillar of our multi-faceted business strategy,
+leveraging Nordic competitive advantages through advanced technology integration.
 
 ### **Strategic Domains**
 
@@ -206,7 +207,8 @@ This repository follows **7±2 cognitive batching** principles:
 **Government Relations**: Active engagement with Norwegian and NATO institutions  
 **Technology Licensing**: Ruby-based solutions available for enterprise deployment
 
-*This consolidation transforms scattered business ideas into a coherent strategic portfolio, enabling systematic execution of our multi-domain business vision while preserving all valuable intellectual property.*
+*This consolidation transforms scattered business ideas into a coherent strategic portfolio,
+enabling systematic execution of our multi-domain business vision while preserving all valuable intellectual property.*
 
 ---
 

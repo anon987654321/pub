@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # lib/base_assistant.rb
 #
 # BaseAssistant: Core assistant that interfaces with Langchain's LLM.

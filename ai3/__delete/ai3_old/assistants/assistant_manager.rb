@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 
 # AI3 Assistant Manager - Custom Agent Logic Based on Langchainrb Concepts
 

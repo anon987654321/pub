@@ -6,7 +6,12 @@
 
 ---
 
-Postpro.rb is an **interactive CLI** tool that applies analog and cinematic effects to images using [libvips](https://libvips.github.io/libvips/) via [ruby-vips](https://github.com/libvips/ruby-vips). It allows **recursive batch processing** of entire folders, layering multiple transformations—such as film grain, blur, halation, VHS-style degrade, and more—for a fully customized look.
+Postpro.rb is an **interactive CLI** tool that applies analog and cinematic effects to images using [libvips](https://libvips.github.io/libvips/) via [ruby-vips](https://github.com/libvips/ruby-vips). It allows **recursive batch processing** of entire folders,
+layering multiple transformations—such as film grain,
+blur,
+halation,
+VHS-style degrade,
+and more—for a fully customized look.
 
 ---
 
@@ -104,4 +109,4 @@ Then, when prompted, enter the filename to **apply that exact recipe**.
 - **Multiple Effects**: Stack **grain, hue shift, vhs_degrade, halation** in one pass for unique combos.  
 - **Performance**: libvips processes large images quickly with minimal memory.  
 - **Cinematic Controls**: Adjust intensities to preserve skin tones or push stylized extremes.
-
+

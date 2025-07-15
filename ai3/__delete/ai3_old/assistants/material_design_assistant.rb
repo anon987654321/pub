@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 
             #!/usr/bin/env ruby
             # Material Design Assistant - AI4 Version

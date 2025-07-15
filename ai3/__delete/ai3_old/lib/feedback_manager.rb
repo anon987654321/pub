@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class FeedbackManager
   def initialize
     @feedback_log = []

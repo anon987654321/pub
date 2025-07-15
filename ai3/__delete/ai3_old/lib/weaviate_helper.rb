@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # WeaviateHelper: Provides methods to interact with the Weaviate vector database
 require 'net/http'
 require 'json'

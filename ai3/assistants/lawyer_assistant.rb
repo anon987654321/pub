@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LawyerAssistant
   attr_reader :target, :case_data, :intervention_queue, :emotional_state, :negotiation_strategies
 

@@ -5,7 +5,8 @@
 
 ---
 
-3D printing with Ruby could be a groundbreaking approach, especially when integrating space propulsion designs. Here is how you can conceptualize Ruby-driven 3D printing for aerospace components and propulsion systems.
+3D printing with Ruby could be a groundbreaking approach,
+especially when integrating space propulsion designs. Here is how you can conceptualize Ruby-driven 3D printing for aerospace components and propulsion systems.
 
 ### 1. **Basic 3D Printing Model in Ruby**
 
@@ -30,7 +31,12 @@ printer = ThreeDPrinter.new("carbon fiber", 0.1, 50)
 printer.print_component("Quantum Vacuum Thruster", 1200)  # 1200 cubic mm
 ```
 
-This basic class simulates how a 3D printer works with given material, layer height, and speed. This can be expanded to factor in temperature, different printing techniques (FDM, SLS), or material strength.
+This basic class simulates how a 3D printer works with given material,
+layer height,
+and speed. This can be expanded to factor in temperature,
+different printing techniques (FDM,
+SLS),
+or material strength.
 
 ---
 
@@ -60,7 +66,10 @@ rotor = DronePart.new("Rotor", "titanium", [50, 50, 10])
 rotor.print_time(100)  # speed is in mm/s
 ```
 
-In this case, you model the different drone parts, defining their material and dimensions. The Ruby code can simulate how long each part will take to print, based on the printer's speed.
+In this case,
+you model the different drone parts,
+defining their material and dimensions. The Ruby code can simulate how long each part will take to print,
+based on the printer's speed.
 
 ---
 
@@ -103,7 +112,8 @@ fusion_nozzle = PropulsionComponents::FusionDriveNozzle.new(300, "Inconel")
 fusion_nozzle.print
 ```
 
-This provides a way to generate different space propulsion components, integrating directly with the 3D printing process. You could even simulate the physics or durability of these components within Ruby before printing.
+This provides a way to generate different space propulsion components,
+integrating directly with the 3D printing process. You could even simulate the physics or durability of these components within Ruby before printing.
 
 ---
 
@@ -112,4 +122,5 @@ This provides a way to generate different space propulsion components, integrati
 - **Physics Integration**: Introduce physical modeling, such as heat dissipation for propulsion systems, into the Ruby framework.
 - **Printer Control**: Build Ruby bindings for controlling actual 3D printers (using APIs like OctoPrint or Marlin firmware) to connect simulation with reality.
 
-This is a stepping stone to integrating advanced propulsion design into practical manufacturing, using Ruby to create both the digital design and manage the 3D printing process.
+This is a stepping stone to integrating advanced propulsion design into practical manufacturing,
+using Ruby to create both the digital design and manage the 3D printing process.

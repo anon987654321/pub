@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # assistants/LinuxOpenBSDDriverTranslator.rb
 require 'digest'
 require 'logger'

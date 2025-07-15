@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # HackerPenTester – Provides ethical hacking and penetration testing guidance.
 #
 # Restored full logic from old versions (ethical_hacker.rb and hacker.r_).
