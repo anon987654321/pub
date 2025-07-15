@@ -1,0 +1,24 @@
+{
+  "framework_version": "12.9.0",
+  "test_timestamp": "2025-07-15T04:12:26Z",
+  "duration_seconds": 0.01,
+  "total_files": 11,
+  "failed_files": 0,
+  "success_rate": 100.0,
+  "processed_files": [
+    "cognitive_load_reducer.rb",
+    "cognitive_monitor.rb",
+    "consolidation_protocol.rb",
+    "master_framework_engine.rb",
+    "master_framework_test.rb",
+    "ai3/ai3.rb",
+    "ai3/__delete/ai3_old/assistants/final_install_assistants.sh",
+    "ai3/__delete/ai3_old/assistants/install_assistants.sh",
+    "ai3/__delete/install.sh",
+    "ai3/__delete/install_ass.sh",
+    "ai3/__delete/install_rails_pwa.sh"
+  ],
+  "failures": [
+
+  ]
+}
