@@ -165,20 +165,212 @@ run() {
   return 1
 }
 
+# § Cognitive Framework: Performance Optimization Functions
+optimize_system() {
+  log "Applying performance optimizations" "INFO"
+  
+  # Kernel parameter optimization for high performance
+  cat >> /etc/sysctl.conf <<EOF
+
+# § Performance Optimization - Cognitive Framework
+# Network buffer optimization
+net.inet.tcp.sendspace=131072
+net.inet.tcp.recvspace=131072
+
+# Connection optimization
+net.inet.tcp.mssdflt=1460
+net.inet.tcp.keepidle=60
+net.inet.tcp.keepintvl=30
+
+# File descriptor limits
+kern.maxfiles=65536
+kern.maxproc=4096
+EOF
+  
+  # Apply sysctl changes
+  run sysctl -f /etc/sysctl.conf
+  
+  # Optimize file system performance
+  if grep -q "ffs" /etc/fstab; then
+    # Add noatime option to reduce disk I/O
+    sed -i 's/rw,/rw,noatime,/g' /etc/fstab
+  fi
+  
+  log "Performance optimizations applied" "INFO"
+}
+
+# § Cognitive Framework: Additional Security Hardening
+harden_system() {
+  log "Applying additional security hardening" "INFO"
+  
+  # Secure kernel parameters
+  cat >> /etc/sysctl.conf <<EOF
+
+# § Security Hardening - Zero Trust Implementation
+# Disable IP forwarding if not needed
+net.inet.ip.forwarding=0
+net.inet6.ip6.forwarding=0
+
+# Enable strict reverse path filtering
+net.inet.ip.sourceroute=0
+
+# Disable ICMP redirects
+net.inet.icmp.rediraccept=0
+net.inet.ip.redirect=0
+
+# Disable source routing
+net.inet.ip.sourceroute=0
+
+# Enable SYN cookies
+net.inet.tcp.syncookies=1
+
+# Randomize process IDs
+kern.randompid=1
+EOF
+  
+  # Configure login security
+  cat >> /etc/login.conf <<EOF
+
+# § Security Hardening - Account Management
+default:\\
+    :password-warn=2d:\\
+    :inactive=30d:\\
+    :expire-warn=7d:\\
+    :umask=022:
+EOF
+  
+  # Build login.conf database
+  run cap_mkdb /etc/login.conf
+  
+  # Configure SSH security if present
+  if [ -f /etc/ssh/sshd_config ]; then
+    # Backup original config
+    cp /etc/ssh/sshd_config /etc/ssh/sshd_config.bak
+    
+    # Apply security settings
+    sed -i 's/#PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config
+    sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
+    sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/' /etc/ssh/sshd_config
+    
+    # Add additional security settings
+    cat >> /etc/ssh/sshd_config <<EOF
+
+# § Security Hardening - SSH Configuration
+Protocol 2
+MaxAuthTries 3
+MaxSessions 4
+ClientAliveInterval 300
+ClientAliveCountMax 2
+AllowTcpForwarding no
+X11Forwarding no
+PrintMotd no
+EOF
+  fi
+  
+  log "Security hardening applied" "INFO"
+}
+
+# § Cognitive Framework: System Monitoring Setup
+setup_monitoring() {
+  log "Setting up system monitoring" "INFO"
+  
+  # Create monitoring script
+  cat > /usr/local/bin/system_monitor.sh <<'EOF'
+#!/bin/sh
+# § System Monitoring - Cognitive Framework
+
+LOG_FILE="/var/log/system_monitor.log"
+THRESHOLD_CPU=80
+THRESHOLD_MEM=85
+THRESHOLD_DISK=90
+
+# Function to log with timestamp
+log_monitor() {
+  printf '{"timestamp":"%s","level":"MONITOR","message":"%s"}\n' \
+    "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$1" >> "$LOG_FILE"
+}
+
+# Check CPU usage
+cpu_usage=$(top -n -b -d 1 | grep "CPU:" | awk '{print $2}' | sed 's/%//')
+if [ "$cpu_usage" -gt "$THRESHOLD_CPU" ]; then
+  log_monitor "HIGH CPU USAGE: ${cpu_usage}%"
+fi
+
+# Check memory usage
+mem_usage=$(top -n -b -d 1 | grep "Memory:" | awk '{print $3}' | sed 's/%//')
+if [ "$mem_usage" -gt "$THRESHOLD_MEM" ]; then
+  log_monitor "HIGH MEMORY USAGE: ${mem_usage}%"
+fi
+
+# Check disk usage
+disk_usage=$(df -h / | tail -1 | awk '{print $5}' | sed 's/%//')
+if [ "$disk_usage" -gt "$THRESHOLD_DISK" ]; then
+  log_monitor "HIGH DISK USAGE: ${disk_usage}%"
+fi
+
+# Check service status
+for service in httpd relayd postgresql redis nsd; do
+  if ! rcctl check "$service" >/dev/null 2>&1; then
+    log_monitor "SERVICE DOWN: $service"
+  fi
+done
+EOF
+  
+  chmod +x /usr/local/bin/system_monitor.sh
+  
+  # Add to cron for regular monitoring
+  echo "*/5 * * * * root /usr/local/bin/system_monitor.sh" >> /etc/crontab
+  
+  log "System monitoring configured" "INFO"
+}
+
+# § Cognitive Framework: Enhanced Install System Function
 install_system() {
-    log "Installing system packages"
-
-    run pkg_add -U zsh ruby-3.3.5 postgresql-server redis node zap ldns-utils
-    run gem install falcon
-
-    cat > /etc/profile <<EOF
+  log "Installing system packages with performance optimization"
+  
+  # Update package database
+  run pkg_add -u
+  
+  # Install essential packages with security focus
+  run pkg_add -U zsh ruby-3.3.5 postgresql-server redis node zap ldns-utils
+  
+  # Install additional security tools
+  run pkg_add -U nmap fail2ban logrotate
+  
+  # Install performance monitoring tools
+  run pkg_add -U htop iftop iotop
+  
+  # Install Ruby gems with error handling
+  if ! gem install falcon --no-document; then
+    log "Failed to install falcon gem, retrying with alternate method" "WARN"
+    run gem install falcon --no-document --source https://rubygems.org
+  fi
+  
+  # Configure Ruby environment
+  cat > /etc/profile <<EOF
+# § Ruby Environment Configuration
 export GEM_HOME="\$HOME/.gem"
 export PATH="\$PATH:\$HOME/.gem/ruby/3.3.5/bin"
 export RAILS_ENV="production"
-EOF
+export RACK_ENV="production"
 
-    log "System packages installed"
-    echo "system_installed" >> "$STATE_FILE"
+# § Performance Environment Variables
+export RUBY_GC_HEAP_GROWTH_FACTOR=1.1
+export RUBY_GC_HEAP_GROWTH_MAX_SLOTS=10000
+export RUBY_GC_HEAP_INIT_SLOTS=40000
+EOF
+  
+  # Apply performance optimizations
+  optimize_system
+  
+  # Apply security hardening
+  harden_system
+  
+  # Setup monitoring
+  setup_monitoring
+  
+  log "System packages installed with comprehensive optimization"
+  echo "system_installed" >> "$STATE_FILE"
 }
 
 configure_firewall() {
