@@ -1,57 +1,58 @@
 # frozen_string_literal: true
 
 # encoding: utf-8
+
 # Offensive Operations Assistant
 
-require "replicate"
-require "faker"
-require "sentimental"
-require "open-uri"
-require "json"
-require "net/http"
-require "digest"
-require "openssl"
+require 'replicate'
+require 'faker'
+require 'sentimental'
+require 'open-uri'
+require 'json'
+require 'net/http'
+require 'digest'
+require 'openssl'
 
 module Assistants
   class OffensiveOps
-    ACTIVITIES = [
-      :generate_deepfake,
-      :adversarial_deepfake_attack,
-      :analyze_personality,
-      :ai_disinformation_campaign,
-      :game_chatbot,
-      :analyze_sentiment,
-      :mimic_user,
-      :perform_espionage,
-      :microtarget_users,
-      :phishing_campaign,
-      :manipulate_search_engine_results,
-      :social_engineering,
-      :disinformation_operations,
-      :infiltrate_online_communities,
-      :data_leak_exploitation,
-      :fake_event_organization,
-      :doxing,
-      :reputation_management,
-      :manipulate_online_reviews,
-      :influence_political_sentiment,
-      :cyberbullying,
-      :identity_theft,
-      :fabricate_evidence,
-      :online_stock_market_manipulation,
-      :targeted_scam_operations,
-      :adaptive_threat_response,
-      :information_warfare_operations,
-      :foot_in_the_door,
-      :scarcity,
-      :reverse_psychology,
-      :cognitive_dissonance,
-      :dependency_creation,
-      :gaslighting,
-      :social_proof,
-      :anchoring,
-      :mirroring,
-      :guilt_trip
+    ACTIVITIES = %i[
+      generate_deepfake
+      adversarial_deepfake_attack
+      analyze_personality
+      ai_disinformation_campaign
+      game_chatbot
+      analyze_sentiment
+      mimic_user
+      perform_espionage
+      microtarget_users
+      phishing_campaign
+      manipulate_search_engine_results
+      social_engineering
+      disinformation_operations
+      infiltrate_online_communities
+      data_leak_exploitation
+      fake_event_organization
+      doxing
+      reputation_management
+      manipulate_online_reviews
+      influence_political_sentiment
+      cyberbullying
+      identity_theft
+      fabricate_evidence
+      online_stock_market_manipulation
+      targeted_scam_operations
+      adaptive_threat_response
+      information_warfare_operations
+      foot_in_the_door
+      scarcity
+      reverse_psychology
+      cognitive_dissonance
+      dependency_creation
+      gaslighting
+      social_proof
+      anchoring
+      mirroring
+      guilt_trip
     ].freeze
 
     attr_reader :profiles
@@ -73,7 +74,7 @@ module Assistants
 
     def configure_replicate
       Replicate.configure do |config|
-        config.api_token = ENV["REPLICATE_API_KEY"]
+        config.api_token = ENV.fetch('REPLICATE_API_KEY', nil)
       end
     end
 
@@ -91,7 +92,7 @@ module Assistants
     def generate_deepfake(gender)
       source_video_path = "path/to/source_video_#{gender}.mp4"
       target_face_path = "path/to/target_face_#{gender}.jpg"
-      model = Replicate::Model.new("deepfake_model_path")
+      model = Replicate::Model.new('deepfake_model_path')
       deepfake_video = model.predict(source_video: source_video_path, target_face: target_face_path)
       save_video(deepfake_video, "path/to/output_deepfake_#{gender}.mp4")
     end
@@ -134,10 +135,10 @@ module Assistants
 
     def perform_espionage(gender)
       target_system = "#{gender}_target_system"
-      if authenticate_to_system(target_system)
-        data = extract_sensitive_data(target_system)
-        store_data_safely(data)
-      end
+      return unless authenticate_to_system(target_system)
+
+      data = extract_sensitive_data(target_system)
+      store_data_safely(data)
     end
 
     def microtarget_users(gender)
@@ -155,22 +156,22 @@ module Assistants
     end
 
     def manipulate_search_engine_results
-      queries = ["keyword1", "keyword2"]
+      queries = %w[keyword1 keyword2]
       queries.each { |query| adjust_search_results(query) }
     end
 
     def social_engineering
-      targets = ["target1", "target2"]
+      targets = %w[target1 target2]
       targets.each { |target| engineer_socially(target) }
     end
 
     def disinformation_operations
-      topics = ["disinformation_topic_1", "disinformation_topic_2"]
+      topics = %w[disinformation_topic_1 disinformation_topic_2]
       topics.each { |topic| spread_disinformation(topic) }
     end
 
     def infiltrate_online_communities
-      communities = ["community1", "community2"]
+      communities = %w[community1 community2]
       communities.each { |community| join_community(community) }
     end
 
@@ -193,9 +194,9 @@ module Assistants
 
     def reputation_management(entity)
       reputation_score = assess_reputation(entity)
-      if reputation_score < threshold
-        deploy_reputation_management_tactics(entity)
-      end
+      return unless reputation_score < threshold
+
+      deploy_reputation_management_tactics(entity)
     end
 
     def manipulate_online_reviews(product)
@@ -247,60 +248,59 @@ module Assistants
 
     # Psychological manipulation methods
     def foot_in_the_door
-      puts "Implementing foot-in-the-door technique..."
+      puts 'Implementing foot-in-the-door technique...'
       # Pseudo code for foot-in-the-door: Begin with small, easy requests to increase likelihood of later compliance.
     end
 
     def scarcity
-      puts "Implementing scarcity technique..."
+      puts 'Implementing scarcity technique...'
       # Pseudo code for scarcity: Present a resource as limited to increase its perceived value.
     end
 
     def reverse_psychology
-      puts "Implementing reverse psychology technique..."
+      puts 'Implementing reverse psychology technique...'
       # Pseudo code for reverse psychology: Encourage the opposite of desired behavior to induce compliance.
     end
 
     def cognitive_dissonance
-      puts "Implementing cognitive dissonance technique..."
+      puts 'Implementing cognitive dissonance technique...'
       # Pseudo code for cognitive dissonance: Create conflict between beliefs and actions to trigger attitude change.
     end
 
     def dependency_creation
-      puts "Implementing dependency creation technique..."
+      puts 'Implementing dependency creation technique...'
       # Pseudo code for dependency creation: Make the target reliant on external resources or validation.
     end
 
     def gaslighting
-      puts "Implementing gaslighting technique..."
+      puts 'Implementing gaslighting technique...'
       # Pseudo code for gaslighting: Make the target doubt their perception of reality, manipulate to question truth.
     end
 
     def social_proof
-      puts "Implementing social proof technique..."
+      puts 'Implementing social proof technique...'
       # Pseudo code for social proof: Leverage others' actions or opinions to validate desired behavior.
     end
 
     def anchoring
-      puts "Implementing anchoring technique..."
+      puts 'Implementing anchoring technique...'
       # Pseudo code for anchoring: Influence decisions by presenting a reference point that affects future judgments.
     end
 
     def mirroring
-      puts "Implementing mirroring technique..."
+      puts 'Implementing mirroring technique...'
       # Pseudo code for mirroring: Subtly copy target's behavior to increase rapport and trust.
     end
 
     def guilt_trip
-      puts "Implementing guilt trip technique..."
+      puts 'Implementing guilt trip technique...'
       # Pseudo code for guilt trip: Use emotional manipulation to make the target feel guilty and increase compliance.
     end
-
   end
 end
 
 # Helper methods for various activities
-def fetch_tweets_for_user(user_id)
+def fetch_tweets_for_user(_user_id)
   Array.new(10) { Faker::Lorem.sentence }
 end
 
@@ -323,7 +323,7 @@ def join_online_community(group, profile)
   puts "#{profile} joined the #{group} community."
 end
 
-def authenticate_to_system(system)
+def authenticate_to_system(_system)
   true
 end
 
@@ -352,7 +352,7 @@ def deliver_content(users, content)
 end
 
 def generate_phishing_emails
-  ["fake@domain.com", "scam@domain.com"]
+  ['fake@domain.com', 'scam@domain.com']
 end
 
 def send_phishing_email(email)
@@ -407,7 +407,7 @@ def publish_personal_info(info)
   puts "Published personal info: #{info}"
 end
 
-def assess_reputation(entity)
+def assess_reputation(_entity)
   rand(0..100)
 end
 
@@ -415,8 +415,8 @@ def deploy_reputation_management_tactics(entity)
   puts "Deploying reputation management for #{entity}."
 end
 
-def fetch_reviews(product)
-  ["Review 1", "Review 2", "Review 3"]
+def fetch_reviews(_product)
+  ['Review 1', 'Review 2', 'Review 3']
 end
 
 def alter_reviews(reviews)
@@ -439,8 +439,8 @@ def monitor_campaign_impact(campaign)
   puts "Monitoring impact of campaign: #{campaign}"
 end
 
-def select_harassment_tactics(target)
-  ["Tactic 1", "Tactic 2"]
+def select_harassment_tactics(_target)
+  ['Tactic 1', 'Tactic 2']
 end
 
 def execute_harassment_tactics(target, tactics)
@@ -475,8 +475,8 @@ def execute_price_manipulation(stock, tactics)
   puts "Executed price manipulation for #{stock} using tactics #{tactics}"
 end
 
-def select_scam_tactics(target)
-  ["Scam Tactic 1", "Scam Tactic 2"]
+def select_scam_tactics(_target)
+  ['Scam Tactic 1', 'Scam Tactic 2']
 end
 
 def execute_scam(target, tactics)
@@ -505,4 +505,3 @@ end
 # TODO: Add automatic escalation of operations based on real-time feedback loops from ongoing operations.
 # TODO: Enhance fake event creation with more customizable parameters for social engineering tactics.
 # TODO: Introduce machine learning or AI to refine disinformation strategies over time based on impact.
-

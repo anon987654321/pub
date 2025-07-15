@@ -3,7 +3,7 @@
 class MemoryManager
   def initialize
     @user_context = {}
-    @vector_search = Langchain::VectorSearch.new(api_key: ENV["WEAVIATE_API_KEY"])
+    @vector_search = Langchain::VectorSearch.new(api_key: ENV.fetch('WEAVIATE_API_KEY', nil))
   end
 
   # Store long-term memory and context
@@ -28,9 +28,9 @@ class MemoryManager
 
   # Clear outdated context automatically
   def clear_outdated_context(user_id)
-    if @user_context[user_id]
-      puts "Clearing outdated context for user #{user_id}..."
-      @user_context[user_id].shift until @user_context[user_id].join(" ").length <= 4096
-    end
+    return unless @user_context[user_id]
+
+    puts "Clearing outdated context for user #{user_id}..."
+    @user_context[user_id].shift until @user_context[user_id].join(' ').length <= 4096
   end
 end

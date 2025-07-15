@@ -8,7 +8,7 @@ class ToolManager
     @logger = Logger.new(STDOUT)
     @logger.level = Logger::INFO
     @tools = load_tools
-    log_message(:info, "ToolManager initialized with available tools.")
+    log_message(:info, 'ToolManager initialized with available tools.')
   end
 
   # Execute a given command using the appropriate tool
@@ -60,4 +60,3 @@ class ToolManager
     end
   end
 end
-

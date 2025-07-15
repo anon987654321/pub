@@ -15,11 +15,11 @@ module Concurrent
     end
   end
 
-  if mutex_owned_per_thread?
-    LockLocalVar = ThreadLocalVar
-  else
-    LockLocalVar = FiberLocalVar
-  end
+  LockLocalVar = if mutex_owned_per_thread?
+                   ThreadLocalVar
+                 else
+                   FiberLocalVar
+                 end
 
   # Either {FiberLocalVar} or {ThreadLocalVar} depending on whether Mutex (and Monitor)
   # are held, respectively, per Fiber or per Thread.

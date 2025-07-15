@@ -9,7 +9,7 @@
 #   content = fs.read("file.txt")
 #   fs.write("file.txt", "Some content")
 
-require "logger"
+require 'logger'
 
 class FilesystemTool
   def initialize
@@ -37,15 +37,14 @@ class FilesystemTool
 
   # Execute method provides a unified interface.
   # Defaults to "read" if no explicit action is provided.
-  def execute(action = "read", *args)
+  def execute(action = 'read', *args)
     case action.downcase
-    when "read"
+    when 'read'
       read(args.first)
-    when "write"
+    when 'write'
       write(args.first, args[1])
     else
-      "Unknown action"
+      'Unknown action'
     end
   end
 end
-

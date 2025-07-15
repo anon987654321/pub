@@ -1,4 +1,5 @@
 # frozen_string_literal: false
+
 #
 #--
 # bigdecimal/util extends various native classes to provide the #to_d method,
@@ -25,7 +26,6 @@ class Integer < Numeric
   end
 end
 
-
 class Float < Numeric
   # call-seq:
   #     float.to_d             -> bigdecimal
@@ -47,11 +47,10 @@ class Float < Numeric
   #
   # See also Kernel.BigDecimal.
   #
-  def to_d(precision=0)
+  def to_d(precision = 0)
     BigDecimal(self, precision)
   end
 end
-
 
 class String
   # call-seq:
@@ -74,7 +73,6 @@ class String
   end
 end
 
-
 class BigDecimal < Numeric
   # call-seq:
   #     a.to_digits -> string
@@ -88,12 +86,12 @@ class BigDecimal < Numeric
   #     d.to_digits                  # => "3.14"
   #
   def to_digits
-    if self.nan? || self.infinite? || self.zero?
-      self.to_s
+    if nan? || infinite? || zero?
+      to_s
     else
-      i       = self.to_i.to_s
-      _,f,_,z = self.frac.split
-      i + "." + ("0"*(-z)) + f
+      i = to_i.to_s
+      _, f, _, z = frac.split
+      i + '.' + ('0' * -z) + f
     end
   end
 
@@ -111,7 +109,6 @@ class BigDecimal < Numeric
     self
   end
 end
-
 
 class Rational < Numeric
   # call-seq:
@@ -134,7 +131,6 @@ class Rational < Numeric
   end
 end
 
-
 class Complex < Numeric
   # call-seq:
   #     cmp.to_d             -> bigdecimal
@@ -155,18 +151,17 @@ class Complex < Numeric
   # See also Kernel.BigDecimal.
   #
   def to_d(*args)
-    BigDecimal(self) unless self.imag.zero? # to raise error
+    BigDecimal(self) unless imag.zero? # to raise error
 
     if args.length == 0
-      case self.real
+      case real
       when Rational
-        BigDecimal(self.real) # to raise error
+        BigDecimal(real) # to raise error
       end
     end
-    self.real.to_d(*args)
+    real.to_d(*args)
   end
 end
-
 
 class NilClass
   # call-seq:

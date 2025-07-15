@@ -2,7 +2,6 @@ require 'concurrent/synchronization/full_memory_barrier'
 
 module Concurrent
   module Synchronization
-
     # @!visibility private
     # @!macro internal_implementation_note
     #
@@ -26,8 +25,8 @@ module Concurrent
     #     end
     #   end
     module SafeInitialization
-      def new(*args, &block)
-        super(*args, &block)
+      def new(*, &)
+        super
       ensure
         Concurrent::Synchronization.full_memory_barrier
       end

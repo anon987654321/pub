@@ -2,7 +2,6 @@ require 'concurrent/synchronization/abstract_lockable_object'
 
 module Concurrent
   module Synchronization
-
     # @!visibility private
     # @!macro internal_implementation_note
     module ConditionSignalling
@@ -19,7 +18,6 @@ module Concurrent
       end
     end
 
-
     # @!visibility private
     # @!macro internal_implementation_note
     class MutexLockableObject < AbstractLockableObject
@@ -28,7 +26,7 @@ module Concurrent
       safe_initialization!
 
       def initialize
-        super()
+        super
         @__Lock__      = ::Mutex.new
         @__Condition__ = ::ConditionVariable.new
       end
@@ -41,11 +39,11 @@ module Concurrent
 
       protected
 
-      def synchronize
+      def synchronize(&)
         if @__Lock__.owned?
           yield
         else
-          @__Lock__.synchronize { yield }
+          @__Lock__.synchronize(&)
         end
       end
 
@@ -63,7 +61,7 @@ module Concurrent
       safe_initialization!
 
       def initialize
-        super()
+        super
         @__Lock__      = ::Monitor.new
         @__Condition__ = @__Lock__.new_cond
       end
@@ -76,8 +74,8 @@ module Concurrent
 
       protected
 
-      def synchronize # TODO may be a problem with lock.synchronize { lock.wait }
-        @__Lock__.synchronize { yield }
+      def synchronize(&) # TODO: may be a problem with lock.synchronize { lock.wait }
+        @__Lock__.synchronize(&)
       end
 
       def ns_wait(timeout = nil)

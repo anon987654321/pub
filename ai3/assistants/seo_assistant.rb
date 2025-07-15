@@ -4,8 +4,8 @@ require_relative '__shared.sh'
 class SEOAssistant
   def initialize
     @resources = [
-      "https://moz.com/beginners-guide-to-seo/",
-      "https://ahrefs.com/blog/"
+      'https://moz.com/beginners-guide-to-seo/',
+      'https://ahrefs.com/blog/'
     ]
   end
 

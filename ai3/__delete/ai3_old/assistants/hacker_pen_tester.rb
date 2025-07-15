@@ -9,11 +9,11 @@ require_relative '../lib/translations'
 module Assistants
   class HackerPenTester
     URLS = [
-      "https://exploit-db.com/",
-      "https://kali.org/",
-      "https://hackthissite.org/"
+      'https://exploit-db.com/',
+      'https://kali.org/',
+      'https://hackthissite.org/'
     ]
-    def initialize(language: "en")
+    def initialize(language: 'en')
       @universal_scraper = UniversalScraper.new
       @weaviate_integration = WeaviateIntegration.new
       @language = language
@@ -21,7 +21,7 @@ module Assistants
     end
 
     def conduct_security_analysis
-      puts "Conducting security analysis and penetration testing..."
+      puts 'Conducting security analysis and penetration testing...'
       URLS.each do |url|
         unless @weaviate_integration.check_if_indexed(url)
           data = @universal_scraper.scrape(url)
@@ -49,9 +49,9 @@ module Assistants
       develop_security_policies
     end
 
-    def perform_penetration_testing; puts "Performing penetration testing..."; end
-    def enhance_network_security; puts "Enhancing network security..."; end
-    def implement_vulnerability_assessment; puts "Implementing vulnerability assessment..."; end
-    def develop_security_policies; puts "Developing security policies..."; end
+    def perform_penetration_testing = puts('Performing penetration testing...')
+    def enhance_network_security = puts('Enhancing network security...')
+    def implement_vulnerability_assessment = puts('Implementing vulnerability assessment...')
+    def develop_security_policies = puts('Developing security policies...')
   end
 end

@@ -8,7 +8,7 @@ class InteractiveSession
 
   def start
     while @active
-      print "User: "
+      print 'User: '
       user_input = gets.chomp
       handle_input(user_input)
     end
@@ -17,7 +17,7 @@ class InteractiveSession
   def handle_input(input)
     if input.downcase == 'exit'
       @active = false
-      puts "Session ended."
+      puts 'Session ended.'
     else
       process_input(input)
     end
@@ -29,4 +29,3 @@ class InteractiveSession
     # Use Langchain or other helpers based on input
   end
 end
-

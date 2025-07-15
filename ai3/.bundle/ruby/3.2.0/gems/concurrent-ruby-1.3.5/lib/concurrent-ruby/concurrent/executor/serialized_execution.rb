@@ -3,13 +3,12 @@ require 'concurrent/concern/logging'
 require 'concurrent/synchronization/lockable_object'
 
 module Concurrent
-
   # Ensures passed jobs in a serialized order never running at the same time.
   class SerializedExecution < Synchronization::LockableObject
     include Concern::Logging
 
-    def initialize()
-      super()
+    def initialize
+      super
       synchronize { ns_initialize }
     end
 
@@ -74,20 +73,20 @@ module Concurrent
 
     def call_job(job)
       did_it_run = begin
-                     job.executor.post { work(job) }
-                     true
-                   rescue RejectedExecutionError => ex
-                     false
-                   end
+        job.executor.post { work(job) }
+        true
+      rescue RejectedExecutionError
+        false
+      end
 
-      # TODO not the best idea to run it myself
-      unless did_it_run
-        begin
-          work job
-        rescue => ex
-          # let it fail
-          log DEBUG, ex
-        end
+      # TODO: not the best idea to run it myself
+      return if did_it_run
+
+      begin
+        work job
+      rescue StandardError => e
+        # let it fail
+        log DEBUG, e
       end
     end
 
@@ -99,7 +98,7 @@ module Concurrent
         job = @stash.shift || (@being_executed = false)
       end
 
-      # TODO maybe be able to tell caching pool to just enqueue this job, because the current one end at the end
+      # TODO: maybe be able to tell caching pool to just enqueue this job, because the current one end at the end
       # of this block
       call_job job if job
     end

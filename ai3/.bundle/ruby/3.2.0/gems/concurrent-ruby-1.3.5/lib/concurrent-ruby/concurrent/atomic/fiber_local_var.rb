@@ -2,7 +2,6 @@ require 'concurrent/constants'
 require_relative 'locals'
 
 module Concurrent
-
   # A `FiberLocalVar` is a variable where the value is different for each fiber.
   # Each variable may have a default value, but when you modify the variable only
   # the current fiber will ever see that change.
@@ -47,9 +46,7 @@ module Concurrent
     # @param [Proc] default_block Optional block that gets called to obtain the
     #   default value for each fiber
     def initialize(default = nil, &default_block)
-      if default && block_given?
-        raise ArgumentError, "Cannot use both value and block as default value"
-      end
+      raise ArgumentError, 'Cannot use both value and block as default value' if default && block_given?
 
       if block_given?
         @default_block = default_block
@@ -84,14 +81,14 @@ module Concurrent
     # @yield the operation to be performed with the bound variable
     # @return [Object] the value
     def bind(value)
-      if block_given?
-        old_value = self.value
-        self.value = value
-        begin
-          yield
-        ensure
-          self.value = old_value
-        end
+      return unless block_given?
+
+      old_value = self.value
+      self.value = value
+      begin
+        yield
+      ensure
+        self.value = old_value
       end
     end
 

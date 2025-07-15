@@ -1,15 +1,16 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
-#   
+
+#
 # IMPORTANT: gem install --user-install ruby-vips tty-prompt && export GEM_HOME=$HOME/.gem/ruby/3.3 GEM_PATH=$HOME/.gem/ruby/3.3:$GEM_PATH PATH=$HOME/.gem/ruby/3.3/bin:$PATH
 
-require "vips"
-require "logger"
-require "tty-prompt"
-require "time"
+require 'vips'
+require 'logger'
+require 'tty-prompt'
+require 'time'
 
 # Logging setup
-$logger = Logger.new("postpro.log")
+$logger = Logger.new('postpro.log')
 $logger.level = Logger::DEBUG
 
 $cli_logger = Logger.new(STDOUT)
@@ -50,6 +51,7 @@ def apply_effects(image, effects_array)
   effects_array.each do |effect_name|
     method_sym = EFFECTS[effect_name]
     next unless respond_to?(method_sym, true)
+
     intensity = adjust_intensity(image, 1.0)
     $cli_logger.info "Applied effect: #{effect_name} (intensity: #{intensity.round(2)})"
     image = send(method_sym, image, intensity)
@@ -61,6 +63,7 @@ def apply_effects_from_recipe(image, recipe)
   recipe.each do |effect, intensity|
     method_sym = EFFECTS[effect.to_sym]
     next unless respond_to?(method_sym, true)
+
     $cli_logger.info "Applied effect: #{effect} (intensity: #{intensity})"
     image = send(method_sym, image, intensity.to_f)
   end
@@ -79,12 +82,12 @@ def light_leaks(image, intensity)
   overlay = overlay.draw_circle([255 * intensity, 50 * intensity, 0],
                                 image.width / 3, image.height / 3,
                                 image.width / 4, fill: true)
-  image.composite2(overlay, "add")
+  image.composite2(overlay, 'add')
 end
 
 def lens_distortion(image, intensity)
   identity = Vips::Image.identity(image.width, image.height)
-  image.mapim(identity.linear([1.0 + 0.2 * intensity], [0]))
+  image.mapim(identity.linear([1.0 + (0.2 * intensity)], [0]))
 end
 
 def sepia(image, intensity)
@@ -97,24 +100,24 @@ def sepia(image, intensity)
 end
 
 def bleach_bypass(image, intensity)
-  gray = image.colourspace("b-w")
-  blend = (image * 0.5 + gray * 0.5) * intensity
+  gray = image.colourspace('b-w')
+  blend = ((image * 0.5) + (gray * 0.5)) * intensity
   (image + blend).clamp(0, 255)
 end
 
 def lomo(image, intensity)
-  saturated = image * (1.0 + 0.1 * intensity)
+  saturated = image * (1.0 + (0.1 * intensity))
   vignette = Vips::Image.black(image.width, image.height)
   vignette = vignette.draw_circle(128, image.width / 2, image.height / 2, image.width / 2, fill: true)
-  saturated.composite2(vignette, "multiply")
+  saturated.composite2(vignette, 'multiply')
 end
 
-def golden_hour_glow(image, intensity)
+def golden_hour_glow(image, _intensity)
   overlay = Vips::Image.black(image.width, image.height)
   overlay = overlay.draw_circle([255, 200, 150],
                                 image.width / 2, image.height / 2,
                                 image.width / 3, fill: true)
-  image.composite2(overlay, "add")
+  image.composite2(overlay, 'add')
 end
 
 def cross_process(image, intensity)
@@ -126,7 +129,7 @@ end
 def bloom_effect(image, intensity)
   blur1 = image.gaussblur(5 * intensity)
   blur2 = image.gaussblur(10 * intensity)
-  combined = (blur1 * 0.6 + blur2 * 0.4) * intensity
+  combined = ((blur1 * 0.6) + (blur2 * 0.4)) * intensity
   (image + combined).clamp(0, 255)
 end
 
@@ -146,13 +149,12 @@ def teal_and_orange(image, intensity)
 end
 
 def day_for_night(image, intensity)
-  darkened = image.linear(1.0 - 0.3 * intensity, 0).clip(0, 255)
-  bluish = darkened.add([0, 0, 60 * intensity]).clip(0, 255)
-  bluish
+  darkened = image.linear(1.0 - (0.3 * intensity), 0).clip(0, 255)
+  darkened.add([0, 0, 60 * intensity]).clip(0, 255)
 end
 
 def anamorphic_simulation(image, intensity)
-  image.resize(1.0 + 0.1 * intensity, vscale: 1.0)
+  image.resize(1.0 + (0.1 * intensity), vscale: 1.0)
 end
 
 def chromatic_aberration(image, intensity)
@@ -175,19 +177,19 @@ end
 # --- Main Interactive Workflow ---
 
 def main
-  apply_random = PROMPT.yes?("Apply a random combination of effects?")
-  recipe_file = PROMPT.ask("Load a custom effects recipe JSON? (filename):", default: "")
+  apply_random = PROMPT.yes?('Apply a random combination of effects?')
+  recipe_file = PROMPT.ask('Load a custom effects recipe JSON? (filename):', default: '')
 
-  patterns = PROMPT.ask("Enter file patterns (default: **/*.jpg, **/*.jpeg, **/*.png, **/*.webp):", default: "")
-  file_patterns = patterns.strip.split(",")
-  file_patterns = ["**/*.jpg", "**/*.jpeg", "**/*.png", "**/*.webp"] if file_patterns.empty?
+  patterns = PROMPT.ask('Enter file patterns (default: **/*.jpg, **/*.jpeg, **/*.png, **/*.webp):', default: '')
+  file_patterns = patterns.strip.split(',')
+  file_patterns = ['**/*.jpg', '**/*.jpeg', '**/*.png', '**/*.webp'] if file_patterns.empty?
 
-  variations = PROMPT.ask("How many variations per image? (default: 3):", convert: :int, default: "3").to_i
+  variations = PROMPT.ask('How many variations per image? (default: 3):', convert: :int, default: '3').to_i
 
-  $cli_logger.info "Starting image processing..."
+  $cli_logger.info 'Starting image processing...'
   files = file_patterns.flat_map { |pattern| Dir.glob(pattern.strip) }
   if files.empty?
-    $cli_logger.error "No files matched the pattern!"
+    $cli_logger.error 'No files matched the pattern!'
     return
   end
 
@@ -198,7 +200,8 @@ def main
   end
 
   files.each do |file|
-    next if File.basename(file).include?("processed")
+    next if File.basename(file).include?('processed')
+
     begin
       $cli_logger.info "Processing file: #{file}"
       image = Vips::Image.new_from_file(file)
@@ -209,12 +212,12 @@ def main
                           selected = random_effects(3)
                           apply_effects(image, selected)
                         else
-                          $cli_logger.warn "No effects selected. Skipping file."
+                          $cli_logger.warn 'No effects selected. Skipping file.'
                           next
                         end
 
       variations.times do |i|
-        timestamp = Time.now.strftime("%Y%m%d%H%M%S")
+        timestamp = Time.now.strftime('%Y%m%d%H%M%S')
         output_file = file.sub(File.extname(file), "_processed_v#{i + 1}_#{timestamp}#{File.extname(file)}")
         processed_image.write_to_file(output_file)
         $cli_logger.info "Saved variation #{i + 1} as #{output_file}"
@@ -225,8 +228,7 @@ def main
     end
   end
 
-  $cli_logger.info "Processing completed."
+  $cli_logger.info 'Processing completed.'
 end
 
 main if __FILE__ == $0
-

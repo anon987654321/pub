@@ -3,12 +3,12 @@
 # Query Cache - Advanced LRU TTL cache system migrated from ai3_old
 # Manages caching of user queries and their responses with cognitive optimization
 
-require "logger"
+require 'logger'
 
 begin
-  require "lru_redux"
+  require 'lru_redux'
 rescue LoadError
-  puts "Warning: lru_redux gem not available. Using basic hash cache."
+  puts 'Warning: lru_redux gem not available. Using basic hash cache.'
 end
 
 class QueryCache
@@ -22,7 +22,7 @@ class QueryCache
       @ttl = ttl
       @max_size = max_size
     end
-    
+
     @logger = Logger.new(STDOUT)
     @logger.level = Logger::INFO
     log_message(:info, "QueryCache initialized with TTL: #{ttl} seconds and max size: #{max_size}.")
@@ -31,7 +31,7 @@ class QueryCache
   # Add a query and its response to the cache
   def add(query, response)
     log_message(:info, "Adding query to cache: #{query}")
-    
+
     if defined?(LruRedux)
       @cache[query] = response
     else
@@ -73,7 +73,7 @@ class QueryCache
       log_message(:info, "Cleared cache for query: #{query}")
     else
       @cache.clear
-      log_message(:info, "Cleared entire cache")
+      log_message(:info, 'Cleared entire cache')
     end
   end
 
@@ -103,19 +103,19 @@ class QueryCache
   # Basic TTL implementation when LruRedux not available
   def expired?(entry)
     return false unless @ttl
-    
+
     Time.now - entry[:timestamp] > @ttl
   end
 
   def evict_expired_entries
     return if defined?(LruRedux)
-    
+
     @cache.delete_if { |_query, entry| expired?(entry) }
   end
 
   def evict_if_full
     return if defined?(LruRedux) || @cache.size < @max_size
-    
+
     # Remove oldest entry
     oldest_key = @cache.min_by { |_query, entry| entry[:timestamp] }[0]
     @cache.delete(oldest_key)

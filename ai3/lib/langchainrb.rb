@@ -11,7 +11,7 @@ module Langchainrb
       @name = name
       @task = task
       @data_sources = data_sources
-      @report = ""
+      @report = ''
       puts "Created agent #{@name} with task: #{@task}"
     end
 

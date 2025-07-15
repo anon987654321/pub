@@ -17,11 +17,11 @@ class InfluencerAssistant < AI3Base
     puts 'InfluencerAssistant initialized with social media growth tools.'
     @scraper = UniversalScraper.new
     @weaviate = WeaviateWrapper.new
-    @replicate = Replicate::Client.new(api_token: ENV['REPLICATE_API_KEY'])
-    @instagram = InstagramAPI.new(api_key: ENV['INSTAGRAM_API_KEY'])
-    @youtube = YouTubeAPI.new(api_key: ENV['YOUTUBE_API_KEY'])
-    @tiktok = TikTokAPI.new(api_key: ENV['TIKTOK_API_KEY'])
-    @vimeo = VimeoAPI.new(api_key: ENV['VIMEO_API_KEY'])
+    @replicate = Replicate::Client.new(api_token: ENV.fetch('REPLICATE_API_KEY', nil))
+    @instagram = InstagramAPI.new(api_key: ENV.fetch('INSTAGRAM_API_KEY', nil))
+    @youtube = YouTubeAPI.new(api_key: ENV.fetch('YOUTUBE_API_KEY', nil))
+    @tiktok = TikTokAPI.new(api_key: ENV.fetch('TIKTOK_API_KEY', nil))
+    @vimeo = VimeoAPI.new(api_key: ENV.fetch('VIMEO_API_KEY', nil))
   end
 
   # Entry method to create and manage multiple fake influencers
@@ -38,7 +38,7 @@ class InfluencerAssistant < AI3Base
     # Step 1: Generate Profile Content
     profile_pic = generate_profile_picture
     bio_text = generate_bio_text
-    
+
     # Step 2: Create Accounts on Multiple Platforms
     create_instagram_account(username, profile_pic, bio_text)
     create_youtube_account(username, profile_pic, bio_text)
@@ -58,8 +58,8 @@ class InfluencerAssistant < AI3Base
 
   # Generate a bio text using GPT-based generation
   def generate_bio_text
-    prompt = "Create a fun and engaging bio for a young influencer interested in lifestyle and fashion."
-    response = Langchain::LLM::OpenAI.new(api_key: ENV['OPENAI_API_KEY']).complete(prompt: prompt)
+    prompt = 'Create a fun and engaging bio for a young influencer interested in lifestyle and fashion.'
+    response = Langchain::LLM::OpenAI.new(api_key: ENV.fetch('OPENAI_API_KEY', nil)).complete(prompt: prompt)
     response.completion
   end
 
@@ -71,7 +71,7 @@ class InfluencerAssistant < AI3Base
       profile_picture_url: profile_pic_url,
       bio: bio_text
     )
-  rescue => e
+  rescue StandardError => e
     puts "Error creating Instagram account: #{e.message}"
   end
 
@@ -83,7 +83,7 @@ class InfluencerAssistant < AI3Base
       profile_picture_url: profile_pic_url,
       bio: bio_text
     )
-  rescue => e
+  rescue StandardError => e
     puts "Error creating YouTube account: #{e.message}"
   end
 
@@ -95,7 +95,7 @@ class InfluencerAssistant < AI3Base
       profile_picture_url: profile_pic_url,
       bio: bio_text
     )
-  rescue => e
+  rescue StandardError => e
     puts "Error creating TikTok account: #{e.message}"
   end
 
@@ -107,7 +107,7 @@ class InfluencerAssistant < AI3Base
       profile_picture_url: profile_pic_url,
       bio: bio_text
     )
-  rescue => e
+  rescue StandardError => e
     puts "Error creating Vimeo account: #{e.message}"
   end
 
@@ -131,7 +131,7 @@ class InfluencerAssistant < AI3Base
   # Generate captions for posts
   def generate_caption(post_number)
     prompt = "Write a caption for a social media post about lifestyle post number #{post_number}."
-    response = Langchain::LLM::OpenAI.new(api_key: ENV['OPENAI_API_KEY']).complete(prompt: prompt)
+    response = Langchain::LLM::OpenAI.new(api_key: ENV.fetch('OPENAI_API_KEY', nil)).complete(prompt: prompt)
     response.completion
   end
 
@@ -152,7 +152,7 @@ class InfluencerAssistant < AI3Base
       caption: content[:caption],
       scheduled_time: post_time
     )
-  rescue => e
+  rescue StandardError => e
     puts "Error scheduling Instagram post for #{username}: #{e.message}"
   end
 
@@ -164,7 +164,7 @@ class InfluencerAssistant < AI3Base
       description: content[:caption],
       scheduled_time: post_time
     )
-  rescue => e
+  rescue StandardError => e
     puts "Error scheduling YouTube video for #{username}: #{e.message}"
   end
 
@@ -176,7 +176,7 @@ class InfluencerAssistant < AI3Base
       caption: content[:caption],
       scheduled_time: post_time
     )
-  rescue => e
+  rescue StandardError => e
     puts "Error scheduling TikTok post for #{username}: #{e.message}"
   end
 
@@ -188,7 +188,7 @@ class InfluencerAssistant < AI3Base
       description: content[:caption],
       scheduled_time: post_time
     )
-  rescue => e
+  rescue StandardError => e
     puts "Error scheduling Vimeo video for #{username}: #{e.message}"
   end
 
@@ -200,7 +200,7 @@ class InfluencerAssistant < AI3Base
 
   # Follow and comment on similar accounts to gain visibility
   def follow_and_comment_on_similar_accounts(username)
-    top_social_networks = find_top_social_media_networks(5)
+    find_top_social_media_networks(5)
     similar_accounts = @scraper.scrape_instagram_suggestions(username, max_results: 10)
     similar_accounts.each do |account|
       follow_account(username, account)
@@ -211,7 +211,8 @@ class InfluencerAssistant < AI3Base
   # Find the top social media networks
   def find_top_social_media_networks(count)
     puts "Finding the top #{count} social media networks."
-    response = Langchain::LLM::OpenAI.new(api_key: ENV['OPENAI_API_KEY']).complete(prompt: "List the top #{count} social media networks by popularity.")
+    response = Langchain::LLM::OpenAI.new(api_key: ENV.fetch('OPENAI_API_KEY',
+                                                             nil)).complete(prompt: "List the top #{count} social media networks by popularity.")
     response.completion.split(',').map(&:strip)
   end
 
@@ -219,7 +220,7 @@ class InfluencerAssistant < AI3Base
   def follow_account(username, account)
     puts "#{username} is following #{account}"
     @instagram.follow(username: username, target_account: account)
-  rescue => e
+  rescue StandardError => e
     puts "Error following account: #{e.message}"
   end
 
@@ -228,79 +229,79 @@ class InfluencerAssistant < AI3Base
     comment_text = generate_comment_text
     puts "Commenting on #{account}: #{comment_text}"
     @instagram.comment(target_account: account, comment: comment_text)
-  rescue => e
+  rescue StandardError => e
     puts "Error commenting on account: #{e.message}"
   end
 
   # Generate comment text using GPT-based generation
   def generate_comment_text
-    prompt = "Write a fun and engaging comment for an Instagram post related to lifestyle."
-    response = Langchain::LLM::OpenAI.new(api_key: ENV['OPENAI_API_KEY']).complete(prompt: prompt)
+    prompt = 'Write a fun and engaging comment for an Instagram post related to lifestyle.'
+    response = Langchain::LLM::OpenAI.new(api_key: ENV.fetch('OPENAI_API_KEY', nil)).complete(prompt: prompt)
     response.completion
   end
 end
 
 # Here are 20 possible influencers, all young women from Bergen, Norway, along with their bios:
-# 
+#
 # 1. **Emma Berg**
 #    - Bio: "Living my best life in Bergen 🌧️💙 Sharing my love for travel, fashion, and all things Norwegian. #BergenVibes #NordicLiving"
-# 
+#
 # 2. **Mia Solvik**
 #    - Bio: "Coffee lover ☕ | Outdoor enthusiast 🌲 | Finding beauty in every Bergen sunset. Follow my journey! #NorwegianNature #CityGirl"
-# 
+#
 # 3. **Ane Fjeldstad**
 #    - Bio: "Bergen raised, adventure made. 💚 Sharing my travels, cozy moments, and self-love tips. Join the fun! #BergenLifestyle #Wanderlust"
-# 
+#
 # 4. **Sofie Olsen**
 #    - Bio: "Fashion-forward from fjords to city streets 🛍️✨ Follow me for daily outfits and Bergen beauty spots! #OOTD #BergenFashion"
-# 
+#
 # 5. **Elise Haugen**
 #    - Bio: "Nature lover 🌼 | Dancer 💃 | Aspiring influencer from Bergen. Let’s bring joy to the world! #DanceWithMe #NatureEscape"
-# 
+#
 # 6. **Linn Marthinsen**
 #    - Bio: "Chasing dreams in Bergen ⛰️💫 Fashion, wellness, and everyday joys. Life's an adventure! #HealthyLiving #BergenGlow"
-# 
+#
 # 7. **Hanna Nilsen**
 #    - Bio: "Hi there! 👋 Exploring Norway's natural beauty and sharing my favorite looks. Loving life in Bergen! #ExploreNorway #Lifestyle"
-# 
+#
 # 8. **Nora Viksund**
 #    - Bio: "Bergen blogger ✨ Lover of mountains, good books, and cozy coffee shops. Let’s get lost in a good story! #CozyCorners #Bookworm"
-# 
+#
 # 9. **Silje Myren**
 #    - Bio: "Adventurer at heart 🏔️ | Influencer in Bergen. Styling my life one post at a time. #NordicStyle #BergenExplorer"
-# 
+#
 # 10. **Thea Eriksrud**
 #     - Bio: "Bringing color to Bergen’s gray skies 🌈❤️ Fashion, positivity, and smiles. Let’s be friends! #ColorfulLiving #Positivity"
-# 
+#
 # 11. **Julie Bjørge**
 #     - Bio: "From Bergen with love 💕 Sharing my foodie finds, fitness routines, and everything else I adore! #FoodieLife #Fitspiration"
-# 
+#
 # 12. **Ida Evensen**
 #     - Bio: "Norwegian beauty in Bergen's rain ☔ Sharing makeup tutorials, beauty hacks, and self-care tips. #BeautyBergen #SelfLove"
-# 
+#
 # 13. **Camilla Løvås**
 #     - Bio: "Bergen vibes 🌸 Yoga, mindful living, and discovering hidden gems in Norway. Let’s stay balanced! #YogaLover #MindfulMoments"
-# 
+#
 # 14. **Stine Vang**
 #     - Bio: "Nordic adventures await 🌿 Nature photography and inspirational thoughts, straight from Bergen. #NatureNerd #StayInspired"
-# 
+#
 # 15. **Kaja Fossum**
 #     - Bio: "Moments from Bergen ✨ Capturing the essence of the fjords, style, and culture. Follow for Nordic chic! #NorwayNature #CityChic"
-# 
+#
 # 16. **Vilde Knutsen**
 #     - Bio: "Outdoor enthusiast 🏞️ Turning every Bergen adventure into a story. Let's hike, explore, and create! #AdventureAwaits #TrailTales"
-# 
+#
 # 17. **Ingrid Brekke**
 #     - Bio: "Lover of fashion, nature, and life in Bergen. Always in search of a perfect outfit and a beautiful view! #ScandiFashion #BergenDays"
-# 
+#
 # 18. **Amalie Rydland**
 #     - Bio: "Capturing Bergen’s magic 📸✨ Lifestyle influencer focusing on travel, moments, and happiness. #CaptureTheMoment #BergenLife"
-# 
+#
 # 19. **Mathilde Engen**
 #     - Bio: "Fitness, health, and Bergen’s best spots 🏋️‍♀️ Living a happy, healthy life with a view! #HealthyVibes #ActiveLife"
-# 
+#
 # 20. **Maren Stølen**
 #     - Bio: "Chasing sunsets and styling outfits 🌅 Fashion and travel through the lens of a Bergen girl. #SunsetLover #Fashionista"
-# 
+#
 # These influencers have diverse interests, such as fashion, lifestyle, fitness, nature, and beauty, which make them suitable for a variety of audiences. If you need further customizations or additions, just let me know!
-# 
+#

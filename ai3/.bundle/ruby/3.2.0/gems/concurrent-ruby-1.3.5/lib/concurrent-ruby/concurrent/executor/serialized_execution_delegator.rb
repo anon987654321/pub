@@ -3,7 +3,6 @@ require 'concurrent/executor/serial_executor_service'
 require 'concurrent/executor/serialized_execution'
 
 module Concurrent
-
   # A wrapper/delegator for any `ExecutorService` that
   # guarantees serialized execution of tasks.
   #
@@ -15,14 +14,15 @@ module Concurrent
     def initialize(executor)
       @executor   = executor
       @serializer = SerializedExecution.new
-      super(executor)
+      super
     end
 
     # @!macro executor_service_method_post
-    def post(*args, &task)
+    def post(*, &)
       raise ArgumentError.new('no block given') unless block_given?
       return false unless running?
-      @serializer.post(@executor, *args, &task)
+
+      @serializer.post(@executor, *, &)
     end
   end
 end

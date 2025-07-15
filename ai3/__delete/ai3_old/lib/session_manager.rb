@@ -54,4 +54,3 @@ class SessionManager
     remove_session(oldest_user_id)
   end
 end
-

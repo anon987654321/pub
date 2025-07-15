@@ -2,11 +2,10 @@ require 'concurrent/synchronization/lockable_object'
 
 module Concurrent
   module Synchronization
-
     # @!visibility private
     # TODO (pitr-ch 04-Dec-2016): should be in edge
     class Lock < LockableObject
-      # TODO use JavaReentrantLock on JRuby
+      # TODO: use JavaReentrantLock on JRuby
 
       public :synchronize
 

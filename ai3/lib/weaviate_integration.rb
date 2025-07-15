@@ -5,12 +5,12 @@
 
 class WeaviateIntegration
   def initialize
-    puts "WeaviateIntegration initialized (stub implementation)"
+    puts 'WeaviateIntegration initialized (stub implementation)'
   end
 
   def check_if_indexed(url)
     puts "Checking if #{url} is indexed (stub implementation)"
-    false  # Always return false to trigger scraping in stub mode
+    false # Always return false to trigger scraping in stub mode
   end
 
   def add_data_to_weaviate(url:, content:)

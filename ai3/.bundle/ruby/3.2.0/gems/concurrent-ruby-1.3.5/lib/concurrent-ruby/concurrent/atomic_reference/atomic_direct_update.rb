@@ -1,7 +1,6 @@
 require 'concurrent/errors'
 
 module Concurrent
-
   # Define update methods that use direct paths
   #
   # @!visibility private
@@ -25,11 +24,10 @@ module Concurrent
       old_value = get
       new_value = yield old_value
       unless compare_and_set(old_value, new_value)
-        if $VERBOSE
-          raise ConcurrentUpdateError, "Update failed"
-        else
-          raise ConcurrentUpdateError, "Update failed", ConcurrentUpdateError::CONC_UP_ERR_BACKTRACE
-        end
+        raise ConcurrentUpdateError, 'Update failed' if $VERBOSE
+
+        raise ConcurrentUpdateError, 'Update failed', ConcurrentUpdateError::CONC_UP_ERR_BACKTRACE
+
       end
       new_value
     end
