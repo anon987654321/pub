@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #!/usr/bin/env zsh
 
 # Dette skriptet kjører en omfattende nettverksskanning fra en OpenBSD-server.

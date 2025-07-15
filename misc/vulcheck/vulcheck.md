@@ -1,7 +1,12 @@
 <html><head></head><body><pre><code># vulcheck.rb - Comprehensive Security Check for macOS, iOS, and Android
 
 ## Overview
-`vulcheck.rb` is a Ruby-based script designed to detect system infections, rootkits, jailbreaks, and unauthorized system access. It automates the installation and updating of essential tools, performs in-depth security scans, and provides actionable logs for analysis.
+`vulcheck.rb` is a Ruby-based script designed to detect system infections,
+rootkits,
+jailbreaks,
+and unauthorized system access. It automates the installation and updating of essential tools,
+performs in-depth security scans,
+and provides actionable logs for analysis.
 
 ### Key Features
 - **macOS Support**: Uses `chkrootkit`, `rkhunter`, and `aide` to detect rootkits, malware, and file integrity issues. Fully compatible with legacy macOS versions.
@@ -74,4 +79,3 @@ All results are logged to `vulcheck_log.txt` in the current directory. Logs incl
 - **Non-Jailbroken iOS Devices**: Limited to basic checks for jailbreak indicators.
 - **Unrooted Android Devices**: Cannot access system-level files; limited to user-space scans.
 - **macOS SIP**: System Integrity Protection may restrict scans of critical files on newer macOS versions.
-

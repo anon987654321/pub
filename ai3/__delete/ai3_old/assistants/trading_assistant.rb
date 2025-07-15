@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 
 Features
 Architect Assistant: Helps generate design ideas and gather architectural inspiration from popular sources.

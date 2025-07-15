@@ -2,19 +2,19 @@ require 'concurrent/thread_safe/util'
 require 'concurrent/tuple'
 
 module Concurrent
-
   # @!visibility private
   module ThreadSafe
-
     # @!visibility private
     module Util
-
       # @!visibility private
       class PowerOfTwoTuple < Concurrent::Tuple
-
         def initialize(size)
-          raise ArgumentError, "size must be a power of 2 (#{size.inspect} provided)" unless size > 0 && size & (size - 1) == 0
-          super(size)
+          unless size > 0 && size & (size - 1) == 0
+            raise ArgumentError,
+                  "size must be a power of 2 (#{size.inspect} provided)"
+          end
+
+          super
         end
 
         def hash_to_index(hash)

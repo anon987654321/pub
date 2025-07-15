@@ -16,11 +16,10 @@
 #    limitations under the License.
 #++
 
-
 begin
-  require "addressable/idna/native"
+  require 'addressable/idna/native'
 rescue LoadError
   # libidn or the idn gem was not available, fall back on a pure-Ruby
   # implementation...
-  require "addressable/idna/pure"
+  require 'addressable/idna/pure'
 end

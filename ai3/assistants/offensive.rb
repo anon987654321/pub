@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'replicate'
 require 'faker'
 require 'twitter'
@@ -11,38 +13,38 @@ require 'logger'
 
 module Assistants
   class OffensiveOps
-    ACTIVITIES = [
-      :generate_deepfake,
-      :adversarial_deepfake_attack,
-      :analyze_personality,
-      :ai_disinformation_campaign,
-      :perform_3d_synthesis,
-      :game_chatbot,
-      :analyze_sentiment,
-      :mimic_user,
-      :perform_espionage,
-      :microtarget_users,
-      :phishing_campaign,
-      :manipulate_search_engine_results,
-      :hacking_activities,
-      :social_engineering,
-      :disinformation_operations,
-      :infiltrate_online_communities,
-      :data_leak_exploitation,
-      :fake_event_organization,
-      :doxing,
-      :reputation_management,
-      :manipulate_online_reviews,
-      :influence_political_sentiment,
-      :cyberbullying,
-      :identity_theft,
-      :fabricate_evidence,
-      :quantum_decryption,
-      :quantum_cloaking,
-      :emotional_manipulation,
-      :mass_disinformation,
-      :reverse_social_engineering,
-      :real_time_quantum_strategy
+    ACTIVITIES = %i[
+      generate_deepfake
+      adversarial_deepfake_attack
+      analyze_personality
+      ai_disinformation_campaign
+      perform_3d_synthesis
+      game_chatbot
+      analyze_sentiment
+      mimic_user
+      perform_espionage
+      microtarget_users
+      phishing_campaign
+      manipulate_search_engine_results
+      hacking_activities
+      social_engineering
+      disinformation_operations
+      infiltrate_online_communities
+      data_leak_exploitation
+      fake_event_organization
+      doxing
+      reputation_management
+      manipulate_online_reviews
+      influence_political_sentiment
+      cyberbullying
+      identity_theft
+      fabricate_evidence
+      quantum_decryption
+      quantum_cloaking
+      emotional_manipulation
+      mass_disinformation
+      reverse_social_engineering
+      real_time_quantum_strategy
     ]
 
     def initialize
@@ -51,13 +53,11 @@ module Assistants
       @logger = Logger.new('offensive_ops.log', 'daily')
     end
 
-    def execute_activity(activity_name, *args)
-      unless ACTIVITIES.include?(activity_name)
-        raise ArgumentError, "Activity #{activity_name} is not supported"
-      end
+    def execute_activity(activity_name, *)
+      raise ArgumentError, "Activity #{activity_name} is not supported" unless ACTIVITIES.include?(activity_name)
 
       begin
-        send(activity_name, *args)
+        send(activity_name, *)
       rescue StandardError => e
         log_error(e, activity_name)
         "An error occurred while executing #{activity_name}: #{e.message}"
@@ -121,8 +121,8 @@ module Assistants
     end
 
     # Microtargeting Users
-    def microtarget_users(data)
-      "Performing microtargeting on the provided dataset."
+    def microtarget_users(_data)
+      'Performing microtargeting on the provided dataset.'
     end
 
     # Phishing Campaign
@@ -225,7 +225,7 @@ module Assistants
     end
 
     # Mass Disinformation via Social Media Bots
-    def mass_disinformation(target_name, topic, target_demographic)
+    def mass_disinformation(_target_name, topic, target_demographic)
       prompt = "Generate mass disinformation on the topic '#{topic}' targeted at the demographic of #{target_demographic}."
       invoke_llm(prompt)
     end
@@ -237,14 +237,13 @@ module Assistants
     end
 
     # Real-Time Quantum Strategy for Predicting Enemy Actions
-    def real_time_quantum_strategy(current_situation)
-      "Analyzing real-time strategic situation using quantum computing and predicting the next moves of the adversary."
+    def real_time_quantum_strategy(_current_situation)
+      'Analyzing real-time strategic situation using quantum computing and predicting the next moves of the adversary.'
     end
 
     # Helper method to invoke the LLM (Large Language Model)
     def invoke_llm(prompt)
-      Langchain::LLM.new(api_key: ENV['OPENAI_API_KEY']).invoke(prompt)
+      Langchain::LLM.new(api_key: ENV.fetch('OPENAI_API_KEY', nil)).invoke(prompt)
     end
   end
 end
-

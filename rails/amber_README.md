@@ -1,6 +1,9 @@
 # Amber
 
-Amber is an AI-enhanced social network for fashion that allows users to organize and visualize their wardrobe, get style assistance, mix and match outfits, and stay updated with the latest fashion trends.
+Amber is an AI-enhanced social network for fashion that allows users to organize and visualize their wardrobe,
+get style assistance,
+mix and match outfits,
+and stay updated with the latest fashion trends.
 
 ## Features
 
@@ -47,4 +50,4 @@ Amber is an AI-enhanced social network for fashion that allows users to organize
 21. **Travel Planning**: Create and manage packing lists.
 22. **Inspiration Library**: Save and organize style inspirations.
 23. **Care Instructions**: Maintain your clothing with personalized care tips.
-
+

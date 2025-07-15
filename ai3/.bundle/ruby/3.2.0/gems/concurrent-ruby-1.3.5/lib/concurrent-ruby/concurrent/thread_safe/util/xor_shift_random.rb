@@ -1,13 +1,10 @@
 require 'concurrent/thread_safe/util'
 
 module Concurrent
-
   # @!visibility private
   module ThreadSafe
-
     # @!visibility private
     module Util
-
       # A xorshift random number (positive +Fixnum+s) generator, provides
       # reasonably cheap way to generate thread local random numbers without
       # contending for the global +Kernel.rand+.
@@ -34,14 +31,14 @@ module Concurrent
           def xorshift(x)
             x ^= x >> 3
             x ^= (x << 1) & MAX_INT # cut-off Bignum overflow
-            x ^= x >> 14
+            x ^ (x >> 14)
           end
         else
           # using the "yˆ=y>>a; yˆ=y<<b; yˆ=y>>c;" transform with the (a,b,c) tuple with values (1,1,54) to minimise Bignum overflows
           def xorshift(x)
             x ^= x >> 1
             x ^= (x << 1) & MAX_INT # cut-off Bignum overflow
-            x ^= x >> 54
+            x ^ (x >> 54)
           end
         end
       end

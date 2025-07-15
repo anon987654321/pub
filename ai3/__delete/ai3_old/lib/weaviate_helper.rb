@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 # WeaviateHelper: Provides methods to interact with the Weaviate vector database
 require 'net/http'
 require 'json'
 
 class WeaviateHelper
   def initialize
-    @base_uri = ENV['WEAVIATE_BASE_URI']
-    @api_key = ENV['WEAVIATE_API_KEY']
+    @base_uri = ENV.fetch('WEAVIATE_BASE_URI', nil)
+    @api_key = ENV.fetch('WEAVIATE_API_KEY', nil)
   end
 
   def add_object(data)
@@ -14,9 +16,9 @@ class WeaviateHelper
     http.use_ssl = true
 
     request = Net::HTTP::Post.new(uri.path, {
-      'Content-Type' => 'application/json',
-      'Authorization' => "Bearer #{@api_key}"
-    })
+                                    'Content-Type' => 'application/json',
+                                    'Authorization' => "Bearer #{@api_key}"
+                                  })
     request.body = data.to_json
 
     response = http.request(request)
@@ -29,9 +31,9 @@ class WeaviateHelper
     http.use_ssl = true
 
     request = Net::HTTP::Get.new(uri.path, {
-      'Content-Type' => 'application/json',
-      'Authorization' => "Bearer #{@api_key}"
-    })
+                                   'Content-Type' => 'application/json',
+                                   'Authorization' => "Bearer #{@api_key}"
+                                 })
 
     response = http.request(request)
     handle_response(response)
@@ -43,11 +45,11 @@ class WeaviateHelper
     http.use_ssl = true
 
     request = Net::HTTP::Post.new(uri.path, {
-      'Content-Type' => 'application/json',
-      'Authorization' => "Bearer #{@api_key}"
-    })
+                                    'Content-Type' => 'application/json',
+                                    'Authorization' => "Bearer #{@api_key}"
+                                  })
     query = {
-      query: """
+      query: "
         {
           Get {
             Objects(nearVector: {vector: #{vector}, certainty: 0.7}, limit: #{limit}) {
@@ -57,7 +59,7 @@ class WeaviateHelper
             }
           }
         }
-      """
+      "
     }
     request.body = query.to_json
 
@@ -77,4 +79,3 @@ class WeaviateHelper
     end
   end
 end
-

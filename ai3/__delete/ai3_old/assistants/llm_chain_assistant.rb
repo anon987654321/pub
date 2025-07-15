@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # assistants/llm_chain_assistant.rb
 #
 # LLMChainAssistant: Processes a query through a chain of LLM providers.
@@ -24,75 +26,75 @@ class LLMChainAssistant
 
     # OpenAI providers with various chat models
     @llm_chain << {
-      name: "openai_o3_mini_high",
+      name: 'openai_o3_mini_high',
       llm: Langchain::LLM::OpenAI.new(
-        api_key: ENV["OPENAI_API_KEY"],
-        default_options: { temperature: 0.7, chat_model: "o3-mini-high" }
+        api_key: ENV.fetch('OPENAI_API_KEY', nil),
+        default_options: { temperature: 0.7, chat_model: 'o3-mini-high' }
       )
     }
     @llm_chain << {
-      name: "o3_mini",
+      name: 'o3_mini',
       llm: Langchain::LLM::OpenAI.new(
-        api_key: ENV["OPENAI_API_KEY"],
-        default_options: { temperature: 0.7, chat_model: "o3-mini" }
+        api_key: ENV.fetch('OPENAI_API_KEY', nil),
+        default_options: { temperature: 0.7, chat_model: 'o3-mini' }
       )
     }
     @llm_chain << {
-      name: "o1",
+      name: 'o1',
       llm: Langchain::LLM::OpenAI.new(
-        api_key: ENV["OPENAI_API_KEY"],
-        default_options: { temperature: 0.7, chat_model: "o1" }
+        api_key: ENV.fetch('OPENAI_API_KEY', nil),
+        default_options: { temperature: 0.7, chat_model: 'o1' }
       )
     }
     @llm_chain << {
-      name: "o1_mini",
+      name: 'o1_mini',
       llm: Langchain::LLM::OpenAI.new(
-        api_key: ENV["OPENAI_API_KEY"],
-        default_options: { temperature: 0.7, chat_model: "o1-mini" }
+        api_key: ENV.fetch('OPENAI_API_KEY', nil),
+        default_options: { temperature: 0.7, chat_model: 'o1-mini' }
       )
     }
     @llm_chain << {
-      name: "gpt_4o",
+      name: 'gpt_4o',
       llm: Langchain::LLM::OpenAI.new(
-        api_key: ENV["OPENAI_API_KEY"],
-        default_options: { temperature: 0.7, chat_model: "gpt-4o" }
+        api_key: ENV.fetch('OPENAI_API_KEY', nil),
+        default_options: { temperature: 0.7, chat_model: 'gpt-4o' }
       )
     }
     @llm_chain << {
-      name: "gpt_4o_mini",
+      name: 'gpt_4o_mini',
       llm: Langchain::LLM::OpenAI.new(
-        api_key: ENV["OPENAI_API_KEY"],
-        default_options: { temperature: 0.7, chat_model: "gpt-4o-mini" }
+        api_key: ENV.fetch('OPENAI_API_KEY', nil),
+        default_options: { temperature: 0.7, chat_model: 'gpt-4o-mini' }
       )
     }
 
     # Anthropic Claude provider
     @llm_chain << {
-      name: "anthropic_claude",
-      llm: Langchain::LLM::Anthropic.new(api_key: ENV["ANTHROPIC_API_KEY"])
+      name: 'anthropic_claude',
+      llm: Langchain::LLM::Anthropic.new(api_key: ENV.fetch('ANTHROPIC_API_KEY', nil))
     }
 
     # Google Gemini provider
     @llm_chain << {
-      name: "google_gemini",
-      llm: Langchain::LLM::GoogleGemini.new(api_key: ENV["GOOGLE_GEMINI_API_KEY"])
+      name: 'google_gemini',
+      llm: Langchain::LLM::GoogleGemini.new(api_key: ENV.fetch('GOOGLE_GEMINI_API_KEY', nil))
     }
 
     # Weaviate vector search client
     @weaviate_client = Langchain::Vectorsearch::Weaviate.new(
-      url: ENV["WEAVIATE_URL"],
-      api_key: ENV["WEAVIATE_API_KEY"],
-      index_name: "Documents",
-      llm: Langchain::LLM::OpenAI.new(api_key: ENV["OPENAI_API_KEY"])
+      url: ENV.fetch('WEAVIATE_URL', nil),
+      api_key: ENV.fetch('WEAVIATE_API_KEY', nil),
+      index_name: 'Documents',
+      llm: Langchain::LLM::OpenAI.new(api_key: ENV.fetch('OPENAI_API_KEY', nil))
     )
-    @llm_chain << { name: "weaviate", llm: nil }  # Special handling for Weaviate below
+    @llm_chain << { name: 'weaviate', llm: nil } # Special handling for Weaviate below
   end
 
   def process_query(query)
     @llm_chain.each do |provider|
       puts "Querying #{provider[:name]}..."
       begin
-        if provider[:name] == "weaviate"
+        if provider[:name] == 'weaviate'
           response = @weaviate_client.ask(question: query)
           completion = response.completion
         else
@@ -108,7 +110,7 @@ class LLMChainAssistant
         puts "Error querying #{provider[:name]}: #{e.message}"
       end
     end
-    "No valid response obtained from any provider."
+    'No valid response obtained from any provider.'
   end
 
   private
@@ -117,4 +119,3 @@ class LLMChainAssistant
     response && !response.strip.empty?
   end
 end
-

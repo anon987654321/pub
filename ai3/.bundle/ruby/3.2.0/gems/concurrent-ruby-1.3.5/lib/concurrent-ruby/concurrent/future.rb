@@ -1,4 +1,3 @@
-require 'thread'
 require 'concurrent/constants'
 require 'concurrent/errors'
 require 'concurrent/ivar'
@@ -6,11 +5,9 @@ require 'concurrent/executor/safe_task_executor'
 
 require 'concurrent/options'
 
-# TODO (pitr-ch 14-Mar-2017): deprecate, Future, Promise, etc.
-
+# TODO: (pitr-ch 14-Mar-2017): deprecate, Future, Promise, etc.
 
 module Concurrent
-
   # {include:file:docs-source/future.md}
   #
   # @!macro copy_options
@@ -19,7 +16,6 @@ module Concurrent
   # @see http://clojuredocs.org/clojure_core/clojure.core/future Clojure's future function
   # @see http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/Future.html java.util.concurrent.Future
   class Future < IVar
-
     # Create a new `Future` in the `:unscheduled` state.
     #
     # @yield the asynchronous operation to perform
@@ -32,6 +28,7 @@ module Concurrent
     # @raise [ArgumentError] if no block is given
     def initialize(opts = {}, &block)
       raise ArgumentError.new('no block given') unless block_given?
+
       super(NULL, opts.merge(__task_from_block__: block), &nil)
     end
 
@@ -51,10 +48,10 @@ module Concurrent
     #   future = Concurrent::Future.new{ sleep(1); 42 }.execute
     #   future.state #=> :pending
     def execute
-      if compare_and_set_state(:pending, :unscheduled)
-        @executor.post{ safe_execute(@task, @args) }
-        self
-      end
+      return unless compare_and_set_state(:pending, :unscheduled)
+
+      @executor.post { safe_execute(@task, @args) }
+      self
     end
 
     # Create a new `Future` object with the given block, execute it, and return the
@@ -74,19 +71,17 @@ module Concurrent
     # @example
     #   future = Concurrent::Future.execute{ sleep(1); 42 }
     #   future.state #=> :pending
-    def self.execute(opts = {}, &block)
-      Future.new(opts, &block).execute
+    def self.execute(opts = {}, &)
+      Future.new(opts, &).execute
     end
 
     # @!macro ivar_set_method
     def set(value = NULL, &block)
       check_for_block_or_value!(block_given?, value)
       synchronize do
-        if @state != :unscheduled
-          raise MultipleAssignmentError
-        else
-          @task = block || Proc.new { value }
-        end
+        raise MultipleAssignmentError if @state != :unscheduled
+
+        @task = block || proc { value }
       end
       execute
     end

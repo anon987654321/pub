@@ -16,9 +16,8 @@
 #    limitations under the License.
 #++
 
-
 # Used to prevent the class/module from being loaded more than once
-if !defined?(Addressable::VERSION)
+unless defined?(Addressable::VERSION)
   module Addressable
     module VERSION
       MAJOR = 2

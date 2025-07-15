@@ -2,7 +2,6 @@ require 'concurrent/synchronization/abstract_struct'
 require 'concurrent/synchronization/lockable_object'
 
 module Concurrent
-
   # An thread-safe variation of Ruby's standard `Struct`. Values can be set at
   # construction or safely changed at any time during the object's lifecycle.
   #
@@ -51,7 +50,7 @@ module Concurrent
     def values
       synchronize { ns_values }
     end
-    alias_method :to_a, :values
+    alias to_a values
 
     # @!macro struct_values_at
     #
@@ -72,7 +71,7 @@ module Concurrent
     def inspect
       synchronize { ns_inspect }
     end
-    alias_method :to_s, :inspect
+    alias to_s inspect
 
     # @!macro struct_merge
     #
@@ -138,6 +137,7 @@ module Concurrent
     #   @yieldparam [Object] value each struct value (in order)
     def each(&block)
       return enum_for(:each) unless block_given?
+
       synchronize { ns_each(&block) }
     end
 
@@ -151,6 +151,7 @@ module Concurrent
     #   @yieldparam [Object] value each struct value (in order)
     def each_pair(&block)
       return enum_for(:each_pair) unless block_given?
+
       synchronize { ns_each_pair(&block) }
     end
 
@@ -166,6 +167,7 @@ module Concurrent
     #   @return [Array] an array containing each value for which the block returns true
     def select(&block)
       return enum_for(:select) unless block_given?
+
       synchronize { ns_select(&block) }
     end
 
@@ -185,9 +187,8 @@ module Concurrent
     def []=(member, value)
       if member.is_a? Integer
         length = synchronize { @values.length }
-        if member >= length
-          raise IndexError.new("offset #{member} too large for struct(size:#{length})")
-        end
+        raise IndexError.new("offset #{member} too large for struct(size:#{length})") if member >= length
+
         synchronize { @values[member] = value }
       else
         send("#{member}=", value)
@@ -207,20 +208,22 @@ module Concurrent
     end
 
     # @!macro struct_new
-    def self.new(*args, &block)
+    def self.new(*args, &)
       clazz_name = nil
       if args.length == 0
         raise ArgumentError.new('wrong number of arguments (0 for 1+)')
       elsif args.length > 0 && args.first.is_a?(String)
         clazz_name = args.shift
       end
-      FACTORY.define_struct(clazz_name, args, &block)
+
+      FACTORY.define_struct(clazz_name, args, &)
     end
 
     FACTORY = Class.new(Synchronization::LockableObject) do
       def define_struct(name, members, &block)
         synchronize do
-          clazz = Synchronization::AbstractStruct.define_struct_class(MutableStruct, Synchronization::LockableObject, name, members, &block)
+          clazz = Synchronization::AbstractStruct.define_struct_class(MutableStruct, Synchronization::LockableObject,
+                                                                      name, members, &block)
           members.each_with_index do |member, index|
             clazz.send :remove_method, member
             clazz.send(:define_method, member) do

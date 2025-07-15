@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # \Module \Base64 provides methods for:
 #
@@ -182,8 +183,7 @@
 #    Base64.encode64(s) # => "VGhpcyBpcyBsaW5lIDEKVGhpcyBpcyBsaW5lIDIK\n"
 #
 module Base64
-
-  VERSION = "0.3.0"
+  VERSION = '0.3.0'
 
   module_function
 
@@ -220,7 +220,7 @@ module Base64
   #   Base64.encode64(s) # => "VGhpcyBpcyBsaW5lIDEKVGhpcyBpcyBsaW5lIDIK\n"
   #
   def encode64(bin)
-    [bin].pack("m")
+    [bin].pack('m')
   end
 
   # :call-seq:
@@ -245,7 +245,7 @@ module Base64
   #   Base64.decode64("MDEyMzQ1Njc==") # => "01234567"
   #
   def decode64(str)
-    str.unpack1("m")
+    str.unpack1('m')
   end
 
   # :call-seq:
@@ -280,7 +280,7 @@ module Base64
   #   Base64.strict_encode64(s) # => "VGhpcyBpcyBsaW5lIDEKVGhpcyBpcyBsaW5lIDIK"
   #
   def strict_encode64(bin)
-    [bin].pack("m0")
+    [bin].pack('m0')
   end
 
   # :call-seq:
@@ -307,7 +307,7 @@ module Base64
   #   Base64.strict_decode64("MDEyMzQ1Njc==") # Raises ArgumentError
   #
   def strict_decode64(str)
-    str.unpack1("m0")
+    str.unpack1('m0')
   end
 
   # :call-seq:
@@ -342,8 +342,8 @@ module Base64
   #
   def urlsafe_encode64(bin, padding: true)
     str = strict_encode64(bin)
-    str.chomp!("==") or str.chomp!("=") unless padding
-    str.tr!("+/", "-_")
+    str.chomp!('==') or str.chomp!('=') unless padding
+    str.tr!('+/', '-_')
     str
   end
 
@@ -370,11 +370,11 @@ module Base64
     # NOTE: RFC 4648 does say nothing about unpadded input, but says that
     # "the excess pad characters MAY also be ignored", so it is inferred that
     # unpadded input is also acceptable.
-    if !str.end_with?("=") && str.length % 4 != 0
-      str = str.ljust((str.length + 3) & ~3, "=")
-      str.tr!("-_", "+/")
+    if !str.end_with?('=') && str.length % 4 != 0
+      str = str.ljust((str.length + 3) & ~3, '=')
+      str.tr!('-_', '+/')
     else
-      str = str.tr("-_", "+/")
+      str = str.tr('-_', '+/')
     end
     strict_decode64(str)
   end

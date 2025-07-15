@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #!/data/data/com.termux/files/usr/bin/zsh
 
 # PounceKeys Installation and Setup Script

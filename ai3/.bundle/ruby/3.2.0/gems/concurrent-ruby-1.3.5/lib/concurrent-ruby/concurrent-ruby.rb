@@ -2,4 +2,4 @@
 # can be required by Bundler.require. Applications should normally
 # require 'concurrent'.
 
-require_relative "concurrent"
+require_relative 'concurrent'

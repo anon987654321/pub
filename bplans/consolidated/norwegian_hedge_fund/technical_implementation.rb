@@ -34,12 +34,10 @@ class NordicProsperityFund
 
   def run
     loop do
-      begin
-        @robot_swarm.execute_trading_cycle
-        sleep(60) # Wait for 60 seconds before the next cycle
-      rescue => e
-        handle_error(e)
-      end
+      @robot_swarm.execute_trading_cycle
+      sleep(60) # Wait for 60 seconds before the next cycle
+    rescue StandardError => e
+      handle_error(e)
     end
   end
 
@@ -103,16 +101,16 @@ class RobotSwarm
 
   def initialize_swarm
     # Create specialized robots
-    @robots << MarketDataBot.new("market_data_001", @config, @logger)
-    @robots << SentimentAnalysisBot.new("sentiment_002", @config, @logger)
-    @robots << TradingExecutionBot.new("execution_003", @config, @logger)
-    
+    @robots << MarketDataBot.new('market_data_001', @config, @logger)
+    @robots << SentimentAnalysisBot.new('sentiment_002', @config, @logger)
+    @robots << TradingExecutionBot.new('execution_003', @config, @logger)
+
     # Add more trading robots with different strategies
     5.times do |i|
       robot = TradingRobot.new(@config, @logger, "robot_#{i + 4}")
       @robots << robot
     end
-    
+
     @logger.info("Robot swarm initialized with #{@robots.length} robots.")
   end
 
@@ -144,13 +142,11 @@ class TradingBot
   end
 
   def execute_strategy
-    begin
-      execute_cycle
-      save_state
-      sleep(30)
-    rescue => e
-      handle_error(e)
-    end
+    execute_cycle
+    save_state
+    sleep(30)
+  rescue StandardError => e
+    handle_error(e)
   end
 
   private
@@ -170,12 +166,12 @@ class TradingBot
   end
 
   def save_state
-    File.open(@state_file, 'wb') { |f| f.write(Marshal.dump(@state)) }
+    File.binwrite(@state_file, Marshal.dump(@state))
     @logger.info("#{@id} saved state")
   end
 
   def execute_cycle
-    raise NotImplementedError, "Must be implemented by specific robot"
+    raise NotImplementedError, 'Must be implemented by specific robot'
   end
 
   def handle_error(exception)
@@ -194,8 +190,8 @@ class MarketDataBot < TradingBot
 
   def connect_to_binance
     @binance_client = Binance::Client::REST.new(
-      api_key: @config["binance_api_key"], 
-      secret_key: @config["binance_api_secret"]
+      api_key: @config['binance_api_key'],
+      secret_key: @config['binance_api_secret']
     )
     @logger.info("#{@id} connected to Binance API")
   end
@@ -208,7 +204,7 @@ class MarketDataBot < TradingBot
   end
 
   def fetch_market_data
-    @binance_client.ticker_price(symbol: @config["trading_pair"] || 'BTCUSDT')
+    @binance_client.ticker_price(symbol: @config['trading_pair'] || 'BTCUSDT')
   rescue StandardError => e
     @logger.error("Could not fetch market data: #{e.message}")
     nil
@@ -225,7 +221,7 @@ class SentimentAnalysisBot < TradingBot
   private
 
   def connect_to_openai
-    @openai_client = OpenAI::Client.new(api_key: @config["openai_api_key"])
+    @openai_client = OpenAI::Client.new(api_key: @config['openai_api_key'])
     @logger.info("#{@id} connected to OpenAI API")
   end
 
@@ -238,20 +234,20 @@ class SentimentAnalysisBot < TradingBot
   end
 
   def fetch_latest_news
-    news_client = News::Client.new(api_key: @config["news_api_key"])
-    news_client.get_top_headlines(country: "us")
+    news_client = News::Client.new(api_key: @config['news_api_key'])
+    news_client.get_top_headlines(country: 'us')
   rescue StandardError => e
     @logger.error("Could not fetch news: #{e.message}")
     []
   end
 
   def analyze_sentiment(headlines)
-    text = headlines.map { |article| article[:title] }.join(" ")
+    text = headlines.map { |article| article[:title] }.join(' ')
     response = @openai_client.completions(
-      engine: "text-davinci-003", 
+      engine: 'text-davinci-003',
       prompt: "Analyze sentiment: #{text}"
     )
-    response["choices"].first["text"].strip.to_f
+    response['choices'].first['text'].strip.to_f
   rescue StandardError => e
     @logger.error("Sentiment analysis failed: #{e.message}")
     0.0
@@ -269,8 +265,8 @@ class TradingExecutionBot < TradingBot
 
   def connect_to_binance
     @binance_client = Binance::Client::REST.new(
-      api_key: @config["binance_api_key"],
-      secret_key: @config["binance_api_secret"]
+      api_key: @config['binance_api_key'],
+      secret_key: @config['binance_api_secret']
     )
     @logger.info("#{@id} connected to Binance API")
   end
@@ -288,25 +284,25 @@ class TradingExecutionBot < TradingBot
   end
 
   def predict_trading_signal(market_data, sentiment_score)
-    if sentiment_score > 0.5 && market_data["price"].to_f > 50000
-      "BUY"
+    if sentiment_score > 0.5 && market_data['price'].to_f > 50_000
+      'BUY'
     elsif sentiment_score < -0.5
-      "SELL"
+      'SELL'
     else
-      "HOLD"
+      'HOLD'
     end
   end
 
   def execute_trade(signal)
     case signal
-    when "BUY"
+    when 'BUY'
       # Simulate buy order
-      log_trade("BUY")
-    when "SELL"
+      log_trade('BUY')
+    when 'SELL'
       # Simulate sell order
-      log_trade("SELL")
+      log_trade('SELL')
     else
-      log_trade("HOLD")
+      log_trade('HOLD')
     end
   end
 
@@ -337,26 +333,26 @@ class TradingRobot
   private
 
   def select_strategy
-    strategies = [:mean_reversion_strategy, :momentum_strategy, :arbitrage_strategy]
+    strategies = %i[mean_reversion_strategy momentum_strategy arbitrage_strategy]
     strategies.sample
   end
 
   def fetch_market_data
     # Placeholder for market data fetching
-    { "price" => rand(40000..70000).to_s }
+    { 'price' => rand(40_000..70_000).to_s }
   end
 
-  def mean_reversion_strategy(data)
+  def mean_reversion_strategy(_data)
     # Implement mean reversion logic
     'BUY' # Placeholder signal
   end
 
-  def momentum_strategy(data)
+  def momentum_strategy(_data)
     # Implement momentum trading logic
     'SELL' # Placeholder signal
   end
 
-  def arbitrage_strategy(data)
+  def arbitrage_strategy(_data)
     # Implement arbitrage logic using multiple exchanges
     'HOLD' # Placeholder signal
   end
@@ -375,13 +371,13 @@ end
 
 # Command Line Interface for the Hedge Fund
 class HedgeFundCLI < Thor
-  desc "run", "Run all robots in the swarm"
+  desc 'run', 'Run all robots in the swarm'
   def run
     fund = NordicProsperityFund.new
     fund.run
   end
 
-  desc "configure", "Set up configuration"
+  desc 'configure', 'Set up configuration'
   def configure
     puts 'Enter Binance API key:'
     binance_api_key = STDIN.gets.chomp
@@ -400,13 +396,13 @@ class HedgeFundCLI < Thor
       'trading_pair' => 'BTCUSDT'
     }
 
-    File.open('config.yml', 'w') { |file| file.write(config.to_yaml) }
+    File.write('config.yml', config.to_yaml)
     puts 'Configuration saved.'
   end
 
-  desc "status", "Check system status"
+  desc 'status', 'Check system status'
   def status
-    puts "Nordic Prosperity Fund - System Status"
+    puts 'Nordic Prosperity Fund - System Status'
     puts "Configuration: #{File.exist?('config.yml') ? 'OK' : 'Missing'}"
     puts "Logs: #{Dir.exist?('logs') ? 'OK' : 'Missing'}"
     puts "State storage: #{Dir.exist?('.ai3') ? 'OK' : 'Missing'}"
@@ -414,6 +410,4 @@ class HedgeFundCLI < Thor
 end
 
 # Main execution
-if __FILE__ == $0
-  HedgeFundCLI.start
-end
+HedgeFundCLI.start if __FILE__ == $0
