@@ -27,29 +27,44 @@ Optional: Weaviate instance for RAG
 
 Steps
 
-Clone the repository:git clone <repository_url>
+Clone the repository:
+```bash
+git clone <repository_url>
 cd ai3
+```
 
+Install dependencies:
+```bash
+bundle install
+```
 
-Run the core installation script:./install.sh
+Run the application:
+```bash
+ruby ai3.rb
+```
 
+## Dependency Management
 
-Installs Ruby gems via Gemfile.
-Prompts for API keys (stored in ~/.ai3_keys).
-Sets ai3.rb as executable.
+This project uses Bundler for dependency management. The committed gems have been removed for repository health and following Ruby best practices.
 
+### Installation
+```bash
+bundle install  # Install dependencies
+ruby ai3.rb     # Run application
+```
 
-Install assistants:./install_ass.sh
-
-
-Generates 15 assistant Ruby files in assistants/.
-Configures config.yml and en.yml.
-
-
+### Updating Dependencies
+```bash
+bundle update   # Update all dependencies
+bundle outdated # Check for outdated gems
+```
 
 Post-Installation
 
-Run the CLI:ruby ai3.rb
+Run the CLI:
+```bash
+ruby ai3.rb
+```
 
 
 

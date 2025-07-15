@@ -1,46 +1,107 @@
-# Framework compliance artifacts
-compliance_report.json
-final_compliance_report.json
-.rubocop.yml
-.eslintrc.json
-
-# Temporary files
-/tmp/*
-*.tmp
-*.log
-*.pid
-
-# Build artifacts
+# Bundler
 .bundle/
-vendor/
-node_modules/
-dist/
-build/
+vendor/bundle
+.ruby-version
+.rbenv-version
+*.gem
+*.rbc
+.rbx/
+.rvm/
 
-# IDE and editor files
+# Ruby artifacts
+*.rbc
+*.sassc
+.sass-cache
+capybara-*.html
+.rspec
+.rvmrc
+/.config
+/coverage/
+/InstalledFiles
+/pkg/
+/spec/reports/
+/spec/examples.txt
+/test/tmp/
+/test/version_tmp/
+/tmp/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+logs/
+log/
+
+# Database
+*.sqlite3
+*.db
+
+# Data and cache directories
+data/
+cache/
+tmp/
+screenshots/
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Editor files
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
 
-# OS files
-.DS_Store
-Thumbs.db
+# Dependencies
+node_modules/
+bower_components/
 
-# Environment files
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+# Rails
+/public/assets
+/public/packs
+/public/packs-test
+/node_modules
+/yarn-error.log
+yarn-debug.log*
+.yarn-integrity
+
+# Ignore application configuration
+/config/application.yml
+
+# Ignore sensitive files
+*.pem
+*.key
+*.cert
+*.crt
+
+# Ignore backup files
+*.backup
+*.bak
+
+# Ignore compiled files
+*.o
+*.so
+*.a
+*.dll
+*.exe
+
+# Framework compliance artifacts
+compliance_report.json
+final_compliance_report.json
+.rubocop.yml
+.eslintrc.json
 
 # Framework monitoring
 resource_monitoring.log
 circuit_breaker.log
-# Validation artifacts
-tmp/validation/
-logs/
-test_compliance_report.json
 validation_report.json
-# Framework validation artifacts
+test_compliance_report.json

@@ -1,0 +1,56 @@
+# frozen_string_literal: true
+
+source "https://rubygems.org"
+
+# Ruby version
+ruby "3.2.0"
+
+# TTY components for interactive CLI
+gem "tty-prompt"
+gem "tty-spinner"
+gem "tty-box"
+gem "pastel"
+
+# AI/LLM integrations
+gem "anthropic"
+gem "openai"
+gem "ollama-ai"
+gem "langchain"
+
+# HTTP clients
+gem "faraday"
+gem "typhoeus"
+gem "httparty"
+
+# Web scraping
+gem "ferrum"
+gem "nokogiri"
+
+# Data storage
+gem "sqlite3"
+gem "lru_redux"
+
+# Development tools
+gem "rubocop"
+gem "reek"
+gem "rspec"
+
+# Environment management
+gem "dotenv"
+
+# Additional utilities
+gem "concurrent-ruby"
+gem "wisper"
+gem "csv"
+gem "bcrypt"
+gem "bigdecimal"
+gem "base64"
+gem "i18n"
+gem "addressable"
+gem "ast"
+gem "event_stream_parser"
+gem "faraday-multipart"
+gem "faraday-net_http"
+gem "faraday-typhoeus"
+gem "ethon"
+gem "ffi"
