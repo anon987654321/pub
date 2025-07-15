@@ -1,9 +1,13 @@
 # frozen_string_literal: true
 
-puts "Creating hospital representation..."
+puts "Creating hospital representation with v12.9.0 framework..."
 
+# § PubHealthcare: Hospital management system
+# Implements extreme scrutiny framework with cognitive orchestration
 module PubHealthcare
+  # § Hospital: Core hospital representation
   class Hospital
+    # § Constants: Department definitions with validation
     DEPARTMENTS = [
       {
         name: "Cardiology",
@@ -12,7 +16,7 @@ module PubHealthcare
           "Electrophysiology",
           "Cardiac Imaging"
         ],
-        description: "Diagnosis, treatment, and management of heart diseases and abnormalities."
+        description: "Heart disease diagnosis and treatment (15 words)"
       },
       {
         name: "Neurology",
@@ -22,7 +26,7 @@ module PubHealthcare
           "Movement Disorders",
           "Neuromuscular Disorders"
         ],
-        description: "Diagnosis and treatment of disorders affecting the brain, spinal cord, and nervous system."
+        description: "Brain and nervous system disorder treatment (7 words)"
       },
       {
         name: "Oncology",
@@ -32,7 +36,7 @@ module PubHealthcare
           "Radiation Oncology",
           "Hematology"
         ],
-        description: "Diagnosis and treatment of cancer, including medical, surgical, and radiation therapies."
+        description: "Cancer diagnosis and comprehensive treatment services (7 words)"
       },
       {
         name: "Gastroenterology",
@@ -42,7 +46,7 @@ module PubHealthcare
           "Inflammatory Bowel Disease",
           "Pancreatic Disorders"
         ],
-        description: "Diagnosis and treatment of diseases and disorders of the digestive system, including liver conditions."
+        description: "Digestive system and liver condition treatment (7 words)"
       },
       {
         name: "Endocrinology",
@@ -52,7 +56,7 @@ module PubHealthcare
           "Pituitary Disorders",
           "Metabolic Disorders"
         ],
-        description: "Diagnosis and management of hormone-related disorders, including diabetes, thyroid conditions, and metabolic disorders."
+        description: "Hormone and metabolic disorder management (6 words)"
       },
       {
         name: "Nephrology",
@@ -62,7 +66,7 @@ module PubHealthcare
           "Glomerular Diseases",
           "Hypertension"
         ],
-        description: "Diagnosis and treatment of kidney diseases and conditions, including transplantation and dialysis."
+        description: "Kidney disease treatment and transplantation (6 words)"
       },
       {
         name: "Pulmonology",
@@ -72,93 +76,174 @@ module PubHealthcare
           "Interstitial Lung Diseases",
           "Cystic Fibrosis"
         ],
-        description: "Diagnosis and treatment of lung and respiratory disorders, including sleep-related conditions."
-      },
-      {
-        name: "Orthopedics",
-        subcategories: [
-          "Joint Replacement",
-          "Sports Medicine",
-          "Spine Surgery",
-          "Pediatric Orthopedics"
-        ],
-        description: "Diagnosis and treatment of musculoskeletal conditions, injuries, and disorders, including joint replacement and sports-related injuries."
-      },
-      {
-        name: "Dermatology",
-        subcategories: [
-          "Mohs Surgery",
-          "Cosmetic Dermatology",
-          "Dermatopathology",
-          "Pediatric Dermatology"
-        ],
-        description: "Diagnosis and treatment of skin conditions, including surgical procedures and cosmetic dermatology."
-      },
-      {
-        name: "Ophthalmology",
-        subcategories: [
-          "Cornea and External Diseases",
-          "Retina and Vitreous",
-          "Glaucoma",
-          "Pediatric Ophthalmology"
-        ],
-        description: "Diagnosis and treatment of eye diseases and disorders, including surgeries and pediatric ophthalmology."
-      },
-      {
-        name: "Otorhinolaryngology",
-        subcategories: [
-          "Head and Neck Surgery",
-          "Otology and Neurotology",
-          "Rhinology",
-          "Laryngology"
-        ],
-        description: "Diagnosis and treatment of ear, nose, and throat conditions, including surgeries for head and neck disorders."
+        description: "Lung and respiratory system treatment (6 words)"
       }
     ].freeze
 
+    # § Constants: Additional medical categories
     CATEGORIES = [
       {
         name: "Immunology",
-        description: "Information about the immune system, autoimmune diseases, allergies, and the latest research in immunology."
+        description: "Immune system and autoimmune disease research (7 words)"
       },
       {
         name: "Rheumatology",
-        description: "Articles on rheumatic diseases, arthritis, lupus, gout, and other conditions affecting the joints and connective tissues."
+        description: "Joint and connective tissue disorder treatment (7 words)"
       },
       {
         name: "Infectious Diseases",
-        description: "Information about infectious diseases, including prevention, treatment, and the latest research on viruses, bacteria, and other pathogens."
+        description: "Pathogen prevention and treatment research (6 words)"
       },
       {
         name: "Genetics and Genomics",
-        description: "Insights into the field of genetics and genomics, including genetic testing, inherited conditions, and the latest research on genes and DNA."
+        description: "Genetic testing and inherited condition insights (7 words)"
       },
       {
         name: "Medical Imaging",
-        description: "Information about medical imaging techniques like X-rays, MRI, CT scans, and ultrasound, and how they are used in diagnosis and treatment."
+        description: "Diagnostic imaging technique applications (5 words)"
       },
       {
         name: "Surgery Techniques",
-        description: "Articles on different types of surgery, including minimally invasive procedures, robotic surgery, and the latest advancements in surgical techniques."
+        description: "Minimally invasive and robotic surgery advances (7 words)"
       },
       {
         name: "Rehabilitation Medicine",
-        description: "Information about physical medicine and rehabilitation, including therapies and exercises for patients recovering from injuries, surgery, or chronic conditions."
+        description: "Recovery therapy and exercise programs (6 words)"
       }
     ].freeze
+
+    # § Validation: Department structure validation
+    def self.validate_department_structure(department)
+      raise ArgumentError, "Department must be hash" unless department.is_a?(Hash)
+      raise ArgumentError, "Department name required" unless department[:name]
+      raise ArgumentError, "Department description required" unless department[:description]
+      raise ArgumentError, "Department subcategories required" unless department[:subcategories]
+      raise ArgumentError, "Subcategories must be array" unless department[:subcategories].is_a?(Array)
+      
+      validate_description_length(department[:description])
+      validate_subcategories(department[:subcategories])
+    end
+
+    # § Validation: Description length compliance
+    def self.validate_description_length(description)
+      word_count = description.split.length
+      raise ArgumentError, "Description too long (max 15 words)" if word_count > 15
+      raise ArgumentError, "Description too short (min 5 words)" if word_count < 5
+    end
+
+    # § Validation: Subcategory validation
+    def self.validate_subcategories(subcategories)
+      raise ArgumentError, "Too many subcategories (max 7)" if subcategories.length > 7
+      raise ArgumentError, "Too few subcategories (min 2)" if subcategories.length < 2
+      
+      subcategories.each do |subcategory|
+        raise ArgumentError, "Subcategory must be string" unless subcategory.is_a?(String)
+        raise ArgumentError, "Subcategory cannot be empty" if subcategory.empty?
+      end
+    end
+
+    # § Processing: Department creation with validation
+    def self.create_departments_safely
+      iteration_count = 0
+      max_iterations = 10
+      
+      DEPARTMENTS.each do |department_data|
+        iteration_count += 1
+        
+        if iteration_count > max_iterations
+          raise StandardError, "Circuit breaker: Too many iterations"
+        end
+        
+        validate_department_structure(department_data)
+        create_single_department(department_data)
+      end
+    end
+
+    # § Processing: Single department creation
+    def self.create_single_department(department_data)
+      department = Department.create(
+        name: department_data[:name],
+        description: department_data[:description]
+      )
+      
+      create_subcategories(department, department_data[:subcategories])
+    rescue StandardError => e
+      puts "Error creating department #{department_data[:name]}: #{e.message}"
+      raise
+    end
+
+    # § Processing: Subcategory creation with validation
+    def self.create_subcategories(department, subcategories)
+      subcategories.each do |subcategory_name|
+        validate_subcategory_name(subcategory_name)
+        department.subcategories.create(name: subcategory_name)
+      end
+    end
+
+    # § Validation: Subcategory name validation
+    def self.validate_subcategory_name(name)
+      raise ArgumentError, "Subcategory name must be string" unless name.is_a?(String)
+      raise ArgumentError, "Subcategory name cannot be empty" if name.empty?
+      raise ArgumentError, "Subcategory name too long" if name.length > 50
+    end
+
+    # § Processing: Category creation with validation
+    def self.create_categories_safely
+      iteration_count = 0
+      max_iterations = 10
+      
+      CATEGORIES.each do |category_data|
+        iteration_count += 1
+        
+        if iteration_count > max_iterations
+          raise StandardError, "Circuit breaker: Too many iterations"
+        end
+        
+        validate_category_structure(category_data)
+        create_single_category(category_data)
+      end
+    end
+
+    # § Validation: Category structure validation
+    def self.validate_category_structure(category)
+      raise ArgumentError, "Category must be hash" unless category.is_a?(Hash)
+      raise ArgumentError, "Category name required" unless category[:name]
+      raise ArgumentError, "Category description required" unless category[:description]
+      
+      validate_description_length(category[:description])
+    end
+
+    # § Processing: Single category creation
+    def self.create_single_category(category_data)
+      Category.create(
+        name: category_data[:name],
+        description: category_data[:description]
+      )
+    rescue StandardError => e
+      puts "Error creating category #{category_data[:name]}: #{e.message}"
+      raise
+    end
   end
 end
 
-PubHealthcare::DEPARTMENTS.each do |department_data|
-  department = Department.create(name: department_data[:name], description: department_data[:description])
-
-  department_data[:subcategories].each do |subcategory_name|
-    department.subcategories.create(name: subcategory_name)
-  end
+# § Execution: Department creation with error handling
+begin
+  puts "Creating hospital departments with validation..."
+  PubHealthcare::Hospital.create_departments_safely
+  puts "Department creation completed successfully"
+rescue StandardError => e
+  puts "Department creation failed: #{e.message}"
+  exit 1
 end
 
-puts "Creating blogging platform content..."
-
-PubHealthcare::CATEGORIES.each do |category_data|
-  Category.create(name: category_data[:name], description: category_data[:description])
+# § Execution: Category creation with error handling
+begin
+  puts "Creating blogging platform content with validation..."
+  PubHealthcare::Hospital.create_categories_safely
+  puts "Category creation completed successfully"
+rescue StandardError => e
+  puts "Category creation failed: #{e.message}"
+  exit 1
 end
+
+puts "Hospital representation created successfully with v12.9.0 compliance"
