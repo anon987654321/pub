@@ -18,7 +18,7 @@ class MultiLLMManager
   attr_reader :current_provider, :fallback_chain, :circuit_breakers
 
   def initialize(config = {})
-    @config = config
+    @config = config || {}
     @providers = {}
     @fallback_chain = [:xai, :anthropic, :openai, :ollama]
     @circuit_breakers = {}
@@ -227,7 +227,8 @@ end
 # X.AI/Grok Provider
 class XAIProvider
   def initialize(config)
-    @api_key = config['xai_api_key'] || ENV['XAI_API_KEY']
+    @config = config || {}
+    @api_key = @config.dig('api_keys', 'xai_api_key') || ENV['XAI_API_KEY']
     @base_url = 'https://api.x.ai/v1'
     @client = setup_client
   end
@@ -270,7 +271,8 @@ end
 # Anthropic/Claude Provider
 class AnthropicProvider
   def initialize(config)
-    @api_key = config['anthropic_api_key'] || ENV['ANTHROPIC_API_KEY']
+    @config = config || {}
+    @api_key = @config.dig('api_keys', 'anthropic_api_key') || ENV['ANTHROPIC_API_KEY']
     @client = @api_key ? Anthropic::Client.new(access_token: @api_key) : nil
   end
 
@@ -292,7 +294,8 @@ end
 # OpenAI Provider
 class OpenAIProvider
   def initialize(config)
-    @api_key = config['openai_api_key'] || ENV['OPENAI_API_KEY']
+    @config = config || {}
+    @api_key = @config.dig('api_keys', 'openai_api_key') || ENV['OPENAI_API_KEY']
     @client = @api_key ? OpenAI::Client.new(access_token: @api_key) : nil
   end
 
@@ -317,8 +320,9 @@ end
 # Ollama Provider (Local)
 class OllamaProvider
   def initialize(config)
-    @base_url = config['ollama_url'] || 'http://localhost:11434'
-    @model = config['ollama_model'] || 'deepseek-r1:1.5b'
+    @config = config || {}
+    @base_url = @config.dig('ollama', 'url') || 'http://localhost:11434'
+    @model = @config.dig('ollama', 'model') || 'deepseek-r1:1.5b'
     @client = setup_client
   end
 
