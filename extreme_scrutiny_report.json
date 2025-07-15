@@ -1,17 +1,17 @@
 {
   "meta": {
     "version": "12.9.0",
-    "timestamp": "2025-07-15T03:58:21Z",
+    "timestamp": "2025-07-15T04:02:47Z",
     "user": "anon987654321",
     "framework": "master.json v12.9.0"
   },
   "summary": {
-    "total_files": 1556,
-    "processed_files": 1556,
-    "passed_files": 45,
-    "failed_files": 1511,
-    "success_rate": 2.89,
-    "average_compliance": 99.89,
+    "total_files": 1562,
+    "processed_files": 1562,
+    "passed_files": 83,
+    "failed_files": 1479,
+    "success_rate": 5.31,
+    "average_compliance": 99.88,
     "overall_success": false
   },
   "thresholds": {
@@ -39,10 +39,8 @@
     {
       "file": "ai3/__delete/ai3_old/__backups/ai3.rb",
       "issues": [
-        "Missing frozen_string_literal directive",
-        "Method length violation: 65 lines (should be 3-20)",
+        "Method length violation: 67 lines (should be 3-20)",
         "Method length violation: 49 lines (should be 3-20)",
-        "Missing cognitive headers (# § format)",
         "Naming violation: 'AI3' (3 chars, should be 5-30)",
         "Naming violation: 'AI3' (3 chars, should be 5-30)",
         "Naming violation: 'AI3' (3 chars, should be 5-30)",
@@ -59,159 +57,135 @@
         "Naming violation: 'AI3' (3 chars, should be 5-30)",
         "Naming violation: 'AI3' (3 chars, should be 5-30)",
         "Naming violation: 'AI3' (3 chars, should be 5-30)",
-        "Code redundancy detected: 5.54% duplicate lines"
+        "Code redundancy detected: 5.48% duplicate lines"
       ]
     },
     {
       "file": "ai3/__delete/ai3_old/ai3.rb",
       "issues": [
-        "Missing frozen_string_literal directive",
-        "Missing cognitive headers (# § format)",
         "Naming violation: 'AI3' (3 chars, should be 5-30)",
-        "Code redundancy detected: 2.86% duplicate lines"
-      ]
-    },
-    {
-      "file": "ai3/__delete/ai3_old/assistants/architect_assistant.rb",
-      "issues": [
-        "Missing frozen_string_literal directive",
-        "Missing cognitive headers (# § format)"
+        "Code redundancy detected: 4.76% duplicate lines"
       ]
     },
     {
       "file": "ai3/__delete/ai3_old/assistants/assistant.rb",
       "issues": [
-        "Missing frozen_string_literal directive",
-        "Missing cognitive headers (# § format)",
-        "Code redundancy detected: 7.69% duplicate lines"
+        "Code redundancy detected: 5.0% duplicate lines"
       ]
     },
     {
       "file": "ai3/__delete/ai3_old/assistants/assistant_api.rb",
       "issues": [
-        "Missing frozen_string_literal directive",
-        "Missing cognitive headers (# § format)",
-        "Code redundancy detected: 3.13% duplicate lines"
+        "Code redundancy detected: 2.5% duplicate lines"
       ]
     },
     {
       "file": "ai3/__delete/ai3_old/assistants/assistant_chat.rb",
       "issues": [
-        "Missing frozen_string_literal directive",
-        "Missing cognitive headers (# § format)",
-        "Code redundancy detected: 6.49% duplicate lines"
+        "Code redundancy detected: 10.0% duplicate lines"
       ]
     },
     {
       "file": "ai3/__delete/ai3_old/assistants/assistant_manager.rb",
       "issues": [
-        "Missing frozen_string_literal directive",
-        "Missing cognitive headers (# § format)",
-        "Code redundancy detected: 3.23% duplicate lines"
-      ]
-    },
-    {
-      "file": "ai3/__delete/ai3_old/assistants/assistant_selector.rb",
-      "issues": [
-        "Missing frozen_string_literal directive",
-        "Missing cognitive headers (# § format)"
+        "Code redundancy detected: 11.36% duplicate lines"
       ]
     },
     {
       "file": "ai3/__delete/ai3_old/assistants/assistants.rb",
       "issues": [
-        "Missing frozen_string_literal directive",
-        "Missing cognitive headers (# § format)",
-        "Code redundancy detected: 14.29% duplicate lines"
-      ]
-    },
-    {
-      "file": "ai3/__delete/ai3_old/assistants/audio_engineering_assistant.rb",
-      "issues": [
-        "Missing frozen_string_literal directive",
-        "Missing cognitive headers (# § format)"
+        "Code redundancy detected: 11.11% duplicate lines"
       ]
     },
     {
       "file": "ai3/__delete/ai3_old/assistants/base_assistant.rb",
       "issues": [
-        "Missing frozen_string_literal directive",
-        "Missing cognitive headers (# § format)",
         "Naming violation: 'chat' (4 chars, should be 5-30)",
-        "Code redundancy detected: 3.23% duplicate lines"
+        "Code redundancy detected: 2.94% duplicate lines"
       ]
     },
     {
       "file": "ai3/__delete/ai3_old/assistants/casual_assistant.rb",
       "issues": [
-        "Missing frozen_string_literal directive",
-        "Missing cognitive headers (# § format)",
-        "Code redundancy detected: 6.25% duplicate lines"
+        "Code redundancy detected: 4.35% duplicate lines"
       ]
     },
     {
       "file": "ai3/__delete/ai3_old/assistants/chatbot_discord.rb",
       "issues": [
-        "Missing frozen_string_literal directive",
-        "Missing cognitive headers (# § format)",
-        "Code redundancy detected: 5.26% duplicate lines"
+        "Code redundancy detected: 4.35% duplicate lines"
       ]
     },
     {
       "file": "ai3/__delete/ai3_old/assistants/chatbot_snapchat.rb",
       "issues": [
-        "Missing frozen_string_literal directive",
-        "Missing cognitive headers (# § format)",
-        "Code redundancy detected: 5.13% duplicate lines"
+        "Code redundancy detected: 4.26% duplicate lines"
       ]
     },
     {
       "file": "ai3/__delete/ai3_old/assistants/chatbot_tinder.rb",
       "issues": [
-        "Missing frozen_string_literal directive",
-        "Missing cognitive headers (# § format)",
-        "Code redundancy detected: 5.26% duplicate lines"
-      ]
-    },
-    {
-      "file": "ai3/__delete/ai3_old/assistants/chatbots.rb",
-      "issues": [
-        "Missing frozen_string_literal directive",
-        "Missing cognitive headers (# § format)"
-      ]
-    },
-    {
-      "file": "ai3/__delete/ai3_old/assistants/data_visualizer_assistant.rb",
-      "issues": [
-        "Missing frozen_string_literal directive",
-        "Missing cognitive headers (# § format)"
+        "Code redundancy detected: 4.35% duplicate lines"
       ]
     },
     {
       "file": "ai3/__delete/ai3_old/assistants/ethical_hacker.rb",
       "issues": [
-        "Missing frozen_string_literal directive",
+        "Code redundancy detected: 8.7% duplicate lines"
+      ]
+    },
+    {
+      "file": "ai3/__delete/ai3_old/assistants/hacker_pen_tester.rb",
+      "issues": [
         "Missing cognitive headers (# § format)",
-        "Code redundancy detected: 9.09% duplicate lines"
+        "Naming violation: 'apply_advanced_security_strategies' (34 chars, should be 5-30)",
+        "Naming violation: 'implement_vulnerability_assessment' (34 chars, should be 5-30)",
+        "Code redundancy detected: 5.36% duplicate lines"
       ]
     },
     {
-      "file": "ai3/__delete/ai3_old/assistants/ethical_hacker_assistant.rb",
+      "file": "ai3/__delete/ai3_old/assistants/influencer_assistant.rb",
       "issues": [
-        "Missing frozen_string_literal directive",
-        "Missing cognitive headers (# § format)"
+        "Code redundancy detected: 2.86% duplicate lines"
       ]
     },
     {
-      "file": "ai3/__delete/ai3_old/assistants/general_assistant.rb",
+      "file": "ai3/__delete/ai3_old/assistants/legal_assistant.rb",
       "issues": [
-        "Missing frozen_string_literal directive",
-        "Missing cognitive headers (# § format)"
+        "Potential logical incompleteness detected",
+        "Code redundancy detected: 9.52% duplicate lines"
+      ]
+    },
+    {
+      "file": "ai3/__delete/ai3_old/assistants/llm_chain_assistant.rb",
+      "issues": [
+        "Method length violation: 69 lines (should be 3-20)",
+        "Code redundancy detected: 7.08% duplicate lines"
+      ]
+    },
+    {
+      "file": "ai3/__delete/ai3_old/assistants/material_design_assistant.rb",
+      "issues": [
+        "Code redundancy detected: 7.14% duplicate lines"
+      ]
+    },
+    {
+      "file": "ai3/__delete/ai3_old/assistants/material_repurposing.rb",
+      "issues": [
+        "Naming violation: 'conduct_material_repurposing_analysis' (37 chars, should be 5-30)",
+        "Naming violation: 'apply_advanced_repurposing_strategies' (37 chars, should be 5-30)",
+        "Code redundancy detected: 5.08% duplicate lines"
+      ]
+    },
+    {
+      "file": "ai3/__delete/ai3_old/assistants/material_repurposing_assistant.rb",
+      "issues": [
+        "Code redundancy detected: 4.35% duplicate lines"
       ]
     }
   ],
   "resource_usage": {
-    "processing_time": 0.97,
+    "processing_time": 1.02,
     "memory_usage": "1024MB (limit)",
     "cpu_usage": "10.0% (limit)"
   }

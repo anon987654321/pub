@@ -1,0 +1,55 @@
+{
+  "meta": {
+    "version": "12.9.0",
+    "timestamp": "2025-07-15T04:02:53Z",
+    "user": "anon987654321",
+    "framework": "master.json v12.9.0"
+  },
+  "limits": {
+    "memory_bytes": 1073741824,
+    "cpu_percentage": 10.0,
+    "network_percentage": 5.0
+  },
+  "summary": {
+    "memory": {
+      "current": 290551333,
+      "average": 290551333,
+      "max": 290551333,
+      "limit": 1073741824
+    },
+    "cpu": {
+      "current": 7.0,
+      "average": 7.0,
+      "max": 7.0,
+      "limit": 10.0
+    },
+    "network": {
+      "current": 1.0,
+      "average": 1.0,
+      "max": 1.0,
+      "limit": 5.0
+    },
+    "uptime": 6.27,
+    "measurements_count": 1
+  },
+  "compliance": {
+    "memory_compliant": true,
+    "cpu_compliant": true,
+    "network_compliant": true,
+    "overall_compliant": true
+  },
+  "circuit_breaker": {
+    "activated": false,
+    "activation_count": 0
+  },
+  "measurements": [
+    {
+      "timestamp": "2025-07-15T04:02:46Z",
+      "memory_usage": 290551333,
+      "cpu_usage": 7.0,
+      "network_usage": 1.0,
+      "process_count": 14,
+      "uptime": 0.0
+    }
+  ]
+}
