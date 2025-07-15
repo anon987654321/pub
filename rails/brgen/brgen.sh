@@ -1,22 +1,580 @@
 #!/usr/bin/env zsh
+# Brgen: Multi-tenant social and marketplace platform with cognitive framework implementation
+# Master.json v10.7.0 compliance with zero-trust security and multi-tenancy
+
 set -e
+setopt extended_glob null_glob
 
-# Brgen core setup: Multi-tenant social and marketplace platform with Mapbox, live search, infinite scroll, and anonymous features on OpenBSD 7.5, unprivileged user
-
+# === COGNITIVE FRAMEWORK CONFIGURATION ===
 APP_NAME="brgen"
 BASE_DIR="/home/dev/rails"
 BRGEN_IP="46.23.95.45"
 
-source "./__shared.sh"
+# Source enhanced shared functionality
+source "../__shared_enhanced.sh"
 
-log "Starting Brgen core setup"
+# === BRGEN-SPECIFIC CONFIGURATION ===
+generate_application_code() {
+  phase_transition "brgen_code_generation" "Creating multi-tenant social and marketplace platform features"
+  
+  # Generate models with cognitive constraints (7 concepts max)
+  bin/rails generate model Follower follower:references followed:references
+  bin/rails generate model Listing title:string description:text price:decimal category:string status:string user:references location:string lat:decimal lng:decimal
+  bin/rails generate model City name:string subdomain:string country:string city:string language:string favicon:string analytics:string tld:string
+  bin/rails generate model TenantUser user:references city:references role:string active:boolean
+  bin/rails generate model MarketplaceTransaction buyer:references seller:references listing:references amount:decimal status:string
+  bin/rails generate model CommunityEvent city:references title:string description:text event_date:datetime organizer:references
+  bin/rails generate model LocalBusiness city:references name:string description:text address:string phone:string website:string
+  
+  # Database migrations
+  bin/rails db:migrate
+  
+  # Install additional gems for Brgen
+  cat <<EOF >> Gemfile
 
-setup_full_app "$APP_NAME"
+# Brgen-specific gems
+gem "acts_as_tenant", "~> 0.6"
+gem "pagy", "~> 8.0"
+gem "money-rails", "~> 1.15"
+gem "geocoder", "~> 1.8"
+gem "friendly_id", "~> 5.5"
+gem "image_processing", "~> 1.2"
+gem "chronic", "~> 0.10"
+EOF
+  
+  bundle install
+  
+  # Create cognitive-aware controllers
+  cat <<EOF > app/controllers/listings_controller.rb
+class ListingsController < ApplicationController
+  before_action :authenticate_user!, except: [:index, :show]
+  before_action :set_listing, only: [:show, :edit, :update, :destroy]
+  before_action :check_tenant_access
+  
+  def index
+    @cognitive_load = CognitiveLoadMonitor.new
+    @complexity_assessment = @cognitive_load.assess_complexity(
+      "Multi-tenant marketplace listings with location filtering and price management"
+    )
+    
+    # Cognitive load management: limit to 7 listings per page
+    @pagy, @listings = pagy(filtered_listings.order(created_at: :desc), items: 7)
+    @categories = Listing.where(city: current_city).distinct.pluck(:category).compact.sort
+    @price_ranges = calculate_price_ranges
+  end
+  
+  def show
+    @cognitive_load = CognitiveLoadMonitor.new
+    @complexity_assessment = @cognitive_load.assess_complexity(
+      "Individual listing with transaction history and location details"
+    )
+    
+    @related_listings = Listing.where(city: current_city)
+                               .where(category: @listing.category)
+                               .where.not(id: @listing.id)
+                               .limit(3)
+    
+    @transaction_history = @listing.marketplace_transactions
+                                   .order(created_at: :desc)
+                                   .limit(5)
+  end
+  
+  def new
+    @listing = Listing.new
+    @cognitive_load = CognitiveLoadMonitor.new
+    @complexity_assessment = @cognitive_load.assess_complexity(
+      "Listing creation with pricing, location, and image upload"
+    )
+    
+    @categories = Listing.where(city: current_city).distinct.pluck(:category).compact.sort
+  end
+  
+  def create
+    @listing = Listing.new(listing_params)
+    @listing.user = current_user
+    @listing.city = current_city
+    @listing.status = "active"
+    
+    if @listing.save
+      # Create tenant association
+      TenantUser.find_or_create_by(
+        user: current_user,
+        city: current_city,
+        role: "member",
+        active: true
+      )
+      
+      respond_to do |format|
+        format.html { redirect_to listings_path, notice: "Listing created successfully!" }
+        format.turbo_stream
+      end
+    else
+      @categories = Listing.where(city: current_city).distinct.pluck(:category).compact.sort
+      render :new, status: :unprocessable_entity
+    end
+  end
+  
+  def edit
+    @cognitive_load = CognitiveLoadMonitor.new
+    @complexity_assessment = @cognitive_load.assess_complexity(
+      "Listing editing with price updates and status management"
+    )
+    
+    @categories = Listing.where(city: current_city).distinct.pluck(:category).compact.sort
+  end
+  
+  def update
+    if @listing.update(listing_params)
+      respond_to do |format|
+        format.html { redirect_to @listing, notice: "Listing updated successfully!" }
+        format.turbo_stream
+      end
+    else
+      @categories = Listing.where(city: current_city).distinct.pluck(:category).compact.sort
+      render :edit, status: :unprocessable_entity
+    end
+  end
+  
+  def destroy
+    @listing.destroy
+    respond_to do |format|
+      format.html { redirect_to listings_path, notice: "Listing deleted successfully!" }
+      format.turbo_stream
+    end
+  end
+  
+  private
+  
+  def set_listing
+    @listing = Listing.where(city: current_city).find(params[:id])
+    unless @listing.user == current_user || current_user&.admin?
+      redirect_to listings_path, alert: "Access denied"
+    end
+  end
+  
+  def listing_params
+    params.require(:listing).permit(:title, :description, :price, :category, :status, :location, :lat, :lng, photos: [])
+  end
+  
+  def filtered_listings
+    listings = Listing.where(city: current_city, status: "active")
+    listings = listings.where(category: params[:category]) if params[:category].present?
+    listings = listings.where("title ILIKE ? OR description ILIKE ?", "%#{params[:search]}%", "%#{params[:search]}%") if params[:search].present?
+    
+    if params[:price_min].present? || params[:price_max].present?
+      price_min = params[:price_min].present? ? params[:price_min].to_f : 0
+      price_max = params[:price_max].present? ? params[:price_max].to_f : Float::INFINITY
+      listings = listings.where(price: price_min..price_max)
+    end
+    
+    listings
+  end
+  
+  def calculate_price_ranges
+    prices = Listing.where(city: current_city, status: "active").pluck(:price).compact
+    return [] if prices.empty?
+    
+    min_price = prices.min
+    max_price = prices.max
+    range_size = (max_price - min_price) / 5
+    
+    5.times.map do |i|
+      {
+        min: (min_price + i * range_size).round(2),
+        max: (min_price + (i + 1) * range_size).round(2)
+      }
+    end
+  end
+  
+  def check_tenant_access
+    redirect_to root_path unless current_city
+  end
+end
+EOF
+  
+  # Create multi-tenant application controller
+  cat <<EOF > app/controllers/application_controller.rb
+class ApplicationController < ActionController::Base
+  include CognitiveCompliance
+  
+  before_action :set_current_city
+  before_action :authenticate_user!, except: [:index, :show], unless: :guest_user_allowed?
+  
+  protect_from_forgery with: :exception
+  
+  def after_sign_in_path_for(resource)
+    root_path
+  end
+  
+  private
+  
+  def set_current_city
+    subdomain = request.subdomain
+    @current_city = City.find_by(subdomain: subdomain) if subdomain.present?
+    
+    unless @current_city
+      redirect_to_main_site
+      return
+    end
+    
+    # Set tenant for acts_as_tenant
+    ActsAsTenant.current_tenant = @current_city
+  end
+  
+  def current_city
+    @current_city
+  end
+  
+  def redirect_to_main_site
+    redirect_to "https://brgen.com", alert: "Community not found"
+  end
+  
+  def guest_user_allowed?
+    controller_name == "home" || 
+    (controller_name == "posts" && action_name.in?(["index", "show", "create"])) || 
+    (controller_name == "listings" && action_name.in?(["index", "show"]))
+  end
+end
+EOF
+  
+  # Create multi-tenant models
+  cat <<EOF > app/models/listing.rb
+class Listing < ApplicationRecord
+  belongs_to :user
+  belongs_to :city
+  has_many :marketplace_transactions, dependent: :destroy
+  has_many_attached :photos
+  
+  validates :title, presence: true, length: { minimum: 5, maximum: 200 }
+  validates :description, presence: true, length: { minimum: 10, maximum: 2000 }
+  validates :price, presence: true, numericality: { greater_than: 0 }
+  validates :category, presence: true
+  validates :status, presence: true, inclusion: { in: %w[active sold reserved inactive] }
+  validates :location, presence: true
+  
+  scope :active, -> { where(status: "active") }
+  scope :by_category, ->(category) { where(category: category) }
+  scope :by_price_range, ->(min, max) { where(price: min..max) }
+  scope :recent, -> { order(created_at: :desc) }
+  scope :popular, -> { joins(:marketplace_transactions).group(:id).order("COUNT(marketplace_transactions.id) DESC") }
+  
+  def available?
+    status == "active"
+  end
+  
+  def sold?
+    status == "sold"
+  end
+  
+  def transaction_count
+    marketplace_transactions.count
+  end
+  
+  def interested_buyers
+    marketplace_transactions.where(status: "interested").count
+  end
+  
+  def display_price
+    "#{price.to_f.round(2)} #{city.currency || 'NOK'}"
+  end
+  
+  def nearby_listings(radius = 10)
+    # Simple proximity search (in real implementation, use proper geospatial queries)
+    Listing.where(city: city)
+           .where.not(id: id)
+           .where(status: "active")
+           .limit(5)
+  end
+end
+EOF
+  
+  # Create city model with tenant capabilities
+  cat <<EOF > app/models/city.rb
+class City < ApplicationRecord
+  has_many :listings, dependent: :destroy
+  has_many :tenant_users, dependent: :destroy
+  has_many :users, through: :tenant_users
+  has_many :community_events, dependent: :destroy
+  has_many :local_businesses, dependent: :destroy
+  
+  validates :name, presence: true, uniqueness: true
+  validates :subdomain, presence: true, uniqueness: true, format: { with: /\A[a-z0-9]+\z/ }
+  validates :country, presence: true
+  validates :city, presence: true
+  validates :language, presence: true, length: { is: 2 }
+  validates :tld, presence: true
+  
+  scope :active, -> { where(active: true) }
+  scope :by_country, ->(country) { where(country: country) }
+  scope :by_language, ->(language) { where(language: language) }
+  
+  def full_domain
+    "#{subdomain}.brgen.#{tld}"
+  end
+  
+  def display_name
+    "#{name}, #{country}"
+  end
+  
+  def currency
+    case country.downcase
+    when "norway", "sverige", "denmark"
+      "NOK"
+    when "sweden"
+      "SEK"
+    when "denmark"
+      "DKK"
+    when "iceland"
+      "ISK"
+    when "finland"
+      "EUR"
+    when "uk"
+      "GBP"
+    when "usa"
+      "USD"
+    else
+      "EUR"
+    end
+  end
+  
+  def active_listings_count
+    listings.active.count
+  end
+  
+  def active_users_count
+    tenant_users.where(active: true).count
+  end
+  
+  def recent_activity
+    {
+      new_listings: listings.where("created_at > ?", 7.days.ago).count,
+      new_users: tenant_users.where("created_at > ?", 7.days.ago).count,
+      transactions: MarketplaceTransaction.joins(:listing).where(listings: { city: self }).where("created_at > ?", 7.days.ago).count
+    }
+  end
+end
+EOF
+  
+  # Create tenant configuration
+  cat <<EOF > config/initializers/tenant.rb
+Rails.application.config.middleware.use ActsAsTenant::Middleware
 
-command_exists "ruby"
-command_exists "node"
-command_exists "psql"
-command_exists "redis-server"
+ActsAsTenant.configure do |config|
+  config.require_tenant = true
+  config.pkey = :city
+end
+EOF
+  
+  # Create enhanced home controller
+  cat <<EOF > app/controllers/home_controller.rb
+class HomeController < ApplicationController
+  def index
+    @cognitive_load = CognitiveLoadMonitor.new
+    @complexity_assessment = @cognitive_load.assess_complexity(
+      "Multi-tenant community home with posts, listings, and local business directory"
+    )
+    
+    # Cognitive load management: limit to 7 key elements
+    @recent_posts = Post.where(city: current_city).recent.limit(5)
+    @featured_listings = Listing.where(city: current_city).active.recent.limit(3)
+    @upcoming_events = CommunityEvent.where(city: current_city)
+                                     .where("event_date > ?", Time.current)
+                                     .order(:event_date)
+                                     .limit(3)
+    
+    @community_stats = {
+      total_listings: current_city.active_listings_count,
+      active_users: current_city.active_users_count,
+      local_businesses: current_city.local_businesses.count,
+      recent_activity: current_city.recent_activity
+    }
+    
+    # Flow state tracking for community engagement
+    @flow_tracker = FlowStateTracker.new
+    @flow_tracker.update({
+      "concentration" => 0.8,
+      "challenge_skill_balance" => 0.7,
+      "clear_goals" => 0.9,
+      "immediate_feedback" => 0.8
+    })
+  end
+end
+EOF
+  
+  # Create JavaScript for multi-tenant features
+  mkdir -p app/javascript/controllers
+  cat <<EOF > app/javascript/controllers/tenant_controller.js
+import { Controller } from "@hotwired/stimulus"
+
+export default class extends Controller {
+  static targets = ["citySelector", "tenantInfo"]
+  static values = { currentCity: String, availableCities: Array }
+  
+  connect() {
+    this.updateTenantInfo()
+  }
+  
+  switchCity(event) {
+    const selectedCity = event.target.value
+    if (selectedCity && selectedCity !== this.currentCityValue) {
+      const city = this.availableCitiesValue.find(c => c.subdomain === selectedCity)
+      if (city) {
+        window.location.href = \`https://\${city.subdomain}.brgen.\${city.tld}\`
+      }
+    }
+  }
+  
+  updateTenantInfo() {
+    if (this.hasTenantInfoTarget) {
+      const cityData = this.availableCitiesValue.find(c => c.subdomain === this.currentCityValue)
+      if (cityData) {
+        this.tenantInfoTarget.innerHTML = \`
+          <div class="tenant-info">
+            <h3>\${cityData.name}</h3>
+            <p>\${cityData.country} • \${cityData.currency}</p>
+            <p>Active Users: \${cityData.active_users}</p>
+            <p>Active Listings: \${cityData.active_listings}</p>
+          </div>
+        \`
+      }
+    }
+  }
+  
+  showCityStats() {
+    // Display city statistics modal or panel
+    const modal = document.createElement("div")
+    modal.className = "city-stats-modal"
+    
+    const cityData = this.availableCitiesValue.find(c => c.subdomain === this.currentCityValue)
+    if (cityData) {
+      modal.innerHTML = \`
+        <div class="modal-content">
+          <h2>\${cityData.name} Community Stats</h2>
+          <div class="stats-grid">
+            <div class="stat-item">
+              <span class="stat-value">\${cityData.active_listings}</span>
+              <span class="stat-label">Active Listings</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value">\${cityData.active_users}</span>
+              <span class="stat-label">Active Users</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value">\${cityData.local_businesses}</span>
+              <span class="stat-label">Local Businesses</span>
+            </div>
+          </div>
+          <button onclick="this.parentElement.parentElement.remove()">Close</button>
+        </div>
+      \`
+    }
+    
+    document.body.appendChild(modal)
+  }
+}
+EOF
+  
+  # Create seed data for cities
+  cat <<EOF > db/seeds.rb
+# Create cities with cognitive load management (7 main cities + expansions)
+cities = [
+  { name: "Bergen", subdomain: "brgen", country: "Norway", city: "Bergen", language: "no", tld: "no" },
+  { name: "Oslo", subdomain: "oshlo", country: "Norway", city: "Oslo", language: "no", tld: "no" },
+  { name: "Trondheim", subdomain: "trndheim", country: "Norway", city: "Trondheim", language: "no", tld: "no" },
+  { name: "Stavanger", subdomain: "stvanger", country: "Norway", city: "Stavanger", language: "no", tld: "no" },
+  { name: "Tromsø", subdomain: "trmso", country: "Norway", city: "Tromsø", language: "no", tld: "no" },
+  { name: "Reykjavík", subdomain: "reykjavk", country: "Iceland", city: "Reykjavík", language: "is", tld: "is" },
+  { name: "Copenhagen", subdomain: "kbenhvn", country: "Denmark", city: "Copenhagen", language: "dk", tld: "dk" }
+]
+
+admin_user = User.create!(
+  email: "admin@brgen.com",
+  password: "password",
+  password_confirmation: "password"
+)
+
+cities.each do |city_attrs|
+  city = City.find_or_create_by(subdomain: city_attrs[:subdomain]) do |c|
+    c.name = city_attrs[:name]
+    c.country = city_attrs[:country]
+    c.city = city_attrs[:city]
+    c.language = city_attrs[:language]
+    c.tld = city_attrs[:tld]
+    c.active = true
+  end
+  
+  # Create tenant user relationship
+  TenantUser.find_or_create_by(user: admin_user, city: city) do |tu|
+    tu.role = "admin"
+    tu.active = true
+  end
+  
+  # Create sample listings for each city
+  3.times do |i|
+    Listing.create!(
+      title: "Sample Item #{i + 1} in #{city.name}",
+      description: "This is a sample listing for #{city.name}. Great condition and ready for pickup.",
+      price: rand(10.0..500.0).round(2),
+      category: %w[electronics furniture clothing books sports].sample,
+      status: "active",
+      location: "#{city.city} City Center",
+      lat: 60.0 + rand(-5.0..5.0),
+      lng: 5.0 + rand(-5.0..5.0),
+      user: admin_user,
+      city: city
+    )
+  end
+  
+  # Create sample community event
+  CommunityEvent.create!(
+    city: city,
+    title: "Community Meetup",
+    description: "Join us for a community gathering in #{city.name}",
+    event_date: 1.week.from_now,
+    organizer: admin_user
+  )
+end
+
+puts "✅ Brgen multi-tenant system seeded successfully!"
+puts "🏙️ #{City.count} cities created"
+puts "📦 #{Listing.count} listings created"
+puts "🎉 #{CommunityEvent.count} events created"
+puts "👥 #{TenantUser.count} tenant relationships created"
+EOF
+  
+  # Run seeds
+  bin/rails db:seed
+  
+  log "Brgen application code generation completed" "INFO"
+}
+
+# Override main to use enhanced installation
+main() {
+  log "Starting Brgen installation with cognitive framework" "INFO"
+  
+  # Use enhanced shared installation
+  source "../__shared_enhanced.sh"
+  
+  # Run the main installation process
+  if command -v initialize_application > /dev/null 2>&1; then
+    # Run enhanced installation
+    initialize_application
+    setup_rails_application
+    setup_database
+    setup_cognitive_framework
+    setup_authentication
+    setup_security
+    generate_application_code  # This will use our Brgen-specific implementation
+    setup_testing
+    finalize_installation
+  else
+    # Fallback to original installation
+    log "Enhanced installation not available, using fallback" "WARN"
+    setup_rails_application
+    setup_database
+    generate_application_code
+  fi
+}
 
 install_gem "acts_as_tenant"
 install_gem "pagy"
