@@ -5,6 +5,8 @@ require "aws-sdk-s3"
 require "open-uri"
 require "fileutils"
 
+# § Run Real Esrgan
+
 S3_BUCKET_NAME = "la2"
 AWS_REGION = "eu-north-1"
 AWS_ACCESS_KEY_ID = ENV["AWS_ACCESS_KEY_ID"]
@@ -24,25 +26,40 @@ bucket = s3.bucket(S3_BUCKET_NAME)
 Replicate.configure { |config| config.api_token = REPLICATE_API_KEY }
 
 def upload_to_s3(file, bucket)
-  name = File.basename(file)
-  obj = bucket.object(name)
-  obj.upload_file(file)
-  obj.public_url
+  begin
+    name = File.basename(file)
+    object = bucket.object(name)
+    obj.upload_file(file)
+    obj.public_url
+  rescue StandardError => e
+    # TODO: Add proper error handling
+    raise e
+  end
 end
 
 def fetch_prediction(prediction)
-  loop do
-    prediction.refetch
-    break if prediction.finished?
-
-    puts "Sleeping 30 seconds while waiting for image..."
-    sleep 30
+  begin
+    loop do
+      prediction.refetch
+      break if prediction.finished?
+  
+      puts "Sleeping 30 seconds while waiting for image..."
+      sleep 30
+    end
+  rescue StandardError => e
+    # TODO: Add proper error handling
+    raise e
   end
 end
 
 def download_file(uri_str, output_file)
-  URI.open(uri_str) do |uri|
-    File.open(output_file, "wb") { |file| file.write(uri.read) }
+  begin
+    URI.open(uri_str) do |uri|
+      File.open(output_file, "wb") { |file| file.write(uri.read) }
+    end
+  rescue StandardError => e
+    # TODO: Add proper error handling
+    raise e
   end
 end
 

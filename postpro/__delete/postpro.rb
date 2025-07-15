@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+# § Postpro
+
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 #   
@@ -47,24 +51,34 @@ def adjust_intensity(image, base_intensity)
 end
 
 def apply_effects(image, effects_array)
-  effects_array.each do |effect_name|
-    method_sym = EFFECTS[effect_name]
-    next unless respond_to?(method_sym, true)
-    intensity = adjust_intensity(image, 1.0)
-    $cli_logger.info "Applied effect: #{effect_name} (intensity: #{intensity.round(2)})"
-    image = send(method_sym, image, intensity)
+  begin
+    effects_array.each do |effect_name|
+      method_sym = EFFECTS[effect_name]
+      next unless respond_to?(method_sym, true)
+      intensity = adjust_intensity(image, 1.0)
+      $cli_logger.info "Applied effect: #{effect_name} (intensity: #{intensity.round(2)})"
+      image = send(method_sym, image, intensity)
+    end
+    image
+  rescue StandardError => e
+    # TODO: Add proper error handling
+    raise e
   end
-  image
 end
 
 def apply_effects_from_recipe(image, recipe)
-  recipe.each do |effect, intensity|
-    method_sym = EFFECTS[effect.to_sym]
-    next unless respond_to?(method_sym, true)
-    $cli_logger.info "Applied effect: #{effect} (intensity: #{intensity})"
-    image = send(method_sym, image, intensity.to_f)
+  begin
+    recipe.each do |effect, intensity|
+      method_sym = EFFECTS[effect.to_sym]
+      next unless respond_to?(method_sym, true)
+      $cli_logger.info "Applied effect: #{effect} (intensity: #{intensity})"
+      image = send(method_sym, image, intensity.to_f)
+    end
+    image
+  rescue StandardError => e
+    # TODO: Add proper error handling
+    raise e
   end
-  image
 end
 
 # --- Effects ---
@@ -75,11 +89,16 @@ def film_grain(image, intensity)
 end
 
 def light_leaks(image, intensity)
-  overlay = Vips::Image.black(image.width, image.height)
-  overlay = overlay.draw_circle([255 * intensity, 50 * intensity, 0],
-                                image.width / 3, image.height / 3,
-                                image.width / 4, fill: true)
-  image.composite2(overlay, "add")
+  begin
+    overlay = Vips::Image.black(image.width, image.height)
+    overlay = overlay.draw_circle([255 * intensity, 50 * intensity, 0],
+                                  image.width / 3, image.height / 3,
+                                  image.width / 4, fill: true)
+    image.composite2(overlay, "add")
+  rescue StandardError => e
+    # TODO: Add proper error handling
+    raise e
+  end
 end
 
 def lens_distortion(image, intensity)
@@ -88,67 +107,112 @@ def lens_distortion(image, intensity)
 end
 
 def sepia(image, intensity)
-  matrix = [
-    0.393 * intensity, 0.769 * intensity, 0.189 * intensity,
-    0.349 * intensity, 0.686 * intensity, 0.168 * intensity,
-    0.272 * intensity, 0.534 * intensity, 0.131 * intensity
-  ]
-  image.recomb(matrix)
+  begin
+    matrix = [
+      0.393 * intensity, 0.769 * intensity, 0.189 * intensity,
+      0.349 * intensity, 0.686 * intensity, 0.168 * intensity,
+      0.272 * intensity, 0.534 * intensity, 0.131 * intensity
+    ]
+    image.recomb(matrix)
+  rescue StandardError => e
+    # TODO: Add proper error handling
+    raise e
+  end
 end
 
 def bleach_bypass(image, intensity)
-  gray = image.colourspace("b-w")
-  blend = (image * 0.5 + gray * 0.5) * intensity
-  (image + blend).clamp(0, 255)
+  begin
+    gray = image.colourspace("b-w")
+    blend = (image * 0.5 + gray * 0.5) * intensity
+    (image + blend).clamp(0, 255)
+  rescue StandardError => e
+    # TODO: Add proper error handling
+    raise e
+  end
 end
 
 def lomo(image, intensity)
-  saturated = image * (1.0 + 0.1 * intensity)
-  vignette = Vips::Image.black(image.width, image.height)
-  vignette = vignette.draw_circle(128, image.width / 2, image.height / 2, image.width / 2, fill: true)
-  saturated.composite2(vignette, "multiply")
+  begin
+    saturated = image * (1.0 + 0.1 * intensity)
+    vignette = Vips::Image.black(image.width, image.height)
+    vignette = vignette.draw_circle(128, image.width / 2, image.height / 2, image.width / 2, fill: true)
+    saturated.composite2(vignette, "multiply")
+  rescue StandardError => e
+    # TODO: Add proper error handling
+    raise e
+  end
 end
 
 def golden_hour_glow(image, intensity)
-  overlay = Vips::Image.black(image.width, image.height)
-  overlay = overlay.draw_circle([255, 200, 150],
-                                image.width / 2, image.height / 2,
-                                image.width / 3, fill: true)
-  image.composite2(overlay, "add")
+  begin
+    overlay = Vips::Image.black(image.width, image.height)
+    overlay = overlay.draw_circle([255, 200, 150],
+                                  image.width / 2, image.height / 2,
+                                  image.width / 3, fill: true)
+    image.composite2(overlay, "add")
+  rescue StandardError => e
+    # TODO: Add proper error handling
+    raise e
+  end
 end
 
 def cross_process(image, intensity)
-  # If intensity > 0.5, invert the image for dramatic effect
-  image.invert if intensity > 0.5
-  image
+  begin
+    # If intensity > 0.5, invert the image for dramatic effect
+    image.invert if intensity > 0.5
+    image
+  rescue StandardError => e
+    # TODO: Add proper error handling
+    raise e
+  end
 end
 
 def bloom_effect(image, intensity)
-  blur1 = image.gaussblur(5 * intensity)
-  blur2 = image.gaussblur(10 * intensity)
-  combined = (blur1 * 0.6 + blur2 * 0.4) * intensity
-  (image + combined).clamp(0, 255)
+  begin
+    blur1 = image.gaussblur(5 * intensity)
+    blur2 = image.gaussblur(10 * intensity)
+    combined = (blur1 * 0.6 + blur2 * 0.4) * intensity
+    (image + combined).clamp(0, 255)
+  rescue StandardError => e
+    # TODO: Add proper error handling
+    raise e
+  end
 end
 
 def film_halation(image, intensity)
-  highlights = image.more(220)
-  halo = highlights.gaussblur(15 * intensity).linear(0.1 * intensity, 0)
-  (image + halo).clamp(0, 255)
+  begin
+    highlights = image.more(220)
+    halo = highlights.gaussblur(15 * intensity).linear(0.1 * intensity, 0)
+    (image + halo).clamp(0, 255)
+  rescue StandardError => e
+    # TODO: Add proper error handling
+    raise e
+  end
 end
 
 def teal_and_orange(image, intensity)
-  matrix = [
-    0.9, 0.1, 0.0,
-    0.0, 0.8, 0.2,
-    0.1, 0.2, 0.7
-  ]
-  image.recomb(matrix).linear(intensity, 0).clamp(0, 255)
+  begin
+    matrix = [
+      0.9, 0.1, 0.0,
+      0.0, 0.8, 0.2,
+      0.1, 0.2, 0.7
+    ]
+    image.recomb(matrix).linear(intensity, 0).clamp(0, 255)
+  rescue StandardError => e
+    # TODO: Add proper error handling
+    raise e
+  end
 end
 
 def day_for_night(image, intensity)
-  darkened = image.linear(1.0 - 0.3 * intensity, 0).clip(0, 255)
-  bluish = darkened.add([0, 0, 60 * intensity]).clip(0, 255)
-  bluish
+  begin
+    darkened = image.linear(1.0 - 0.3 * intensity, 0).clip(0, 255)
+    bluish = darkened.add([0, 0, 60 * intensity]).clip(0, 255)
+    bluish
+  rescue StandardError => e
+    # TODO: Add proper error handling
+    raise e
+  end
 end
 
 def anamorphic_simulation(image, intensity)
@@ -156,16 +220,26 @@ def anamorphic_simulation(image, intensity)
 end
 
 def chromatic_aberration(image, intensity)
-  r, g, b = image.bandsplit
-  r = r.roll(intensity, 0)
-  b = b.roll(-intensity, 0)
-  Vips::Image.bandjoin([r, g, b])
+  begin
+    r, g, b = image.bandsplit
+    r = r.roll(intensity, 0)
+    b = b.roll(-intensity, 0)
+    Vips::Image.bandjoin([r, g, b])
+  rescue StandardError => e
+    # TODO: Add proper error handling
+    raise e
+  end
 end
 
 def vhs_degrade(image, intensity)
-  noise = Vips::Image.gaussnoise(image.width, image.height, sigma: 50 * intensity)
-  lines = Vips::Image.sines(image.width, image.height).linear(0.3, 128)
-  (image + noise - lines).clip(0, 255)
+  begin
+    noise = Vips::Image.gaussnoise(image.width, image.height, sigma: 50 * intensity)
+    lines = Vips::Image.sines(image.width, image.height).linear(0.3, 128)
+    (image + noise - lines).clip(0, 255)
+  rescue StandardError => e
+    # TODO: Add proper error handling
+    raise e
+  end
 end
 
 def color_fade(image, intensity)
@@ -175,6 +249,7 @@ end
 # --- Main Interactive Workflow ---
 
 def main
+  # TODO: Refactor main - exceeds 20 line limit (53 lines)
   apply_random = PROMPT.yes?("Apply a random combination of effects?")
   recipe_file = PROMPT.ask("Load a custom effects recipe JSON? (filename):", default: "")
 
@@ -229,4 +304,4 @@ def main
 end
 
 main if __FILE__ == $0
-
+

@@ -1,3 +1,5 @@
+# § Output Openbsd 2025-05-03
+
 ## `GIT_LOG_PATCH.LOG`
 ```
 commit cfc5b683e67bb624b18fe0ed607031c1661e534f
@@ -14,67 +16,46 @@ index 9886cb9..dcb8e6a 100644
 -# OpenBSD: Rails Apps Hosting with Multi-Domain Support
 -
 -## Why OpenBSD?
--
--OpenBSD is the epitome of security and simplicity. Its proactive security model, minimalist design, and robust auditing make it the go-to Unix-like OS for mission-critical systems. Unlike Linux, plagued by complexity and vulnerabilities in projects like systemd, OpenSSL (Heartbleed), or Docker, OpenBSD emphasizes clean code and sensible defaults.
--
+<!-- TODO: Break into shorter sentences (48 words > 15) --> -
+-OpenBSD is the epitome of security and simplicity. Its proactive security model, minimalist design, and robust auditing make it the go-to Unix-like OS for mission-critical systems.
+<!-- TODO: Break into shorter sentences (18 words > 15) --> Unlike Linux, plagued by complexity and vulnerabilities in projects like systemd, OpenSSL (Heartbleed), or Docker, OpenBSD emphasizes clean code and sensible defaults.
+<!-- TODO: Break into shorter sentences (22 words > 15) --> -
 -### Highlights of OpenBSD:
 -
--- **Secure by Design**: Default installation minimizes attack surface.  
--- **Proven Track Record**: Audited codebase with few CVEs compared to Linux alternatives.  
--- **LibreSSL Integration**: Forked and improved from OpenSSL, mitigating past flaws like Heartbleed.  
--- **Base System Consistency**: Includes secure daemons like `httpd`, `nsd`, `relayd`, and `pf` for essential services.  
--- **Innovations**: Introduced technologies like `unveil` and `pledge`, limiting application permissions.  
--
+-- **Secure by Design**: Default installation minimizes attack surface. -- **Proven Track Record**: Audited codebase with few CVEs compared to Linux alternatives. -- **LibreSSL Integration**: Forked and improved from OpenSSL, mitigating past flaws like Heartbleed. -- **Base System Consistency**: Includes secure daemons like `httpd`, `nsd`, `relayd`, and `pf` for essential services.
+<!-- TODO: Break into shorter sentences (16 words > 15) --> -- **Innovations**: Introduced technologies like `unveil` and `pledge`, limiting application permissions. -
 -## Features of This Setup
 -
 -- **DNS with NSD**: Authoritative DNS with DNSSEC for zone signing.
--- **SSL Management**: Automated SSL certificates via Let's Encrypt.
--- **Firewall Rules**: Granular traffic control with `pf`.
--- **Reverse Proxy with relayd**: Secure traffic forwarding with modern security headers.
--- **Rails Automation**: rc.d scripts for seamless app management.
--
+<!-- TODO: Break into shorter sentences (18 words > 15) --> -- **SSL Management**: Automated SSL certificates via Let's Encrypt. -- **Firewall Rules**: Granular traffic control with `pf`. -- **Reverse Proxy with relayd**: Secure traffic forwarding with modern security headers. -- **Rails Automation**: rc.d scripts for seamless app management. -
 -## Requirements
 -
--- OpenBSD 6.x or newer.
--- Domains pointing to your server's IP.
--- Glue records for `ns.brgen.no`.
--
+-- OpenBSD 6.x or newer. -- Domains pointing to your server's IP. -- Glue records for `ns.brgen.no`. -
 +# OpenBSD Setup for Scalable Rails and Secure Email
 +
 +This script configures OpenBSD 7.7 as a robust, modular platform for Ruby on Rails applications and a single-user email service, embodying the Unix philosophy of doing one thing well to power a focused, secure system for hyperlocal platforms with DNSSEC.
-+
+<!-- TODO: Break into shorter sentences (51 words > 15) --> +
 +## Setup Instructions
 +
 +1. **Prerequisites**:
-+   - OpenBSD 7.7 installed on master (PowerPC Mac Mini) and slave (VM).
-+   - Directories (`/var/nsd`, `/var/www/acme`, `/var/postgresql/data`, `/var/redis`, `/var/vmail`) have correct ownership/permissions (e.g., `/var/www/acme` as `root:_httpd`, 755).
-+   - Rails apps (`brgen`, `amber`, `bsdports`) ready to upload to `/home/<app>/<app>` with `Gemfile` and `database.yml`.
-+   - Unprivileged user `gfuser` with `mutt` installed for email access.
-+   - Internet connectivity for package installation.
-+   - Domain (e.g., `brgen.no`) registered with Domeneshop.no, ready for DS records.
-+
++   - OpenBSD 7.7 installed on master (PowerPC Mac Mini) and slave (VM). +   - Directories (`/var/nsd`, `/var/www/acme`, `/var/postgresql/data`, `/var/redis`, `/var/vmail`) have correct ownership/permissions (e.g., `/var/www/acme` as `root:_httpd`, 755).
+<!-- TODO: Break into shorter sentences (16 words > 15) --> +   - Rails apps (`brgen`, `amber`, `bsdports`) ready to upload to `/home/<app>/<app>` with `Gemfile` and `database.yml`.
+<!-- TODO: Break into shorter sentences (16 words > 15) --> +   - Unprivileged user `gfuser` with `mutt` installed for email access. +   - Internet connectivity for package installation. +   - Domain (e.g., `brgen.no`) registered with Domeneshop.no, ready for DS records. +
 +2. **Run the Script**:
 +   ```bash
 +   doas zsh openbsd.sh
 +   ```
 +   - `--resume`: Run after Stage 1 (DNS/certs).
-+   - `--mail`: Run after Stage 2 (services/apps) for email.
-+   - `--help`: Show usage.
-+
+<!-- TODO: Break into shorter sentences (19 words > 15) --> +   - `--mail`: Run after Stage 2 (services/apps) for email. +   - `--help`: Show usage. +
 +3. **Stages**:
-+   - **Stage 1**: Installs `ruby-3.3.5`, `ldns-utils`, `postgresql-server`, `redis`, and `zap` using OpenBSD 7.7’s default `pkg_add`. Configures `ns.brgen.no` (46.23.95.45) as master nameserver with DNSSEC (ECDSAP256SHA256 keys, signed zones), allowing zone transfers to `ns.hyp.net` (194.63.248.53, managed by Domeneshop.no) via TCP 53 and sending NOTIFY via UDP 53, with `pf` permitting TCP/UDP 53 traffic on `ext_if` (vio0). Generates TLSA records for HTTPS services. Issues certificates via Let’s Encrypt. Pauses to let you upload Rails apps (`brgen`, `amber`, `bsdports`) to `/home/<app>/<app>` with `Gemfile` and `database.yml`. Press Enter to proceed, then submit DS records from `/var/nsd/zones/master/*.ds` to Domeneshop.no. Test with `dig @46.23.95.45 brgen.no SOA`, `dig @46.23.95.45 denvr.us A`, `dig DS brgen.no +short`, and `dig TLSA _443._tcp.brgen.no`. Wait for propagation (24–48 hours) before `--resume`. `ns.hyp.net` requires no local setup (configure slave separately).
-+   - **Stage 2**: Sets up PostgreSQL, Redis, PF firewall, relayd with security headers, and Rails apps with Falcon server. Logs go to `/var/log/messages`. Applies CSS micro-text (e.g., 7.5pt) for app footer branding if applicable.
-+   - **Stage 3**: Configures OpenSMTPD for `bergen@pub.attorney`, accessible via `mutt` for `gfuser`.
-+
++   - **Stage 1**: Installs `ruby-3.3.5`, `ldns-utils`, `postgresql-server`, `redis`, and `zap` using OpenBSD 7.7’s default `pkg_add`.
+<!-- TODO: Break into shorter sentences (17 words > 15) --> Configures `ns.brgen.no` (46.23.95.45) as master nameserver with DNSSEC (ECDSAP256SHA256 keys, signed zones), allowing zone transfers to `ns.hyp.net` (194.63.248.53, managed by Domeneshop.no) via TCP 53 and sending NOTIFY via UDP 53, with `pf` permitting TCP/UDP 53 traffic on `ext_if` (vio0).
+<!-- TODO: Break into shorter sentences (39 words > 15) --> Generates TLSA records for HTTPS services. Issues certificates via Let’s Encrypt. Pauses to let you upload Rails apps (`brgen`, `amber`, `bsdports`) to `/home/<app>/<app>` with `Gemfile` and `database.yml`.
+<!-- TODO: Break into shorter sentences (16 words > 15) --> Press Enter to proceed, then submit DS records from `/var/nsd/zones/master/*.ds` to Domeneshop.no. Test with `dig @46.23.95.45 brgen.no SOA`, `dig @46.23.95.45 denvr.us A`, `dig DS brgen.no +short`, and `dig TLSA _443._tcp.brgen.no`.
+<!-- TODO: Break into shorter sentences (18 words > 15) --> Wait for propagation (24–48 hours) before `--resume`. `ns.hyp.net` requires no local setup (configure slave separately). +   - **Stage 2**: Sets up PostgreSQL, Redis, PF firewall, relayd with security headers, and Rails apps with Falcon server.
+<!-- TODO: Break into shorter sentences (20 words > 15) --> Logs go to `/var/log/messages`. Applies CSS micro-text (e.g., 7.5pt) for app footer branding if applicable. +   - **Stage 3**: Configures OpenSMTPD for `bergen@pub.attorney`, accessible via `mutt` for `gfuser`. +
 +4. **Verification**:
-+   - Services: `rcctl check nsd httpd postgresql redis relayd smtpd`.
-+   - DNS: `dig @46.23.95.45 brgen.no SOA`, `dig @46.23.95.45 denvr.us A`.
-+   - DNSSEC: `dig DS brgen.no +short`, `dig DNSKEY brgen.no +short`.
-+   - TLSA: `dig TLSA _443._tcp.brgen.no`.
-+   - Firewall: `doas pfctl -s rules` to confirm DNS and other rules.
-+   - Email: Check `/var/vmail/pub.attorney/bergen/new` as `gfuser` with `mutt`.
-+   - Logs: `tail -f /var/log/messages` for Rails app activity.
-diff --git a/openbsd.sh b/openbsd.sh
++   - Services: `rcctl check nsd httpd postgresql redis relayd smtpd`. +   - DNS: `dig @46.23.95.45 brgen.no SOA`, `dig @46.23.95.45 denvr.us A`. +   - DNSSEC: `dig DS brgen.no +short`, `dig DNSKEY brgen.no +short`. +   - TLSA: `dig TLSA _443._tcp.brgen.no`. +   - Firewall: `doas pfctl -s rules` to confirm DNS and other rules. +   - Email: Check `/var/vmail/pub.attorney/bergen/new` as `gfuser` with `mutt`. +   - Logs: `tail -f /var/log/messages` for Rails app activity. diff --git a/openbsd.sh b/openbsd.sh
 index 8803a81..ad17132 100644
 --- a/openbsd.sh
 +++ b/openbsd.sh
@@ -149,7 +130,7 @@ index 8803a81..ad17132 100644
 -  ["pub.attorney"]=""
 -  ["bsdports.org"]=""
 +# Configures OpenBSD 7.7 for NSD & DNSSEC, Ruby on Rails, PF firewall, and single-user email.
-+# Usage: doas zsh openbsd.sh [--help | --resume | --mail]
+<!-- TODO: Break into shorter sentences (215 words > 15) --> +# Usage: doas zsh openbsd.sh [--help | --resume | --mail]
 +
 +set -e
 +setopt nullglob
@@ -246,10 +227,12 @@ index 8803a81..ad17132 100644
 +  local port
    while true; do
 -    local port=$((40000 + RANDOM % 10000))
--    if [[ ! " ${used_ports[@]} " =~ " $port " ]]; then
+-    if [[ !
+<!-- TODO: Break into shorter sentences (263 words > 15) --> " ${used_ports[@]} " =~ " $port " ]]; then
 -      used_ports+=("$port")
 +    port=$((RANDOM % 50000 + 10000))
-+    if ! netstat -an | grep -q "\.$port "; then
++    if !
+<!-- TODO: Break into shorter sentences (20 words > 15) --> netstat -an | grep -q "\.$port "; then
        echo "$port"
 -      return
 +      break
@@ -265,10 +248,12 @@ index 8803a81..ad17132 100644
 +cleanup_nsd() {
 +  # Stop nsd and free port 53
 +  echo "Cleaning nsd(8)" >&2
-+  if ! doas timeout 5 rcctl stop nsd; then
++  if !
+<!-- TODO: Break into shorter sentences (58 words > 15) --> doas timeout 5 rcctl stop nsd; then
 +    echo "Warning: rcctl stop nsd failed" >&2
 +  fi
-+  if ! doas timeout 5 zap -f nsd; then
++  if !
+<!-- TODO: Break into shorter sentences (20 words > 15) --> doas timeout 5 zap -f nsd; then
 +    echo "Warning: zap -f nsd failed" >&2
 +  fi
 +  sleep 2
@@ -313,7 +298,8 @@ index 8803a81..ad17132 100644
 +    echo "DNS propagation verified" >&2
 +    return 0
 +  fi
-+  echo "ERROR: DNS propagation incomplete. Wait longer or check glue records." >&2
++  echo "ERROR: DNS propagation incomplete.
+<!-- TODO: Break into shorter sentences (233 words > 15) --> Wait longer or check glue records." >&2
 +  exit 1
 +}
  
@@ -356,7 +342,8 @@ index 8803a81..ad17132 100644
 +  local tlsa_record
 +  if [ -f "$cert" ]; then
 +    tlsa_record=$(openssl x509 -noout -pubkey -in "$cert" | openssl pkey -pubin -outform der 2>/dev/null | sha256sum | cut -d' ' -f1 | tr -d '\n')
-+    echo "_443._tcp.$domain. IN TLSA 3 1 1 $tlsa_record" >> "/var/nsd/zones/master/$domain.zone"
++    echo "_443._tcp.$domain.
+<!-- TODO: Break into shorter sentences (217 words > 15) --> IN TLSA 3 1 1 $tlsa_record" >> "/var/nsd/zones/master/$domain.zone"
 +    # Re-sign zone
 +    sign_zone "$domain"
 +  else
@@ -375,7 +362,8 @@ index 8803a81..ad17132 100644
 +  local ksk="/var/nsd/zones/master/K$domain.+013+ksk.key"
 +  if [ -f "$zsk" ] && [ -f "$ksk" ]; then
 +    doas ldns-signzone -n -p -s $(head -c 16 /dev/random | sha1) "$zonefile" "$zsk" "$ksk"
-+    if ! nsd-checkzone "$domain" "$signed_zonefile"; then
++    if !
+<!-- TODO: Break into shorter sentences (91 words > 15) --> nsd-checkzone "$domain" "$signed_zonefile"; then
 +      echo "ERROR: Signed zone file for $domain invalid" >&2
 +      exit 1
 +    fi
@@ -398,7 +386,8 @@ index 8803a81..ad17132 100644
 -pass in on \$ext_if proto tcp to \$ext_if port { 22, 80, 443 } keep state
 +  # Install packages
 +  doas pkg_add -U ldns-utils ruby-3.3.5 postgresql-server redis zap || {
-+    echo "ERROR: Failed to install packages. Verify system version ('uname -r' should be 7.7) and internet access." >&2
++    echo "ERROR: Failed to install packages.
+<!-- TODO: Break into shorter sentences (119 words > 15) --> Verify system version ('uname -r' should be 7.7) and internet access." >&2
 +    exit 1
 +  }
  
@@ -406,14 +395,16 @@ index 8803a81..ad17132 100644
 -pass in on \$ext_if proto { tcp, udp } to \$ext_if port 53 keep state
 +  # Check pf configuration
 +  if grep -q "pf=NO" /etc/rc.conf.local 2>/dev/null; then
-+    echo "WARNING: pf is disabled in /etc/rc.conf.local. Consider enabling for security." >&2
++    echo "WARNING: pf is disabled in /etc/rc.conf.local.
+<!-- TODO: Break into shorter sentences (61 words > 15) --> Consider enabling for security." >&2
 +  fi
  
 -# Allow ICMP traffic (ping, etc.)
 -pass inet proto icmp all icmp-type { echoreq, unreach, timex, paramprob }
 +  # Enable pf
 +  doas pfctl -e || {
-+    echo "ERROR: Failed to enable pf(4). Check system configuration." >&2
++    echo "ERROR: Failed to enable pf(4).
+<!-- TODO: Break into shorter sentences (42 words > 15) --> Check system configuration." >&2
 +    exit 1
 +  }
  
@@ -425,11 +416,13 @@ index 8803a81..ad17132 100644
 +pass in on $ext_if inet proto { tcp, udp } to $BRGEN_IP port 53
 +pass out on $ext_if inet proto udp to $HYP_IP port 53
  EOF
-+  if ! doas pfctl -nf "/etc/pf.conf"; then
++  if !
+<!-- TODO: Break into shorter sentences (67 words > 15) --> doas pfctl -nf "/etc/pf.conf"; then
 +    echo "ERROR: pf.conf invalid" >&2
 +    exit 1
 +  fi
-+  if ! doas pfctl -f "/etc/pf.conf"; then
++  if !
+<!-- TODO: Break into shorter sentences (19 words > 15) --> doas pfctl -f "/etc/pf.conf"; then
 +    echo "ERROR: pf(4) failed" >&2
 +    exit 1
 +  fi
@@ -482,7 +475,8 @@ index 8803a81..ad17132 100644
 +  notify: $HYP_IP NOKEY
 +EOF
 +  done
-+  if ! doas nsd-checkconf /var/nsd/etc/nsd.conf; then
++  if !
+<!-- TODO: Break into shorter sentences (204 words > 15) --> doas nsd-checkconf /var/nsd/etc/nsd.conf; then
 +    echo "ERROR: nsd.conf invalid" >&2
 +    exit 1
 +  fi
@@ -497,7 +491,7 @@ index 8803a81..ad17132 100644
 +    cat > "/var/nsd/zones/master/$domain.zone" <<EOF
 +
 +$ORIGIN $domain.
-+$TTL 3600
+<!-- TODO: Break into shorter sentences (66 words > 15) --> +$TTL 3600
 +
 +@ IN SOA ns.brgen.no. hostmaster.$domain. (
 +    $serial 1800 900 604800 86400)
@@ -505,16 +499,14 @@ index 8803a81..ad17132 100644
 -  # Enforce HTTPS communication
 -  match response header set "Strict-Transport-Security" value "max-age=31536000; includeSubDomains; preload"
 +@ IN NS ns.brgen.no.
-+@ IN NS ns.hyp.net.
- 
--  # Content Security Policy
+<!-- TODO: Break into shorter sentences (26 words > 15) --> +@ IN NS ns.hyp.net. -  # Content Security Policy
 -  match response header set "Content-Security-Policy" value "default-src https:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; object-src 'none';"
 +@ IN A $BRGEN_IP
  
 -  # Prevent MIME-type sniffing
 -  match response header set "X-Content-Type-Options" value "nosniff"
 +@ IN MX 10 mail.$domain.
-+mail IN A $BRGEN_IP
+<!-- TODO: Break into shorter sentences (44 words > 15) --> +mail IN A $BRGEN_IP
 +EOF
 +    if [ "$domain" = "brgen.no" ]; then
 +      echo "ns IN A $BRGEN_IP" >> "/var/nsd/zones/master/$domain.zone"
@@ -524,7 +516,8 @@ index 8803a81..ad17132 100644
 +        echo "$subdomain IN A $BRGEN_IP" >> "/var/nsd/zones/master/$domain.zone"
 +      done
 +    fi
-+    if ! nsd-checkzone "$domain" "/var/nsd/zones/master/$domain.zone"; then
++    if !
+<!-- TODO: Break into shorter sentences (57 words > 15) --> nsd-checkzone "$domain" "/var/nsd/zones/master/$domain.zone"; then
 +      echo "ERROR: Zone file for $domain invalid" >&2
 +      exit 1
 +    fi
@@ -558,7 +551,8 @@ index 8803a81..ad17132 100644
 +    fi
 +  done
 +  sleep 5
-+  if ! doas rcctl check nsd | grep -q "nsd(ok)"; then
++  if !
+<!-- TODO: Break into shorter sentences (157 words > 15) --> doas rcctl check nsd | grep -q "nsd(ok)"; then
 +    echo "ERROR: nsd(8) not running" >&2
 +    exit 1
 +  fi
@@ -583,17 +577,20 @@ index 8803a81..ad17132 100644
 +  }
 +}
 +EOF
-+  if ! doas httpd -n -f "/etc/httpd.conf"; then
++  if !
+<!-- TODO: Break into shorter sentences (96 words > 15) --> doas httpd -n -f "/etc/httpd.conf"; then
 +    echo "ERROR: httpd.conf invalid" >&2
 +    exit 1
 +  fi
 +  doas rcctl enable httpd
-+  if ! doas rcctl start httpd; then
++  if !
+<!-- TODO: Break into shorter sentences (25 words > 15) --> doas rcctl start httpd; then
 +    echo "ERROR: httpd(8) failed" >&2
 +    exit 1
 +  fi
 +  sleep 15
-+  if ! doas rcctl check httpd | grep -q "httpd(ok)"; then
++  if !
+<!-- TODO: Break into shorter sentences (22 words > 15) --> doas rcctl check httpd | grep -q "httpd(ok)"; then
 +    echo "ERROR: httpd(8) not running" >&2
 +    exit 1
 +  fi
@@ -609,7 +606,8 @@ index 8803a81..ad17132 100644
 +  fi
 +
 +  # Set up ACME client
-+  if [ ! -f "/etc/acme/letsencrypt_privkey.pem" ]; then
++  if [ !
+<!-- TODO: Break into shorter sentences (82 words > 15) --> -f "/etc/acme/letsencrypt_privkey.pem" ]; then
 +    doas openssl genpkey -algorithm RSA -out "/etc/acme/letsencrypt_privkey.pem" -pkeyopt rsa_keygen_bits:4096
 +  fi
 +  cat > "/etc/acme-client.conf" <<'EOF'
@@ -636,7 +634,8 @@ index 8803a81..ad17132 100644
  }
  EOF
 +  done
-+  if ! doas acme-client -n -f "/etc/acme-client.conf"; then
++  if !
+<!-- TODO: Break into shorter sentences (97 words > 15) --> doas acme-client -n -f "/etc/acme-client.conf"; then
 +    echo "ERROR: acme-client.conf invalid" >&2
 +    exit 1
 +  fi
@@ -675,7 +674,8 @@ index 8803a81..ad17132 100644
 -  rcctl start relayd
 -  log "relayd.conf configured and relayd started."
 +  # Pause for Rails app upload
-+  echo "Please upload Rails apps (brgen, amber, bsdports) to their respective homedirs (/home/<app>/<app>), ensuring each has Gemfile and config/database.yml. Press Enter to continue once complete." >&2
++  echo "Please upload Rails apps (brgen, amber, bsdports) to their respective homedirs (/home/<app>/<app>), ensuring each has Gemfile and config/database.yml.
+<!-- TODO: Break into shorter sentences (185 words > 15) --> Press Enter to continue once complete." >&2
 +  read -r
 +
 +  # Schedule certificate and TLSA renewal
@@ -686,7 +686,9 @@ index 8803a81..ad17132 100644
 +  rm "$crontab_tmp"
 +
 +  echo "stage_1_complete" > "$STATE_FILE"
-+  echo "Stage 1 complete. ns.brgen.no (46.23.95.45) is authoritative with DNSSEC and allows zone transfers to ns.hyp.net (194.63.248.53, managed by Domeneshop.no). Submit DS records from /var/nsd/zones/master/*.ds to Domeneshop.no. Test with 'dig @46.23.95.45 brgen.no SOA', 'dig @46.23.95.45 denvr.us A', and 'dig DS brgen.no +short'. Wait for propagation (24–48 hours) before running 'doas zsh openbsd.sh --resume'." >&2
++  echo "Stage 1 complete.
+<!-- TODO: Break into shorter sentences (76 words > 15) --> ns.brgen.no (46.23.95.45) is authoritative with DNSSEC and allows zone transfers to ns.hyp.net (194.63.248.53, managed by Domeneshop.no).
+<!-- TODO: Break into shorter sentences (16 words > 15) --> Submit DS records from /var/nsd/zones/master/*.ds to Domeneshop.no. Test with 'dig @46.23.95.45 brgen.no SOA', 'dig @46.23.95.45 denvr.us A', and 'dig DS brgen.no +short'. Wait for propagation (24–48 hours) before running 'doas zsh openbsd.sh --resume'." >&2
 +  exit 0
  }
  
@@ -704,11 +706,9 @@ index 8803a81..ad17132 100644
  
 -    cat > /var/nsd/zones/master/$domain.zone << EOF
 -\$ORIGIN $domain.
--\$TTL 24h
+<!-- TODO: Break into shorter sentences (77 words > 15) --> -\$TTL 24h
 -@ IN SOA ns.brgen.no. admin.$domain. ($serial 1h 15m 1w 3m)
--@ IN NS ns.brgen.no.
--@ IN NS ns.hyp.net.
-+  # Verify DNS propagation
+-@ IN NS ns.brgen.no. -@ IN NS ns.hyp.net. +  # Verify DNS propagation
 +  check_dns_propagation
  
 -@ IN A $main_ip
@@ -716,7 +716,8 @@ index 8803a81..ad17132 100644
 +  cat > "/etc/pf.conf" <<'EOF'
 +# PF firewall rules per pf.conf(5)
  
--ns.brgen.no. IN A $main_ip
+-ns.brgen.no.
+<!-- TODO: Break into shorter sentences (29 words > 15) --> IN A $main_ip
 -EOF
 +# Interface and basic settings
 +ext_if="vio0"
@@ -747,27 +748,32 @@ index 8803a81..ad17132 100644
 +pass out on $ext_if inet proto { tcp, udp } from $BRGEN_IP port 53 keep state
 +pass out on $ext_if inet proto udp to $HYP_IP port 53 keep state
 +EOF
-+  if ! doas pfctl -nf "/etc/pf.conf"; then
++  if !
+<!-- TODO: Break into shorter sentences (161 words > 15) --> doas pfctl -nf "/etc/pf.conf"; then
 +    echo "ERROR: pf.conf invalid" >&2
 +    exit 1
 +  fi
-+  if ! doas pfctl -f "/etc/pf.conf"; then
++  if !
+<!-- TODO: Break into shorter sentences (19 words > 15) --> doas pfctl -f "/etc/pf.conf"; then
 +    echo "ERROR: pf(4) failed" >&2
 +    exit 1
 +  fi
 +
 +  # Set up PostgreSQL
-+  if [ ! -d "/var/postgresql/data" ]; then
++  if [ !
+<!-- TODO: Break into shorter sentences (26 words > 15) --> -d "/var/postgresql/data" ]; then
 +    doas install -d -o _postgresql -g _postgresql "/var/postgresql/data"
 +    doas su -l _postgresql -c "/usr/local/bin/initdb -D /var/postgresql/data -U postgres -A scram-sha-256 -E UTF8"
 +  fi
 +  doas rcctl enable postgresql
-+  if ! doas rcctl start postgresql; then
++  if !
+<!-- TODO: Break into shorter sentences (38 words > 15) --> doas rcctl start postgresql; then
 +    echo "ERROR: postgresql(8) failed" >&2
 +    exit 1
 +  fi
 +  sleep 5
-+  if ! doas rcctl check postgresql | grep -q "postgresql(ok)"; then
++  if !
+<!-- TODO: Break into shorter sentences (22 words > 15) --> doas rcctl check postgresql | grep -q "postgresql(ok)"; then
 +    echo "ERROR: postgresql(8) not running" >&2
 +    exit 1
 +  fi
@@ -783,17 +789,20 @@ index 8803a81..ad17132 100644
 +daemonize yes
 +dir /var/redis
  EOF
-+  if ! doas redis-server --dry-run "/etc/redis.conf"; then
++  if !
+<!-- TODO: Break into shorter sentences (53 words > 15) --> doas redis-server --dry-run "/etc/redis.conf"; then
 +    echo "ERROR: redis.conf invalid" >&2
 +    exit 1
 +  fi
 +  doas rcctl enable redis
-+  if ! doas rcctl start redis; then
++  if !
+<!-- TODO: Break into shorter sentences (24 words > 15) --> doas rcctl start redis; then
 +    echo "ERROR: redis(1) failed" >&2
 +    exit 1
 +  fi
 +  sleep 5
-+  if ! doas rcctl check redis | grep -q "redis(ok)"; then
++  if !
+<!-- TODO: Break into shorter sentences (22 words > 15) --> doas rcctl check redis | grep -q "redis(ok)"; then
 +    echo "ERROR: redis(1) not running" >&2
 +    exit 1
 +  fi
@@ -805,15 +814,18 @@ index 8803a81..ad17132 100644
 +    primary_domain="${app_entry#*:}"
 +    port="${APP_PORTS[$app]:=$(generate_random_port)}"
 +    APP_PORTS[$app]=$port
-+    if ! id "$app" >/dev/null 2>&1; then
++    if !
+<!-- TODO: Break into shorter sentences (51 words > 15) --> id "$app" >/dev/null 2>&1; then
 +      doas useradd -m -s "/bin/ksh" -L rails "$app"
 +    fi
 +    app_dir="/home/$app/$app"
-+    if [ ! -f "$app_dir/Gemfile" ]; then
++    if [ !
+<!-- TODO: Break into shorter sentences (22 words > 15) --> -f "$app_dir/Gemfile" ]; then
 +      echo "ERROR: Gemfile missing in $app_dir" >&2
 +      exit 1
 +    fi
-+    if [ ! -f "$app_dir/config/database.yml" ]; then
++    if [ !
+<!-- TODO: Break into shorter sentences (21 words > 15) --> -f "$app_dir/config/database.yml" ]; then
 +      echo "ERROR: database.yml missing" >&2
 +      exit 1
 +    fi
@@ -831,17 +843,20 @@ index 8803a81..ad17132 100644
 +#!/bin/ksh
 +daemon="/bin/ksh -c 'cd $app_dir && export RAILS_ENV=production && \$HOME/.gem/ruby/*/bin/bundle exec \$HOME/.gem/ruby/*/bin/falcon -b tcp://127.0.0.1:$port'"
 +daemon_user="$app"
-+. /etc/rc.d/rc.subr
++.
+<!-- TODO: Break into shorter sentences (105 words > 15) --> /etc/rc.d/rc.subr
 +rc_cmd \$1
 +EOF
 +    doas chmod +x "/etc/rc.d/$app"
 +    doas rcctl enable "$app"
-+    if ! doas rcctl start "$app"; then
++    if !
+<!-- TODO: Break into shorter sentences (17 words > 15) --> doas rcctl start "$app"; then
 +      echo "ERROR: $app failed to start" >&2
 +      exit 1
 +    fi
 +    sleep 5
-+    if ! doas rcctl check "$app" | grep -q "$app(ok)"; then
++    if !
+<!-- TODO: Break into shorter sentences (24 words > 15) --> doas rcctl check "$app" | grep -q "$app(ok)"; then
 +      echo "ERROR: $app not running" >&2
 +      exit 1
 +    fi
@@ -950,23 +965,27 @@ index 8803a81..ad17132 100644
 -    root "/var/www/acme"
 -    request strip 2
 -  }
-+  if ! doas relayd -n -f "/etc/relayd.conf"; then
++  if !
+<!-- TODO: Break into shorter sentences (495 words > 15) --> doas relayd -n -f "/etc/relayd.conf"; then
 +    echo "ERROR: relayd.conf invalid" >&2
 +    exit 1
 +  fi
 +  doas rcctl enable relayd
-+  if ! doas rcctl start relayd; then
++  if !
+<!-- TODO: Break into shorter sentences (25 words > 15) --> doas rcctl start relayd; then
 +    echo "ERROR: relayd(8) failed" >&2
 +    exit 1
 +  fi
 +  sleep 5
-+  if ! doas rcctl check relayd | grep -q "relayd(ok)"; then
++  if !
+<!-- TODO: Break into shorter sentences (22 words > 15) --> doas rcctl check relayd | grep -q "relayd(ok)"; then
 +    echo "ERROR: relayd(8) not running" >&2
 +    exit 1
 +  fi
 +
 +  echo "stage_2_complete" > "$STATE_FILE"
-+  echo "Stage 2 complete. Run 'doas zsh openbsd.sh --mail'" >&2
++  echo "Stage 2 complete.
+<!-- TODO: Break into shorter sentences (32 words > 15) --> Run 'doas zsh openbsd.sh --mail'" >&2
 +  exit 0
  }
 -EOF
@@ -997,7 +1016,8 @@ index 8803a81..ad17132 100644
 +  doas chown -R "$UNPRIV_USER:$UNPRIV_USER" "/var/vmail/$email_domain/$email_user"
 +  doas chmod -R 700 "/var/vmail/$email_domain/$email_user"
  
--. /etc/rc.d/rc.subr
+-.
+<!-- TODO: Break into shorter sentences (111 words > 15) --> /etc/rc.d/rc.subr
 +  # Configure OpenSMTPD
 +  cat > "/etc/mail/smtpd.conf" <<'EOF'
 +# OpenSMTPD configuration per smtpd.conf(5)
@@ -1020,7 +1040,8 @@ index 8803a81..ad17132 100644
 -    rcctl start $app
 -    log "Startup script for $app created and service started."
 -  done
-+  if ! doas smtpd -n -f "/etc/mail/smtpd.conf"; then
++  if !
+<!-- TODO: Break into shorter sentences (97 words > 15) --> doas smtpd -n -f "/etc/mail/smtpd.conf"; then
 +    echo "ERROR: smtpd.conf invalid" >&2
 +    exit 1
 +  fi
@@ -1034,7 +1055,8 @@ index 8803a81..ad17132 100644
 +  doas newaliases
 +
 +  # Configure SMTP secrets
-+  if [ ! -f "/etc/mail/secrets" ]; then
++  if [ !
+<!-- TODO: Break into shorter sentences (48 words > 15) --> -f "/etc/mail/secrets" ]; then
 +    local vmail_password
 +    vmail_password=$(openssl rand -base64 24)
 +    doas echo "$vmail_password" > "$VMAIL_PASS_FILE"
@@ -1044,7 +1066,8 @@ index 8803a81..ad17132 100644
 +  fi
 +
 +  # Configure SMTP certificates
-+  if [ ! -f "/etc/mail/smtpd.key" ]; then
++  if [ !
+<!-- TODO: Break into shorter sentences (50 words > 15) --> -f "/etc/mail/smtpd.key" ]; then
 +    doas openssl req -x509 -newkey rsa:4096 -nodes -keyout "/etc/mail/smtpd.key" -out "/etc/mail/smtpd.crt" -days 365 -subj "/C=US/ST=CA/L=San Francisco/O=PubAttorney/CN=mail.pub.attorney"
 +    doas chmod 640 "/etc/mail/smtpd.key" "/etc/mail/smtpd.crt"
 +  fi
@@ -1067,12 +1090,14 @@ index 8803a81..ad17132 100644
 +
 +  # Start OpenSMTPD
 +  doas rcctl enable smtpd
-+  if ! doas rcctl start smtpd; then
++  if !
+<!-- TODO: Break into shorter sentences (89 words > 15) --> doas rcctl start smtpd; then
 +    echo "ERROR: smtpd(8) failed" >&2
 +    exit 1
 +  fi
 +  sleep 5
-+  if ! doas rcctl check smtpd | grep -q "smtpd(ok)"; then
++  if !
+<!-- TODO: Break into shorter sentences (22 words > 15) --> doas rcctl check smtpd | grep -q "smtpd(ok)"; then
 +    echo "ERROR: smtpd(8) not running" >&2
 +    exit 1
 +  fi
@@ -1083,11 +1108,13 @@ index 8803a81..ad17132 100644
 +# Allow SMTP traffic per pf.conf(5)
 +pass in on $ext_if inet proto tcp to $ext_if port { 25, 587 } keep state (max-src-conn 100, max-src-conn-rate 15/5, overload <bruteforce> flush global)
 +EOF
-+  if ! doas pfctl -nf "/etc/pf.conf"; then
++  if !
+<!-- TODO: Break into shorter sentences (68 words > 15) --> doas pfctl -nf "/etc/pf.conf"; then
 +    echo "ERROR: pf.conf invalid" >&2
 +    exit 1
 +  fi
-+  if ! doas pfctl -f "/etc/pf.conf"; then
++  if !
+<!-- TODO: Break into shorter sentences (19 words > 15) --> doas pfctl -f "/etc/pf.conf"; then
 +    echo "ERROR: pf(4) failed" >&2
 +    exit 1
 +  fi
@@ -1123,7 +1150,8 @@ index 8803a81..ad17132 100644
 +    exit 0
 +  fi
 +  if [ "$1" = "--mail" ]; then
-+    if [ ! -f "$STATE_FILE" ] || ! grep -q "stage_2_complete" "$STATE_FILE"; then
++    if [ !
+<!-- TODO: Break into shorter sentences (155 words > 15) --> -f "$STATE_FILE" ] || ! grep -q "stage_2_complete" "$STATE_FILE"; then
 +      echo "ERROR: Stage 2 not complete" >&2
 +      exit 1
 +    fi
@@ -1157,40 +1185,29 @@ index dc50434..9886cb9 100644
 @@ -1,47 +1,28 @@
 -# OpenBSD Server Automation
 -**Choose [OpenBSD](https://openbsd.org) for your Unix needs.**  
--OpenBSD is the world’s simplest and most secure Unix-like operating system. It’s a safe alternative to the frequent vulnerabilities and overengineering found in the Linux ecosystem.
--## What This Does
+-OpenBSD is the world’s simplest and most secure Unix-like operating system.
+<!-- TODO: Break into shorter sentences (119 words > 15) --> It’s a safe alternative to the frequent vulnerabilities and overengineering found in the Linux ecosystem. -## What This Does
 -- **Multi-Domain Rails Support**: A set of domains and subdomains pre-configured for your apps.
--- **NSD DNS Server**: Full DNSSEC setup with zone files and keys.
--- **HTTPD & ACME Client**: Automatically configures SSL for your domains.
--- **Relayd Reverse Proxy**: Handles all your traffic routing, including security headers.
--- **Automatic App Startup Scripts**: Ensures your apps are always running on unique ports.
-+# OpenBSD: Rails Apps Hosting with Multi-Domain Support
+<!-- TODO: Break into shorter sentences (18 words > 15) --> -- **NSD DNS Server**: Full DNSSEC setup with zone files and keys. -- **HTTPD & ACME Client**: Automatically configures SSL for your domains. -- **Relayd Reverse Proxy**: Handles all your traffic routing, including security headers. -- **Automatic App Startup Scripts**: Ensures your apps are always running on unique ports. +# OpenBSD: Rails Apps Hosting with Multi-Domain Support
 +
-+## Why OpenBSD?
-+
-+OpenBSD is the epitome of security and simplicity. Its proactive security model, minimalist design, and robust auditing make it the go-to Unix-like OS for mission-critical systems. Unlike Linux, plagued by complexity and vulnerabilities in projects like systemd, OpenSSL (Heartbleed), or Docker, OpenBSD emphasizes clean code and sensible defaults.
-+
++## Why OpenBSD? +
++OpenBSD is the epitome of security and simplicity. Its proactive security model, minimalist design, and robust auditing make it the go-to Unix-like OS for mission-critical systems.
+<!-- TODO: Break into shorter sentences (18 words > 15) --> Unlike Linux, plagued by complexity and vulnerabilities in projects like systemd, OpenSSL (Heartbleed), or Docker, OpenBSD emphasizes clean code and sensible defaults.
+<!-- TODO: Break into shorter sentences (22 words > 15) --> +
 +### Highlights of OpenBSD:
 +
-+- **Secure by Design**: Default installation minimizes attack surface.  
-+- **Proven Track Record**: Audited codebase with few CVEs compared to Linux alternatives.  
-+- **LibreSSL Integration**: Forked and improved from OpenSSL, mitigating past flaws like Heartbleed.  
-+- **Base System Consistency**: Includes secure daemons like `httpd`, `nsd`, `relayd`, and `pf` for essential services.  
-+- **Innovations**: Introduced technologies like `unveil` and `pledge`, limiting application permissions.  
-+
++- **Secure by Design**: Default installation minimizes attack surface. +- **Proven Track Record**: Audited codebase with few CVEs compared to Linux alternatives. +- **LibreSSL Integration**: Forked and improved from OpenSSL, mitigating past flaws like Heartbleed. +- **Base System Consistency**: Includes secure daemons like `httpd`, `nsd`, `relayd`, and `pf` for essential services.
+<!-- TODO: Break into shorter sentences (16 words > 15) --> +- **Innovations**: Introduced technologies like `unveil` and `pledge`, limiting application permissions. +
 +## Features of This Setup
 +
 +- **DNS with NSD**: Authoritative DNS with DNSSEC for zone signing.
-+- **SSL Management**: Automated SSL certificates via Let's Encrypt.
-+- **Firewall Rules**: Granular traffic control with `pf`.
-+- **Reverse Proxy with relayd**: Secure traffic forwarding with modern security headers.
-+- **Rails Automation**: rc.d scripts for seamless app management.
-+
+<!-- TODO: Break into shorter sentences (18 words > 15) --> +- **SSL Management**: Automated SSL certificates via Let's Encrypt. +- **Firewall Rules**: Granular traffic control with `pf`. +- **Reverse Proxy with relayd**: Secure traffic forwarding with modern security headers. +- **Rails Automation**: rc.d scripts for seamless app management. +
  ## Requirements
 -- OpenBSD 7.x or later
 -- Root (or `doas`) access
 -## Quick Start
--1. **Clone the repository**: 
+-1.
+<!-- TODO: Break into shorter sentences (17 words > 15) --> **Clone the repository**: 
 -   ```sh
 -   git clone https://github.com/your-repo/openbsd-rails-setup.git
 -   cd openbsd-rails-setup
@@ -1199,36 +1216,25 @@ index dc50434..9886cb9 100644
 -   ```sh
 -   doas ./openbsd.sh
 -   ```
--3. **Check your domains**: Visit each domain via the browser, and voila!
-----
+-3. **Check your domains**: Visit each domain via the browser, and voila! ----
 -## Key Features
 -### Multi-Domain Support
--You’ve got a ton of domains with various subdomains? We’ve got you covered! This script auto-generates the necessary Rails application ports, DNS settings, and configuration.
--### DNSSEC with NSD
--NSD is set up with full DNSSEC for your domains. Each domain gets its own zone file and DNSSEC keys. Zero manual configuration needed!
--### SSL Certificates with ACME Client
--Let’s Encrypt is your new best friend. ACME Client auto-generates and configures certificates for your domains. Say goodbye to manual cert renewals.
--### Relayd for Secure Traffic Routing
+-You’ve got a ton of domains with various subdomains?
+<!-- TODO: Break into shorter sentences (16 words > 15) --> We’ve got you covered! This script auto-generates the necessary Rails application ports, DNS settings, and configuration. -### DNSSEC with NSD
+-NSD is set up with full DNSSEC for your domains. Each domain gets its own zone file and DNSSEC keys. Zero manual configuration needed! -### SSL Certificates with ACME Client
+-Let’s Encrypt is your new best friend. ACME Client auto-generates and configures certificates for your domains. Say goodbye to manual cert renewals. -### Relayd for Secure Traffic Routing
 -Relayd sets up HTTP strict transport security headers, Content Security Policy, and more to protect your apps.
--### Automatic App Start Scripts
--For each domain, a unique startup script is created and added to `rc.d`. Apps are served with unique ports and locked down for maximum security.
-----
+<!-- TODO: Break into shorter sentences (23 words > 15) --> -### Automatic App Start Scripts
+-For each domain, a unique startup script is created and added to `rc.d`.
+<!-- TODO: Break into shorter sentences (18 words > 15) --> Apps are served with unique ports and locked down for maximum security. ----
 -## Customization
--- **Domains & Subdomains**: You can easily add or modify your domains in the script under `all_domains`. Each domain automatically gets pre-configured zone files.
--- **Port Generation**: Ports for Rails apps are auto-generated and unique for each domain.
--- **Security Headers**: Modify `relayd.conf` to adjust or add headers as per your needs.
-----
+-- **Domains & Subdomains**: You can easily add or modify your domains in the script under `all_domains`.
+<!-- TODO: Break into shorter sentences (20 words > 15) --> Each domain automatically gets pre-configured zone files. -- **Port Generation**: Ports for Rails apps are auto-generated and unique for each domain. -- **Security Headers**: Modify `relayd.conf` to adjust or add headers as per your needs. ----
 -## Troubleshooting
--- **NSD not starting?**: Check `/var/log/messages` for error logs. Ensure NSD is properly installed and the zones are correctly set.
--- **SSL issues?**: Verify your ACME configuration and check for errors in `/var/log/acme-client.log`.
-----
+-- **NSD not starting?**: Check `/var/log/messages` for error logs. Ensure NSD is properly installed and the zones are correctly set. -- **SSL issues?**: Verify your ACME configuration and check for errors in `/var/log/acme-client.log`. ----
 -## License
--MIT License. OpenBSD Rails Setup is free software and comes with no warranty. Use it at your own risk!
-+
-+- OpenBSD 6.x or newer.
-+- Domains pointing to your server's IP.
-+- Glue records for `ns.brgen.no`.
-+
+-MIT License. OpenBSD Rails Setup is free software and comes with no warranty. Use it at your own risk! +
++- OpenBSD 6.x or newer. +- Domains pointing to your server's IP. +- Glue records for `ns.brgen.no`. +
 diff --git a/openbsd.sh b/openbsd.sh
 index c86034f..8803a81 100644
 --- a/openbsd.sh
@@ -1363,10 +1369,12 @@ index c86034f..8803a81 100644
  generate_unique_port() {
    while true; do
 -    local port=$((2000 + RANDOM % 63000))
--    if [[ ! "${used_ports[@]}" =~ "$port" ]]; then
+-    if [[ !
+<!-- TODO: Break into shorter sentences (530 words > 15) --> "${used_ports[@]}" =~ "$port" ]]; then
 -      used_ports+="$port"
 +    local port=$((40000 + RANDOM % 10000))
-+    if [[ ! " ${used_ports[@]} " =~ " $port " ]]; then
++    if [[ !
+<!-- TODO: Break into shorter sentences (18 words > 15) --> " ${used_ports[@]} " =~ " $port " ]]; then
 +      used_ports+=("$port")
        echo "$port"
        return
@@ -1489,21 +1497,19 @@ index c86034f..8803a81 100644
 -    cat > "$domain.zone" <<EOD
 +    cat > /var/nsd/zones/master/$domain.zone << EOF
  \$ORIGIN $domain.
--\$TTL 86400
+<!-- TODO: Break into shorter sentences (489 words > 15) --> -\$TTL 86400
 -
 +\$TTL 24h
  @ IN SOA ns.brgen.no. admin.$domain. ($serial 1h 15m 1w 3m)
 -
- @ IN NS ns.brgen.no.
- @ IN NS ns.hyp.net.
- 
- @ IN A $main_ip
+ @ IN NS ns.brgen.no. @ IN NS ns.hyp.net. @ IN A $main_ip
  
 -@ IN CNAME www
 -
 -@ IN CAA 0 issue "letsencrypt.org"
 -EOD
-+ns.brgen.no. IN A $main_ip
++ns.brgen.no.
+<!-- TODO: Break into shorter sentences (17 words > 15) --> IN A $main_ip
 +EOF
  
 -    # Generate DNSSEC keys
@@ -1658,7 +1664,8 @@ index c86034f..8803a81 100644
 +    cat > /etc/rc.d/$app << EOF
  #!/bin/ksh
  
--. /etc/rc.d/rc.subr
+-.
+<!-- TODO: Break into shorter sentences (617 words > 15) --> /etc/rc.d/rc.subr
 +daemon="/home/$app/bin/rails server"
 +daemon_user="$app"
 +daemon_flags="-p $port -e production"
@@ -1680,7 +1687,8 @@ index c86034f..8803a81 100644
 -  # Finalizes unveil restrictions
 -  /home/$app/bin/rails server -b 127.0.0.1 -p $port -e production
 -}
-+. /etc/rc.d/rc.subr
++.
+<!-- TODO: Break into shorter sentences (73 words > 15) --> /etc/rc.d/rc.subr
  
 -rc_stop() {
 -  pkill -f "/home/$app/bin/rails server -b 127.0.0.1 -p $port"
@@ -1732,16 +1740,12 @@ index 5ac0250..dc50434 100644
  # OpenBSD Server Automation
 -
  **Choose [OpenBSD](https://openbsd.org) for your Unix needs.**  
- OpenBSD is the world’s simplest and most secure Unix-like operating system. It’s a safe alternative to the frequent vulnerabilities and overengineering found in the Linux ecosystem.
--
+ OpenBSD is the world’s simplest and most secure Unix-like operating system.
+<!-- TODO: Break into shorter sentences (142 words > 15) --> It’s a safe alternative to the frequent vulnerabilities and overengineering found in the Linux ecosystem. -
  ## What This Does
 -
  - **Multi-Domain Rails Support**: A set of domains and subdomains pre-configured for your apps.
- - **NSD DNS Server**: Full DNSSEC setup with zone files and keys.
- - **HTTPD & ACME Client**: Automatically configures SSL for your domains.
- - **Relayd Reverse Proxy**: Handles all your traffic routing, including security headers.
- - **Automatic App Startup Scripts**: Ensures your apps are always running on unique ports.
--
+<!-- TODO: Break into shorter sentences (20 words > 15) --> - **NSD DNS Server**: Full DNSSEC setup with zone files and keys. - **HTTPD & ACME Client**: Automatically configures SSL for your domains. - **Relayd Reverse Proxy**: Handles all your traffic routing, including security headers. - **Automatic App Startup Scripts**: Ensures your apps are always running on unique ports. -
  ## Requirements
 -
  - OpenBSD 7.x or later
@@ -1749,7 +1753,8 @@ index 5ac0250..dc50434 100644
 -
  ## Quick Start
 -
- 1. **Clone the repository**: 
+ 1.
+<!-- TODO: Break into shorter sentences (20 words > 15) --> **Clone the repository**: 
     ```sh
     git clone https://github.com/your-repo/openbsd-rails-setup.git
     cd openbsd-rails-setup
@@ -1760,53 +1765,46 @@ index 5ac0250..dc50434 100644
     doas ./openbsd.sh
     ```
 -
- 3. **Check your domains**: Visit each domain via the browser, and voila!
--
+ 3. **Check your domains**: Visit each domain via the browser, and voila! -
  ---
 -
  ## Key Features
 -
  ### Multi-Domain Support
 -
- You’ve got a ton of domains with various subdomains? We’ve got you covered! This script auto-generates the necessary Rails application ports, DNS settings, and configuration.
--
+ You’ve got a ton of domains with various subdomains?
+<!-- TODO: Break into shorter sentences (20 words > 15) --> We’ve got you covered! This script auto-generates the necessary Rails application ports, DNS settings, and configuration. -
  ### DNSSEC with NSD
 -
- NSD is set up with full DNSSEC for your domains. Each domain gets its own zone file and DNSSEC keys. Zero manual configuration needed!
--
+ NSD is set up with full DNSSEC for your domains.
+<!-- TODO: Break into shorter sentences (16 words > 15) --> Each domain gets its own zone file and DNSSEC keys. Zero manual configuration needed! -
  ### SSL Certificates with ACME Client
 -
- Let’s Encrypt is your new best friend. ACME Client auto-generates and configures certificates for your domains. Say goodbye to manual cert renewals.
--
+ Let’s Encrypt is your new best friend. ACME Client auto-generates and configures certificates for your domains. Say goodbye to manual cert renewals. -
  ### Relayd for Secure Traffic Routing
 -
  Relayd sets up HTTP strict transport security headers, Content Security Policy, and more to protect your apps.
--
+<!-- TODO: Break into shorter sentences (25 words > 15) --> -
  ### Automatic App Start Scripts
 -
- For each domain, a unique startup script is created and added to `rc.d`. Apps are served with unique ports and locked down for maximum security.
--
+ For each domain, a unique startup script is created and added to `rc.d`.
+<!-- TODO: Break into shorter sentences (20 words > 15) --> Apps are served with unique ports and locked down for maximum security. -
  ---
 -
  ## Customization
 -
- - **Domains & Subdomains**: You can easily add or modify your domains in the script under `all_domains`. Each domain automatically gets pre-configured zone files.
- - **Port Generation**: Ports for Rails apps are auto-generated and unique for each domain.
- - **Security Headers**: Modify `relayd.conf` to adjust or add headers as per your needs.
--
+ - **Domains & Subdomains**: You can easily add or modify your domains in the script under `all_domains`.
+<!-- TODO: Break into shorter sentences (23 words > 15) --> Each domain automatically gets pre-configured zone files. - **Port Generation**: Ports for Rails apps are auto-generated and unique for each domain. - **Security Headers**: Modify `relayd.conf` to adjust or add headers as per your needs. -
  ---
 -
  ## Troubleshooting
 -
- - **NSD not starting?**: Check `/var/log/messages` for error logs. Ensure NSD is properly installed and the zones are correctly set.
- - **SSL issues?**: Verify your ACME configuration and check for errors in `/var/log/acme-client.log`.
--
+ - **NSD not starting?**: Check `/var/log/messages` for error logs. Ensure NSD is properly installed and the zones are correctly set. - **SSL issues?**: Verify your ACME configuration and check for errors in `/var/log/acme-client.log`. -
  ---
 -
  ## License
 -
- MIT License. OpenBSD Rails Setup is free software and comes with no warranty. Use it at your own risk!
--
+ MIT License. OpenBSD Rails Setup is free software and comes with no warranty. Use it at your own risk! -
 diff --git a/openbsd.sh b/openbsd.sh
 index b7245c7..c86034f 100644
 --- a/openbsd.sh
@@ -1823,7 +1821,8 @@ index b7245c7..c86034f 100644
  generate_unique_port() {
    while true; do
      local port=$((2000 + RANDOM % 63000))
--    if [[ ! " ${used_ports[@]} " =~ " $port " ]]; then
+-    if [[ !
+<!-- TODO: Break into shorter sentences (57 words > 15) --> " ${used_ports[@]} " =~ " $port " ]]; then
 -      used_ports+=("$port")
 +    if [[ ! "${used_ports[@]}" =~ "$port" ]]; then
 +      used_ports+="$port"
@@ -1859,16 +1858,12 @@ index b7245c7..c86034f 100644
 +    echo "Creating zone file for $domain..."
      cat > "$domain.zone" <<EOD
  \$ORIGIN $domain.
- \$TTL 86400
+<!-- TODO: Break into shorter sentences (126 words > 15) --> \$TTL 86400
  
 -@ IN SOA ns.$domain. admin.$domain. ($serial 1h 15m 1w 3m)
 +@ IN SOA ns.brgen.no. admin.$domain. ($serial 1h 15m 1w 3m)
  
--@ IN NS ns.$domain.
-+@ IN NS ns.brgen.no.
- @ IN NS ns.hyp.net.
- 
- @ IN A $main_ip
+-@ IN NS ns.$domain. +@ IN NS ns.brgen.no. @ IN NS ns.hyp.net. @ IN A $main_ip
 @@ -122,14 +117,7 @@ configure_nsd() {
  @ IN CNAME www
  
@@ -2007,26 +2002,21 @@ index b02ea42..5ac0250 100644
  
 -## Overview
 +**Choose [OpenBSD](https://openbsd.org) for your Unix needs.**  
-+OpenBSD is the world’s simplest and most secure Unix-like operating system. It’s a safe alternative to the frequent vulnerabilities and overengineering found in the Linux ecosystem.
- 
--This setup script automates the deployment of an OpenBSD VPS as a secure, optimized hosting environment for Ruby on Rails applications. It handles essential installations, security configurations, domain management, and SSL certification, creating a production-ready server setup.
-+## What This Does
++OpenBSD is the world’s simplest and most secure Unix-like operating system.
+<!-- TODO: Break into shorter sentences (442 words > 15) --> It’s a safe alternative to the frequent vulnerabilities and overengineering found in the Linux ecosystem. -This setup script automates the deployment of an OpenBSD VPS as a secure, optimized hosting environment for Ruby on Rails applications.
+<!-- TODO: Break into shorter sentences (21 words > 15) --> It handles essential installations, security configurations, domain management, and SSL certification, creating a production-ready server setup.
+<!-- TODO: Break into shorter sentences (16 words > 15) --> +## What This Does
  
 -## Features
 +- **Multi-Domain Rails Support**: A set of domains and subdomains pre-configured for your apps.
-+- **NSD DNS Server**: Full DNSSEC setup with zone files and keys.
-+- **HTTPD & ACME Client**: Automatically configures SSL for your domains.
-+- **Relayd Reverse Proxy**: Handles all your traffic routing, including security headers.
-+- **Automatic App Startup Scripts**: Ensures your apps are always running on unique ports.
- 
--- **Automated Software Installation**: Installs necessary components, including `ruby`, `postgresql-server`, `redis`, `varnish`, `monit`, and `sshguard` for security and monitoring.
--- **Dynamic Port Management**: Prevents port conflicts through automated port assignment using a random port generator.
--- **Firewall Configuration (`pf.conf(5)` and `pfctl(8)`)**: Configures OpenBSD’s Packet Filter to secure the server by controlling access and limiting vulnerabilities.
--- **Traffic Routing with `relayd(8)`**: Configures `relayd` as a reverse proxy to manage HTTP/HTTPS traffic, directing it securely to Rails applications.
--- **DNS Management with `nsd(8)`**: Uses `nsd` to configure DNS zones for each domain and subdomain, with DNSSEC enabled for added security.
--- **SSL Automation with `acme-client(8)`**: Uses `acme-client` with Let’s Encrypt for automated SSL certificate issuance and renewal.
--- **Rails Application Management (`rc.d(8)` scripts)**: Generates startup scripts for each Rails application, enabling seamless control through `rcctl(8)`.
-+## Requirements
+<!-- TODO: Break into shorter sentences (20 words > 15) --> +- **NSD DNS Server**: Full DNSSEC setup with zone files and keys. +- **HTTPD & ACME Client**: Automatically configures SSL for your domains. +- **Relayd Reverse Proxy**: Handles all your traffic routing, including security headers. +- **Automatic App Startup Scripts**: Ensures your apps are always running on unique ports. -- **Automated Software Installation**: Installs necessary components, including `ruby`, `postgresql-server`, `redis`, `varnish`, `monit`, and `sshguard` for security and monitoring.
+<!-- TODO: Break into shorter sentences (19 words > 15) --> -- **Dynamic Port Management**: Prevents port conflicts through automated port assignment using a random port generator.
+<!-- TODO: Break into shorter sentences (16 words > 15) --> -- **Firewall Configuration (`pf.conf(5)` and `pfctl(8)`)**: Configures OpenBSD’s Packet Filter to secure the server by controlling access and limiting vulnerabilities.
+<!-- TODO: Break into shorter sentences (20 words > 15) --> -- **Traffic Routing with `relayd(8)`**: Configures `relayd` as a reverse proxy to manage HTTP/HTTPS traffic, directing it securely to Rails applications.
+<!-- TODO: Break into shorter sentences (21 words > 15) --> -- **DNS Management with `nsd(8)`**: Uses `nsd` to configure DNS zones for each domain and subdomain, with DNSSEC enabled for added security.
+<!-- TODO: Break into shorter sentences (22 words > 15) --> -- **SSL Automation with `acme-client(8)`**: Uses `acme-client` with Let’s Encrypt for automated SSL certificate issuance and renewal.
+<!-- TODO: Break into shorter sentences (17 words > 15) --> -- **Rails Application Management (`rc.d(8)` scripts)**: Generates startup scripts for each Rails application, enabling seamless control through `rcctl(8)`.
+<!-- TODO: Break into shorter sentences (18 words > 15) --> +## Requirements
  
 -## Configuration Details
 +- OpenBSD 7.x or later
@@ -2035,71 +2025,61 @@ index b02ea42..5ac0250 100644
 -### Domains and Subdomains
 +## Quick Start
  
--The script supports multiple domains and subdomains, specified in the `ALL_DOMAINS` list. Each domain configuration includes DNS records, SSL certificates, and `relayd` routing rules.
-+1. **Clone the repository**: 
+-The script supports multiple domains and subdomains, specified in the `ALL_DOMAINS` list.
+<!-- TODO: Break into shorter sentences (34 words > 15) --> Each domain configuration includes DNS records, SSL certificates, and `relayd` routing rules. +1. **Clone the repository**: 
 +   ```sh
 +   git clone https://github.com/your-repo/openbsd-rails-setup.git
 +   cd openbsd-rails-setup
 +   ```
  
 -### Port Management
-+2. **Run the script**: 
++2.
+<!-- TODO: Break into shorter sentences (18 words > 15) --> **Run the script**: 
 +   ```sh
 +   doas ./openbsd.sh
 +   ```
  
 -The `generate_random_port()` function assigns available ports dynamically to avoid conflicts across services such as `relayd` and Rails applications.
-+3. **Check your domains**: Visit each domain via the browser, and voila!
- 
--### SSL Certificates and Secure Connections
+<!-- TODO: Break into shorter sentences (28 words > 15) --> +3. **Check your domains**: Visit each domain via the browser, and voila! -### SSL Certificates and Secure Connections
 +---
  
--Using `acme-client(8)` with Let’s Encrypt, the script automatically handles SSL certificate issuance and renewal for all domains, ensuring secure HTTPS connections. OpenBSD’s `httpd(8)` is configured to respond to ACME challenges, automating the SSL setup.
-+## Key Features
+-Using `acme-client(8)` with Let’s Encrypt, the script automatically handles SSL certificate issuance and renewal for all domains, ensuring secure HTTPS connections.
+<!-- TODO: Break into shorter sentences (28 words > 15) --> OpenBSD’s `httpd(8)` is configured to respond to ACME challenges, automating the SSL setup. +## Key Features
  
 -### Firewall Configuration with `pf.conf(5)` and `pfctl(8)`
 +### Multi-Domain Support
  
--The firewall (`pf`) is configured to control inbound and outbound traffic, enhancing server security. It includes brute-force protection for SSH using `sshguard`, rate-limiting, and access controls for DNS, HTTP, and HTTPS, ensuring only authorized access.
-+You’ve got a ton of domains with various subdomains? We’ve got you covered! This script auto-generates the necessary Rails application ports, DNS settings, and configuration.
- 
--### Traffic Management with `relayd(8)` and `relayd.conf(5)`
+-The firewall (`pf`) is configured to control inbound and outbound traffic, enhancing server security.
+<!-- TODO: Break into shorter sentences (27 words > 15) --> It includes brute-force protection for SSH using `sshguard`, rate-limiting, and access controls for DNS, HTTP, and HTTPS, ensuring only authorized access.
+<!-- TODO: Break into shorter sentences (21 words > 15) --> +You’ve got a ton of domains with various subdomains? We’ve got you covered! This script auto-generates the necessary Rails application ports, DNS settings, and configuration. -### Traffic Management with `relayd(8)` and `relayd.conf(5)`
 +### DNSSEC with NSD
  
 -`relayd` directs HTTP and HTTPS traffic with two specific protocols:
-+NSD is set up with full DNSSEC for your domains. Each domain gets its own zone file and DNSSEC keys. Zero manual configuration needed!
- 
--- **ACME Challenge Routing**: Routes SSL certificate validation requests to `acme-client`.
--- **Application Request Routing**: Forwards user traffic to the Rails applications via Varnish, enhancing scalability and security.
-+### SSL Certificates with ACME Client
++NSD is set up with full DNSSEC for your domains.
+<!-- TODO: Break into shorter sentences (31 words > 15) --> Each domain gets its own zone file and DNSSEC keys. Zero manual configuration needed! -- **ACME Challenge Routing**: Routes SSL certificate validation requests to `acme-client`. -- **Application Request Routing**: Forwards user traffic to the Rails applications via Varnish, enhancing scalability and security.
+<!-- TODO: Break into shorter sentences (17 words > 15) --> +### SSL Certificates with ACME Client
  
 -### DNS Management with `nsd(8)` and `nsd.conf(5)`
-+Let’s Encrypt is your new best friend. ACME Client auto-generates and configures certificates for your domains. Say goodbye to manual cert renewals.
- 
--The `configure_nsd` function automates DNS zone configuration for each domain, enabling DNSSEC to ensure integrity and authenticity of DNS records.
-+### Relayd for Secure Traffic Routing
++Let’s Encrypt is your new best friend.
+<!-- TODO: Break into shorter sentences (20 words > 15) --> ACME Client auto-generates and configures certificates for your domains. Say goodbye to manual cert renewals. -The `configure_nsd` function automates DNS zone configuration for each domain, enabling DNSSEC to ensure integrity and authenticity of DNS records.
+<!-- TODO: Break into shorter sentences (20 words > 15) --> +### Relayd for Secure Traffic Routing
  
 -### Rails Application Startup and Management with `rc.d(8)` and `rcctl(8)`
 +Relayd sets up HTTP strict transport security headers, Content Security Policy, and more to protect your apps.
- 
--Each Rails application is configured with a startup script in `/etc/rc.d/`. These scripts allow `rcctl` to manage application start and stop processes, using Falcon as the application server. Security measures like `unveil` and `pledge` are used to restrict system calls and file system access.
-+### Automatic App Start Scripts
+<!-- TODO: Break into shorter sentences (33 words > 15) --> -Each Rails application is configured with a startup script in `/etc/rc.d/`. These scripts allow `rcctl` to manage application start and stop processes, using Falcon as the application server.
+<!-- TODO: Break into shorter sentences (17 words > 15) --> Security measures like `unveil` and `pledge` are used to restrict system calls and file system access.
+<!-- TODO: Break into shorter sentences (16 words > 15) --> +### Automatic App Start Scripts
  
 -## Usage Instructions
-+For each domain, a unique startup script is created and added to `rc.d`. Apps are served with unique ports and locked down for maximum security.
++For each domain, a unique startup script is created and added to `rc.d`.
+<!-- TODO: Break into shorter sentences (21 words > 15) --> Apps are served with unique ports and locked down for maximum security. -1. **Prepare the Server**: Ensure you have a fresh OpenBSD installation with `doas` configured for your user.
+<!-- TODO: Break into shorter sentences (16 words > 15) --> +---
  
--1. **Prepare the Server**: Ensure you have a fresh OpenBSD installation with `doas` configured for your user.
-+---
- 
--2. **Copy the Script**: Place the `openbsd.sh` script on your server.
-+## Customization
+-2. **Copy the Script**: Place the `openbsd.sh` script on your server. +## Customization
  
 -3. **Make the Script Executable**:
-+- **Domains & Subdomains**: You can easily add or modify your domains in the script under `all_domains`. Each domain automatically gets pre-configured zone files.
-+- **Port Generation**: Ports for Rails apps are auto-generated and unique for each domain.
-+- **Security Headers**: Modify `relayd.conf` to adjust or add headers as per your needs.
- 
--    ```sh
++- **Domains & Subdomains**: You can easily add or modify your domains in the script under `all_domains`.
+<!-- TODO: Break into shorter sentences (21 words > 15) --> Each domain automatically gets pre-configured zone files. +- **Port Generation**: Ports for Rails apps are auto-generated and unique for each domain. +- **Security Headers**: Modify `relayd.conf` to adjust or add headers as per your needs. -    ```sh
 -    chmod +x openbsd.sh
 -    ```
 +---
@@ -2110,25 +2090,21 @@ index b02ea42..5ac0250 100644
 -    ```sh
 -    ./openbsd.sh
 -    ```
-+- **NSD not starting?**: Check `/var/log/messages` for error logs. Ensure NSD is properly installed and the zones are correctly set.
-+- **SSL issues?**: Verify your ACME configuration and check for errors in `/var/log/acme-client.log`.
- 
--5. **Deploy Your Rails Applications**: Place your Rails applications in `/home/<app_name>/<app_name>`, where `<app_name>` corresponds to each name in `RAILS_APPS`.
-+---
++- **NSD not starting?**: Check `/var/log/messages` for error logs.
+<!-- TODO: Break into shorter sentences (20 words > 15) --> Ensure NSD is properly installed and the zones are correctly set. +- **SSL issues?**: Verify your ACME configuration and check for errors in `/var/log/acme-client.log`. -5. **Deploy Your Rails Applications**: Place your Rails applications in `/home/<app_name>/<app_name>`, where `<app_name>` corresponds to each name in `RAILS_APPS`.
+<!-- TODO: Break into shorter sentences (18 words > 15) --> +---
  
 -## Notes
 +## License
  
 -- **Ensure Domain Ownership**: Before running the script, make sure you own or control all the domains listed in `ALL_DOMAINS`.
--- **DNS Configuration**: You may need to set up glue records or adjust your registrar's settings to point to your NSD server.
--- **Review the Script**: It's good practice to review and understand the script before running it, especially since it makes significant changes to your system configuration.
--
+<!-- TODO: Break into shorter sentences (25 words > 15) --> -- **DNS Configuration**: You may need to set up glue records or adjust your registrar's settings to point to your NSD server.
+<!-- TODO: Break into shorter sentences (22 words > 15) --> -- **Review the Script**: It's good practice to review and understand the script before running it, especially since it makes significant changes to your system configuration.
+<!-- TODO: Break into shorter sentences (26 words > 15) --> -
 -## Acknowledgments
 -
--This script leverages OpenBSD's robust features to provide a secure and efficient environment for hosting Rails applications. Special thanks to the OpenBSD community for their excellent documentation and tools.
-+MIT License. OpenBSD Rails Setup is free software and comes with no warranty. Use it at your own risk!
- 
-diff --git a/openbsd.sh b/openbsd.sh
+-This script leverages OpenBSD's robust features to provide a secure and efficient environment for hosting Rails applications.
+<!-- TODO: Break into shorter sentences (21 words > 15) --> Special thanks to the OpenBSD community for their excellent documentation and tools. +MIT License. OpenBSD Rails Setup is free software and comes with no warranty. Use it at your own risk! diff --git a/openbsd.sh b/openbsd.sh
 index 7bb32c9..b7245c7 100644
 --- a/openbsd.sh
 +++ b/openbsd.sh
@@ -2246,7 +2222,8 @@ index 7bb32c9..b7245c7 100644
 +generate_unique_port() {
 +  while true; do
 +    local port=$((2000 + RANDOM % 63000))
-+    if [[ ! " ${used_ports[@]} " =~ " $port " ]]; then
++    if [[ !
+<!-- TODO: Break into shorter sentences (454 words > 15) --> " ${used_ports[@]} " =~ " $port " ]]; then
 +      used_ports+=("$port")
 +      echo "$port"
 +      return
@@ -2341,7 +2318,8 @@ index 7bb32c9..b7245c7 100644
 -    # Generate DNSSEC keys (overwrite any existing keys)
 -    echo "Generating keys for $domain..."
 -    doas sh -c "cd /var/nsd/zones/master && ldns-keygen -a ECDSAP256SHA256 -b 256 -r /dev/urandom $domain"
--    if [ $? -ne 0 ]; then
+-    if [ $?
+<!-- TODO: Break into shorter sentences (346 words > 15) --> -ne 0 ]; then
 -      echo "Error: Key generation for $domain failed."
 -      continue
 -    fi
@@ -2357,7 +2335,7 @@ index 7bb32c9..b7245c7 100644
 +    # Generate Zone File
 +    cat > "$domain.zone" <<EOD
  \$ORIGIN $domain.
--\$TTL 3600
+<!-- TODO: Break into shorter sentences (71 words > 15) --> -\$TTL 3600
 -
 -@ IN SOA ns.brgen.no. hostmaster.$domain. (
 -  $serial ; Serial
@@ -2367,14 +2345,11 @@ index 7bb32c9..b7245c7 100644
 -  3600 ; Minimum TTL
 -)
 -@ IN NS ns.brgen.no.
-+\$TTL 86400
+<!-- TODO: Break into shorter sentences (27 words > 15) --> +\$TTL 86400
 +
 +@ IN SOA ns.$domain. admin.$domain. ($serial 1h 15m 1w 3m)
 +
-+@ IN NS ns.$domain.
- @ IN NS ns.hyp.net.
- 
--ns.brgen.no. IN A $OPENBSD_AMSTERDAM_IP
++@ IN NS ns.$domain. @ IN NS ns.hyp.net. -ns.brgen.no. IN A $OPENBSD_AMSTERDAM_IP
 +@ IN A $main_ip
 +
 +@ IN CNAME www
@@ -2394,7 +2369,8 @@ index 7bb32c9..b7245c7 100644
 -    # Sign the zone file with DNSSEC, using the generated keys
 -    echo "Signing the zone for $domain..."
 -    doas sh -c "cd /var/nsd/zones/master && ldns-signzone -n -p -o $domain $domain.zone"
--    if [ $? -ne 0 ]; then
+-    if [ $?
+<!-- TODO: Break into shorter sentences (91 words > 15) --> -ne 0 ]; then
 -      echo "Error: Zone signing for $domain failed."
 -      continue
 -    fi
@@ -2429,7 +2405,8 @@ index 7bb32c9..b7245c7 100644
 -  doas chown -R www:www /var/www/acme
 +# --
  
--  if [[ ! -f /etc/acme/letsencrypt-privkey.pem ]]; then
+-  if [[ !
+<!-- TODO: Break into shorter sentences (140 words > 15) --> -f /etc/acme/letsencrypt-privkey.pem ]]; then
 -    doas openssl genpkey -algorithm RSA -out /etc/acme/letsencrypt-privkey.pem -pkeyopt rsa_keygen_bits:2048
 -  fi
 +configure_httpd_and_acme_client() {
@@ -2556,7 +2533,8 @@ index 7bb32c9..b7245c7 100644
 -configure_startup_scripts() {
 -  typeset -A APP_BACKEND_PORTS
 -  for app in $RAILS_APPS; do
--    if ! id "$app" >/dev/null 2>&1; then
+-    if !
+<!-- TODO: Break into shorter sentences (560 words > 15) --> id "$app" >/dev/null 2>&1; then
 -      doas useradd -m -s /bin/ksh "$app"
 -    fi
 -
@@ -2586,7 +2564,8 @@ index 7bb32c9..b7245c7 100644
 -
 -pledge stdio rpath wpath cpath inet dns
 -
- . /etc/rc.d/rc.subr
+ .
+<!-- TODO: Break into shorter sentences (107 words > 15) --> /etc/rc.d/rc.subr
 -rc_cmd \$1
 -EOF
  
@@ -2712,42 +2691,40 @@ index aa7979e..b02ea42 100644
  ## Features
  
 -- **Automated Software Installation**: Installs necessary components, including `ruby`, `postgresql-server`, `redis`, and `varnish` for web acceleration.
--- **Dynamic Port Management**: Prevents port conflicts through automated port assignment.
-+- **Automated Software Installation**: Installs necessary components, including `ruby`, `postgresql-server`, `redis`, `varnish`, `monit`, and `sshguard` for security and monitoring.
-+- **Dynamic Port Management**: Prevents port conflicts through automated port assignment using a random port generator.
- - **Firewall Configuration (`pf.conf(5)` and `pfctl(8)`)**: Configures OpenBSD’s Packet Filter to secure the server by controlling access and limiting vulnerabilities.
- - **Traffic Routing with `relayd(8)`**: Configures `relayd` as a reverse proxy to manage HTTP/HTTPS traffic, directing it securely to Rails applications.
- - **DNS Management with `nsd(8)`**: Uses `nsd` to configure DNS zones for each domain and subdomain, with DNSSEC enabled for added security.
-@@ -30,13 +30,14 @@ Using `acme-client(8)` with Let’s Encrypt, the script automatically handles SS
+<!-- TODO: Break into shorter sentences (419 words > 15) --> -- **Dynamic Port Management**: Prevents port conflicts through automated port assignment. +- **Automated Software Installation**: Installs necessary components, including `ruby`, `postgresql-server`, `redis`, `varnish`, `monit`, and `sshguard` for security and monitoring.
+<!-- TODO: Break into shorter sentences (19 words > 15) --> +- **Dynamic Port Management**: Prevents port conflicts through automated port assignment using a random port generator.
+<!-- TODO: Break into shorter sentences (16 words > 15) --> - **Firewall Configuration (`pf.conf(5)` and `pfctl(8)`)**: Configures OpenBSD’s Packet Filter to secure the server by controlling access and limiting vulnerabilities.
+<!-- TODO: Break into shorter sentences (20 words > 15) --> - **Traffic Routing with `relayd(8)`**: Configures `relayd` as a reverse proxy to manage HTTP/HTTPS traffic, directing it securely to Rails applications.
+<!-- TODO: Break into shorter sentences (21 words > 15) --> - **DNS Management with `nsd(8)`**: Uses `nsd` to configure DNS zones for each domain and subdomain, with DNSSEC enabled for added security.
+<!-- TODO: Break into shorter sentences (22 words > 15) --> @@ -30,13 +30,14 @@ Using `acme-client(8)` with Let’s Encrypt, the script automatically handles SS
  
  ### Firewall Configuration with `pf.conf(5)` and `pfctl(8)`
  
--The firewall (`pf`) is configured to control inbound and outbound traffic, enhancing server security. It includes brute-force protection for SSH, rate-limiting, and access controls for DNS, HTTP, and HTTPS, ensuring only authorized access.
-+The firewall (`pf`) is configured to control inbound and outbound traffic, enhancing server security. It includes brute-force protection for SSH using `sshguard`, rate-limiting, and access controls for DNS, HTTP, and HTTPS, ensuring only authorized access.
- 
- ### Traffic Management with `relayd(8)` and `relayd.conf(5)`
+-The firewall (`pf`) is configured to control inbound and outbound traffic, enhancing server security.
+<!-- TODO: Break into shorter sentences (35 words > 15) --> It includes brute-force protection for SSH, rate-limiting, and access controls for DNS, HTTP, and HTTPS, ensuring only authorized access.
+<!-- TODO: Break into shorter sentences (19 words > 15) --> +The firewall (`pf`) is configured to control inbound and outbound traffic, enhancing server security. It includes brute-force protection for SSH using `sshguard`, rate-limiting, and access controls for DNS, HTTP, and HTTPS, ensuring only authorized access.
+<!-- TODO: Break into shorter sentences (21 words > 15) --> ### Traffic Management with `relayd(8)` and `relayd.conf(5)`
  
  `relayd` directs HTTP and HTTPS traffic with two specific protocols:
 +
  - **ACME Challenge Routing**: Routes SSL certificate validation requests to `acme-client`.
--- **Application Request Routing**: Forwards user traffic to the Rails applications, enhancing scalability and security.
-+- **Application Request Routing**: Forwards user traffic to the Rails applications via Varnish, enhancing scalability and security.
- 
- ### DNS Management with `nsd(8)` and `nsd.conf(5)`
+<!-- TODO: Break into shorter sentences (29 words > 15) --> -- **Application Request Routing**: Forwards user traffic to the Rails applications, enhancing scalability and security. +- **Application Request Routing**: Forwards user traffic to the Rails applications via Varnish, enhancing scalability and security.
+<!-- TODO: Break into shorter sentences (17 words > 15) --> ### DNS Management with `nsd(8)` and `nsd.conf(5)`
  
 @@ -44,5 +45,35 @@ The `configure_nsd` function automates DNS zone configuration for each domain, e
  
  ### Rails Application Startup and Management with `rc.d(8)` and `rcctl(8)`
  
--Each Rails application is configured with a startup script in `/etc/rc.d/`. These scripts allow `rcctl` to manage application start and stop processes, using Falcon as the application server.
-+Each Rails application is configured with a startup script in `/etc/rc.d/`. These scripts allow `rcctl` to manage application start and stop processes, using Falcon as the application server. Security measures like `unveil` and `pledge` are used to restrict system calls and file system access.
-+
+-Each Rails application is configured with a startup script in `/etc/rc.d/`.
+<!-- TODO: Break into shorter sentences (43 words > 15) --> These scripts allow `rcctl` to manage application start and stop processes, using Falcon as the application server.
+<!-- TODO: Break into shorter sentences (17 words > 15) --> +Each Rails application is configured with a startup script in `/etc/rc.d/`. These scripts allow `rcctl` to manage application start and stop processes, using Falcon as the application server.
+<!-- TODO: Break into shorter sentences (17 words > 15) --> Security measures like `unveil` and `pledge` are used to restrict system calls and file system access.
+<!-- TODO: Break into shorter sentences (16 words > 15) --> +
 +## Usage Instructions
 +
 +1. **Prepare the Server**: Ensure you have a fresh OpenBSD installation with `doas` configured for your user.
-+
-+2. **Copy the Script**: Place the `openbsd.sh` script on your server.
-+
+<!-- TODO: Break into shorter sentences (16 words > 15) --> +
++2. **Copy the Script**: Place the `openbsd.sh` script on your server. +
 +3. **Make the Script Executable**:
 +
 +    ```sh
@@ -2761,18 +2738,17 @@ index aa7979e..b02ea42 100644
 +    ```
 +
 +5. **Deploy Your Rails Applications**: Place your Rails applications in `/home/<app_name>/<app_name>`, where `<app_name>` corresponds to each name in `RAILS_APPS`.
-+
+<!-- TODO: Break into shorter sentences (18 words > 15) --> +
 +## Notes
 +
 +- **Ensure Domain Ownership**: Before running the script, make sure you own or control all the domains listed in `ALL_DOMAINS`.
-+- **DNS Configuration**: You may need to set up glue records or adjust your registrar's settings to point to your NSD server.
-+- **Review the Script**: It's good practice to review and understand the script before running it, especially since it makes significant changes to your system configuration.
-+
+<!-- TODO: Break into shorter sentences (24 words > 15) --> +- **DNS Configuration**: You may need to set up glue records or adjust your registrar's settings to point to your NSD server.
+<!-- TODO: Break into shorter sentences (22 words > 15) --> +- **Review the Script**: It's good practice to review and understand the script before running it, especially since it makes significant changes to your system configuration.
+<!-- TODO: Break into shorter sentences (26 words > 15) --> +
 +## Acknowledgments
 +
-+This script leverages OpenBSD's robust features to provide a secure and efficient environment for hosting Rails applications. Special thanks to the OpenBSD community for their excellent documentation and tools.
- 
-diff --git a/openbsd.sh b/openbsd.sh
++This script leverages OpenBSD's robust features to provide a secure and efficient environment for hosting Rails applications.
+<!-- TODO: Break into shorter sentences (21 words > 15) --> Special thanks to the OpenBSD community for their excellent documentation and tools. diff --git a/openbsd.sh b/openbsd.sh
 index 18d7a33..7bb32c9 100644
 --- a/openbsd.sh
 +++ b/openbsd.sh
@@ -2901,7 +2877,8 @@ index 18d7a33..7bb32c9 100644
 +    # Generate DNSSEC keys (overwrite any existing keys)
 +    echo "Generating keys for $domain..."
 +    doas sh -c "cd /var/nsd/zones/master && ldns-keygen -a ECDSAP256SHA256 -b 256 -r /dev/urandom $domain"
-+    if [ $? -ne 0 ]; then
++    if [ $?
+<!-- TODO: Break into shorter sentences (501 words > 15) --> -ne 0 ]; then
 +      echo "Error: Key generation for $domain failed."
 +      continue
      fi
@@ -2910,18 +2887,17 @@ index 18d7a33..7bb32c9 100644
      local serial=$(date +"%Y%m%d%H")
  
 -    # Create the zone file if it doesn't exist
--    if [[ ! -f "/var/nsd/zones/master/${domain}.zone" ]]; then
+-    if [[ !
+<!-- TODO: Break into shorter sentences (46 words > 15) --> -f "/var/nsd/zones/master/${domain}.zone" ]]; then
 -      cat <<ZONE | doas tee /var/nsd/zones/master/$domain.zone > /dev/null
 +    # Create the zone file (overwrite if exists)
 +    doas tee /var/nsd/zones/master/$domain.zone > /dev/null <<ZONE
  \$ORIGIN $domain.
- \$TTL 3600
+<!-- TODO: Break into shorter sentences (31 words > 15) --> \$TTL 3600
  
 @@ -131,71 +143,63 @@ EOF
  )
- @ IN NS ns.brgen.no.
- @ IN NS ns.hyp.net.
-+
+ @ IN NS ns.brgen.no. @ IN NS ns.hyp.net. +
  ns.brgen.no. IN A $OPENBSD_AMSTERDAM_IP
 +
  @ IN CAA 0 issue "letsencrypt.org"
@@ -2943,12 +2919,14 @@ index 18d7a33..7bb32c9 100644
      fi
  
 -    # Sign the zone file with DNSSEC if not already signed
--    if [[ ! -f "/var/nsd/zones/master/${domain}.zone.signed" ]]; then
+-    if [[ !
+<!-- TODO: Break into shorter sentences (119 words > 15) --> -f "/var/nsd/zones/master/${domain}.zone.signed" ]]; then
 -      doas ldns-signzone -n -p -o "$domain" "/var/nsd/zones/master/$domain.zone"
 +    # Sign the zone file with DNSSEC, using the generated keys
 +    echo "Signing the zone for $domain..."
 +    doas sh -c "cd /var/nsd/zones/master && ldns-signzone -n -p -o $domain $domain.zone"
-+    if [ $? -ne 0 ]; then
++    if [ $?
+<!-- TODO: Break into shorter sentences (48 words > 15) --> -ne 0 ]; then
 +      echo "Error: Zone signing for $domain failed."
 +      continue
      fi
@@ -2966,7 +2944,8 @@ index 18d7a33..7bb32c9 100644
 +  doas mkdir -p /var/www/acme/.well-known/acme-challenge
 +  doas chown -R www:www /var/www/acme
 +
-   if [[ ! -f /etc/acme/letsencrypt-privkey.pem ]]; then
+   if [[ !
+<!-- TODO: Break into shorter sentences (79 words > 15) --> -f /etc/acme/letsencrypt-privkey.pem ]]; then
      doas openssl genpkey -algorithm RSA -out /etc/acme/letsencrypt-privkey.pem -pkeyopt rsa_keygen_bits:2048
    fi
  
@@ -3025,7 +3004,8 @@ index 18d7a33..7bb32c9 100644
 -    local domain="${domain_info%%:*}"
 -    [[ -z "$domain" ]] && continue
 -
--    if [[ ! -f "/etc/ssl/$domain.fullchain.pem" ]]; then
+-    if [[ !
+<!-- TODO: Break into shorter sentences (284 words > 15) --> -f "/etc/ssl/$domain.fullchain.pem" ]]; then
 -      echo "Generating certificate for $domain using ACME client..."
 -      doas acme-client -v "$domain"
 -    else
@@ -3112,10 +3092,12 @@ index 18d7a33..7bb32c9 100644
 +# Function to configure startup scripts for Rails applications
  configure_startup_scripts() {
 -  for app in "${RAILS_APPS[@]}"; do
--    if ! doas grep -q "^$app:" /etc/master.passwd; then
+-    if !
+<!-- TODO: Break into shorter sentences (328 words > 15) --> doas grep -q "^$app:" /etc/master.passwd; then
 +  typeset -A APP_BACKEND_PORTS
 +  for app in $RAILS_APPS; do
-+    if ! id "$app" >/dev/null 2>&1; then
++    if !
+<!-- TODO: Break into shorter sentences (19 words > 15) --> id "$app" >/dev/null 2>&1; then
        doas useradd -m -s /bin/ksh "$app"
      fi
  
@@ -3145,7 +3127,8 @@ index 18d7a33..7bb32c9 100644
 -pledge stdio rpath wpath cpath inet
 +pledge stdio rpath wpath cpath inet dns
  
- . /etc/rc.d/rc.subr
+ .
+<!-- TODO: Break into shorter sentences (105 words > 15) --> /etc/rc.d/rc.subr
  rc_cmd \$1
 @@ -323,14 +292,74 @@ EOF
    done
@@ -3240,110 +3223,86 @@ index a9a7228..aa7979e 100644
  
  ## Overview
  
--This script automates the setup of an OpenBSD environment configured for Ruby on Rails development. It includes the installation of required packages, configuration of firewall rules using Packet Filter (pf), relayd setup for reverse proxying, and NSD setup for DNS management.
-+This setup script automates the deployment of an OpenBSD VPS as a secure, optimized hosting environment for Ruby on Rails applications. It handles essential installations, security configurations, domain management, and SSL certification, creating a production-ready server setup.
- 
- ## Features
+-This script automates the setup of an OpenBSD environment configured for Ruby on Rails development.
+<!-- TODO: Break into shorter sentences (300 words > 15) --> It includes the installation of required packages, configuration of firewall rules using Packet Filter (pf), relayd setup for reverse proxying, and NSD setup for DNS management.
+<!-- TODO: Break into shorter sentences (26 words > 15) --> +This setup script automates the deployment of an OpenBSD VPS as a secure, optimized hosting environment for Ruby on Rails applications.
+<!-- TODO: Break into shorter sentences (21 words > 15) --> It handles essential installations, security configurations, domain management, and SSL certification, creating a production-ready server setup.
+<!-- TODO: Break into shorter sentences (16 words > 15) --> ## Features
  
 -- **Automatic Package Installation**: Installs required packages such as Ruby, PostgreSQL, Redis, and others.
--- **Dynamic Domain Loading**: Loads domains from an external configuration file for easy management and maintainability.
--- **Firewall Configuration (pf)**: Configures OpenBSD's Packet Filter to enhance security, including brute-force attack protection and trusted IP handling for SSH.
--- **Reverse Proxy Configuration (relayd)**: Sets up relayd for HTTP traffic to support load balancing and forwarding.
--- **DNS Configuration (NSD)**: Automates the creation of zone files for managing DNS entries across various domains and subdomains.
-+- **Automated Software Installation**: Installs necessary components, including `ruby`, `postgresql-server`, `redis`, and `varnish` for web acceleration.
-+- **Dynamic Port Management**: Prevents port conflicts through automated port assignment.
-+- **Firewall Configuration (`pf.conf(5)` and `pfctl(8)`)**: Configures OpenBSD’s Packet Filter to secure the server by controlling access and limiting vulnerabilities.
-+- **Traffic Routing with `relayd(8)`**: Configures `relayd` as a reverse proxy to manage HTTP/HTTPS traffic, directing it securely to Rails applications.
-+- **DNS Management with `nsd(8)`**: Uses `nsd` to configure DNS zones for each domain and subdomain, with DNSSEC enabled for added security.
-+- **SSL Automation with `acme-client(8)`**: Uses `acme-client` with Let’s Encrypt for automated SSL certificate issuance and renewal.
-+- **Rails Application Management (`rc.d(8)` scripts)**: Generates startup scripts for each Rails application, enabling seamless control through `rcctl(8)`.
- 
--## Prerequisites
+<!-- TODO: Break into shorter sentences (16 words > 15) --> -- **Dynamic Domain Loading**: Loads domains from an external configuration file for easy management and maintainability.
+<!-- TODO: Break into shorter sentences (16 words > 15) --> -- **Firewall Configuration (pf)**: Configures OpenBSD's Packet Filter to enhance security, including brute-force attack protection and trusted IP handling for SSH.
+<!-- TODO: Break into shorter sentences (21 words > 15) --> -- **Reverse Proxy Configuration (relayd)**: Sets up relayd for HTTP traffic to support load balancing and forwarding.
+<!-- TODO: Break into shorter sentences (17 words > 15) --> -- **DNS Configuration (NSD)**: Automates the creation of zone files for managing DNS entries across various domains and subdomains.
+<!-- TODO: Break into shorter sentences (19 words > 15) --> +- **Automated Software Installation**: Installs necessary components, including `ruby`, `postgresql-server`, `redis`, and `varnish` for web acceleration.
+<!-- TODO: Break into shorter sentences (16 words > 15) --> +- **Dynamic Port Management**: Prevents port conflicts through automated port assignment. +- **Firewall Configuration (`pf.conf(5)` and `pfctl(8)`)**: Configures OpenBSD’s Packet Filter to secure the server by controlling access and limiting vulnerabilities.
+<!-- TODO: Break into shorter sentences (20 words > 15) --> +- **Traffic Routing with `relayd(8)`**: Configures `relayd` as a reverse proxy to manage HTTP/HTTPS traffic, directing it securely to Rails applications.
+<!-- TODO: Break into shorter sentences (21 words > 15) --> +- **DNS Management with `nsd(8)`**: Uses `nsd` to configure DNS zones for each domain and subdomain, with DNSSEC enabled for added security.
+<!-- TODO: Break into shorter sentences (22 words > 15) --> +- **SSL Automation with `acme-client(8)`**: Uses `acme-client` with Let’s Encrypt for automated SSL certificate issuance and renewal.
+<!-- TODO: Break into shorter sentences (17 words > 15) --> +- **Rails Application Management (`rc.d(8)` scripts)**: Generates startup scripts for each Rails application, enabling seamless control through `rcctl(8)`.
+<!-- TODO: Break into shorter sentences (18 words > 15) --> -## Prerequisites
 +## Configuration Details
  
--- OpenBSD system with `doas` configured.
--- Configuration file `/etc/openbsd_domains.conf` with the domains and subdomains to be managed.
--- Internet access for package installation.
-+### Domains and Subdomains
+-- OpenBSD system with `doas` configured. -- Configuration file `/etc/openbsd_domains.conf` with the domains and subdomains to be managed. -- Internet access for package installation. +### Domains and Subdomains
  
 -## Usage
-+The script supports multiple domains and subdomains, specified in the `ALL_DOMAINS` list. Each domain configuration includes DNS records, SSL certificates, and `relayd` routing rules.
- 
--### Running the Script
++The script supports multiple domains and subdomains, specified in the `ALL_DOMAINS` list.
+<!-- TODO: Break into shorter sentences (18 words > 15) --> Each domain configuration includes DNS records, SSL certificates, and `relayd` routing rules. -### Running the Script
 +### Port Management
  
 -To execute the script, run the following command:
 +The `generate_random_port()` function assigns available ports dynamically to avoid conflicts across services such as `relayd` and Rails applications.
- 
--    ./__openbsd.sh
+<!-- TODO: Break into shorter sentences (33 words > 15) --> -    ./__openbsd.sh
 +### SSL Certificates and Secure Connections
  
 -Ensure the script has executable permissions:
-+Using `acme-client(8)` with Let’s Encrypt, the script automatically handles SSL certificate issuance and renewal for all domains, ensuring secure HTTPS connections. OpenBSD’s `httpd(8)` is configured to respond to ACME challenges, automating the SSL setup.
- 
--    chmod +x __openbsd.sh
++Using `acme-client(8)` with Let’s Encrypt, the script automatically handles SSL certificate issuance and renewal for all domains, ensuring secure HTTPS connections.
+<!-- TODO: Break into shorter sentences (35 words > 15) --> OpenBSD’s `httpd(8)` is configured to respond to ACME challenges, automating the SSL setup. -    chmod +x __openbsd.sh
 +### Firewall Configuration with `pf.conf(5)` and `pfctl(8)`
  
 -### Configuration File
-+The firewall (`pf`) is configured to control inbound and outbound traffic, enhancing server security. It includes brute-force protection for SSH, rate-limiting, and access controls for DNS, HTTP, and HTTPS, ensuring only authorized access.
- 
--The domains to be managed are loaded from `/etc/openbsd_domains.conf`. This file should contain the domain definitions in the format expected by the script, allowing for easy updates without modifying the script itself.
-+### Traffic Management with `relayd(8)` and `relayd.conf(5)`
++The firewall (`pf`) is configured to control inbound and outbound traffic, enhancing server security.
+<!-- TODO: Break into shorter sentences (28 words > 15) --> It includes brute-force protection for SSH, rate-limiting, and access controls for DNS, HTTP, and HTTPS, ensuring only authorized access.
+<!-- TODO: Break into shorter sentences (19 words > 15) --> -The domains to be managed are loaded from `/etc/openbsd_domains.conf`. This file should contain the domain definitions in the format expected by the script, allowing for easy updates without modifying the script itself.
+<!-- TODO: Break into shorter sentences (23 words > 15) --> +### Traffic Management with `relayd(8)` and `relayd.conf(5)`
  
 -## Detailed Steps
 +`relayd` directs HTTP and HTTPS traffic with two specific protocols:
 +- **ACME Challenge Routing**: Routes SSL certificate validation requests to `acme-client`.
-+- **Application Request Routing**: Forwards user traffic to the Rails applications, enhancing scalability and security.
- 
--### 1. Package Installation
+<!-- TODO: Break into shorter sentences (31 words > 15) --> +- **Application Request Routing**: Forwards user traffic to the Rails applications, enhancing scalability and security. -### 1. Package Installation
 +### DNS Management with `nsd(8)` and `nsd.conf(5)`
  
 -The script installs several necessary packages:
 +The `configure_nsd` function automates DNS zone configuration for each domain, enabling DNSSEC to ensure integrity and authenticity of DNS records.
- 
--- `ruby`: Ruby programming language.
--- `postgresql-server`: Database server for Rails.
--- `dnscrypt-proxy`: DNS security.
--- `redis`: In-memory data store.
--- `varnish`: HTTP reverse proxy.
-+### Rails Application Startup and Management with `rc.d(8)` and `rcctl(8)`
+<!-- TODO: Break into shorter sentences (35 words > 15) --> -- `ruby`: Ruby programming language. -- `postgresql-server`: Database server for Rails. -- `dnscrypt-proxy`: DNS security. -- `redis`: In-memory data store. -- `varnish`: HTTP reverse proxy. +### Rails Application Startup and Management with `rc.d(8)` and `rcctl(8)`
  
 -The latest version of each package is determined and installed using OpenBSD's `pkg_add` tool.
-+Each Rails application is configured with a startup script in `/etc/rc.d/`. These scripts allow `rcctl` to manage application start and stop processes, using Falcon as the application server.
- 
--### 2. Packet Filter (pf) Configuration
+<!-- TODO: Break into shorter sentences (24 words > 15) --> +Each Rails application is configured with a startup script in `/etc/rc.d/`. These scripts allow `rcctl` to manage application start and stop processes, using Falcon as the application server.
+<!-- TODO: Break into shorter sentences (17 words > 15) --> -### 2. Packet Filter (pf) Configuration
 -
--- Configures `pf` to block unwanted incoming traffic by default.
--- Protects against brute-force attacks by rate-limiting SSH connections and blocking offending IPs.
--- Allows incoming connections for HTTP, HTTPS, DNS, and SSH (from trusted IPs).
--- Loads the configuration from a temporary file and applies it.
--
+-- Configures `pf` to block unwanted incoming traffic by default. -- Protects against brute-force attacks by rate-limiting SSH connections and blocking offending IPs. -- Allows incoming connections for HTTP, HTTPS, DNS, and SSH (from trusted IPs). -- Loads the configuration from a temporary file and applies it. -
 -### 3. Relayd Configuration
 -
--- Configures `relayd` for HTTP traffic management.
--- Sets up a backend table for local services (`127.0.0.1`) and listens for incoming HTTP requests on port 80.
--- Copies the generated configuration to `/etc/relayd.conf`.
--
+-- Configures `relayd` for HTTP traffic management. -- Sets up a backend table for local services (`127.0.0.1`) and listens for incoming HTTP requests on port 80.
+<!-- TODO: Break into shorter sentences (19 words > 15) --> -- Copies the generated configuration to `/etc/relayd.conf`. -
 -### 4. NSD (Name Server Daemon) Configuration
 -
 -- Sets up zone files for each domain listed in `/etc/openbsd_domains.conf`.
--- Configures SOA, NS, and A records for the domains and their respective subdomains.
--- Utilizes a timestamp as the serial number for SOA records to ensure DNS changes are properly propagated.
--
+<!-- TODO: Break into shorter sentences (17 words > 15) --> -- Configures SOA, NS, and A records for the domains and their respective subdomains. -- Utilizes a timestamp as the serial number for SOA records to ensure DNS changes are properly propagated.
+<!-- TODO: Break into shorter sentences (18 words > 15) --> -
 -## Logs
 -
 -- All log messages generated by the script are written to `/var/log/openbsd_setup.log` for auditing and troubleshooting purposes.
--
+<!-- TODO: Break into shorter sentences (21 words > 15) --> -
 -## Error Handling
 -
 -- The script includes retry mechanisms for package installation and configuration steps to handle transient issues.
--- If any critical step fails after multiple attempts, the script will exit and log the failure.
--
+<!-- TODO: Break into shorter sentences (21 words > 15) --> -- If any critical step fails after multiple attempts, the script will exit and log the failure.
+<!-- TODO: Break into shorter sentences (17 words > 15) --> -
 -## Notes
 -
 -- Ensure that the `/etc/openbsd_domains.conf` file is properly formatted and contains the correct domain information before running the script.
--- This script is intended for environments where `doas` is used instead of `sudo`.
--
+<!-- TODO: Break into shorter sentences (23 words > 15) --> -- This script is intended for environments where `doas` is used instead of `sudo`. -
 -## Example `/etc/openbsd_domains.conf` Format
 -
 -    typeset -A all_domains=(
@@ -3352,11 +3311,11 @@ index a9a7228..aa7979e 100644
 -    )
 -
 -This format allows you to specify the main domains and their respective subdomains, which the script will use to generate the appropriate DNS zone files.
--
+<!-- TODO: Break into shorter sentences (46 words > 15) --> -
 -## Disclaimer
 -
--This script is provided as-is and should be tested in a development environment before using it in production. Make sure to adjust configurations to match your specific use case and security requirements.
-diff --git a/openbsd.sh b/openbsd.sh
+-This script is provided as-is and should be tested in a development environment before using it in production.
+<!-- TODO: Break into shorter sentences (22 words > 15) --> Make sure to adjust configurations to match your specific use case and security requirements. diff --git a/openbsd.sh b/openbsd.sh
 index 245296a..18d7a33 100644
 --- a/openbsd.sh
 +++ b/openbsd.sh
@@ -3518,8 +3477,10 @@ index 245296a..18d7a33 100644
 +  doas pfctl -f /etc/pf.conf
  }
  
--if ! retry_command doas pkg_add -UI ruby postgresql-server dnscrypt-proxy sshguard monit redis varnish; then
--  echo "Package installation failed. Exiting." | tee -a $log_file
+-if !
+<!-- TODO: Break into shorter sentences (639 words > 15) --> retry_command doas pkg_add -UI ruby postgresql-server dnscrypt-proxy sshguard monit redis varnish; then
+-  echo "Package installation failed.
+<!-- TODO: Break into shorter sentences (17 words > 15) --> Exiting." | tee -a $log_file
 -  exit 1
 -fi
 -echo "Packages installed successfully." | tee -a $log_file
@@ -3575,10 +3536,10 @@ index 245296a..18d7a33 100644
 -# Enable packet scrubbing (fragment reassembly)
 -scrub in on \$ext_if all fragment reassemble
 +    # Create the zone file if it doesn't exist
-+    if [[ ! -f "/var/nsd/zones/master/${domain}.zone" ]]; then
++    if [[ !
+<!-- TODO: Break into shorter sentences (356 words > 15) --> -f "/var/nsd/zones/master/${domain}.zone" ]]; then
 +      cat <<ZONE | doas tee /var/nsd/zones/master/$domain.zone > /dev/null
-+\$ORIGIN $domain.
-+\$TTL 3600
++\$ORIGIN $domain. +\$TTL 3600
 +
 +@ IN SOA ns.brgen.no. hostmaster.$domain. (
 +  $serial ; Serial
@@ -3588,8 +3549,7 @@ index 245296a..18d7a33 100644
 +  3600 ; Minimum TTL
 +)
 +@ IN NS ns.brgen.no.
-+@ IN NS ns.hyp.net.
-+ns.brgen.no. IN A $OPENBSD_AMSTERDAM_IP
+<!-- TODO: Break into shorter sentences (27 words > 15) --> +@ IN NS ns.hyp.net. +ns.brgen.no. IN A $OPENBSD_AMSTERDAM_IP
 +@ IN CAA 0 issue "letsencrypt.org"
 +ZONE
 +
@@ -3606,7 +3566,8 @@ index 245296a..18d7a33 100644
 -# Relay rules (anchors) for relayd
 -anchor "relayd/*"
 +    # Sign the zone file with DNSSEC if not already signed
-+    if [[ ! -f "/var/nsd/zones/master/${domain}.zone.signed" ]]; then
++    if [[ !
+<!-- TODO: Break into shorter sentences (97 words > 15) --> -f "/var/nsd/zones/master/${domain}.zone.signed" ]]; then
 +      doas ldns-signzone -n -p -o "$domain" "/var/nsd/zones/master/$domain.zone"
 +    fi
 +  done
@@ -3619,7 +3580,8 @@ index 245296a..18d7a33 100644
 +
 +configure_httpd_and_acme_client() {
 +  # Generate a private key for Let's Encrypt if it doesn't exist
-+  if [[ ! -f /etc/acme/letsencrypt-privkey.pem ]]; then
++  if [[ !
+<!-- TODO: Break into shorter sentences (62 words > 15) --> -f /etc/acme/letsencrypt-privkey.pem ]]; then
 +    doas openssl genpkey -algorithm RSA -out /etc/acme/letsencrypt-privkey.pem -pkeyopt rsa_keygen_bits:2048
 +  fi
 +
@@ -3639,7 +3601,8 @@ index 245296a..18d7a33 100644
 -  doas pfctl -f /etc/pf.conf
 -  echo "pf(4) configured and applied." | tee -a $log_file
 -else
--  echo "pf(4) configuration failed. Exiting." | tee -a $log_file
+-  echo "pf(4) configuration failed.
+<!-- TODO: Break into shorter sentences (94 words > 15) --> Exiting." | tee -a $log_file
 -  exit 1
 -fi
 -
@@ -3696,7 +3659,8 @@ index 245296a..18d7a33 100644
 +    local domain="${domain_info%%:*}"
 +    [[ -z "$domain" ]] && continue
 +
-+    if [[ ! -f "/etc/ssl/$domain.fullchain.pem" ]]; then
++    if [[ !
+<!-- TODO: Break into shorter sentences (286 words > 15) --> -f "/etc/ssl/$domain.fullchain.pem" ]]; then
 +      echo "Generating certificate for $domain using ACME client..."
 +      doas acme-client -v "$domain"
 +    else
@@ -3787,7 +3751,8 @@ index 245296a..18d7a33 100644
    doas rcctl restart relayd
 -  echo "relayd(8) configured and restarted." | tee -a $log_file
 -else
--  echo "relayd(8) configuration failed. Exiting." | tee -a $log_file
+-  echo "relayd(8) configuration failed.
+<!-- TODO: Break into shorter sentences (417 words > 15) --> Exiting." | tee -a $log_file
 -  exit 1
 -fi
 -
@@ -3801,11 +3766,9 @@ index 245296a..18d7a33 100644
 -  serial=$(date +"%Y%m%d%H")
 -  cat <<- EOF | doas tee "/var/nsd/zones/master/$domain.zone" > /dev/null
 -\$ORIGIN $domain.
--\$TTL 24h
+<!-- TODO: Break into shorter sentences (76 words > 15) --> -\$TTL 24h
 -@ IN SOA ns.brgen.no. admin.brgen.no. ($serial 1h 15m 1w 3m)
--@ IN NS ns.brgen.no.
--@ IN NS ns.hyp.net.
--$domain. 3m IN CAA 0 issue "letsencrypt.org"
+-@ IN NS ns.brgen.no. -@ IN NS ns.hyp.net. -$domain. 3m IN CAA 0 issue "letsencrypt.org"
 -www IN CNAME @
 -@ IN A $openbsd_amsterdam
 -EOF
@@ -3863,7 +3826,8 @@ index 245296a..18d7a33 100644
 -  doas rcctl start nsd
 -  echo "nsd(8) configured and started." | tee -a $log_file
 -else
--  echo "nsd(8) configuration failed. Exiting." | tee -a $log_file
+-  echo "nsd(8) configuration failed.
+<!-- TODO: Break into shorter sentences (220 words > 15) --> Exiting." | tee -a $log_file
 -  exit 1
 -fi
 -
@@ -3938,7 +3902,8 @@ index 245296a..18d7a33 100644
 +
 +configure_startup_scripts() {
 +  for app in "${RAILS_APPS[@]}"; do
-+    if ! doas grep -q "^$app:" /etc/master.passwd; then
++    if !
+<!-- TODO: Break into shorter sentences (360 words > 15) --> doas grep -q "^$app:" /etc/master.passwd; then
 +      doas useradd -m -s /bin/ksh "$app"
 +    fi
 +
@@ -3964,7 +3929,8 @@ index 245296a..18d7a33 100644
 +
 +pledge stdio rpath wpath cpath inet
 +
-+. /etc/rc.d/rc.subr
++.
+<!-- TODO: Break into shorter sentences (120 words > 15) --> /etc/rc.d/rc.subr
 +rc_cmd \$1
 +EOF
 +
@@ -4105,7 +4071,8 @@ index 83594ee..245296a 100644
    local delay=5
 -  while (( retries > 0 )); do
 -    "$@" && return 0
--    log_message "WARN" "Command failed: $@. Retrying... ($retries attempts left)"
+-    log_message "WARN" "Command failed: $@.
+<!-- TODO: Break into shorter sentences (609 words > 15) --> Retrying... ($retries attempts left)"
 -    ((retries--))
 -    sleep $delay
 +  local count=0
@@ -4118,7 +4085,8 @@ index 83594ee..245296a 100644
 +      sleep $delay
 +    fi
    done
--  log_message "ERROR" "Command failed after multiple attempts: $@. Exiting."
+-  log_message "ERROR" "Command failed after multiple attempts: $@.
+<!-- TODO: Break into shorter sentences (55 words > 15) --> Exiting."
 -  exit 1
 +  return 1
  }
@@ -4128,7 +4096,8 @@ index 83594ee..245296a 100644
 -packages=(ruby-3.3.5 postgresql-server dnscrypt-proxy redis varnish)
 -
 -for package in "${packages[@]}"; do
--  if ! pkg_info | grep -q "$package"; then
+-  if !
+<!-- TODO: Break into shorter sentences (31 words > 15) --> pkg_info | grep -q "$package"; then
 -    retry_command doas pkg_add "$package"
 -    if [[ $? -ne 0 ]]; then
 -      log_message "ERROR" "Failed to install package: $package"
@@ -4145,10 +4114,13 @@ index 83594ee..245296a 100644
 -# Configure pf with improved SSH rules
 -log_message "INFO" "Configuring pf..."
 -tmp_pf_conf=$(mktemp)
--if [[ $? -ne 0 ]]; then
+-if [[ $?
+<!-- TODO: Break into shorter sentences (62 words > 15) --> -ne 0 ]]; then
 -  log_message "ERROR" "Failed to create temporary file for pf configuration."
-+if ! retry_command doas pkg_add -UI ruby postgresql-server dnscrypt-proxy sshguard monit redis varnish; then
-+  echo "Package installation failed. Exiting." | tee -a $log_file
++if !
+<!-- TODO: Break into shorter sentences (17 words > 15) --> retry_command doas pkg_add -UI ruby postgresql-server dnscrypt-proxy sshguard monit redis varnish; then
++  echo "Package installation failed.
+<!-- TODO: Break into shorter sentences (17 words > 15) --> Exiting." | tee -a $log_file
    exit 1
  fi
 +echo "Packages installed successfully." | tee -a $log_file
@@ -4210,7 +4182,8 @@ index 83594ee..245296a 100644
 -# Test and load the pf configuration
 -log_message "DEBUG" "Testing pf configuration."
 -retry_command doas pfctl -n -f "$tmp_pf_conf"
--if [[ $? -ne 0 ]]; then
+-if [[ $?
+<!-- TODO: Break into shorter sentences (377 words > 15) --> -ne 0 ]]; then
 -  log_message "ERROR" "pfctl test failed for pf configuration. Please check the configuration."
 -  cat "$tmp_pf_conf"
 +# Apply and test the pf(4) configuration
@@ -4218,13 +4191,15 @@ index 83594ee..245296a 100644
 +  doas pfctl -f /etc/pf.conf
 +  echo "pf(4) configured and applied." | tee -a $log_file
 +else
-+  echo "pf(4) configuration failed. Exiting." | tee -a $log_file
++  echo "pf(4) configuration failed.
+<!-- TODO: Break into shorter sentences (42 words > 15) --> Exiting." | tee -a $log_file
    exit 1
  fi
  
 -# Copy the configuration file if the test passes
 -retry_command doas cp "$tmp_pf_conf" /etc/pf.conf
--if [[ $? -ne 0 ]]; then
+-if [[ $?
+<!-- TODO: Break into shorter sentences (25 words > 15) --> -ne 0 ]]; then
 -  log_message "ERROR" "Failed to copy pf.conf to /etc/. Check permissions."
 -  exit 1
 -fi
@@ -4240,7 +4215,8 @@ index 83594ee..245296a 100644
 -# Clean up temporary file
 -if [[ -f "$tmp_pf_conf" ]]; then
 -  rm "$tmp_pf_conf"
--  if [[ $? -ne 0 ]]; then
+-  if [[ $?
+<!-- TODO: Break into shorter sentences (72 words > 15) --> -ne 0 ]]; then
 -    log_message "WARN" "Failed to delete temporary file $tmp_pf_conf. Manual cleanup might be required."
 -  fi
 -fi
@@ -4254,7 +4230,8 @@ index 83594ee..245296a 100644
 -# Load pf configuration
 -log_message "DEBUG" "Loading pf configuration."
 -retry_command doas pfctl -f /etc/pf.conf
--if [[ $? -ne 0 ]]; then
+-if [[ $?
+<!-- TODO: Break into shorter sentences (44 words > 15) --> -ne 0 ]]; then
 -  log_message "ERROR" "Failed to load pf.conf. Check the configuration for errors."
 -  exit 1
 -fi
@@ -4270,12 +4247,15 @@ index 83594ee..245296a 100644
 +EOF
  
 -# Enable pf if not already enabled
--if ! doas pfctl -s info | grep -q "Status: Enabled"; then
+-if !
+<!-- TODO: Break into shorter sentences (56 words > 15) --> doas pfctl -s info | grep -q "Status: Enabled"; then
 -  retry_command doas pfctl -e
--  if [[ $? -eq 0 ]]; then
+-  if [[ $?
+<!-- TODO: Break into shorter sentences (19 words > 15) --> -eq 0 ]]; then
 -    log_message "INFO" "pf configured and enabled."
 -  else
--    log_message "ERROR" "Failed to enable pf. Please check the system logs."
+-    log_message "ERROR" "Failed to enable pf.
+<!-- TODO: Break into shorter sentences (20 words > 15) --> Please check the system logs."
 -    exit 1
 -  fi
 -else
@@ -4288,7 +4268,8 @@ index 83594ee..245296a 100644
  
 -# Enable pf to start at boot after verification
 -retry_command doas rcctl enable pf
--if [[ $? -ne 0 ]]; then
+-if [[ $?
+<!-- TODO: Break into shorter sentences (59 words > 15) --> -ne 0 ]]; then
 -  log_message "ERROR" "Failed to enable pf for startup. Please check rcctl configuration."
 -  exit 1
 -fi
@@ -4303,7 +4284,8 @@ index 83594ee..245296a 100644
 -  local service_name="$1"
 -  local action="$2"
 -  retry_command doas rcctl "$action" "$service_name"
--  if [[ $? -ne 0 ]]; then
+-  if [[ $?
+<!-- TODO: Break into shorter sentences (76 words > 15) --> -ne 0 ]]; then
 -    log_message "ERROR" "Failed to $action $service_name. Please check logs."
 -    exit 1
 -  fi
@@ -4338,7 +4320,8 @@ index 83594ee..245296a 100644
 -# Configuring relayd
 -log_message "INFO" "Configuring relayd..."
 -tmp_relayd_conf=$(mktemp)
--if [[ $? -ne 0 ]]; then
+-if [[ $?
+<!-- TODO: Break into shorter sentences (145 words > 15) --> -ne 0 ]]; then
 -  log_message "ERROR" "Failed to create temporary file for relayd configuration."
 -  exit 1
 -fi
@@ -4375,7 +4358,8 @@ index 83594ee..245296a 100644
 -# Test relayd configuration before applying
 -log_message "DEBUG" "Testing relayd configuration."
 -retry_command doas relayd -n -f "$tmp_relayd_conf"
--if [[ $? -ne 0 ]]; then
+-if [[ $?
+<!-- TODO: Break into shorter sentences (157 words > 15) --> -ne 0 ]]; then
 -  log_message "ERROR" "relayd configuration test failed. Please check the configuration."
 -  cat "$tmp_relayd_conf"
 +# Apply relayd configuration and restart service
@@ -4383,7 +4367,8 @@ index 83594ee..245296a 100644
 +  doas rcctl restart relayd
 +  echo "relayd(8) configured and restarted." | tee -a $log_file
 +else
-+  echo "relayd(8) configuration failed. Exiting." | tee -a $log_file
++  echo "relayd(8) configuration failed.
+<!-- TODO: Break into shorter sentences (41 words > 15) --> Exiting." | tee -a $log_file
    exit 1
  fi
  
@@ -4399,11 +4384,9 @@ index 83594ee..245296a 100644
 +  serial=$(date +"%Y%m%d%H")
 +  cat <<- EOF | doas tee "/var/nsd/zones/master/$domain.zone" > /dev/null
 +\$ORIGIN $domain.
-+\$TTL 24h
+<!-- TODO: Break into shorter sentences (81 words > 15) --> +\$TTL 24h
 +@ IN SOA ns.brgen.no. admin.brgen.no. ($serial 1h 15m 1w 3m)
-+@ IN NS ns.brgen.no.
-+@ IN NS ns.hyp.net.
-+$domain. 3m IN CAA 0 issue "letsencrypt.org"
++@ IN NS ns.brgen.no. +@ IN NS ns.hyp.net. +$domain. 3m IN CAA 0 issue "letsencrypt.org"
 +www IN CNAME @
 +@ IN A $openbsd_amsterdam
 +EOF
@@ -4421,7 +4404,8 @@ index 83594ee..245296a 100644
 -# Enable OpenSMTPD to start at boot after verifying configuration
 -log_message "INFO" "Configuring OpenSMTPD..."
 -retry_command doas smtpd -n -f /etc/mail/smtpd.conf
--if [[ $? -ne 0 ]]; then
+-if [[ $?
+<!-- TODO: Break into shorter sentences (83 words > 15) --> -ne 0 ]]; then
 -  log_message "ERROR" "OpenSMTPD configuration test failed. Please check the configuration."
 -  cat /etc/mail/smtpd.conf
 +# Configure the NSD server with the new zone files
@@ -4459,7 +4443,8 @@ index 83594ee..245296a 100644
 +  doas rcctl start nsd
 +  echo "nsd(8) configured and started." | tee -a $log_file
 +else
-+  echo "nsd(8) configuration failed. Exiting." | tee -a $log_file
++  echo "nsd(8) configuration failed.
+<!-- TODO: Break into shorter sentences (143 words > 15) --> Exiting." | tee -a $log_file
    exit 1
  fi
  
@@ -4474,7 +4459,8 @@ index 83594ee..245296a 100644
 -#
 -# Startup script for $app
 -#
--. /etc/rc.subr
+-.
+<!-- TODO: Break into shorter sentences (59 words > 15) --> /etc/rc.subr
 -
 -name="$app"
 -rcvar="\${name}_enable"
@@ -4570,22 +4556,20 @@ index 0000000..a9a7228
 +
 +## Overview
 +
-+This script automates the setup of an OpenBSD environment configured for Ruby on Rails development. It includes the installation of required packages, configuration of firewall rules using Packet Filter (pf), relayd setup for reverse proxying, and NSD setup for DNS management.
-+
++This script automates the setup of an OpenBSD environment configured for Ruby on Rails development.
+<!-- TODO: Break into shorter sentences (442 words > 15) --> It includes the installation of required packages, configuration of firewall rules using Packet Filter (pf), relayd setup for reverse proxying, and NSD setup for DNS management.
+<!-- TODO: Break into shorter sentences (26 words > 15) --> +
 +## Features
 +
 +- **Automatic Package Installation**: Installs required packages such as Ruby, PostgreSQL, Redis, and others.
-+- **Dynamic Domain Loading**: Loads domains from an external configuration file for easy management and maintainability.
-+- **Firewall Configuration (pf)**: Configures OpenBSD's Packet Filter to enhance security, including brute-force attack protection and trusted IP handling for SSH.
-+- **Reverse Proxy Configuration (relayd)**: Sets up relayd for HTTP traffic to support load balancing and forwarding.
-+- **DNS Configuration (NSD)**: Automates the creation of zone files for managing DNS entries across various domains and subdomains.
-+
+<!-- TODO: Break into shorter sentences (18 words > 15) --> +- **Dynamic Domain Loading**: Loads domains from an external configuration file for easy management and maintainability.
+<!-- TODO: Break into shorter sentences (16 words > 15) --> +- **Firewall Configuration (pf)**: Configures OpenBSD's Packet Filter to enhance security, including brute-force attack protection and trusted IP handling for SSH.
+<!-- TODO: Break into shorter sentences (21 words > 15) --> +- **Reverse Proxy Configuration (relayd)**: Sets up relayd for HTTP traffic to support load balancing and forwarding.
+<!-- TODO: Break into shorter sentences (17 words > 15) --> +- **DNS Configuration (NSD)**: Automates the creation of zone files for managing DNS entries across various domains and subdomains.
+<!-- TODO: Break into shorter sentences (19 words > 15) --> +
 +## Prerequisites
 +
-+- OpenBSD system with `doas` configured.
-+- Configuration file `/etc/openbsd_domains.conf` with the domains and subdomains to be managed.
-+- Internet access for package installation.
-+
++- OpenBSD system with `doas` configured. +- Configuration file `/etc/openbsd_domains.conf` with the domains and subdomains to be managed. +- Internet access for package installation. +
 +## Usage
 +
 +### Running the Script
@@ -4600,55 +4584,42 @@ index 0000000..a9a7228
 +
 +### Configuration File
 +
-+The domains to be managed are loaded from `/etc/openbsd_domains.conf`. This file should contain the domain definitions in the format expected by the script, allowing for easy updates without modifying the script itself.
-+
++The domains to be managed are loaded from `/etc/openbsd_domains.conf`.
+<!-- TODO: Break into shorter sentences (46 words > 15) --> This file should contain the domain definitions in the format expected by the script, allowing for easy updates without modifying the script itself.
+<!-- TODO: Break into shorter sentences (23 words > 15) --> +
 +## Detailed Steps
 +
 +### 1. Package Installation
 +
 +The script installs several necessary packages:
 +
-+- `ruby`: Ruby programming language.
-+- `postgresql-server`: Database server for Rails.
-+- `dnscrypt-proxy`: DNS security.
-+- `redis`: In-memory data store.
-+- `varnish`: HTTP reverse proxy.
-+
-+The latest version of each package is determined and installed using OpenBSD's `pkg_add` tool.
-+
++- `ruby`: Ruby programming language. +- `postgresql-server`: Database server for Rails. +- `dnscrypt-proxy`: DNS security. +- `redis`: In-memory data store. +- `varnish`: HTTP reverse proxy. +
++The latest version of each package is determined and installed using OpenBSD's `pkg_add` tool. +
 +### 2. Packet Filter (pf) Configuration
 +
-+- Configures `pf` to block unwanted incoming traffic by default.
-+- Protects against brute-force attacks by rate-limiting SSH connections and blocking offending IPs.
-+- Allows incoming connections for HTTP, HTTPS, DNS, and SSH (from trusted IPs).
-+- Loads the configuration from a temporary file and applies it.
-+
++- Configures `pf` to block unwanted incoming traffic by default. +- Protects against brute-force attacks by rate-limiting SSH connections and blocking offending IPs. +- Allows incoming connections for HTTP, HTTPS, DNS, and SSH (from trusted IPs). +- Loads the configuration from a temporary file and applies it. +
 +### 3. Relayd Configuration
 +
-+- Configures `relayd` for HTTP traffic management.
-+- Sets up a backend table for local services (`127.0.0.1`) and listens for incoming HTTP requests on port 80.
-+- Copies the generated configuration to `/etc/relayd.conf`.
-+
++- Configures `relayd` for HTTP traffic management. +- Sets up a backend table for local services (`127.0.0.1`) and listens for incoming HTTP requests on port 80.
+<!-- TODO: Break into shorter sentences (19 words > 15) --> +- Copies the generated configuration to `/etc/relayd.conf`. +
 +### 4. NSD (Name Server Daemon) Configuration
 +
 +- Sets up zone files for each domain listed in `/etc/openbsd_domains.conf`.
-+- Configures SOA, NS, and A records for the domains and their respective subdomains.
-+- Utilizes a timestamp as the serial number for SOA records to ensure DNS changes are properly propagated.
-+
+<!-- TODO: Break into shorter sentences (17 words > 15) --> +- Configures SOA, NS, and A records for the domains and their respective subdomains. +- Utilizes a timestamp as the serial number for SOA records to ensure DNS changes are properly propagated.
+<!-- TODO: Break into shorter sentences (18 words > 15) --> +
 +## Logs
 +
 +- All log messages generated by the script are written to `/var/log/openbsd_setup.log` for auditing and troubleshooting purposes.
-+
+<!-- TODO: Break into shorter sentences (21 words > 15) --> +
 +## Error Handling
 +
 +- The script includes retry mechanisms for package installation and configuration steps to handle transient issues.
-+- If any critical step fails after multiple attempts, the script will exit and log the failure.
-+
+<!-- TODO: Break into shorter sentences (21 words > 15) --> +- If any critical step fails after multiple attempts, the script will exit and log the failure.
+<!-- TODO: Break into shorter sentences (17 words > 15) --> +
 +## Notes
 +
 +- Ensure that the `/etc/openbsd_domains.conf` file is properly formatted and contains the correct domain information before running the script.
-+- This script is intended for environments where `doas` is used instead of `sudo`.
-+
+<!-- TODO: Break into shorter sentences (23 words > 15) --> +- This script is intended for environments where `doas` is used instead of `sudo`. +
 +## Example `/etc/openbsd_domains.conf` Format
 +
 +    typeset -A all_domains=(
@@ -4657,11 +4628,11 @@ index 0000000..a9a7228
 +    )
 +
 +This format allows you to specify the main domains and their respective subdomains, which the script will use to generate the appropriate DNS zone files.
-+
+<!-- TODO: Break into shorter sentences (46 words > 15) --> +
 +## Disclaimer
 +
-+This script is provided as-is and should be tested in a development environment before using it in production. Make sure to adjust configurations to match your specific use case and security requirements.
-diff --git a/openbsd.sh b/openbsd.sh
++This script is provided as-is and should be tested in a development environment before using it in production.
+<!-- TODO: Break into shorter sentences (22 words > 15) --> Make sure to adjust configurations to match your specific use case and security requirements. diff --git a/openbsd.sh b/openbsd.sh
 new file mode 100644
 index 0000000..83594ee
 --- /dev/null
@@ -4715,11 +4686,13 @@ index 0000000..83594ee
 +  local delay=5
 +  while (( retries > 0 )); do
 +    "$@" && return 0
-+    log_message "WARN" "Command failed: $@. Retrying... ($retries attempts left)"
++    log_message "WARN" "Command failed: $@.
+<!-- TODO: Break into shorter sentences (203 words > 15) --> Retrying... ($retries attempts left)"
 +    ((retries--))
 +    sleep $delay
 +  done
-+  log_message "ERROR" "Command failed after multiple attempts: $@. Exiting."
++  log_message "ERROR" "Command failed after multiple attempts: $@.
+<!-- TODO: Break into shorter sentences (19 words > 15) --> Exiting."
 +  exit 1
 +}
 +
@@ -4728,7 +4701,8 @@ index 0000000..83594ee
 +packages=(ruby-3.3.5 postgresql-server dnscrypt-proxy redis varnish)
 +
 +for package in "${packages[@]}"; do
-+  if ! pkg_info | grep -q "$package"; then
++  if !
+<!-- TODO: Break into shorter sentences (29 words > 15) --> pkg_info | grep -q "$package"; then
 +    retry_command doas pkg_add "$package"
 +    if [[ $? -ne 0 ]]; then
 +      log_message "ERROR" "Failed to install package: $package"
@@ -4745,7 +4719,8 @@ index 0000000..83594ee
 +# Configure pf with improved SSH rules
 +log_message "INFO" "Configuring pf..."
 +tmp_pf_conf=$(mktemp)
-+if [[ $? -ne 0 ]]; then
++if [[ $?
+<!-- TODO: Break into shorter sentences (62 words > 15) --> -ne 0 ]]; then
 +  log_message "ERROR" "Failed to create temporary file for pf configuration."
 +  exit 1
 +fi
@@ -4789,7 +4764,8 @@ index 0000000..83594ee
 +# Test and load the pf configuration
 +log_message "DEBUG" "Testing pf configuration."
 +retry_command doas pfctl -n -f "$tmp_pf_conf"
-+if [[ $? -ne 0 ]]; then
++if [[ $?
+<!-- TODO: Break into shorter sentences (215 words > 15) --> -ne 0 ]]; then
 +  log_message "ERROR" "pfctl test failed for pf configuration. Please check the configuration."
 +  cat "$tmp_pf_conf"
 +  exit 1
@@ -4797,7 +4773,8 @@ index 0000000..83594ee
 +
 +# Copy the configuration file if the test passes
 +retry_command doas cp "$tmp_pf_conf" /etc/pf.conf
-+if [[ $? -ne 0 ]]; then
++if [[ $?
+<!-- TODO: Break into shorter sentences (29 words > 15) --> -ne 0 ]]; then
 +  log_message "ERROR" "Failed to copy pf.conf to /etc/. Check permissions."
 +  exit 1
 +fi
@@ -4805,7 +4782,8 @@ index 0000000..83594ee
 +# Clean up temporary file
 +if [[ -f "$tmp_pf_conf" ]]; then
 +  rm "$tmp_pf_conf"
-+  if [[ $? -ne 0 ]]; then
++  if [[ $?
+<!-- TODO: Break into shorter sentences (25 words > 15) --> -ne 0 ]]; then
 +    log_message "WARN" "Failed to delete temporary file $tmp_pf_conf. Manual cleanup might be required."
 +  fi
 +fi
@@ -4813,18 +4791,22 @@ index 0000000..83594ee
 +# Load pf configuration
 +log_message "DEBUG" "Loading pf configuration."
 +retry_command doas pfctl -f /etc/pf.conf
-+if [[ $? -ne 0 ]]; then
++if [[ $?
+<!-- TODO: Break into shorter sentences (26 words > 15) --> -ne 0 ]]; then
 +  log_message "ERROR" "Failed to load pf.conf. Check the configuration for errors."
 +  exit 1
 +fi
 +
 +# Enable pf if not already enabled
-+if ! doas pfctl -s info | grep -q "Status: Enabled"; then
++if !
+<!-- TODO: Break into shorter sentences (19 words > 15) --> doas pfctl -s info | grep -q "Status: Enabled"; then
 +  retry_command doas pfctl -e
-+  if [[ $? -eq 0 ]]; then
++  if [[ $?
+<!-- TODO: Break into shorter sentences (19 words > 15) --> -eq 0 ]]; then
 +    log_message "INFO" "pf configured and enabled."
 +  else
-+    log_message "ERROR" "Failed to enable pf. Please check the system logs."
++    log_message "ERROR" "Failed to enable pf.
+<!-- TODO: Break into shorter sentences (20 words > 15) --> Please check the system logs."
 +    exit 1
 +  fi
 +else
@@ -4833,7 +4815,8 @@ index 0000000..83594ee
 +
 +# Enable pf to start at boot after verification
 +retry_command doas rcctl enable pf
-+if [[ $? -ne 0 ]]; then
++if [[ $?
+<!-- TODO: Break into shorter sentences (39 words > 15) --> -ne 0 ]]; then
 +  log_message "ERROR" "Failed to enable pf for startup. Please check rcctl configuration."
 +  exit 1
 +fi
@@ -4843,7 +4826,8 @@ index 0000000..83594ee
 +  local service_name="$1"
 +  local action="$2"
 +  retry_command doas rcctl "$action" "$service_name"
-+  if [[ $? -ne 0 ]]; then
++  if [[ $?
+<!-- TODO: Break into shorter sentences (37 words > 15) --> -ne 0 ]]; then
 +    log_message "ERROR" "Failed to $action $service_name. Please check logs."
 +    exit 1
 +  fi
@@ -4852,7 +4836,8 @@ index 0000000..83594ee
 +# Configuring relayd
 +log_message "INFO" "Configuring relayd..."
 +tmp_relayd_conf=$(mktemp)
-+if [[ $? -ne 0 ]]; then
++if [[ $?
+<!-- TODO: Break into shorter sentences (21 words > 15) --> -ne 0 ]]; then
 +  log_message "ERROR" "Failed to create temporary file for relayd configuration."
 +  exit 1
 +fi
@@ -4879,7 +4864,8 @@ index 0000000..83594ee
 +# Test relayd configuration before applying
 +log_message "DEBUG" "Testing relayd configuration."
 +retry_command doas relayd -n -f "$tmp_relayd_conf"
-+if [[ $? -ne 0 ]]; then
++if [[ $?
+<!-- TODO: Break into shorter sentences (125 words > 15) --> -ne 0 ]]; then
 +  log_message "ERROR" "relayd configuration test failed. Please check the configuration."
 +  cat "$tmp_relayd_conf"
 +  exit 1
@@ -4894,7 +4880,8 @@ index 0000000..83594ee
 +# Enable OpenSMTPD to start at boot after verifying configuration
 +log_message "INFO" "Configuring OpenSMTPD..."
 +retry_command doas smtpd -n -f /etc/mail/smtpd.conf
-+if [[ $? -ne 0 ]]; then
++if [[ $?
+<!-- TODO: Break into shorter sentences (50 words > 15) --> -ne 0 ]]; then
 +  log_message "ERROR" "OpenSMTPD configuration test failed. Please check the configuration."
 +  cat /etc/mail/smtpd.conf
 +  exit 1
@@ -4911,7 +4898,8 @@ index 0000000..83594ee
 +#
 +# Startup script for $app
 +#
-+. /etc/rc.subr
++.
+<!-- TODO: Break into shorter sentences (63 words > 15) --> /etc/rc.subr
 +
 +name="$app"
 +rcvar="\${name}_enable"
@@ -4936,39 +4924,21 @@ index 0000000..83594ee
 # OpenBSD Setup for Scalable Rails and Secure Email
 
 This script configures OpenBSD 7.7 as a robust, modular platform for Ruby on Rails applications and a single-user email service, embodying the Unix philosophy of doing one thing well to power a focused, secure system for hyperlocal platforms with DNSSEC.
-
-## Setup Instructions
+<!-- TODO: Break into shorter sentences (89 words > 15) --> ## Setup Instructions
 
 1. **Prerequisites**:
-   - OpenBSD 7.7 installed on master (PowerPC Mac Mini) and slave (VM).
-   - Directories (`/var/nsd`, `/var/www/acme`, `/var/postgresql/data`, `/var/redis`, `/var/vmail`) have correct ownership/permissions (e.g., `/var/www/acme` as `root:_httpd`, 755).
-   - Rails apps (`brgen`, `amber`, `bsdports`) ready to upload to `/home/<app>/<app>` with `Gemfile` and `database.yml`.
-   - Unprivileged user `gfuser` with `mutt` installed for email access.
-   - Internet connectivity for package installation.
-   - Domain (e.g., `brgen.no`) registered with Domeneshop.no, ready for DS records.
-
-2. **Run the Script**:
+   - OpenBSD 7.7 installed on master (PowerPC Mac Mini) and slave (VM). - Directories (`/var/nsd`, `/var/www/acme`, `/var/postgresql/data`, `/var/redis`, `/var/vmail`) have correct ownership/permissions (e.g., `/var/www/acme` as `root:_httpd`, 755). - Rails apps (`brgen`, `amber`, `bsdports`) ready to upload to `/home/<app>/<app>` with `Gemfile` and `database.yml`. - Unprivileged user `gfuser` with `mutt` installed for email access. - Internet connectivity for package installation. - Domain (e.g., `brgen.no`) registered with Domeneshop.no, ready for DS records. 2. **Run the Script**:
    ```bash
    doas zsh openbsd.sh
    ```
-   - `--resume`: Run after Stage 1 (DNS/certs).
-   - `--mail`: Run after Stage 2 (services/apps) for email.
-   - `--help`: Show usage.
-
-3. **Stages**:
-   - **Stage 1**: Installs `ruby-3.3.5`, `ldns-utils`, `postgresql-server`, `redis`, and `zap` using OpenBSD 7.7’s default `pkg_add`. Configures `ns.brgen.no` (46.23.95.45) as master nameserver with DNSSEC (ECDSAP256SHA256 keys, signed zones), allowing zone transfers to `ns.hyp.net` (194.63.248.53, managed by Domeneshop.no) via TCP 53 and sending NOTIFY via UDP 53, with `pf` permitting TCP/UDP 53 traffic on `ext_if` (vio0). Generates TLSA records for HTTPS services. Issues certificates via Let’s Encrypt. Pauses to let you upload Rails apps (`brgen`, `amber`, `bsdports`) to `/home/<app>/<app>` with `Gemfile` and `database.yml`. Press Enter to proceed, then submit DS records from `/var/nsd/zones/master/*.ds` to Domeneshop.no. Test with `dig @46.23.95.45 brgen.no SOA`, `dig @46.23.95.45 denvr.us A`, `dig DS brgen.no +short`, and `dig TLSA _443._tcp.brgen.no`. Wait for propagation (24–48 hours) before `--resume`. `ns.hyp.net` requires no local setup (configure slave separately).
-   - **Stage 2**: Sets up PostgreSQL, Redis, PF firewall, relayd with security headers, and Rails apps with Falcon server. Logs go to `/var/log/messages`. Applies CSS micro-text (e.g., 7.5pt) for app footer branding if applicable.
-   - **Stage 3**: Configures OpenSMTPD for `bergen@pub.attorney`, accessible via `mutt` for `gfuser`.
-
-4. **Verification**:
-   - Services: `rcctl check nsd httpd postgresql redis relayd smtpd`.
-   - DNS: `dig @46.23.95.45 brgen.no SOA`, `dig @46.23.95.45 denvr.us A`.
-   - DNSSEC: `dig DS brgen.no +short`, `dig DNSKEY brgen.no +short`.
-   - TLSA: `dig TLSA _443._tcp.brgen.no`.
-   - Firewall: `doas pfctl -s rules` to confirm DNS and other rules.
-   - Email: Check `/var/vmail/pub.attorney/bergen/new` as `gfuser` with `mutt`.
-   - Logs: `tail -f /var/log/messages` for Rails app activity.
-```
+   - `--resume`: Run after Stage 1 (DNS/certs). - `--mail`: Run after Stage 2 (services/apps) for email. - `--help`: Show usage. 3. **Stages**:
+   - **Stage 1**: Installs `ruby-3.3.5`, `ldns-utils`, `postgresql-server`, `redis`, and `zap` using OpenBSD 7.7’s default `pkg_add`.
+<!-- TODO: Break into shorter sentences (16 words > 15) --> Configures `ns.brgen.no` (46.23.95.45) as master nameserver with DNSSEC (ECDSAP256SHA256 keys, signed zones), allowing zone transfers to `ns.hyp.net` (194.63.248.53, managed by Domeneshop.no) via TCP 53 and sending NOTIFY via UDP 53, with `pf` permitting TCP/UDP 53 traffic on `ext_if` (vio0).
+<!-- TODO: Break into shorter sentences (39 words > 15) --> Generates TLSA records for HTTPS services. Issues certificates via Let’s Encrypt. Pauses to let you upload Rails apps (`brgen`, `amber`, `bsdports`) to `/home/<app>/<app>` with `Gemfile` and `database.yml`.
+<!-- TODO: Break into shorter sentences (16 words > 15) --> Press Enter to proceed, then submit DS records from `/var/nsd/zones/master/*.ds` to Domeneshop.no. Test with `dig @46.23.95.45 brgen.no SOA`, `dig @46.23.95.45 denvr.us A`, `dig DS brgen.no +short`, and `dig TLSA _443._tcp.brgen.no`.
+<!-- TODO: Break into shorter sentences (18 words > 15) --> Wait for propagation (24–48 hours) before `--resume`. `ns.hyp.net` requires no local setup (configure slave separately). - **Stage 2**: Sets up PostgreSQL, Redis, PF firewall, relayd with security headers, and Rails apps with Falcon server.
+<!-- TODO: Break into shorter sentences (19 words > 15) --> Logs go to `/var/log/messages`. Applies CSS micro-text (e.g., 7.5pt) for app footer branding if applicable. - **Stage 3**: Configures OpenSMTPD for `bergen@pub.attorney`, accessible via `mutt` for `gfuser`. 4. **Verification**:
+   - Services: `rcctl check nsd httpd postgresql redis relayd smtpd`. - DNS: `dig @46.23.95.45 brgen.no SOA`, `dig @46.23.95.45 denvr.us A`. - DNSSEC: `dig DS brgen.no +short`, `dig DNSKEY brgen.no +short`. - TLSA: `dig TLSA _443._tcp.brgen.no`. - Firewall: `doas pfctl -s rules` to confirm DNS and other rules. - Email: Check `/var/vmail/pub.attorney/bergen/new` as `gfuser` with `mutt`. - Logs: `tail -f /var/log/messages` for Rails app activity. ```
 
 ## `openbsd.sh`
 ```
@@ -4976,44 +4946,25 @@ This script configures OpenBSD 7.7 as a robust, modular platform for Ruby on Rai
 # OpenBSD Setup for Scalable Rails and Secure Email
 # Configures OpenBSD 7.7 as a robust, modular platform for Ruby on Rails applications
 # and a single-user email service, with DNSSEC for hyperlocal platforms.
-#
+<!-- TODO: Break into shorter sentences (40 words > 15) --> #
 # Prerequisites:
 # - OpenBSD 7.7 installed on master (PowerPC Mac Mini) and slave (VM).
-# - Directories: /var/nsd, /var/www/acme (root:_httpd, 755), /var/postgresql/data,
-#   /var/redis, /var/vmail with correct ownership/permissions.
-# - Rails apps (brgen, amber, bsdports) ready in /home/<app>/<app> with Gemfile and database.yml.
-# - Unprivileged user gfuser with mutt installed for email access.
-# - Internet connectivity for package installation.
-# - Domain (e.g., brgen.no) registered with Domeneshop.no, ready for DS records.
-#
+<!-- TODO: Break into shorter sentences (16 words > 15) --> # - Directories: /var/nsd, /var/www/acme (root:_httpd, 755), /var/postgresql/data,
+#   /var/redis, /var/vmail with correct ownership/permissions. # - Rails apps (brgen, amber, bsdports) ready in /home/<app>/<app> with Gemfile and database.yml. # - Unprivileged user gfuser with mutt installed for email access. # - Internet connectivity for package installation. # - Domain (e.g., brgen.no) registered with Domeneshop.no, ready for DS records. #
+<!-- TODO: Fix heading hierarchy - level 6 after level 1 -->
 # Usage: doas zsh openbsd.sh [--help | --resume | --mail]
-#   --help: Show usage.
-#   --resume: Run after Stage 1 (DNS/certs).
-#   --mail: Run after Stage 2 (services/apps) for email.
-#
+#   --help: Show usage. #   --resume: Run after Stage 1 (DNS/certs). #   --mail: Run after Stage 2 (services/apps) for email. #
+<!-- TODO: Fix heading hierarchy - level 4 after level 1 -->
 # Stages:
-# 1. DNS/Certs: Installs ruby-3.3.5, ldns-utils, postgresql-server, redis, zap.
-#    Configures ns.brgen.no (46.23.95.45) as master nameserver with DNSSEC,
+# 1. DNS/Certs: Installs ruby-3.3.5, ldns-utils, postgresql-server, redis, zap. #    Configures ns.brgen.no (46.23.95.45) as master nameserver with DNSSEC,
 #    allows zone transfers to ns.hyp.net (194.63.248.53) via TCP 53, sends NOTIFY
-#    via UDP 53, PF permits TCP/UDP 53 on ext_if (vio0). Generates TLSA records.
-#    Issues Let’s Encrypt certificates. Pauses for app upload and DS record submission.
-#    Test with 'dig @46.23.95.45 brgen.no SOA', 'dig @46.23.95.45 denvr.us A',
+#    via UDP 53, PF permits TCP/UDP 53 on ext_if (vio0).
+<!-- TODO: Break into shorter sentences (32 words > 15) --> Generates TLSA records. #    Issues Let’s Encrypt certificates. Pauses for app upload and DS record submission. #    Test with 'dig @46.23.95.45 brgen.no SOA', 'dig @46.23.95.45 denvr.us A',
 #    'dig DS brgen.no +short', 'dig TLSA _443._tcp.brgen.no'.
-#    Wait 24–48 hours for propagation before --resume.
-# 2. Services/Apps: Sets up PostgreSQL, Redis, PF, relayd, Rails apps with Falcon.
-#    Logs to /var/log/messages.
-# 3. Email: Configures OpenSMTPD for bergen@pub.attorney, accessible via mutt for gfuser.
-#
+<!-- TODO: Break into shorter sentences (19 words > 15) --> #    Wait 24–48 hours for propagation before --resume. # 2. Services/Apps: Sets up PostgreSQL, Redis, PF, relayd, Rails apps with Falcon. #    Logs to /var/log/messages. # 3. Email: Configures OpenSMTPD for bergen@pub.attorney, accessible via mutt for gfuser. #
 # Verification:
-# - Services: rcctl check nsd httpd postgresql redis relayd smtpd.
-# - DNS: dig @46.23.95.45 brgen.no SOA, dig @46.23.95.45 denvr.us A.
-# - DNSSEC: dig DS brgen.no +short, dig DNSKEY brgen.no +short.
-# - TLSA: dig TLSA _443._tcp.brgen.no.
-# - Firewall: doas pfctl -s rules.
-# - Email: Check /var/vmail/pub.attorney/bergen/new as gfuser with mutt.
-# - Logs: tail -f /var/log/messages.
-
-set -e
+# - Services: rcctl check nsd httpd postgresql redis relayd smtpd. # - DNS: dig @46.23.95.45 brgen.no SOA, dig @46.23.95.45 denvr.us A. # - DNSSEC: dig DS brgen.no +short, dig DNSKEY brgen.no +short. # - TLSA: dig TLSA _443._tcp.brgen.no. # - Firewall: doas pfctl -s rules. # - Email: Check /var/vmail/pub.attorney/bergen/new as gfuser with mutt. # - Logs: tail -f /var/log/messages. set -e
+<!-- TODO: Fix heading hierarchy - level 7 after level 1 -->
 
 # Config variables
 BRGEN_IP="46.23.95.45"            # Primary IP (ns.brgen.no)
@@ -5139,9 +5090,11 @@ check_dns_propagation() {
 # Generate TLSA record for DANE
 generate_tlsa_record() {
   local domain="$1" cert="/etc/ssl/$domain.fullchain.pem"
-  [[ ! -f "$cert" ]] && { echo "WARNING: Certificate for $domain not found"; return; }
+  [[ !
+<!-- TODO: Break into shorter sentences (352 words > 15) --> -f "$cert" ]] && { echo "WARNING: Certificate for $domain not found"; return; }
   local tlsa=$(openssl x509 -noout -pubkey -in "$cert" | openssl pkey -pubin -outform der 2>/dev/null | sha256sum | cut -d' ' -f1)
-  echo "_443._tcp.$domain. IN TLSA 3 1 1 $tlsa" >> "/var/nsd/zones/master/$domain.zone"
+  echo "_443._tcp.$domain.
+<!-- TODO: Break into shorter sentences (37 words > 15) --> IN TLSA 3 1 1 $tlsa" >> "/var/nsd/zones/master/$domain.zone"
   sign_zone "$domain"
 }
 
@@ -5149,7 +5102,8 @@ generate_tlsa_record() {
 sign_zone() {
   local domain="$1" zonefile="/var/nsd/zones/master/$domain.zone" signed_zonefile="/var/nsd/zones/master/$domain.zone.signed"
   local zsk="/var/nsd/zones/master/K$domain.+013+zsk.key" ksk="/var/nsd/zones/master/K$domain.+013+ksk.key"
-  [[ ! -f "$zsk" || ! -f "$ksk" ]] && { echo "ERROR: ZSK or KSK missing for $domain"; exit 1; }
+  [[ !
+<!-- TODO: Break into shorter sentences (27 words > 15) --> -f "$zsk" || ! -f "$ksk" ]] && { echo "ERROR: ZSK or KSK missing for $domain"; exit 1; }
   doas ldns-signzone -n -p -s $(head -c 16 /dev/random | sha1) "$zonefile" "$zsk" "$ksk"
   doas nsd-checkzone "$domain" "$signed_zonefile" || { echo "ERROR: Signed zone file for $domain invalid"; exit 1; }
 }
@@ -5211,13 +5165,10 @@ EOF
     domain="${domain_entry%%:*}" subdomains="${domain_entry#*:}"
     cat > "/var/nsd/zones/master/$domain.zone" <<EOF
 \$ORIGIN $domain.
-\$TTL 3600
+<!-- TODO: Break into shorter sentences (262 words > 15) --> \$TTL 3600
 @ IN SOA ns.brgen.no. hostmaster.$domain. ( $serial 1800 900 604800 86400 )
-@ IN NS ns.brgen.no.
-@ IN NS ns.hyp.net.
-@ IN A $BRGEN_IP
-@ IN MX 10 mail.$domain.
-@ IN CAA 0 issue "letsencrypt.org"
+@ IN NS ns.brgen.no. @ IN NS ns.hyp.net. @ IN A $BRGEN_IP
+@ IN MX 10 mail.$domain. @ IN CAA 0 issue "letsencrypt.org"
 mail IN A $BRGEN_IP
 EOF
     [[ "$domain" = "brgen.no" ]] && echo "ns IN A $BRGEN_IP" >> "/var/nsd/zones/master/$domain.zone"
@@ -5274,7 +5225,8 @@ verify_httpd() {
 # Configure ACME client
 configure_acme() {
   echo "Configuring ACME client"
-  [[ ! -f "/etc/acme/letsencrypt_privkey.pem" ]] && doas openssl genpkey -algorithm RSA -out "/etc/acme/letsencrypt_privkey.pem" -pkeyopt rsa_keygen_bits:4096
+  [[ !
+<!-- TODO: Break into shorter sentences (279 words > 15) --> -f "/etc/acme/letsencrypt_privkey.pem" ]] && doas openssl genpkey -algorithm RSA -out "/etc/acme/letsencrypt_privkey.pem" -pkeyopt rsa_keygen_bits:4096
   cat > "/etc/acme-client.conf" <<'EOF'
 authority letsencrypt {
   api url "https://acme-v02.api.letsencrypt.org/directory"
@@ -5389,7 +5341,8 @@ configure_sshguard() {
 # Set up PostgreSQL
 configure_postgresql() {
   echo "Configuring PostgreSQL"
-  [[ ! -d "/var/postgresql/data" ]] && {
+  [[ !
+<!-- TODO: Break into shorter sentences (581 words > 15) --> -d "/var/postgresql/data" ]] && {
     doas install -d -o _postgresql -g _postgresql "/var/postgresql/data"
     doas su -l _postgresql -c "/usr/local/bin/initdb -D /var/postgresql/data -U postgres -A scram-sha-256 -E UTF8"
   }
@@ -5486,14 +5439,16 @@ EOF
 bergen: /var/vmail/pub.attorney/bergen
 EOF
   doas newaliases
-  [[ ! -f "/etc/mail/secrets" ]] && {
+  [[ !
+<!-- TODO: Break into shorter sentences (484 words > 15) --> -f "/etc/mail/secrets" ]] && {
     local vmail_password=$(openssl rand -base64 24)
     doas echo "$vmail_password" > "$VMAIL_PASS_FILE"
     doas chmod 640 "$VMAIL_PASS_FILE"
     doas echo "bergen:$vmail_password" | doas smtpctl encrypt > "/etc/mail/secrets"
     doas chmod 640 "/etc/mail/secrets"
   }
-  [[ ! -f "/etc/mail/smtpd.key" ]] && {
+  [[ !
+<!-- TODO: Break into shorter sentences (35 words > 15) --> -f "/etc/mail/smtpd.key" ]] && {
     doas openssl req -x509 -newkey rsa:4096 -nodes -keyout "/etc/mail/smtpd.key" -out "/etc/mail/smtpd.crt" -days 365 -subj "/C=US/ST=CA/L=San Francisco/O=PubAttorney/CN=mail.pub.attorney"
     doas chmod 640 "/etc/mail/smtpd.key" "/etc/mail/smtpd.crt"
   }
@@ -5527,7 +5482,8 @@ generate_rcd_scripts() {
     app="${app_entry%%:*}" port="${APP_PORTS[$app]:=$(generate_random_port)}"
     APP_PORTS[$app]=$port
     app_dir="/home/_${app}/${app}"
-    [[ ! -d "$app_dir" || ! -f "$app_dir/Gemfile" || ! -f "$app_dir/config/database.yml" ]] && {
+    [[ !
+<!-- TODO: Break into shorter sentences (159 words > 15) --> -d "$app_dir" || ! -f "$app_dir/Gemfile" || ! -f "$app_dir/config/database.yml" ]] && {
       echo "ERROR: App directory $app_dir, Gemfile, or database.yml missing"
       exit 1
     }
@@ -5544,7 +5500,8 @@ unveil /home/_${app}/${app} r
 unveil /var/log w
 unveil /etc/ssl r
 pledge stdio rpath wpath cpath inet
-. /etc/rc.d/rc.subr
+.
+<!-- TODO: Break into shorter sentences (84 words > 15) --> /etc/rc.d/rc.subr
 rc_cmd \$1
 EOF
     doas chmod +x "/etc/rc.d/$app"
@@ -5592,10 +5549,13 @@ stage_1() {
   configure_acme
   issue_certs
   schedule_renewal
-  echo "Please upload Rails apps (brgen, amber, bsdports) to their respective homedirs (/home/_<app>/<app>), ensuring each has Gemfile and config/database.yml. Press Enter to continue once complete."
+  echo "Please upload Rails apps (brgen, amber, bsdports) to their respective homedirs (/home/_<app>/<app>), ensuring each has Gemfile and config/database.yml.
+<!-- TODO: Break into shorter sentences (275 words > 15) --> Press Enter to continue once complete."
   read -r
   echo "stage_1_complete" > "$STATE_FILE"
-  echo "Stage 1 complete. Submit DS records from /var/nsd/zones/master/*.ds to Domeneshop.no. Test with 'dig @46.23.95.45 brgen.no SOA', 'dig @46.23.95.45 denvr.us A', 'dig DS brgen.no +short', 'dig TLSA _443._tcp.brgen.no'. Wait 24–48 hours for propagation before running 'doas zsh openbsd.sh --resume'."
+  echo "Stage 1 complete.
+<!-- TODO: Break into shorter sentences (16 words > 15) --> Submit DS records from /var/nsd/zones/master/*.ds to Domeneshop.no. Test with 'dig @46.23.95.45 brgen.no SOA', 'dig @46.23.95.45 denvr.us A', 'dig DS brgen.no +short', 'dig TLSA _443._tcp.brgen.no'.
+<!-- TODO: Break into shorter sentences (17 words > 15) --> Wait 24–48 hours for propagation before running 'doas zsh openbsd.sh --resume'."
   exit 0
 }
 
@@ -5611,7 +5571,8 @@ stage_2() {
   configure_sshguard
   run_health_checks
   echo "stage_2_complete" > "$STATE_FILE"
-  echo "Stage 2 complete. Run 'doas zsh openbsd.sh --mail' to set up email."
+  echo "Stage 2 complete.
+<!-- TODO: Break into shorter sentences (45 words > 15) --> Run 'doas zsh openbsd.sh --mail' to set up email."
   exit 0
 }
 
@@ -5637,3 +5598,5 @@ main "$@"
 # EOF: Line count and checksum generated by master.jso
 ```
 
+
+<!-- TODO: Break into shorter sentences (117 words > 15) -->

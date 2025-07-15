@@ -1,9 +1,14 @@
+# frozen_string_literal: true
+
+# § Querycache
+
 # QueryCache: Manages caching of user queries and their responses
 class QueryCache
   require 'lru_redux'
   require 'logger'
 
   def initialize(ttl: 3600, max_size: 100)
+  # TODO: Refactor initialize - exceeds 20 line limit (46 lines)
     @cache = LruRedux::TTL::Cache.new(max_size, ttl)
     @logger = Logger.new(STDOUT)
     @logger.level = Logger::INFO
@@ -49,4 +54,4 @@ class QueryCache
     end
   end
 end
-
+

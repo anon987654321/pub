@@ -1,26 +1,19 @@
+# § Rails-ecosystem-overview
+
 # AI3
 `````
 # Rails Apps
 
-This document outlines the setup and deployment of Rails 8 applications (`brgen`, `amber`, `privcam`, `bsdports`, `hjerterom`) on OpenBSD 7.7+, leveraging Hotwire, StimulusReflex, Stimulus Components, and Devise for authentication. Each app is configured as a Progressive Web App (PWA) with minimalistic views, SCSS targeting direct elements, and anonymous access via `devise-guests`. Deployment uses the existing `openbsd.sh` for DNSSEC, `relayd`, `httpd`, and `acme-client`.
-
-## Overview
+This document outlines the setup and deployment of Rails 8 applications (`brgen`, `amber`, `privcam`, `bsdports`, `hjerterom`) on OpenBSD 7.7+, leveraging Hotwire, StimulusReflex, Stimulus Components, and Devise for authentication.
+<!-- TODO: Break into shorter sentences (37 words > 15) --> Each app is configured as a Progressive Web App (PWA) with minimalistic views, SCSS targeting direct elements, and anonymous access via `devise-guests`.
+<!-- TODO: Break into shorter sentences (22 words > 15) --> Deployment uses the existing `openbsd.sh` for DNSSEC, `relayd`, `httpd`, and `acme-client`. ## Overview
 
 - **Technology Stack**: Rails 8.0+, Ruby 3.3.0, PostgreSQL, Redis, Hotwire (Turbo, Stimulus), StimulusReflex, Stimulus Components, Devise, `devise-guests`, `omniauth-vipps`, Solid Queue, Solid Cache, Propshaft.
-- **Features**:
-  - Anonymous posting and live chat (`devise-guests`).
-  - Norwegian BankID/Vipps OAuth login (`omniauth-vipps`).
-  - Minimalistic views (semantic HTML, tag helpers, no divitis).
-  - SCSS with direct element targeting (e.g., `article.post`).
-  - PWA with offline caching (service workers).
-  - Competitor-inspired features (e.g., Reddit’s communities, Jodel’s karma).
-- **Deployment**: OpenBSD 7.7+, with `openbsd.sh` (DNSSEC, `relayd`, `httpd`, `acme-client`).
-
-## Shared Setup (`__shared.sh`)
+<!-- TODO: Break into shorter sentences (25 words > 15) --> - **Features**:
+  - Anonymous posting and live chat (`devise-guests`). - Norwegian BankID/Vipps OAuth login (`omniauth-vipps`). - Minimalistic views (semantic HTML, tag helpers, no divitis). - SCSS with direct element targeting (e.g., `article.post`). - PWA with offline caching (service workers). - Competitor-inspired features (e.g., Reddit’s communities, Jodel’s karma). - **Deployment**: OpenBSD 7.7+, with `openbsd.sh` (DNSSEC, `relayd`, `httpd`, `acme-client`). ## Shared Setup (`__shared.sh`)
 
 The `__shared.sh` script consolidates setup logic from `@*.sh` files, providing modular functions for all apps.
-
-   #!/usr/bin/env zsh
+<!-- TODO: Break into shorter sentences (19 words > 15) --> #!/usr/bin/env zsh
 Shared setup script for Rails apps
 Usage: zsh __shared.sh 
 EOF: 240 lines
@@ -83,8 +76,7 @@ CHECKSUM: sha256:4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5
 ## Brgen (`brgen.sh`)
 
 A hyper-local social network inspired by Reddit, X.com, TikTok, Snapchat, and Jodel, with subapps for marketplace, playlist, dating, takeaway, and TV.
-
-   #!/usr/bin/env zsh
+<!-- TODO: Break into shorter sentences (819 words > 15) --> #!/usr/bin/env zsh
 Setup script for Brgen social network
 Usage: zsh brgen.sh
 EOF: 380 lines
@@ -105,8 +97,7 @@ CHECKSUM: sha256:5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a6b7
 ## Amber (`amber.sh`)
 
 A fashion network with AI-driven style recommendations and wardrobe analytics.
-
-   #!/usr/bin/env zsh
+<!-- TODO: Break into shorter sentences (975 words > 15) --> #!/usr/bin/env zsh
 Setup script for Amber fashion network
 Usage: zsh amber.sh
 EOF: 200 lines
@@ -122,8 +113,7 @@ CHECKSUM: sha256:6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7
 ## Privcam (`privcam.sh`)
 
 An OnlyFans-like platform for Norway with video streaming and subscriptions.
-
-   #!/usr/bin/env zsh
+<!-- TODO: Break into shorter sentences (257 words > 15) --> #!/usr/bin/env zsh
 Setup script for Privcam platform
 Usage: zsh privcam.sh
 EOF: 220 lines
@@ -139,8 +129,7 @@ CHECKSUM: sha256:7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8
 ## Bsdports (`bsdports.sh`)
 
 An OpenBSD ports index with live search and FTP imports.
-
-   #!/usr/bin/env zsh
+<!-- TODO: Break into shorter sentences (214 words > 15) --> #!/usr/bin/env zsh
 Setup script for Bsdports index
 Usage: zsh bsdports.sh
 EOF: 180 lines
@@ -156,8 +145,7 @@ CHECKSUM: sha256:8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9
 ## Hjerterom (`hjerterom.sh`)
 
 A food donation platform with a Mapbox map UI, inspired by LAFoodbank.org.
-
-   #!/usr/bin/env zsh
+<!-- TODO: Break into shorter sentences (264 words > 15) --> #!/usr/bin/env zsh
 Setup script for Hjerterom donation platform
 Usage: zsh hjerterom.sh
 EOF: 260 lines
@@ -172,23 +160,13 @@ CHECKSUM: sha256:9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0
 
 ## Deployment
 
-Apps are deployed using the existing `openbsd.sh`, which configures OpenBSD 7.7+ with DNSSEC, `relayd`, `httpd`, and `acme-client`. Each app is installed in `/home/<app>/app` and runs as a dedicated user with Falcon on a unique port (10000-60000).
-
-### Steps
-1. Run `doas zsh openbsd.sh` to configure DNS and certificates (Stage 1).
-2. Install each app using its respective script (e.g., `zsh brgen.sh`).
-3. Run `doas zsh openbsd.sh --resume` to deploy apps (Stage 2).
-4. Verify services: `doas rcctl check <app>` (e.g., `brgen`, `amber`).
-5. Access apps via their domains (e.g., `brgen.no`, `amberapp.com`).
-
-### Troubleshooting
+Apps are deployed using the existing `openbsd.sh`, which configures OpenBSD 7.7+ with DNSSEC, `relayd`, `httpd`, and `acme-client`.
+<!-- TODO: Break into shorter sentences (355 words > 15) --> Each app is installed in `/home/<app>/app` and runs as a dedicated user with Falcon on a unique port (10000-60000).
+<!-- TODO: Break into shorter sentences (19 words > 15) --> ### Steps
+1. Run `doas zsh openbsd.sh` to configure DNS and certificates (Stage 1). 2. Install each app using its respective script (e.g., `zsh brgen.sh`). 3. Run `doas zsh openbsd.sh --resume` to deploy apps (Stage 2). 4. Verify services: `doas rcctl check <app>` (e.g., `brgen`, `amber`). 5. Access apps via their domains (e.g., `brgen.no`, `amberapp.com`). ### Troubleshooting
 - **NSD Failure**: Check `/var/log/nsd.log` and ensure port 53 is free (`netstat -an | grep :53`).
-- **Certificate Issues**: Verify `/etc/acme-client.conf` and run `doas acme-client -v <domain>`.
-- **App Not Starting**: Check `/home/<app>/app/log/production.log` and ensure `RAILS_ENV=production`.
-- **PWA Offline Issues**: Clear browser cache and verify `/service-worker.js` registration.
-- **Database Errors**: Ensure PostgreSQL is running (`doas rcctl check postgresql`) and check credentials in `config/database.yml`.
-
-# EOF (1080 lines)
+<!-- TODO: Break into shorter sentences (18 words > 15) --> - **Certificate Issues**: Verify `/etc/acme-client.conf` and run `doas acme-client -v <domain>`. - **App Not Starting**: Check `/home/<app>/app/log/production.log` and ensure `RAILS_ENV=production`. - **PWA Offline Issues**: Clear browser cache and verify `/service-worker.js` registration. - **Database Errors**: Ensure PostgreSQL is running (`doas rcctl check postgresql`) and check credentials in `config/database.yml`.
+<!-- TODO: Break into shorter sentences (16 words > 15) --> # EOF (1080 lines)
 # CHECKSUM: sha256:0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1
 ````
 
@@ -199,26 +177,17 @@ Apps are deployed using the existing `openbsd.sh`, which configures OpenBSD 7.7+
 ```html
 # Rails Apps
 
-This document outlines the setup and deployment of Rails 8 applications (`brgen`, `amber`, `privcam`, `bsdports`, `hjerterom`, `pubattorney`, `blognet`) on OpenBSD 7.7+, leveraging Hotwire, StimulusReflex, Stimulus Components, and Devise for authentication. Each app is configured as a Progressive Web App (PWA) with minimalistic views, SCSS targeting direct elements, and anonymous access via `devise-guests`. Deployment uses `openbsd.sh` for DNSSEC, `relayd`, `httpd`, and `acme-client`. Configurations align with `master.json` for gem versions and environment variables.
-
-## Overview
+This document outlines the setup and deployment of Rails 8 applications (`brgen`, `amber`, `privcam`, `bsdports`, `hjerterom`, `pubattorney`, `blognet`) on OpenBSD 7.7+, leveraging Hotwire, StimulusReflex, Stimulus Components, and Devise for authentication.
+<!-- TODO: Break into shorter sentences (47 words > 15) --> Each app is configured as a Progressive Web App (PWA) with minimalistic views, SCSS targeting direct elements, and anonymous access via `devise-guests`.
+<!-- TODO: Break into shorter sentences (22 words > 15) --> Deployment uses `openbsd.sh` for DNSSEC, `relayd`, `httpd`, and `acme-client`. Configurations align with `master.json` for gem versions and environment variables. ## Overview
 
 - **Technology Stack**: Rails 8.0.0, Ruby 3.3.0, PostgreSQL, Redis, Hotwire (Turbo, Stimulus), StimulusReflex 3.5.0, Stimulus Components, Devise 4.9.4, `devise-guests`, `omniauth-vipps`, Solid Queue, Solid Cache, Propshaft.
-- **Features**:
-  - Anonymous posting and live chat (`devise-guests`).
-  - Norwegian BankID/Vipps OAuth login (`omniauth-vipps`).
-  - Minimalistic views (semantic HTML, tag helpers, no divitis).
-  - SCSS with direct element targeting (e.g., `article.post`).
-  - PWA with offline caching (service workers).
-  - Competitor-inspired features (e.g., Reddit’s communities, Jodel’s karma).
-- **Deployment**: OpenBSD 7.7+, with `openbsd.sh` (DNSSEC, `relayd`, `httpd`, `acme-client`).
-- **Note**: `pubattorney` and `blognet` are deployed similarly but not detailed below; their setups follow the same pattern.
-
-## Shared Setup (`__shared.sh`)
+<!-- TODO: Break into shorter sentences (27 words > 15) --> - **Features**:
+  - Anonymous posting and live chat (`devise-guests`). - Norwegian BankID/Vipps OAuth login (`omniauth-vipps`). - Minimalistic views (semantic HTML, tag helpers, no divitis). - SCSS with direct element targeting (e.g., `article.post`). - PWA with offline caching (service workers). - Competitor-inspired features (e.g., Reddit’s communities, Jodel’s karma). - **Deployment**: OpenBSD 7.7+, with `openbsd.sh` (DNSSEC, `relayd`, `httpd`, `acme-client`). - **Note**: `pubattorney` and `blognet` are deployed similarly but not detailed below; their setups follow the same pattern.
+<!-- TODO: Break into shorter sentences (18 words > 15) --> ## Shared Setup (`__shared.sh`)
 
 The `__shared.sh` script consolidates setup logic, providing modular functions for all apps, aligned with `master.json`.
-
-```sh
+<!-- TODO: Break into shorter sentences (19 words > 15) --> ```sh
 #!/usr/bin/env zsh
 # Shared setup script for Rails apps
 # Usage: zsh __shared.sh <app_name>
@@ -719,6 +688,7 @@ main
 # Hjerterom
 
 ### Logo
+<!-- TODO: Fix heading hierarchy - level 3 after level 1 -->
 
 ```html
 <html lang="en">
@@ -896,6 +866,7 @@ main
 ```
 
 ### Installasjonsskript 
+<!-- TODO: Fix heading hierarchy - level 3 after level 1 -->
 
 ```html
 #!/usr/bin/env zsh
@@ -1197,8 +1168,7 @@ main
 # KI-bibel
 
 Copy layout from https://llmstxt.org/.
-
-## 1
+<!-- TODO: Break into shorter sentences (4007 words > 15) --> ## 1
 
 ```html
 <html lang="nb">
@@ -1430,10 +1400,12 @@ Copy layout from https://llmstxt.org/.
       <section id="about" class="about">
         <div class="content">
           <h1>Om prosjektet</h1>
-          <p>Vi avdekker bibeltekstenes opprinnelige nyanser før de ble filtrert gjennom århundrer med patriarkalsk tolkning. ARTEX kombinerer filologisk tradisjon med avansert teknologi for å gjenopprette de originale stemmene.</p>
+          <p>Vi avdekker bibeltekstenes opprinnelige nyanser før de ble filtrert gjennom århundrer med patriarkalsk tolkning.
+<!-- TODO: Break into shorter sentences (698 words > 15) --> ARTEX kombinerer filologisk tradisjon med avansert teknologi for å gjenopprette de originale stemmene.</p>
           <p>Prosjektet er et samarbeid mellom lingvister, bibelforskere, kjønnsforskere og datavitere.</p>
           
-          <p>Vi kombinerer filologiske metoder med moderne AI-teknologi. Vår metode er åpen og reproduserbar.</p>
+          <p>Vi kombinerer filologiske metoder med moderne AI-teknologi.
+<!-- TODO: Break into shorter sentences (30 words > 15) --> Vår metode er åpen og reproduserbar.</p>
           <div class="card-container">
             <!-- Card 1 -->
             <div class="card">
@@ -1508,7 +1480,8 @@ Copy layout from https://llmstxt.org/.
             <pre class="ruby"><span class="comment"># frozen_string_literal: true</span>
 <span class="comment"># File: bible_translator.rb</span>
 <span class="comment"># Bible Translator: Translates biblical texts (e.g., Old Testament) from original Aramaic</span>
-<span class="comment"># into modern English. It leverages Langchain.rb's LLM interface to preserve historical,</span>
+<span class="comment"># into modern English.
+<!-- TODO: Break into shorter sentences (253 words > 15) --> It leverages Langchain.rb's LLM interface to preserve historical,</span>
 <span class="comment"># cultural, and theological nuances.</span>
 <span class="keyword">require</span> <span class="string">"langchain"</span>
 <span class="keyword">module</span> <span class="constant">Assistants</span>
@@ -1537,9 +1510,7 @@ Copy layout from https://llmstxt.org/.
     <span class="keyword">def</span> build_translation_prompt(text)
       <span class="string"><<~PROMPT
         You are an expert biblical translator with deep knowledge of ancient languages.
-        Translate the following text from its original language (e.g., Aramaic) into clear, modern English.
-        Ensure that all cultural, historical, and theological nuances are preserved and explained briefly if necessary.
-        Source Text:
+<!-- TODO: Break into shorter sentences (137 words > 15) --> Translate the following text from its original language (e.g., Aramaic) into clear, modern English. Ensure that all cultural, historical, and theological nuances are preserved and explained briefly if necessary. Source Text:
         #{text}
         Translation:
       PROMPT</span>
@@ -1571,7 +1542,8 @@ Copy layout from https://llmstxt.org/.
               <span class="verse-number">2</span>
               <p class="aramaic">V'ha'aretz haytah tohu vavohu, v'choshech al-p'nei t'hom; v'ruach Elaha m'rachefet al-p'nei hamayim.</p>
               <p><strong>KJV (Norsk):</strong> Og jorden var øde og tom, og mørket lå over det dype hav.</p>
-              <p><strong>ARTEX:</strong> Jorden var øde og tom, mørket dekte dypet. Guds ånd svevde over vannene.</p>
+              <p><strong>ARTEX:</strong> Jorden var øde og tom, mørket dekte dypet.
+<!-- TODO: Break into shorter sentences (127 words > 15) --> Guds ånd svevde over vannene.</p>
               <div class="verse-notes">
                 <p>Translitterasjon: haytah tohu vavohu ...</p>
               </div>
@@ -1579,7 +1551,8 @@ Copy layout from https://llmstxt.org/.
             <!-- Verse 3 -->
             <div class="verse" data-verse="3">
               <span class="verse-number">3</span>
-              <p class="aramaic">Va'yomer Elaha: Yehi or! Va'yehi or.</p>
+              <p class="aramaic">Va'yomer Elaha: Yehi or!
+<!-- TODO: Break into shorter sentences (28 words > 15) --> Va'yehi or.</p>
               <p><strong>KJV (Norsk):</strong> Og Gud sa: "Bli lys!" Og det ble lys.</p>
               <p><strong>ARTEX:</strong> Det guddommelige sa: "La det bli lys!" Og lys brøt frem.</p>
               <div class="verse-notes">
@@ -1599,8 +1572,10 @@ Copy layout from https://llmstxt.org/.
             <!-- Verse 5 -->
             <div class="verse" data-verse="5">
               <span class="verse-number">5</span>
-              <p class="aramaic">Va'yiqra Elaha la'or yom, v'lachoshech qara layla. Va'yehi erev va'yehi voqer, yom echad.</p>
-              <p><strong>KJV (Norsk):</strong> Og Gud kalte lyset dag, og mørket kalte han natt. Det ble kveld og morgen, den første dag.</p>
+              <p class="aramaic">Va'yiqra Elaha la'or yom, v'lachoshech qara layla.
+<!-- TODO: Break into shorter sentences (105 words > 15) --> Va'yehi erev va'yehi voqer, yom echad.</p>
+              <p><strong>KJV (Norsk):</strong> Og Gud kalte lyset dag, og mørket kalte han natt.
+<!-- TODO: Break into shorter sentences (18 words > 15) --> Det ble kveld og morgen, den første dag.</p>
               <p><strong>ARTEX:</strong> Lyset ble kalt dag og mørket natt – den første dagen var fullendt.</p>
               <div class="verse-notes">
                 <p>Translitterasjon: la'or yom ...</p>
@@ -1619,8 +1594,10 @@ Copy layout from https://llmstxt.org/.
             <!-- Verse 7 -->
             <div class="verse" data-verse="7">
               <span class="verse-number">7</span>
-              <p class="aramaic">Va'ya'as Elaha et-haraqia, va'yavdel bein hamayim asher mitakhat laraqia u'vein hamayim asher me'al laraqia. Va'yehi ken.</p>
-              <p><strong>KJV (Norsk):</strong> Og Gud skapte hvelvingen og skilte vannet under hvelvingen fra vannet over hvelvingen. Det ble slik.</p>
+              <p class="aramaic">Va'ya'as Elaha et-haraqia, va'yavdel bein hamayim asher mitakhat laraqia u'vein hamayim asher me'al laraqia.
+<!-- TODO: Break into shorter sentences (110 words > 15) --> Va'yehi ken.</p>
+              <p><strong>KJV (Norsk):</strong> Og Gud skapte hvelvingen og skilte vannet under hvelvingen fra vannet over hvelvingen.
+<!-- TODO: Break into shorter sentences (17 words > 15) --> Det ble slik.</p>
               <p><strong>ARTEX:</strong> Hvelvingen organiserte vannmassene – slik ble universet formet.</p>
               <div class="verse-notes">
                 <p>Translitterasjon: et-haraqia ...</p>
@@ -1629,7 +1606,8 @@ Copy layout from https://llmstxt.org/.
             <!-- Verse 8 -->
             <div class="verse" data-verse="8">
               <span class="verse-number">8</span>
-              <p class="aramaic">Va'yiqra Elaha laraqia shamayim. Va'yehi erev va'yehi voqer, yom sheni.</p>
+              <p class="aramaic">Va'yiqra Elaha laraqia shamayim.
+<!-- TODO: Break into shorter sentences (33 words > 15) --> Va'yehi erev va'yehi voqer, yom sheni.</p>
               <p><strong>KJV (Norsk):</strong> Og Gud kalte hvelvingen himmel. Det ble kveld og morgen, den andre dag.</p>
               <p><strong>ARTEX:</strong> Himmelen ble kunngjort – en ny skapelsesdag ble innledet.</p>
               <div class="verse-notes">
@@ -1639,7 +1617,8 @@ Copy layout from https://llmstxt.org/.
             <!-- Verse 9 -->
             <div class="verse" data-verse="9">
               <span class="verse-number">9</span>
-              <p class="aramaic">Va'yomer Elaha: Yiqavu hamayim mitakhat hashamayim el-maqom ekhad, v'tera'eh hayabasha. Va'yehi ken.</p>
+              <p class="aramaic">Va'yomer Elaha: Yiqavu hamayim mitakhat hashamayim el-maqom ekhad, v'tera'eh hayabasha.
+<!-- TODO: Break into shorter sentences (46 words > 15) --> Va'yehi ken.</p>
               <p><strong>KJV (Norsk):</strong> Og Gud sa: "La vannet samle seg til ett sted, og la det tørre land komme til syne."</p>
               <p><strong>ARTEX:</strong> Vassamlingene ble etablert, og landet trådte frem – naturens orden ble fastslått.</p>
               <div class="verse-notes">
@@ -1649,8 +1628,10 @@ Copy layout from https://llmstxt.org/.
             <!-- Verse 10 -->
             <div class="verse" data-verse="10">
               <span class="verse-number">10</span>
-              <p class="aramaic">Va'yiqra Elaha layabasha eretz, ul'miqveh hamayim qara yammim. Va'yar Elaha ki-tov.</p>
-              <p><strong>KJV (Norsk):</strong> Og Gud kalte det tørre land jord, og vannsamlingen kalte han hav. Og Gud så at det var godt.</p>
+              <p class="aramaic">Va'yiqra Elaha layabasha eretz, ul'miqveh hamayim qara yammim.
+<!-- TODO: Break into shorter sentences (61 words > 15) --> Va'yar Elaha ki-tov.</p>
+              <p><strong>KJV (Norsk):</strong> Og Gud kalte det tørre land jord, og vannsamlingen kalte han hav.
+<!-- TODO: Break into shorter sentences (17 words > 15) --> Og Gud så at det var godt.</p>
               <p><strong>ARTEX:</strong> Jorden og havet ble til, og alt ble erklært i harmoni.</p>
               <div class="verse-notes">
                 <p>Translitterasjon: layabasha eretz ...</p>
@@ -1664,7 +1645,8 @@ Copy layout from https://llmstxt.org/.
       <section id="collaborate" class="collaborate">
         <div class="content">
           <h1>Samarbeid med oss</h1>
-          <p>ARTEX er et åpent forskningsprosjekt. Har du ekspertise i arameisk, filologi, programmering eller kjønnsstudier? Vi vil gjerne høre fra deg!</p>
+          <p>ARTEX er et åpent forskningsprosjekt.
+<!-- TODO: Break into shorter sentences (47 words > 15) --> Har du ekspertise i arameisk, filologi, programmering eller kjønnsstudier? Vi vil gjerne høre fra deg!</p>
           <h2>Hvordan bidra</h2>
           <ul>
             <li>Delta i oversettelsesarbeid</li>
@@ -1675,7 +1657,8 @@ Copy layout from https://llmstxt.org/.
           <h2>Kontakt</h2>
           <p>Send en e-post til <a href="mailto:kontakt@artex-prosjekt.no">kontakt@artex-prosjekt.no</a> eller besøk vår GitHub-side.</p>
           <h2>Finansiering</h2>
-          <p>ARTEX støttes av Norges forskningsråd (2023/45678) og samarbeider med ledende institusjoner. Alle resultater publiseres under CC BY 4.0.</p>
+          <p>ARTEX støttes av Norges forskningsråd (2023/45678) og samarbeider med ledende institusjoner.
+<!-- TODO: Break into shorter sentences (47 words > 15) --> Alle resultater publiseres under CC BY 4.0.</p>
         </div>
       </section>
 
@@ -1956,7 +1939,8 @@ Copy layout from https://llmstxt.org/.
         </div>
       </div>
       <div class="vision-statement">
-        <p>Ved å forene eldgammel visdom med banebrytende KI-teknologi, avdekker vi de hellige tekstenes sanne essens. BAIBL representerer en ny æra innen åndelig innsikt – der presisjon møter transendens, og der århundrers tolkningsproblemer endelig løses med vitenskapelig nøyaktighet.</p>
+        <p>Ved å forene eldgammel visdom med banebrytende KI-teknologi, avdekker vi de hellige tekstenes sanne essens.
+<!-- TODO: Break into shorter sentences (739 words > 15) --> BAIBL representerer en ny æra innen åndelig innsikt – der presisjon møter transendens, og der århundrers tolkningsproblemer endelig løses med vitenskapelig nøyaktighet.</p>
       </div>
     </header>
     <main>
@@ -1964,19 +1948,16 @@ Copy layout from https://llmstxt.org/.
       <section id="introduction">
         <h2>Introduksjon</h2>
         <p>
-          BAIBL tilbyr den mest presise AI-Bibelen som finnes. Vi kombinerer banebrytende språkprosessering med historiske tekster for å levere pålitelig og tydelig religiøs innsikt.
-        </p>
+          BAIBL tilbyr den mest presise AI-Bibelen som finnes.
+<!-- TODO: Break into shorter sentences (40 words > 15) --> Vi kombinerer banebrytende språkprosessering med historiske tekster for å levere pålitelig og tydelig religiøs innsikt. </p>
         
         <div class="verse-container">
           <div class="aramaic">
-            Breishit bara Elohim et hashamayim ve'et ha'aretz. Veha'aretz hayetah tohu vavohu vechoshech al-pnei tehom veruach Elohim merachefet al-pnei hamayim.
-          </div>
+            Breishit bara Elohim et hashamayim ve'et ha'aretz. Veha'aretz hayetah tohu vavohu vechoshech al-pnei tehom veruach Elohim merachefet al-pnei hamayim. </div>
           <div class="kjv">
-            I begynnelsen skapte Gud himmelen og jorden. Og jorden var øde og tom, og mørke var over avgrunnen. Og Guds Ånd svevde over vannene.
-          </div>
+            I begynnelsen skapte Gud himmelen og jorden. Og jorden var øde og tom, og mørke var over avgrunnen. Og Guds Ånd svevde over vannene. </div>
           <div class="baibl">
-            Gud skapte kosmos ved tidens begynnelse. Den opprinnelige jorden ventet i mørket mens guddommelig energi svevde over de formløse vannene.
-          </div>
+            Gud skapte kosmos ved tidens begynnelse. Den opprinnelige jorden ventet i mørket mens guddommelig energi svevde over de formløse vannene. </div>
           <div class="verse-reference">
             1. Mosebok 1:1-2
           </div>
@@ -2050,8 +2031,8 @@ Copy layout from https://llmstxt.org/.
       <section id="presisjon">
         <h2>Presisjon & Nøyaktighet</h2>
         <p>
-          BAIBL-oversettelsen overgår tradisjonelle oversettelser på flere kritiske områder. Våre KI-algoritmer sikrer uovertruffen presisjon i både lingvistiske og teologiske aspekter.
-        </p>
+          BAIBL-oversettelsen overgår tradisjonelle oversettelser på flere kritiske områder.
+<!-- TODO: Break into shorter sentences (271 words > 15) --> Våre KI-algoritmer sikrer uovertruffen presisjon i både lingvistiske og teologiske aspekter. </p>
         
         <table class="metrics-table">
           <caption>Presisjonsmetrikker: BAIBL vs. KJV</caption>
@@ -2135,19 +2116,17 @@ Copy layout from https://llmstxt.org/.
       <section id="manifest">
         <h2>Manifest</h2>
         <p>
-          Sannhet er innebygd i eldgamle tekster. Med BAIBL undersøker vi disse kildene på nytt ved hjelp av KI og dataanalyse, og forener tradisjon med moderne vitenskap.
-        </p>
+          Sannhet er innebygd i eldgamle tekster.
+<!-- TODO: Break into shorter sentences (139 words > 15) --> Med BAIBL undersøker vi disse kildene på nytt ved hjelp av KI og dataanalyse, og forener tradisjon med moderne vitenskap.
+<!-- TODO: Break into shorter sentences (20 words > 15) --> </p>
         
         <div class="verse-container">
           <div class="aramaic">
-            Va'yomer Elohim yehi-or vayehi-or. Vayar Elohim et-ha'or ki-tov vayavdel Elohim bein ha'or uvein hachoshech.
-          </div>
+            Va'yomer Elohim yehi-or vayehi-or. Vayar Elohim et-ha'or ki-tov vayavdel Elohim bein ha'or uvein hachoshech. </div>
           <div class="kjv">
-            Og Gud sa: Det blive lys! Og det blev lys. Og Gud så at lyset var godt, og Gud skilte lyset fra mørket.
-          </div>
+            Og Gud sa: Det blive lys! Og det blev lys. Og Gud så at lyset var godt, og Gud skilte lyset fra mørket. </div>
           <div class="baibl">
-            Gud befalte lyset å eksistere, og det oppsto. Da han så dets verdi, etablerte Gud et skille mellom lys og mørke.
-          </div>
+            Gud befalte lyset å eksistere, og det oppsto. Da han så dets verdi, etablerte Gud et skille mellom lys og mørke. </div>
           <div class="verse-reference">
             1. Mosebok 1:3-4
           </div>
@@ -2168,14 +2147,13 @@ Copy layout from https://llmstxt.org/.
         
         <div class="verse-container">
           <div class="aramaic">
-            Shema Yisrael Adonai Eloheinu Adonai Echad. Ve'ahavta et Adonai Elohecha bechol levavcha uvechol nafshecha uvechol me'odecha.
-          </div>
+            Shema Yisrael Adonai Eloheinu Adonai Echad.
+<!-- TODO: Break into shorter sentences (52 words > 15) --> Ve'ahavta et Adonai Elohecha bechol levavcha uvechol nafshecha uvechol me'odecha. </div>
           <div class="kjv">
             Hør, Israel! Herren vår Gud, Herren er én. Og du skal elske Herren din Gud av hele ditt hjerte og av hele din sjel og av all din makt.
-          </div>
+<!-- TODO: Break into shorter sentences (21 words > 15) --> </div>
           <div class="baibl">
-            Hør, Israel: Herren er vår Gud, Herren alene. Elsk Herren din Gud med hele ditt hjerte, hele din sjel og all din kraft.
-          </div>
+            Hør, Israel: Herren er vår Gud, Herren alene. Elsk Herren din Gud med hele ditt hjerte, hele din sjel og all din kraft. </div>
           <div class="verse-reference">
             5. Mosebok 6:4-5
           </div>
@@ -2186,16 +2164,16 @@ Copy layout from https://llmstxt.org/.
       <section id="marked">
         <h2>Markedsinnsikt & Målgruppe</h2>
         <p>
-          Forskere, teologer og troende søker pålitelige kilder for dyp åndelig innsikt. BAIBL møter dette behovet med uovertruffen presisjon.
-        </p>
+          Forskere, teologer og troende søker pålitelige kilder for dyp åndelig innsikt.
+<!-- TODO: Break into shorter sentences (26 words > 15) --> BAIBL møter dette behovet med uovertruffen presisjon. </p>
       </section>
       
       <!-- Technology -->
       <section id="teknologi">
         <h2>Teknologi & Innovasjon</h2>
         <p>
-          Vår plattform utnytter avansert KI og naturlig språkprosessering for å tolke eldgamle tekster nøyaktig. Systemet er bygget for skalerbarhet og sikkerhet.
-        </p>
+          Vår plattform utnytter avansert KI og naturlig språkprosessering for å tolke eldgamle tekster nøyaktig.
+<!-- TODO: Break into shorter sentences (25 words > 15) --> Systemet er bygget for skalerbarhet og sikkerhet. </p>
       </section>
       
       <!-- Operations & Team -->
@@ -2224,7 +2202,7 @@ Copy layout from https://llmstxt.org/.
         <h2>Økonomisk Oversikt</h2>
         <p>
           Diagrammet nedenfor viser våre treårsprognoser.
-        </p>
+<!-- TODO: Break into shorter sentences (67 words > 15) --> </p>
         <div class="chart-container">
           <canvas id="financialChart"></canvas>
         </div>
@@ -2235,7 +2213,7 @@ Copy layout from https://llmstxt.org/.
         <h2>Handlingsoppfordring</h2>
         <p>
           Kontakt oss for en demo av BAIBL og se hvordan plattformen vår kan transformere religiøse studier.
-        </p>
+<!-- TODO: Break into shorter sentences (32 words > 15) --> </p>
       </section>
       
       <!-- Conclusion -->
@@ -2243,18 +2221,16 @@ Copy layout from https://llmstxt.org/.
         <h2>Konklusjon</h2>
         <p>
           BAIBL omdefinerer religiøse studier ved å forene tradisjonell visdom med avansert teknologi.
-        </p>
+<!-- TODO: Break into shorter sentences (21 words > 15) --> </p>
         
         <div class="verse-container">
           <div class="aramaic">
-            Beresheet haya hadavar vehadavar haya etzel ha'Elohim v'Elohim haya hadavar.
-          </div>
+            Beresheet haya hadavar vehadavar haya etzel ha'Elohim v'Elohim haya hadavar. </div>
           <div class="kjv">
             I begynnelsen var Ordet, og Ordet var hos Gud, og Ordet var Gud.
-          </div>
+<!-- TODO: Break into shorter sentences (16 words > 15) --> </div>
           <div class="baibl">
-            I begynnelsen var Ordet. Ordet var hos Gud, fordi Ordet var Gud.
-          </div>
+            I begynnelsen var Ordet. Ordet var hos Gud, fordi Ordet var Gud. </div>
           <div class="verse-reference">
             Johannes 1:1
           </div>
@@ -2384,9 +2360,9 @@ main
 
 # PounceKeys
 
-The script is designed to be user-friendly, secure, and compliant with `master.json` requirements, including DRY, KISS, YAGNI, POLA, and SOLID principles, as well as communication standards (Strunk & White, structured logging) and technology specifications (ZSH, minimal permissions). It prompts for email configuration, verifies permissions (e.g., accessibility services), and guides manual steps, ensuring a reliable setup process.
-
-```x-shellscript
+The script is designed to be user-friendly, secure, and compliant with `master.json` requirements, including DRY, KISS, YAGNI, POLA, and SOLID principles, as well as communication standards (Strunk & White, structured logging) and technology specifications (ZSH, minimal permissions).
+<!-- TODO: Break into shorter sentences (358 words > 15) --> It prompts for email configuration, verifies permissions (e.g., accessibility services), and guides manual steps, ensuring a reliable setup process.
+<!-- TODO: Break into shorter sentences (19 words > 15) --> ```x-shellscript
 #!/data/data/com.termux/files/usr/bin/zsh
 
 # PounceKeys Installation and Setup Script
@@ -2428,7 +2404,8 @@ log_and_toast() {
 # Legal disclaimer (NNGroup user control, YAGNI)
 # $ref: master.json#/settings/feedback/roles/lawyer
 log_and_toast "Starting PounceKeys setup"
-echo "WARNING: For personal use only. Unauthorized use violates laws (e.g., U.S. CFAA, EU GDPR)."
+echo "WARNING: For personal use only.
+<!-- TODO: Break into shorter sentences (192 words > 15) --> Unauthorized use violates laws (e.g., U.S. CFAA, EU GDPR)."
 echo "Purpose: Install PounceKeys to log keystrokes (e.g., Snapchat) and email logs."
 echo "Press Y to confirm legal use, any other key to cancel..."
 read -k 1 confirm
@@ -2439,7 +2416,8 @@ read -k 1 confirm
 log_and_toast "Checking internet..."
 ping -c 1 google.com >/dev/null 2>&1 || {
     log_and_toast "Error: No internet."
-    echo "Solution: Connect to Wi-Fi or data. Retry? (Y/N)"
+    echo "Solution: Connect to Wi-Fi or data.
+<!-- TODO: Break into shorter sentences (79 words > 15) --> Retry? (Y/N)"
     read -k 1 retry
     [[ "$retry" == "Y" || "$retry" == "y" ]] && exec "$0"
     exit 1
@@ -2455,12 +2433,14 @@ command -v pkg >/dev/null 2>&1 || {
 # Install dependencies (DRY, automated deployment)
 # $ref: master.json#/settings/installer_integration
 log_and_toast "Installing dependencies..."
-echo "Install wget, curl, adb, termux-api, android-tools? (Y/N)"
+echo "Install wget, curl, adb, termux-api, android-tools?
+<!-- TODO: Break into shorter sentences (63 words > 15) --> (Y/N)"
 read -k 1 install_deps
 [[ "$install_deps" == "Y" || "$install_deps" == "y" ]] && {
     pkg update -y && pkg install -y wget curl termux-adb termux-api android-tools || {
         log_and_toast "Error: Package installation failed."
-        echo "Solution: Check network, run 'pkg update' manually. Retry? (Y/N)"
+        echo "Solution: Check network, run 'pkg update' manually.
+<!-- TODO: Break into shorter sentences (43 words > 15) --> Retry? (Y/N)"
         read -k 1 retry
         [[ "$retry" == "Y" || "$retry" == "y" ]] && exec "$0"
         exit 1
@@ -2472,14 +2452,16 @@ read -k 1 install_deps
 log_and_toast "Checking ADB..."
 adb devices | grep -q device || {
     log_and_toast "Error: No device detected."
-    echo "Solution: Enable USB debugging in Settings > Developer Options. Retry? (Y/N)"
+    echo "Solution: Enable USB debugging in Settings > Developer Options.
+<!-- TODO: Break into shorter sentences (56 words > 15) --> Retry? (Y/N)"
     read -k 1 retry
     [[ "$retry" == "Y" || "$retry" == "y" ]] && exec "$0"
     exit 1
 }
 
 log_and_toast "Checking Android version..."
-ANDROID_VERSION=$(adb shell getprop ro.build.version.release | cut -d. -f1)
+ANDROID_VERSION=$(adb shell getprop ro.build.version.release | cut -d.
+<!-- TODO: Break into shorter sentences (31 words > 15) --> -f1)
 [[ "$ANDROID_VERSION" -lt $MIN_ANDROID_VERSION || "$ANDROID_VERSION" -gt $MAX_ANDROID_VERSION ]] && {
     log_and_toast "Error: Android version $ANDROID_VERSION unsupported."
     echo "Solution: Use Android $MIN_ANDROID_VERSION-$MAX_ANDROID_VERSION."
@@ -2489,7 +2471,8 @@ ANDROID_VERSION=$(adb shell getprop ro.build.version.release | cut -d. -f1)
 # Email configuration (NNGroup recognition, security)
 # $ref: master.json#/settings/communication/style
 log_and_toast "Configuring email..."
-echo "Use Gmail? (Y/N)"
+echo "Use Gmail?
+<!-- TODO: Break into shorter sentences (41 words > 15) --> (Y/N)"
 read -k 1 use_gmail
 if [[ "$use_gmail" == "Y" || "$use_gmail" == "y" ]]; then
     SMTP_SERVER="smtp.gmail.com"
@@ -2535,13 +2518,15 @@ ACTUAL_CHECKSUM=$(sha256sum "$APK_FILE" | awk '{print $1}')
 # $ref: master.json#/settings/core/task_templates/build
 log_and_toast "Installing APK..."
 echo "Enable 'Install from Unknown Sources' in Settings > Security."
-echo "1. Navigate to Settings > Security (or Privacy)."
+echo "1.
+<!-- TODO: Break into shorter sentences (167 words > 15) --> Navigate to Settings > Security (or Privacy)."
 echo "2. Enable 'Install from Unknown Sources' for your browser or file manager."
 echo "Press Enter after enabling..."
 read -p ""
 adb install "$APK_FILE" || {
     log_and_toast "Error: Installation failed."
-    echo "Solution: Ensure Unknown Sources is enabled. Retry? (Y/N)"
+    echo "Solution: Ensure Unknown Sources is enabled.
+<!-- TODO: Break into shorter sentences (35 words > 15) --> Retry? (Y/N)"
     read -k 1 retry
     [[ "$retry" == "Y" || "$retry" == "y" ]] && exec "$0"
     exit 1
@@ -2552,20 +2537,23 @@ rm -f "$APK_FILE"
 # $ref: master.json#/settings/core/task_templates/refine
 log_and_toast "Enable accessibility service..."
 echo "This allows PounceKeys to capture keystrokes."
-echo "1. Go to Settings > Accessibility > Downloaded Services."
+echo "1.
+<!-- TODO: Break into shorter sentences (46 words > 15) --> Go to Settings > Accessibility > Downloaded Services."
 echo "2. Find PounceKeys, toggle ON, and confirm permissions."
 echo "Press Enter after enabling..."
 read -p ""
 
 log_and_toast "Disable battery optimization..."
 echo "This ensures PounceKeys runs continuously."
-echo "1. Go to Settings > Battery > App Optimization."
+echo "1.
+<!-- TODO: Break into shorter sentences (27 words > 15) --> Go to Settings > Battery > App Optimization."
 echo "2. Find PounceKeys, set to 'Don’t optimize.'"
 echo "Press Enter after disabling..."
 read -p ""
 
 log_and_toast "Configure email in PounceKeys..."
-echo "1. Open PounceKeys from app drawer."
+echo "1.
+<!-- TODO: Break into shorter sentences (21 words > 15) --> Open PounceKeys from app drawer."
 echo "2. Go to Settings > Output > Email."
 echo "3. Enter:"
 echo "   - Server: $SMTP_SERVER"
@@ -2582,10 +2570,13 @@ log_and_toast "Setup complete!"
 echo "Test by typing 'PounceKeys test' in any app."
 echo "Check $recipient_email for logs within 10 minutes."
 echo "Troubleshooting:"
-echo "- No logs? Verify SMTP settings and accessibility."
+echo "- No logs?
+<!-- TODO: Break into shorter sentences (71 words > 15) --> Verify SMTP settings and accessibility."
 echo "- Uninstall: adb uninstall $PACKAGE_NAME"
 echo "Log file: $LOG_FILE"
 echo "EOF: pouncekeys_setup.zsh completed successfully"
 # Line count: 110 (excluding comments)
 # Checksum: sha256sum pouncekeys_setup.zsh
 ```
+
+<!-- TODO: Break into shorter sentences (31 words > 15) -->

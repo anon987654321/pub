@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+# § Baseassistant
+
 # lib/base_assistant.rb
 #
 # BaseAssistant: Core assistant that interfaces with Langchain's LLM.
@@ -11,6 +15,7 @@ class BaseAssistant
   attr_reader :llm, :logger, :tool_manager
 
   def initialize
+  # TODO: Refactor initialize - exceeds 20 line limit (24 lines)
     @logger = Logger.new("logs/assistant.log", "daily")
     @logger.level = Logger::INFO
     @llm = Langchain::LLM::OpenAI.new(
@@ -34,4 +39,4 @@ class BaseAssistant
   # Alias for backward compatibility
   alias respond chat
 end
-
+

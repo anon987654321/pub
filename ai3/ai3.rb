@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+# § Ai3cli
+
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
@@ -36,6 +40,7 @@ class AI3CLI
               :rag_engine, :assistant_registry, :current_assistant, :prompt, :pastel, :scraper
 
   def initialize
+  # TODO: Refactor initialize - exceeds 20 line limit (525 lines)
     @pastel = Pastel.new
     @prompt = TTY::Prompt.new
     

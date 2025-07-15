@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Nikon D600 Kodak T Max 3200 2n.dcp
+
 {
   "dcpData" => {
     "ProfileName" => "Kodak T-MAX 3200 2N",

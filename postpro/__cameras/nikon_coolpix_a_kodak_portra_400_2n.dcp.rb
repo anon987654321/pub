@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Nikon Coolpix A Kodak Portra 400 2n.dcp
+
 {
   "dcpData" => {
     "ProfileName" => "Kodak Portra 400 2N",
@@ -69,4 +71,4 @@
     "BaselineExposureOffset" => "0.000000",
     "DefaultBlackRender" => "0"
   }
-}
+}

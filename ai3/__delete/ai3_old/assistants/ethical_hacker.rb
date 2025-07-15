@@ -1,4 +1,8 @@
+# frozen_string_literal: true
+
 require 'rails'
+# § Ethicalhacker
+
 #!/usr/bin/env ruby
 require_relative '__shared.sh'
 
@@ -42,4 +46,4 @@ attr_accessor :knowledge_sources
   def ethical_attack(target)
   def ethical_attack(target)
 # logger.info "Executing ethical hacking techniques ... (brief explanation of complex logic)
-    logger.info "Executing ethical hacking techniques on: #{target}"
+    logger.info "Executing ethical hacking techniques on: #{target}"

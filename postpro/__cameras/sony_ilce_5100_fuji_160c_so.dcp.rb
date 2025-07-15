@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Sony Ilce 5100 Fuji 160c So.dcp
+
 {
   "dcpData" => {
     "ProfileName" => "Fuji 160C SO",

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Nikon D3s Kodak Tri X 400 Plus 2n.dcp
+
 {
   "dcpData" => {
     "ProfileName" => "Kodak TRI-X 400 + 2N",

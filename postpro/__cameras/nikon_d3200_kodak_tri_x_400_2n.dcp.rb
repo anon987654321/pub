@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Nikon D3200 Kodak Tri X 400 2n.dcp
+
 {
   "dcpData" => {
     "ProfileName" => "Kodak TRI-X 400 2N",
@@ -72,4 +74,4 @@
     "BaselineExposureOffset" => "0.000000",
     "DefaultBlackRender" => "0"
   }
-}
+}

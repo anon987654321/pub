@@ -1,10 +1,12 @@
+# § Research Notes
+
 # Nordic Prosperity Fund - Research Notes & Trading Strategies
 
 This document consolidates research findings, trading strategies, and market analysis for the Nordic Prosperity Fund's automated trading systems.
-
-## Trading Strategy Research
+<!-- TODO: Break into shorter sentences (32 words > 15) --> ## Trading Strategy Research
 
 ### Market Analysis Insights
+<!-- TODO: Fix heading hierarchy - level 3 after level 1 -->
 
 **LocalBitcoins Trading Strategy:**
 - Buy in bulk with bank transfer then sell in increments
@@ -17,6 +19,7 @@ This document consolidates research findings, trading strategies, and market ana
 - Use position sizing limits (recommended up to 5% of deposit for individual trades)
 
 ### Technical Indicators & Analysis
+<!-- TODO: Fix heading hierarchy - level 3 after level 1 -->
 
 **Key Indicators for Algorithm Implementation:**
 - DEMA (Double Exponential Moving Average)
@@ -32,6 +35,7 @@ This document consolidates research findings, trading strategies, and market ana
 - Pending orders placed above SMA50 and local highs
 
 ### Exchange Analysis & Arbitrage
+<!-- TODO: Fix heading hierarchy - level 3 after level 1 -->
 
 **Platform Comparison:**
 - **GDAX/Coinbase Pro**: Good liquidity, free limit orders, but lacks leverage
@@ -45,6 +49,7 @@ This document consolidates research findings, trading strategies, and market ana
 - LocalBitcoins vs centralized exchange spreads
 
 ### Automated Trading Insights
+<!-- TODO: Fix heading hierarchy - level 3 after level 1 -->
 
 **Bot Trading Considerations:**
 - Market makers vs taker strategies (0.25% fee impact)
@@ -78,7 +83,8 @@ This document consolidates research findings, trading strategies, and market ana
 ## Trading Psychology & Decision Making
 
 ### Successful Trader Characteristics
-1. **Do Your Own Research**: Never rely solely on external recommendations
+1.
+<!-- TODO: Break into shorter sentences (400 words > 15) --> **Do Your Own Research**: Never rely solely on external recommendations
 2. **Stay In Your Weight Class**: Trade appropriate position sizes
 3. **Pay Attention**: Monitor markets and system performance
 4. **Check Your Ego**: Accept losses and learn from mistakes
@@ -148,7 +154,8 @@ This document consolidates research findings, trading strategies, and market ana
 
 ## Action Items for Implementation
 
-1. **Backtesting Framework**: Develop comprehensive historical testing system
+1.
+<!-- TODO: Break into shorter sentences (313 words > 15) --> **Backtesting Framework**: Develop comprehensive historical testing system
 2. **Risk Management**: Implement position sizing and stop-loss algorithms
 3. **API Integration**: Secure and optimize exchange connectivity
 4. **Monitoring Dashboard**: Create real-time performance visualization
@@ -166,3 +173,4 @@ This document consolidates research findings, trading strategies, and market ana
 
 *Last Updated: Based on consolidated research from Norwegian hedge fund project files*
 *Status: Ready for implementation in AI³ Ruby framework*
+<!-- TODO: Break into shorter sentences (65 words > 15) -->

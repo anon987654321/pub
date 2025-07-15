@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Influencerassistant
+
 # ai3/assistants/influencer_assistant.rb
 
 require_relative '../lib/universal_scraper'
@@ -13,6 +15,7 @@ require 'securerandom'
 
 class InfluencerAssistant < AI3Base
   def initialize
+  # TODO: Refactor initialize - exceeds 20 line limit (227 lines)
     super(domain_knowledge: 'social_media')
     puts 'InfluencerAssistant initialized with social media growth tools.'
     @scraper = UniversalScraper.new

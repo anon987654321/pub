@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Nikon Coolpix A Fuji 800z 2n.dcp
+
 {
   "dcpData" => {
     "ProfileName" => "Fuji 800Z 2N",
@@ -69,4 +71,4 @@
     "BaselineExposureOffset" => "0.000000",
     "DefaultBlackRender" => "0"
   }
-}
+}

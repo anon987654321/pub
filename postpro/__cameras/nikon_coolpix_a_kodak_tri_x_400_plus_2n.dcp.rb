@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Nikon Coolpix A Kodak Tri X 400 Plus 2n.dcp
+
 {
   "dcpData" => {
     "ProfileName" => "Kodak TRI-X 400 + 2N",
@@ -66,4 +68,4 @@
     "BaselineExposureOffset" => "0.000000",
     "DefaultBlackRender" => "0"
   }
-}
+}

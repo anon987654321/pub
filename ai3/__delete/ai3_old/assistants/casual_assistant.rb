@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+# § Casualassistant
+
 # assistants/casual_assistant.rb
 #
 # CasualAssistant: Provides general conversation by delegating queries
@@ -7,14 +11,19 @@ require_relative "llm_chain_assistant"
 
 class CasualAssistant
   def initialize
-    @chain_assistant = LLMChainAssistant.new
-  end
-
-  def respond(input)
-    puts "CasualAssistant processing your input via the LLM chain..."
-    response = @chain_assistant.process_query(input)
-    puts "CasualAssistant: #{response}"
-    response
+  begin
+      @chain_assistant = LLMChainAssistant.new
+    end
+  
+    def respond(input)
+      puts "CasualAssistant processing your input via the LLM chain..."
+      response = @chain_assistant.process_query(input)
+      puts "CasualAssistant: #{response}"
+      response
+    end
+  rescue StandardError => e
+    # TODO: Add proper error handling
+    raise e
   end
 end
-
+

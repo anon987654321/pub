@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Leica X Typ 113 Kodak Portra 800 L.dcp
+
 {
   "dcpData" => {
     "ProfileName" => "Kodak Portra 800 L",
@@ -72,4 +74,4 @@
     "BaselineExposureOffset" => "0.000000",
     "DefaultBlackRender" => "0"
   }
-}
+}

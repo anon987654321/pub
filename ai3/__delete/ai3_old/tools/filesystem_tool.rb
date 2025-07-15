@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+# § Filesystemtool
+
 # lib/tools/filesystem_tool.rb
 #
 # FilesystemTool: Provides safe file reading and writing.
@@ -11,6 +15,7 @@ require "logger"
 
 class FilesystemTool
   def initialize
+  # TODO: Refactor initialize - exceeds 20 line limit (36 lines)
     @logger = Logger.new(STDOUT)
   end
 
@@ -46,4 +51,4 @@ class FilesystemTool
     end
   end
 end
-
+

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Sony Dsc Rx100m2 Fuji 800z So.dcp
+
 {
   "dcpData" => {
     "ProfileName" => "Fuji 800Z SO",

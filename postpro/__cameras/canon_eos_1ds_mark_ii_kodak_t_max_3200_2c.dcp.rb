@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Canon Eos 1ds Mark Ii Kodak T Max 3200 2c.dcp
+
 {
   'dcpData' => {
     'ProfileName' => 'Kodak T-MAX 3200 2C',
@@ -66,4 +68,4 @@
     'BaselineExposureOffset' => '0.000000',
     'DefaultBlackRender' => '0'
   }
-}
+}

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § M9 Digital Camera Kodak Tri X 400 L.dcp
+
 {
   "dcpData" => {
     "ProfileName" => "Kodak TRI-X 400 L",
@@ -69,4 +71,4 @@
     "BaselineExposureOffset" => "0.000000",
     "DefaultBlackRender" => "0"
   }
-}
+}

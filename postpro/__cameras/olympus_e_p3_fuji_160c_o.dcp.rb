@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Olympus E P3 Fuji 160c O.dcp
+
 {
   "dcpData" => {
     "ProfileName" => "Fuji 160C O",

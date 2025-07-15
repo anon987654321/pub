@@ -7,12 +7,15 @@ require 'uri'
 require 'digest'
 require 'set'
 
+# § Universalscraper
+
 # Universal Scraper with Ferrum for web content and screenshots
 # Includes cognitive load awareness and depth-based analysis
 class UniversalScraper
   attr_reader :browser, :config, :cognitive_monitor
 
   def initialize(config = {})
+  # TODO: Refactor initialize - exceeds 20 line limit (366 lines)
     @config = default_config.merge(config)
     @cognitive_monitor = nil
     @screenshot_dir = @config[:screenshot_dir]

@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+# § Linuxopenbsddrivertranslator
+
 # assistants/LinuxOpenBSDDriverTranslator.rb
 require 'digest'
 require 'logger'
@@ -10,6 +14,7 @@ module Assistants
     EXPECTED_CHECKSUM = 'dummy_checksum_value'  # Replace with actual checksum when available
 
     def initialize(language: 'en', config: {})
+  # TODO: Refactor initialize - exceeds 20 line limit (155 lines)
       @language = language
       @config = config
       @logger = Logger.new('driver_translator.log', 'daily')
@@ -164,4 +169,3 @@ module Assistants
     end
   end
 end
-

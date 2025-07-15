@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Leica D Lux 6 Kodak Portra 160 L.dcp
+
 {
   "dcpData" => {
     "ProfileName" => "Kodak Portra 160 L",
@@ -72,4 +74,4 @@
     "BaselineExposureOffset" => "0.000000",
     "DefaultBlackRender" => "0"
   }
-}
+}

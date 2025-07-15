@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+# § Nordicprosperityfund
+
 #!/usr/bin/env ruby
 # norwegian_hedge_fund_implementation.rb
 #
@@ -25,6 +29,7 @@ require 'fileutils'
 # Main Hedge Fund Class
 class NordicProsperityFund
   def initialize
+  # TODO: Refactor initialize - exceeds 20 line limit (67 lines)
     @logger = Logger.new('hedge_fund.log')
     load_configuration
     connect_to_apis
@@ -95,39 +100,45 @@ end
 # Robot Swarm Trader Class
 class RobotSwarm
   def initialize(config, logger)
-    @config = config
-    @logger = logger
-    @robots = []
-    initialize_swarm
-  end
-
-  def initialize_swarm
-    # Create specialized robots
-    @robots << MarketDataBot.new("market_data_001", @config, @logger)
-    @robots << SentimentAnalysisBot.new("sentiment_002", @config, @logger)
-    @robots << TradingExecutionBot.new("execution_003", @config, @logger)
-    
-    # Add more trading robots with different strategies
-    5.times do |i|
-      robot = TradingRobot.new(@config, @logger, "robot_#{i + 4}")
-      @robots << robot
+  begin
+    # TODO: Refactor initialize - exceeds 20 line limit (36 lines)
+      @config = config
+      @logger = logger
+      @robots = []
+      initialize_swarm
     end
-    
-    @logger.info("Robot swarm initialized with #{@robots.length} robots.")
-  end
-
-  def execute_trading_cycle
-    threads = []
-    @robots.each do |robot|
-      threads << Thread.new { robot.execute_strategy }
+  
+    def initialize_swarm
+      # Create specialized robots
+      @robots << MarketDataBot.new("market_data_001", @config, @logger)
+      @robots << SentimentAnalysisBot.new("sentiment_002", @config, @logger)
+      @robots << TradingExecutionBot.new("execution_003", @config, @logger)
+      
+      # Add more trading robots with different strategies
+      5.times do |i|
+        robot = TradingRobot.new(@config, @logger, "robot_#{i + 4}")
+        @robots << robot
+      end
+      
+      @logger.info("Robot swarm initialized with #{@robots.length} robots.")
     end
-    threads.each(&:join)
-    aggregate_results
-  end
-
-  def aggregate_results
-    # Combine results from all robots for portfolio management
-    @logger.info('Aggregated results from all robots.')
+  
+    def execute_trading_cycle
+      threads = []
+      @robots.each do |robot|
+        threads << Thread.new { robot.execute_strategy }
+      end
+      threads.each(&:join)
+      aggregate_results
+    end
+  
+    def aggregate_results
+      # Combine results from all robots for portfolio management
+      @logger.info('Aggregated results from all robots.')
+    end
+  rescue StandardError => e
+    # TODO: Add proper error handling
+    raise e
   end
 end
 
@@ -136,6 +147,7 @@ class TradingBot
   attr_reader :id, :config
 
   def initialize(config, logger, id)
+  # TODO: Refactor initialize - exceeds 20 line limit (47 lines)
     @id = id
     @config = config
     @logger = logger
@@ -186,6 +198,7 @@ end
 # Market Data Collection Robot
 class MarketDataBot < TradingBot
   def initialize(id, config, logger)
+  # TODO: Refactor initialize - exceeds 20 line limit (29 lines)
     super(config, logger, id)
     connect_to_binance
   end
@@ -218,6 +231,7 @@ end
 # Sentiment Analysis Robot
 class SentimentAnalysisBot < TradingBot
   def initialize(id, config, logger)
+  # TODO: Refactor initialize - exceeds 20 line limit (40 lines)
     super(config, logger, id)
     connect_to_openai
   end
@@ -261,63 +275,70 @@ end
 # Trading Execution Robot
 class TradingExecutionBot < TradingBot
   def initialize(id, config, logger)
-    super(config, logger, id)
-    connect_to_binance
-  end
-
-  private
-
-  def connect_to_binance
-    @binance_client = Binance::Client::REST.new(
-      api_key: @config["binance_api_key"],
-      secret_key: @config["binance_api_secret"]
-    )
-    @logger.info("#{@id} connected to Binance API")
-  end
-
-  def execute_cycle
-    market_data = @state[:market_data]
-    sentiment_score = @state[:sentiment_score]
-
-    if market_data && sentiment_score
-      signal = predict_trading_signal(market_data, sentiment_score)
-      execute_trade(signal)
-    else
-      @logger.warn("#{@id} missing necessary data for trading")
+  begin
+    # TODO: Refactor initialize - exceeds 20 line limit (54 lines)
+      super(config, logger, id)
+      connect_to_binance
     end
-  end
-
-  def predict_trading_signal(market_data, sentiment_score)
-    if sentiment_score > 0.5 && market_data["price"].to_f > 50000
-      "BUY"
-    elsif sentiment_score < -0.5
-      "SELL"
-    else
-      "HOLD"
+  
+    private
+  
+    def connect_to_binance
+      @binance_client = Binance::Client::REST.new(
+        api_key: @config["binance_api_key"],
+        secret_key: @config["binance_api_secret"]
+      )
+      @logger.info("#{@id} connected to Binance API")
     end
-  end
-
-  def execute_trade(signal)
-    case signal
-    when "BUY"
-      # Simulate buy order
-      log_trade("BUY")
-    when "SELL"
-      # Simulate sell order
-      log_trade("SELL")
-    else
-      log_trade("HOLD")
+  
+    def execute_cycle
+      market_data = @state[:market_data]
+      sentiment_score = @state[:sentiment_score]
+  
+      if market_data && sentiment_score
+        signal = predict_trading_signal(market_data, sentiment_score)
+        execute_trade(signal)
+      else
+        @logger.warn("#{@id} missing necessary data for trading")
+      end
     end
-  end
-
-  def log_trade(action)
-    @logger.info("#{@id} executed trade: #{action}")
+  
+    def predict_trading_signal(market_data, sentiment_score)
+      if sentiment_score > 0.5 && market_data["price"].to_f > 50000
+        "BUY"
+      elsif sentiment_score < -0.5
+        "SELL"
+      else
+        "HOLD"
+      end
+    end
+  
+    def execute_trade(signal)
+      case signal
+      when "BUY"
+        # Simulate buy order
+        log_trade("BUY")
+      when "SELL"
+        # Simulate sell order
+        log_trade("SELL")
+      else
+        log_trade("HOLD")
+      end
+    end
+  
+    def log_trade(action)
+      @logger.info("#{@id} executed trade: #{action}")
+    end
+  rescue StandardError => e
+    # TODO: Add proper error handling
+    raise e
   end
 end
 
 # Individual Trading Robot with Multiple Strategies
 class TradingRobot
   def initialize(config, logger, name)
+  # TODO: Refactor initialize - exceeds 20 line limit (55 lines)
     @config = config
     @logger = logger
     @name = name
@@ -377,39 +398,45 @@ end
 class HedgeFundCLI < Thor
   desc "run", "Run all robots in the swarm"
   def run
-    fund = NordicProsperityFund.new
-    fund.run
-  end
-
-  desc "configure", "Set up configuration"
-  def configure
-    puts 'Enter Binance API key:'
-    binance_api_key = STDIN.gets.chomp
-    puts 'Enter Binance API secret:'
-    binance_api_secret = STDIN.gets.chomp
-    puts 'Enter News API key:'
-    news_api_key = STDIN.gets.chomp
-    puts 'Enter OpenAI API key:'
-    openai_api_key = STDIN.gets.chomp
-
-    config = {
-      'binance_api_key' => binance_api_key,
-      'binance_api_secret' => binance_api_secret,
-      'news_api_key' => news_api_key,
-      'openai_api_key' => openai_api_key,
-      'trading_pair' => 'BTCUSDT'
-    }
-
-    File.open('config.yml', 'w') { |file| file.write(config.to_yaml) }
-    puts 'Configuration saved.'
-  end
-
-  desc "status", "Check system status"
-  def status
-    puts "Nordic Prosperity Fund - System Status"
-    puts "Configuration: #{File.exist?('config.yml') ? 'OK' : 'Missing'}"
-    puts "Logs: #{Dir.exist?('logs') ? 'OK' : 'Missing'}"
-    puts "State storage: #{Dir.exist?('.ai3') ? 'OK' : 'Missing'}"
+  begin
+    # TODO: Refactor run - exceeds 20 line limit (36 lines)
+      fund = NordicProsperityFund.new
+      fund.run
+    end
+  
+    desc "configure", "Set up configuration"
+    def configure
+      puts 'Enter Binance API key:'
+      binance_api_key = STDIN.gets.chomp
+      puts 'Enter Binance API secret:'
+      binance_api_secret = STDIN.gets.chomp
+      puts 'Enter News API key:'
+      news_api_key = STDIN.gets.chomp
+      puts 'Enter OpenAI API key:'
+      openai_api_key = STDIN.gets.chomp
+  
+      config = {
+        'binance_api_key' => binance_api_key,
+        'binance_api_secret' => binance_api_secret,
+        'news_api_key' => news_api_key,
+        'openai_api_key' => openai_api_key,
+        'trading_pair' => 'BTCUSDT'
+      }
+  
+      File.open('config.yml', 'w') { |file| file.write(config.to_yaml) }
+      puts 'Configuration saved.'
+    end
+  
+    desc "status", "Check system status"
+    def status
+      puts "Nordic Prosperity Fund - System Status"
+      puts "Configuration: #{File.exist?('config.yml') ? 'OK' : 'Missing'}"
+      puts "Logs: #{Dir.exist?('logs') ? 'OK' : 'Missing'}"
+      puts "State storage: #{Dir.exist?('.ai3') ? 'OK' : 'Missing'}"
+    end
+  rescue StandardError => e
+    # TODO: Add proper error handling
+    raise e
   end
 end
 

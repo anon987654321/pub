@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+# § Universalscraper
+
 # lib/tools/universal_scraper.rb
 #
 # UniversalScraper: Fetches and refines web content using Ferrum and Nokogiri.
@@ -16,6 +20,7 @@ class UniversalScraper
   ].freeze
 
   def initialize(options = {})
+  # TODO: Refactor initialize - exceeds 20 line limit (79 lines)
     @logger = Logger.new(STDOUT)
     @logger.level = Logger::INFO
     @options = {
@@ -94,4 +99,4 @@ class UniversalScraper
     url.gsub(%r{https?://}, "").gsub(/[^0-9A-Za-z.\-]/, "_")[0...255]
   end
 end
-
+

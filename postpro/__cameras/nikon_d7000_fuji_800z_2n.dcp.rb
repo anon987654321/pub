@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Nikon D7000 Fuji 800z 2n.dcp
+
 {
   "dcpData" => {
     "ProfileName" => "Fuji 800Z 2N",

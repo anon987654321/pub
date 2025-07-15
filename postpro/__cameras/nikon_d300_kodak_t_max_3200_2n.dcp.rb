@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Nikon D300 Kodak T Max 3200 2n.dcp
+
 {
   "dcpData" => {
     "ProfileName" => "Kodak T-MAX 3200 2N",
@@ -66,4 +68,4 @@
     "BaselineExposureOffset" => "0.000000",
     "DefaultBlackRender" => "0"
   }
-}
+}

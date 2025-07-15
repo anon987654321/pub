@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Canon Eos 1ds Mark Iii Fuji 400h 2c.dcp
+
 {
   'dcpData' => {
     'ProfileName' => 'Fuji 400H 2C',
@@ -69,4 +71,4 @@
     'BaselineExposureOffset' => '0.000000',
     'DefaultBlackRender' => '0'
   }
-}
+}

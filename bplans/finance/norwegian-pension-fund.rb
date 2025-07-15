@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Norwegianpensionfund
+
 #!/usr/bin/env ruby
 # norwegian_pension_fund.rb
 #
@@ -28,6 +30,7 @@ require 'concurrent'
 # Main Hedge Fund Class
 class NorwegianPensionFund
   def initialize
+  # TODO: Refactor initialize - exceeds 20 line limit (67 lines)
     @logger = Logger.new('hedge_fund.log')
     load_configuration
     connect_to_apis
@@ -98,38 +101,45 @@ end
 # Robot Swarm Trader Class
 class RobotSwarm
   def initialize(config, logger)
-    @config = config
-    @logger = logger
-    @robots = []
-    initialize_swarm
-  end
-
-  def initialize_swarm
-    10.times do |i|
-      robot = TradingRobot.new(@config, @logger, "Robot_#{i + 1}")
-      @robots << robot
+  begin
+    # TODO: Refactor initialize - exceeds 20 line limit (29 lines)
+      @config = config
+      @logger = logger
+      @robots = []
+      initialize_swarm
     end
-    @logger.info('Robot swarm initialized with 10 robots.')
-  end
-
-  def execute_trading_cycle
-    threads = []
-    @robots.each do |robot|
-      threads << Thread.new { robot.execute_strategy }
+  
+    def initialize_swarm
+      10.times do |i|
+        robot = TradingRobot.new(@config, @logger, "Robot_#{i + 1}")
+        @robots << robot
+      end
+      @logger.info('Robot swarm initialized with 10 robots.')
     end
-    threads.each(&:join)
-    aggregate_results
-  end
-
-  def aggregate_results
-    # Combine results from all robots for portfolio management
-    @logger.info('Aggregated results from all robots.')
+  
+    def execute_trading_cycle
+      threads = []
+      @robots.each do |robot|
+        threads << Thread.new { robot.execute_strategy }
+      end
+      threads.each(&:join)
+      aggregate_results
+    end
+  
+    def aggregate_results
+      # Combine results from all robots for portfolio management
+      @logger.info('Aggregated results from all robots.')
+    end
+  rescue StandardError => e
+    # TODO: Add proper error handling
+    raise e
   end
 end
 
 # Individual Trading Robot Class
 class TradingRobot
   def initialize(config, logger, name)
+  # TODO: Refactor initialize - exceeds 20 line limit (61 lines)
     @config = config
     @logger = logger
     @name = name

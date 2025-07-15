@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Fujifilm X100s Fuji 800z F.dcp
+
 {
   'dcpData' => {
     'ProfileName' => 'Fuji 800Z F',
@@ -72,4 +74,4 @@
     'BaselineExposureOffset' => '0.000000',
     'DefaultBlackRender' => '0'
   }
-}
+}

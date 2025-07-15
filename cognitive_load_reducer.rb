@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
@@ -9,6 +11,7 @@ require 'fileutils'
 
 class CognitiveLoadReducer
   def initialize
+  # TODO: Refactor initialize - exceeds 20 line limit (214 lines)
     @master_config = load_master_config
     @cognitive_metrics = {
       before: {},
@@ -209,7 +212,7 @@ class CognitiveMonitor
   def calculate_current_load
     # Simulate load calculation based on current processes
     base_load = 20
-    branch_load = `git branch -r`.split("\\n").count * 5
+    branch_load = `git branch -r`.split("\n").count * 5
     file_load = Dir.glob("**/*.rb").count * 0.5
     
     [base_load + branch_load + file_load, 100].min
@@ -232,92 +235,98 @@ CognitiveMonitor.new.monitor if __FILE__ == $0
   end
 
   def update_documentation_references
-    # Update README files to reflect consolidated structure
-    readme_files = Dir.glob("**/README.md")
-    
-    readme_files.each do |readme|
-      next unless File.exist?(readme)
+  begin
+    # TODO: Refactor update_documentation_references - exceeds 20 line limit (89 lines)
+      # Update README files to reflect consolidated structure
+      readme_files = Dir.glob("**/README.md")
       
-      content = File.read(readme)
-      
-      # Update branch references
-      updated_content = content.gsub(/copilot\/fix-[a-f0-9-]+/, 'main')
-      
-      if content != updated_content
-        File.write(readme, updated_content)
-        puts "  Updated branch references in #{readme}"
+      readme_files.each do |readme|
+        next unless File.exist?(readme)
+        
+        content = File.read(readme)
+        
+        # Update branch references
+        updated_content = content.gsub(/copilot\/fix-[a-f0-9-]+/, 'main')
+        
+        if content != updated_content
+          File.write(readme, updated_content)
+          puts "  Updated branch references in #{readme}"
+        end
       end
     end
-  end
-
-  def generate_cognitive_report
-    puts "\n§ Cognitive Load Reduction Report"
-    
-    before_load = @cognitive_metrics[:before][:cognitive_load_percentage]
-    after_load = @cognitive_metrics[:after][:cognitive_load_percentage]
-    
-    reduction_percentage = before_load - after_load
-    improvement = (reduction_percentage / before_load * 100).round(1)
-    
-    puts "Before consolidation:"
-    puts "  Branches: #{@cognitive_metrics[:before][:branch_count]}"
-    puts "  Files: #{@cognitive_metrics[:before][:file_complexity]}"
-    puts "  Cognitive load: #{before_load}%"
-    
-    puts "\nAfter consolidation:"
-    puts "  Branches: #{@cognitive_metrics[:after][:branch_count]}"
-    puts "  Files: #{@cognitive_metrics[:after][:file_complexity]}"
-    puts "  Cognitive load: #{after_load}%"
-    
-    puts "\nResults:"
-    puts "  Load reduction: #{reduction_percentage}%"
-    puts "  Improvement: #{improvement}%"
-    
-    # Check success criteria
-    success_criteria = {
-      'cognitive_load_reduction' => reduction_percentage > 0,
-      'branch_consolidation' => @cognitive_metrics[:after][:branch_count] <= 1,
-      'below_threshold' => after_load < 80
-    }
-    
-    puts "\nSuccess Criteria:"
-    success_criteria.each do |criterion, met|
-      status = met ? "✓" : "✗"
-      puts "  #{status} #{criterion.tr('_', ' ').capitalize}: #{met}"
+  
+    def generate_cognitive_report
+      puts "\n§ Cognitive Load Reduction Report"
+      
+      before_load = @cognitive_metrics[:before][:cognitive_load_percentage]
+      after_load = @cognitive_metrics[:after][:cognitive_load_percentage]
+      
+      reduction_percentage = before_load - after_load
+      improvement = (reduction_percentage / before_load * 100).round(1)
+      
+      puts "Before consolidation:"
+      puts "  Branches: #{@cognitive_metrics[:before][:branch_count]}"
+      puts "  Files: #{@cognitive_metrics[:before][:file_complexity]}"
+      puts "  Cognitive load: #{before_load}%"
+      
+      puts "\nAfter consolidation:"
+      puts "  Branches: #{@cognitive_metrics[:after][:branch_count]}"
+      puts "  Files: #{@cognitive_metrics[:after][:file_complexity]}"
+      puts "  Cognitive load: #{after_load}%"
+      
+      puts "\nResults:"
+      puts "  Load reduction: #{reduction_percentage}%"
+      puts "  Improvement: #{improvement}%"
+      
+      # Check success criteria
+      success_criteria = {
+        'cognitive_load_reduction' => reduction_percentage > 0,
+        'branch_consolidation' => @cognitive_metrics[:after][:branch_count] <= 1,
+        'below_threshold' => after_load < 80
+      }
+      
+      puts "\nSuccess Criteria:"
+      success_criteria.each do |criterion, met|
+        status = met ? "✓" : "✗"
+        puts "  #{status} #{criterion.tr('_', ' ').capitalize}: #{met}"
+      end
+      
+      # Master.json compliance check
+      check_master_compliance
     end
-    
-    # Master.json compliance check
-    check_master_compliance
-  end
-
-  def check_master_compliance
-    puts "\n§ Master.json Compliance Check"
-    
-    compliance_items = [
-      { check: 'cognitive_framework_enabled', result: @master_config.dig('core', 'cognitive_framework', 'compliance_level') == 'master' },
-      { check: 'circuit_breakers_enabled', result: @master_config.dig('core', 'circuit_breakers', 'enabled') == true },
-      { check: 'cognitive_load_budgeting', result: @master_config.dig('core', 'cognitive_load_budgeting', 'enabled') == true },
-      { check: 'pitfall_prevention_active', result: @master_config.dig('core', 'pitfall_prevention', 'enabled') == true }
-    ]
-    
-    compliance_items.each do |item|
-      status = item[:result] ? "✓" : "✗"
-      puts "  #{status} #{item[:check].tr('_', ' ').capitalize}"
+  
+    def check_master_compliance
+      puts "\n§ Master.json Compliance Check"
+      
+      compliance_items = [
+        { check: 'cognitive_framework_enabled', result: @master_config.dig('core', 'cognitive_framework', 'compliance_level') == 'master' },
+        { check: 'circuit_breakers_enabled', result: @master_config.dig('core', 'circuit_breakers', 'enabled') == true },
+        { check: 'cognitive_load_budgeting', result: @master_config.dig('core', 'cognitive_load_budgeting', 'enabled') == true },
+        { check: 'pitfall_prevention_active', result: @master_config.dig('core', 'pitfall_prevention', 'enabled') == true }
+      ]
+      
+      compliance_items.each do |item|
+        status = item[:result] ? "✓" : "✗"
+        puts "  #{status} #{item[:check].tr('_', ' ').capitalize}"
+      end
+      
+      compliant_count = compliance_items.count { |item| item[:result] }
+      total_count = compliance_items.count
+      compliance_percentage = (compliant_count.to_f / total_count * 100).round(1)
+      
+      puts "\nOverall compliance: #{compliance_percentage}% (#{compliant_count}/#{total_count})"
+      
+      if compliance_percentage >= 90
+        puts "🟢 Excellent compliance with master.json framework"
+      elsif compliance_percentage >= 70
+        puts "🟡 Good compliance with master.json framework"
+      else
+        puts "🔴 Poor compliance with master.json framework"
+      end
     end
-    
-    compliant_count = compliance_items.count { |item| item[:result] }
-    total_count = compliance_items.count
-    compliance_percentage = (compliant_count.to_f / total_count * 100).round(1)
-    
-    puts "\nOverall compliance: #{compliance_percentage}% (#{compliant_count}/#{total_count})"
-    
-    if compliance_percentage >= 90
-      puts "🟢 Excellent compliance with master.json framework"
-    elsif compliance_percentage >= 70
-      puts "🟡 Good compliance with master.json framework"
-    else
-      puts "🔴 Poor compliance with master.json framework"
-    end
+  rescue StandardError => e
+    # TODO: Add proper error handling
+    raise e
   end
 end
 

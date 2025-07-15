@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Fujifilm X100s Kodak Portra 800 F.dcp
+
 {
   'dcpData' => {
     'ProfileName' => 'Kodak Portra 800 F',
@@ -72,4 +74,4 @@
     'BaselineExposureOffset' => '0.000000',
     'DefaultBlackRender' => '0'
   }
-}
+}

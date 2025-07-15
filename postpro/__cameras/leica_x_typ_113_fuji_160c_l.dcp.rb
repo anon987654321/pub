@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Leica X Typ 113 Fuji 160c L.dcp
+
 {
   "dcpData" => {
     "ProfileName" => "Fuji 160C L",
@@ -72,4 +74,4 @@
     "BaselineExposureOffset" => "0.000000",
     "DefaultBlackRender" => "0"
   }
-}
+}

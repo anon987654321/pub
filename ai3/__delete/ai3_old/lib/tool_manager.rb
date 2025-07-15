@@ -1,8 +1,13 @@
+# frozen_string_literal: true
+
+# § Toolmanager
+
 # ToolManager: Manages  loading and usage of various tools for AI3
 class ToolManager
   require 'logger'
 
   def initialize
+  # TODO: Refactor initialize - exceeds 20 line limit (56 lines)
     @logger = Logger.new(STDOUT)
     @logger.level = Logger::INFO
     @tools = load_tools
@@ -58,4 +63,4 @@ class ToolManager
     end
   end
 end
-
+

@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+# § Ai3
+
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 # 
@@ -22,21 +26,26 @@ end
 
 class AI3
   def initialize
-    @assistant = CasualAssistant.new
-  end
-
-  def start
-    puts "Welcome to AI^3. Type `exit` to quit."
-    loop do
-      print "AI³> "
-      input = gets.chomp.strip
-      break if input.downcase == "exit"
-      response = @assistant.respond(input)
-      puts "\nResponse: #{response}\n"
+  begin
+      @assistant = CasualAssistant.new
     end
-    puts "Goodbye!"
+  
+    def start
+      puts "Welcome to AI^3. Type `exit` to quit."
+      loop do
+        print "AI³> "
+        input = gets.chomp.strip
+        break if input.downcase == "exit"
+        response = @assistant.respond(input)
+        puts "\nResponse: #{response}\n"
+      end
+      puts "Goodbye!"
+    end
+  rescue StandardError => e
+    # TODO: Add proper error handling
+    raise e
   end
 end
 
 AI3.new.start
-
+

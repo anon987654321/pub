@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+# § Pouncekeys Setup
+
 #!/data/data/com.termux/files/usr/bin/zsh
 
 # PounceKeys Installation and Setup Script

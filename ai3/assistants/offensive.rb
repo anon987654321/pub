@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'replicate'
 require 'faker'
 require 'twitter'
@@ -8,6 +10,8 @@ require 'net/http'
 require 'digest'
 require 'openssl'
 require 'logger'
+
+# § Offensiveops
 
 module Assistants
   class OffensiveOps
@@ -46,6 +50,7 @@ module Assistants
     ]
 
     def initialize
+  # TODO: Refactor initialize - exceeds 20 line limit (202 lines)
       @sentiment_analyzer = Sentimental.new
       @sentiment_analyzer.load_defaults
       @logger = Logger.new('offensive_ops.log', 'daily')
@@ -247,4 +252,3 @@ module Assistants
     end
   end
 end
-

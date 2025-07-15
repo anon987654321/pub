@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Fujifilm X E1 Fuji 400h F.dcp
+
 {
   "dcpData" => {
     "ProfileName" => "Fuji 400H F",
@@ -72,4 +74,4 @@
     "BaselineExposureOffset" => "0.000000",
     "DefaultBlackRender" => "0"
   }
-}
+}

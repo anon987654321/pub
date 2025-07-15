@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+# § Minigpt
+
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 #
@@ -44,27 +48,37 @@ clients = {
 
 # Rotating spinner for progress
 def rotating_animation(thread)
-  spinner = ["/", "-", "\\", "|"]
-  index = 0
-  while thread.alive?
-    print "\r#{spinner[index]}"
-    index += 1
-    if index >= spinner.length
-      index = 0
+  begin
+    spinner = ["/", "-", "\", "|"]
+    index = 0
+    while thread.alive?
+      print "\r#{spinner[index]}"
+      index += 1
+      if index >= spinner.length
+        index = 0
+      end
+      sleep(0.1)
     end
-    sleep(0.1)
+    print "\r"
+  rescue StandardError => e
+    # TODO: Add proper error handling
+    raise e
   end
-  print "\r"
 end
 
 # Extract response uniformly
 def extract_response(resp)
-  if resp.respond_to?("content")
-    resp.content
-  elsif resp.is_a?(Hash)
-    resp.dig("choices", 0, "message", "content")
-  else
-    resp.to_s
+  begin
+    if resp.respond_to?("content")
+      resp.content
+    elsif resp.is_a?(Hash)
+      resp.dig("choices", 0, "message", "content")
+    else
+      resp.to_s
+    end
+  rescue StandardError => e
+    # TODO: Add proper error handling
+    raise e
   end
 end
 

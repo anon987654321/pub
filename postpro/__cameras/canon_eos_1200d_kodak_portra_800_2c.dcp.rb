@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Canon Eos 1200d Kodak Portra 800 2c.dcp
+
 {
   'dcpData' => {
     'ProfileName' => 'Kodak Portra 800 2C',
@@ -69,4 +71,4 @@
     'BaselineExposureOffset' => '0.000000',
     'DefaultBlackRender' => '0'
   }
-}
+}

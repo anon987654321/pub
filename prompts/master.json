@@ -11,34 +11,34 @@
     "cognitive_header": "§ Workflow Intelligence System",
     "mode_detection": {
       "simple": [
-        "basic_implementation", 
-        "single_stack", 
+        "basic_implementation",
+        "single_stack",
         "minimal_features"
       ],
       "complex": [
-        "business_plan", 
-        "design_system", 
-        "multi_technology", 
-        "visualization", 
-        "ai_integration", 
-        "async_processing", 
+        "business_plan",
+        "design_system",
+        "multi_technology",
+        "visualization",
+        "ai_integration",
+        "async_processing",
         "browser_automation"
       ]
     },
     "phases": {
       "simple": [
-        "analyze", 
-        "build", 
-        "verify", 
+        "analyze",
+        "build",
+        "verify",
         "package"
       ],
       "complex": [
-        "empathize_and_analyze", 
-        "define_and_design", 
-        "ideate_and_architect", 
-        "prototype_and_implement", 
-        "test_and_validate", 
-        "optimize_and_refine", 
+        "empathize_and_analyze",
+        "define_and_design",
+        "ideate_and_architect",
+        "prototype_and_implement",
+        "test_and_validate",
+        "optimize_and_refine",
         "deliver_and_evolve"
       ]
     },
@@ -332,12 +332,36 @@
     },
     "multi_perspective": {
       "roles": [
-        {"role": "security_expert", "temperature": 0.2, "weight": 0.25},
-        {"role": "architect", "temperature": 0.4, "weight": 0.20},
-        {"role": "creative_innovator", "temperature": 0.9, "weight": 0.15},
-        {"role": "performance_engineer", "temperature": 0.3, "weight": 0.15},
-        {"role": "openbsd_specialist", "temperature": 0.3, "weight": 0.15},
-        {"role": "rails_expert", "temperature": 0.4, "weight": 0.10}
+        {
+          "role": "security_expert",
+          "temperature": 0.2,
+          "weight": 0.25
+        },
+        {
+          "role": "architect",
+          "temperature": 0.4,
+          "weight": 0.2
+        },
+        {
+          "role": "creative_innovator",
+          "temperature": 0.9,
+          "weight": 0.15
+        },
+        {
+          "role": "performance_engineer",
+          "temperature": 0.3,
+          "weight": 0.15
+        },
+        {
+          "role": "openbsd_specialist",
+          "temperature": 0.3,
+          "weight": 0.15
+        },
+        {
+          "role": "rails_expert",
+          "temperature": 0.4,
+          "weight": 0.1
+        }
       ],
       "consensus_threshold": 0.7
     },
@@ -368,44 +392,131 @@
   },
   "stacks": {
     "detection": {
-      "rails": ["Gemfile", "config/application.rb", "app/"],
-      "ruby": ["*.rb", "Gemfile", "Rakefile"],
-      "frontend": ["*.html", "*.css", "*.js", "package.json"],
-      "shell": ["*.sh", "*.zsh", "*.bash"],
-      "business": ["business_plan", "canvas", "financial_model"],
-      "animation": ["babylon.js", "three.js", "d3.js", "svg_animations"],
-      "async": ["async", "concurrent", "parallel", "queue"],
-      "browser": ["ferrum", "selenium", "playwright", "puppeteer"],
-      "scraping": ["nokogiri", "mechanize", "httparty"]
+      "rails": [
+        "Gemfile",
+        "config/application.rb",
+        "app/"
+      ],
+      "ruby": [
+        "*.rb",
+        "Gemfile",
+        "Rakefile"
+      ],
+      "frontend": [
+        "*.html",
+        "*.css",
+        "*.js",
+        "package.json"
+      ],
+      "shell": [
+        "*.sh",
+        "*.zsh",
+        "*.bash"
+      ],
+      "business": [
+        "business_plan",
+        "canvas",
+        "financial_model"
+      ],
+      "animation": [
+        "babylon.js",
+        "three.js",
+        "d3.js",
+        "svg_animations"
+      ],
+      "async": [
+        "async",
+        "concurrent",
+        "parallel",
+        "queue"
+      ],
+      "browser": [
+        "ferrum",
+        "selenium",
+        "playwright",
+        "puppeteer"
+      ],
+      "scraping": [
+        "nokogiri",
+        "mechanize",
+        "httparty"
+      ]
     },
     "templates": {
       "rails": {
         "version": "8.0+",
-        "features": ["hotwire", "stimulus", "solid_queue"],
-        "security": ["strong_params", "csrf_protection", "pundit"],
-        "performance": ["falcon_server", "fragment_caching"]
+        "features": [
+          "hotwire",
+          "stimulus",
+          "solid_queue"
+        ],
+        "security": [
+          "strong_params",
+          "csrf_protection",
+          "pundit"
+        ],
+        "performance": [
+          "falcon_server",
+          "fragment_caching"
+        ]
       },
       "ruby": {
         "version": "3.3+",
-        "patterns": ["frozen_string_literal", "yard_docs", "solid_principles"],
-        "tools": ["rubocop", "rspec", "bundler"],
-        "async": ["async", "concurrent-ruby", "sidekiq"]
+        "patterns": [
+          "frozen_string_literal",
+          "yard_docs",
+          "solid_principles"
+        ],
+        "tools": [
+          "rubocop",
+          "rspec",
+          "bundler"
+        ],
+        "async": [
+          "async",
+          "concurrent-ruby",
+          "sidekiq"
+        ]
       },
       "frontend": {
-        "standards": ["html5", "wcag_2.2_aaa", "mobile_first"],
-        "performance": ["core_web_vitals_95_plus", "gpu_acceleration"],
-        "design": ["golden_ratio", "8px_grid", "modular_scale"]
+        "standards": [
+          "html5",
+          "wcag_2.2_aaa",
+          "mobile_first"
+        ],
+        "performance": [
+          "core_web_vitals_95_plus",
+          "gpu_acceleration"
+        ],
+        "design": [
+          "golden_ratio",
+          "8px_grid",
+          "modular_scale"
+        ]
       },
       "shell": {
-        "compatibility": ["posix", "zsh", "openbsd_ksh"],
-        "safety": ["set_euo_pipefail", "input_validation"],
-        "openbsd": ["pledge_unveil", "doas"]
+        "compatibility": [
+          "posix",
+          "zsh",
+          "openbsd_ksh"
+        ],
+        "safety": [
+          "set_euo_pipefail",
+          "input_validation"
+        ],
+        "openbsd": [
+          "pledge_unveil",
+          "doas"
+        ]
       }
     }
   },
   "formatting": {
     "universal": {
-      "indentation": {"type": "spaces", "size": 2},
+      "indentation": {
+        "type": "spaces",
+        "size": 2
+      },
       "quotes": "double_quotes_consistent",
       "line_endings": "unix_lf",
       "alignment": "optical_over_mathematical",
@@ -492,7 +603,7 @@
           },
           "golden_ratio_sizes": {
             "h1": "32px–42px",
-            "h2": "20px–28px", 
+            "h2": "20px–28px",
             "h3": "16px–20px",
             "body": "15px–18px"
           },
@@ -549,8 +660,8 @@
       }
     },
     "principles": [
-      "clarity_over_cleverness", 
-      "accessibility_first", 
+      "clarity_over_cleverness",
+      "accessibility_first",
       "mathematical_foundation"
     ],
     "typography": {
@@ -562,7 +673,7 @@
         "monospace": "'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace"
       },
       "accessibility": {
-        "contrast_ratio": "7:1", 
+        "contrast_ratio": "7:1",
         "font_size_min": "16px"
       }
     },
@@ -571,8 +682,8 @@
       "methodology": "semantic_hsl",
       "accessibility": "wcag_2_2_aaa",
       "modes": [
-        "light", 
-        "dark", 
+        "light",
+        "dark",
         "high_contrast"
       ]
     },
@@ -585,8 +696,8 @@
     "motion": {
       "cognitive_header": "§ Motion Design System",
       "duration": {
-        "fast": "150ms", 
-        "normal": "300ms", 
+        "fast": "150ms",
+        "normal": "300ms",
         "slow": "500ms"
       },
       "easing": "cubic-bezier(0.25, 0.1, 0.25, 1)",
@@ -602,31 +713,78 @@
       "design_thinking": "continuous_iteration"
     },
     "localization": {
-      "nordic": ["norwegian", "swedish", "danish", "icelandic"],
+      "nordic": [
+        "norwegian",
+        "swedish",
+        "danish",
+        "icelandic"
+      ],
       "communication": "direct_transparent",
       "currency": "nok_sek_dkk_isk"
     }
   },
   "specialized_capabilities": {
     "visualization": {
-      "3d": ["babylon_js", "three_js"],
-      "charts": ["d3_js", "interactive_svg"],
-      "animation": ["gpu_accelerated", "mathematical_precision"]
+      "3d": [
+        "babylon_js",
+        "three_js"
+      ],
+      "charts": [
+        "d3_js",
+        "interactive_svg"
+      ],
+      "animation": [
+        "gpu_accelerated",
+        "mathematical_precision"
+      ]
     },
     "async_processing": {
-      "patterns": ["concurrent_ruby", "async_gem", "actor_model"],
-      "security": ["rate_limiting", "resource_limits", "timeout_protection"],
-      "monitoring": ["performance_metrics", "error_tracking"]
+      "patterns": [
+        "concurrent_ruby",
+        "async_gem",
+        "actor_model"
+      ],
+      "security": [
+        "rate_limiting",
+        "resource_limits",
+        "timeout_protection"
+      ],
+      "monitoring": [
+        "performance_metrics",
+        "error_tracking"
+      ]
     },
     "browser_automation": {
-      "frameworks": ["ferrum", "selenium", "playwright"],
-      "security": ["unveil_restrictions", "pledge_limits", "sandboxing"],
-      "performance": ["headless_optimization", "concurrent_sessions"]
+      "frameworks": [
+        "ferrum",
+        "selenium",
+        "playwright"
+      ],
+      "security": [
+        "unveil_restrictions",
+        "pledge_limits",
+        "sandboxing"
+      ],
+      "performance": [
+        "headless_optimization",
+        "concurrent_sessions"
+      ]
     },
     "scraping": {
-      "libraries": ["nokogiri", "mechanize", "httparty"],
-      "patterns": ["rate_limiting", "retry_mechanisms", "error_recovery"],
-      "ethics": ["robots_txt_compliance", "respectful_crawling"]
+      "libraries": [
+        "nokogiri",
+        "mechanize",
+        "httparty"
+      ],
+      "patterns": [
+        "rate_limiting",
+        "retry_mechanisms",
+        "error_recovery"
+      ],
+      "ethics": [
+        "robots_txt_compliance",
+        "respectful_crawling"
+      ]
     }
   },
   "quality_assurance": {
@@ -639,11 +797,26 @@
       "formatting": "universal_consistency"
     },
     "tools": {
-      "linting": ["rubocop", "eslint"],
-      "testing": ["rspec", "jest", "playwright"],
-      "security": ["brakeman", "bundler_audit"],
-      "performance": ["lighthouse", "web_vitals"],
-      "accessibility": ["axe_core"]
+      "linting": [
+        "rubocop",
+        "eslint"
+      ],
+      "testing": [
+        "rspec",
+        "jest",
+        "playwright"
+      ],
+      "security": [
+        "brakeman",
+        "bundler_audit"
+      ],
+      "performance": [
+        "lighthouse",
+        "web_vitals"
+      ],
+      "accessibility": [
+        "axe_core"
+      ]
     },
     "ai_enhancement": {
       "code_review": "semantic_analysis",
@@ -653,33 +826,92 @@
     }
   },
   "security": {
-    "baseline": ["input_validation", "output_encoding", "secure_defaults", "zero_trust"],
+    "baseline": [
+      "input_validation",
+      "output_encoding",
+      "secure_defaults",
+      "zero_trust"
+    ],
     "by_stack": {
-      "rails": ["secure_headers", "brakeman", "pundit"],
-      "frontend": ["csp_headers", "sri_integrity", "https_only"],
-      "shell": ["input_sanitization", "privilege_dropping"],
-      "openbsd": ["pledge", "unveil", "doas"],
-      "browser": ["sandbox_isolation", "resource_limits"],
-      "async": ["rate_limiting", "circuit_breakers"]
+      "rails": [
+        "secure_headers",
+        "brakeman",
+        "pundit"
+      ],
+      "frontend": [
+        "csp_headers",
+        "sri_integrity",
+        "https_only"
+      ],
+      "shell": [
+        "input_sanitization",
+        "privilege_dropping"
+      ],
+      "openbsd": [
+        "pledge",
+        "unveil",
+        "doas"
+      ],
+      "browser": [
+        "sandbox_isolation",
+        "resource_limits"
+      ],
+      "async": [
+        "rate_limiting",
+        "circuit_breakers"
+      ]
     }
   },
   "deployment": {
-    "environments": ["development", "staging", "production"],
+    "environments": [
+      "development",
+      "staging",
+      "production"
+    ],
     "requirements": {
-      "docs": ["readme", "setup", "api_docs"],
-      "scripts": ["install", "test", "deploy"],
-      "configs": ["environment_examples", "monitoring"]
+      "docs": [
+        "readme",
+        "setup",
+        "api_docs"
+      ],
+      "scripts": [
+        "install",
+        "test",
+        "deploy"
+      ],
+      "configs": [
+        "environment_examples",
+        "monitoring"
+      ]
     },
     "monitoring": {
-      "health": ["service_status", "resource_usage"],
-      "logging": ["error_tracking", "performance_metrics"],
-      "alerts": ["service_down", "high_error_rate"]
+      "health": [
+        "service_status",
+        "resource_usage"
+      ],
+      "logging": [
+        "error_tracking",
+        "performance_metrics"
+      ],
+      "alerts": [
+        "service_down",
+        "high_error_rate"
+      ]
     }
   },
   "self_optimization": {
     "philosophy": "surgical_enhancement_preserve_core",
-    "triggers": ["performance_degradation", "error_increase", "user_feedback"],
-    "forbidden_removals": ["security", "accessibility", "never_truncate", "world_class_standards"],
+    "triggers": [
+      "performance_degradation",
+      "error_increase",
+      "user_feedback"
+    ],
+    "forbidden_removals": [
+      "security",
+      "accessibility",
+      "never_truncate",
+      "world_class_standards"
+    ],
     "bounded_recursive_enhancement": {
       "enabled": true,
       "limits": {

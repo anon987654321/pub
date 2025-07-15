@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Fujifilm Xq2 Kodak Tri X 400 F.dcp
+
 {
   "dcpData" => {
     "ProfileName" => "Kodak TRI-X 400 F",
@@ -72,4 +74,4 @@
     "BaselineExposureOffset" => "0.000000",
     "DefaultBlackRender" => "0"
   }
-}
+}

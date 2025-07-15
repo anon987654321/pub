@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Assistantorchestrator
+
 # Assistant Orchestrator - Unified request processing framework
 # Migrated and enhanced from ai3_old/assistants/assistant_api.rb
 
@@ -11,6 +13,7 @@ class AssistantOrchestrator
   attr_reader :llm_wrapper, :scraper, :file_system_tool, :query_cache
 
   def initialize(llm: nil)
+  # TODO: Refactor initialize - exceeds 20 line limit (123 lines)
     @llm_wrapper = llm || create_default_llm
     @scraper = UniversalScraper.new
     @file_system_tool = FilesystemTool.new

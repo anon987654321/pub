@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Leica X Typ 113 Fuji 400h L.dcp
+
 {
   "dcpData" => {
     "ProfileName" => "Fuji 400H L",
@@ -72,4 +74,4 @@
     "BaselineExposureOffset" => "0.000000",
     "DefaultBlackRender" => "0"
   }
-}
+}

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Fujifilm Finepix X100 Kodak T Max 3200 F.dcp
+
 {
   'dcpData' => {
     'ProfileName' => 'Kodak T-MAX 3200 F',
@@ -66,4 +68,4 @@
     'BaselineExposureOffset' => '0.000000',
     'DefaultBlackRender' => '0'
   }
-}
+}

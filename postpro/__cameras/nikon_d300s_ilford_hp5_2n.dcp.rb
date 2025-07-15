@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Nikon D300s Ilford Hp5 2n.dcp
+
 {
   "dcpData" => {
     "ProfileName" => "Ilford HP5 2N",
@@ -66,4 +68,4 @@
     "BaselineExposureOffset" => "0.000000",
     "DefaultBlackRender" => "0"
   }
-}
+}

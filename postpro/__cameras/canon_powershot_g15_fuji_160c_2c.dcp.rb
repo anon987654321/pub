@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Canon Powershot G15 Fuji 160c 2c.dcp
+
 {
   'dcpData' => {
     'ProfileName' => 'Fuji 160C 2C',
@@ -69,4 +71,4 @@
     'BaselineExposureOffset' => '0.750000',
     'DefaultBlackRender' => '1'
   }
-}
+}

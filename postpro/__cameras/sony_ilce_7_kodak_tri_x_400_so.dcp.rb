@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Sony Ilce 7 Kodak Tri X 400 So.dcp
+
 {
   "dcpData" => {
     "ProfileName" => "Kodak TRI-X 400 SO",

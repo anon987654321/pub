@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+
+# § Assistants
 
 # spec/factories/assistants.rb
 FactoryBot.define do
@@ -6,4 +10,4 @@ FactoryBot.define do
   end
 
   # Define other assistant factories similarly
-end
+end

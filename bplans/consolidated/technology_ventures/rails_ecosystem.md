@@ -1,3 +1,5 @@
+# § Rails Ecosystem
+
 # Rails Ecosystem - Multi-Application Platform
 
 **Comprehensive Rails 8.0 Application Suite for Modern Web Development**
@@ -6,9 +8,9 @@
 
 ## Executive Summary
 
-This document outlines a comprehensive Rails ecosystem consisting of multiple specialized applications built on Rails 8.0+, designed for deployment on OpenBSD 7.7+. The suite leverages modern web technologies including Hotwire, StimulusReflex, and Progressive Web App capabilities to deliver high-performance, real-time applications.
-
----
+This document outlines a comprehensive Rails ecosystem consisting of multiple specialized applications built on Rails 8.0+, designed for deployment on OpenBSD 7.7+.
+<!-- TODO: Break into shorter sentences (45 words > 15) --> The suite leverages modern web technologies including Hotwire, StimulusReflex, and Progressive Web App capabilities to deliver high-performance, real-time applications.
+<!-- TODO: Break into shorter sentences (19 words > 15) --> ---
 
 ## Technology Stack
 
@@ -34,7 +36,8 @@ This document outlines a comprehensive Rails ecosystem consisting of multiple sp
 
 ## Application Portfolio
 
-### 1. Brgen - Social Media Platform
+### 1.
+<!-- TODO: Break into shorter sentences (118 words > 15) --> Brgen - Social Media Platform
 **Norwegian-inspired community platform with real-time features**
 
 **Core Features:**
@@ -63,7 +66,9 @@ class PostReflex < ApplicationReflex
 end
 ```
 
-### 2. Amber - Fashion & AI Recommendations
+### 2.
+<!-- TODO: Fix heading hierarchy - level 3 after level 1 -->
+<!-- TODO: Break into shorter sentences (94 words > 15) --> Amber - Fashion & AI Recommendations
 **Fashion platform with AI-driven style recommendations**
 
 **Core Features:**
@@ -93,7 +98,9 @@ class FashionRecommendationService
 end
 ```
 
-### 3. Privcam - Private Media Streaming
+### 3.
+<!-- TODO: Fix heading hierarchy - level 3 after level 1 -->
+<!-- TODO: Break into shorter sentences (73 words > 15) --> Privcam - Private Media Streaming
 **Secure, privacy-focused media streaming platform**
 
 **Core Features:**
@@ -118,7 +125,9 @@ class EncryptedMediaService
 end
 ```
 
-### 4. Bsdports - OpenBSD Package Management
+### 4.
+<!-- TODO: Fix heading hierarchy - level 3 after level 1 -->
+<!-- TODO: Break into shorter sentences (65 words > 15) --> Bsdports - OpenBSD Package Management
 **Web interface for OpenBSD ports system with live search**
 
 **Core Features:**
@@ -145,7 +154,9 @@ class PortSearchService
 end
 ```
 
-### 5. Hjerterom - Wellness & Mental Health
+### 5.
+<!-- TODO: Fix heading hierarchy - level 3 after level 1 -->
+<!-- TODO: Break into shorter sentences (67 words > 15) --> Hjerterom - Wellness & Mental Health
 **Mental health and wellness tracking platform**
 
 **Core Features:**
@@ -184,12 +195,9 @@ end
 # Shared authentication setup across all applications
 class ApplicationController < ActionController::Base
   before_action :authenticate_user_or_guest!
-  
-  protected
+<!-- TODO: Break into shorter sentences (91 words > 15) --> protected
 
-  def authenticate_user_or_guest!
-    if user_signed_in?
-      @current_user = current_user
+  def authenticate_user_or_guest! if user_signed_in? @current_user = current_user
     else
       @current_user = guest_user
     end
@@ -206,7 +214,7 @@ class VippsOmniauthCallbacksController < Devise::OmniauthCallbacksController
     @user = User.from_omniauth(request.env["omniauth.auth"])
     
     if @user.persisted?
-      sign_in_and_redirect @user, event: :authentication
+<!-- TODO: Break into shorter sentences (34 words > 15) --> sign_in_and_redirect @user, event: :authentication
     else
       redirect_to new_user_registration_url
     end
@@ -215,6 +223,7 @@ end
 ```
 
 ### Real-time Features
+<!-- TODO: Fix heading hierarchy - level 3 after level 1 -->
 ```ruby
 # Shared real-time functionality
 class ApplicationCable::Connection < ActionCable::Connection::Base
@@ -248,6 +257,7 @@ end
 ```
 
 ### Progressive Web App Setup
+<!-- TODO: Fix heading hierarchy - level 3 after level 1 -->
 ```javascript
 // Shared service worker for offline capabilities
 self.addEventListener('install', (event) => {
@@ -331,6 +341,7 @@ EOF
 ```
 
 ### Application Containerization
+<!-- TODO: Fix heading hierarchy - level 3 after level 1 -->
 ```dockerfile
 # Shared Dockerfile for Rails applications
 FROM ruby:3.3.0-alpine
@@ -350,9 +361,8 @@ RUN bundle install
 COPY package.json yarn.lock ./
 RUN yarn install
 
-COPY . .
-
-RUN bundle exec rails assets:precompile
+COPY .
+<!-- TODO: Break into shorter sentences (287 words > 15) --> . RUN bundle exec rails assets:precompile
 
 EXPOSE 3000
 
@@ -394,6 +404,7 @@ end
 ```
 
 ### Caching Strategy
+<!-- TODO: Fix heading hierarchy - level 3 after level 1 -->
 ```ruby
 # Multi-layer caching implementation
 class CacheService
@@ -456,6 +467,7 @@ end
 ```
 
 ### Security Headers
+<!-- TODO: Fix heading hierarchy - level 3 after level 1 -->
 ```ruby
 # Security configuration for all applications
 class SecurityConfiguration
@@ -542,9 +554,9 @@ end
 
 ## Conclusion
 
-The Rails Ecosystem represents a comprehensive approach to modern web application development, combining the robustness of Rails 8.0 with cutting-edge technologies and privacy-focused design. By leveraging OpenBSD's security-first approach and implementing real-time features, this platform positions itself at the forefront of web application development.
-
-**Key Success Factors:**
+The Rails Ecosystem represents a comprehensive approach to modern web application development, combining the robustness of Rails 8.0 with cutting-edge technologies and privacy-focused design.
+<!-- TODO: Break into shorter sentences (526 words > 15) --> By leveraging OpenBSD's security-first approach and implementing real-time features, this platform positions itself at the forefront of web application development.
+<!-- TODO: Break into shorter sentences (20 words > 15) --> **Key Success Factors:**
 - **Technical Excellence**: Modern Rails stack with performance optimization
 - **Security Focus**: Privacy-first design with GDPR compliance
 - **Market Fit**: Norwegian integration with local payment systems
@@ -552,8 +564,7 @@ The Rails Ecosystem represents a comprehensive approach to modern web applicatio
 - **Community**: Open-source foundation with enterprise features
 
 This comprehensive platform provides a solid foundation for building next-generation web applications while maintaining the highest standards of security, performance, and user experience.
-
----
+<!-- TODO: Break into shorter sentences (66 words > 15) --> ---
 
 **Contact Information:**
 - **Technical Lead**: rails.ecosystem@innovation.no
@@ -561,3 +572,4 @@ This comprehensive platform provides a solid foundation for building next-genera
 - **Security Contact**: security@railseco.no
 
 *This document represents a complete Rails ecosystem designed for modern web application development with focus on security, performance, and Norwegian market integration.*
+<!-- TODO: Break into shorter sentences (37 words > 15) -->

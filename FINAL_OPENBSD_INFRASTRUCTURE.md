@@ -1,10 +1,11 @@
+# § Final Openbsd Infrastructure
+
 # FINAL OPENBSD INFRASTRUCTURE - Complete Production System Architecture
 
 ## Executive Summary
 
-This document provides comprehensive, production-ready OpenBSD infrastructure documentation for deploying and maintaining a secure, scalable system architecture supporting AI³, Rails applications, and business platforms. The infrastructure implements defense-in-depth security, automated certificate management, DNS with DNSSEC, and high-availability load balancing.
-
-## System Architecture Overview
+This document provides comprehensive, production-ready OpenBSD infrastructure documentation for deploying and maintaining a secure, scalable system architecture supporting AI³, Rails applications, and business platforms.
+<!-- TODO: Break into shorter sentences (41 words > 15) --> The infrastructure implements defense-in-depth security, automated certificate management, DNS with DNSSEC, and high-availability load balancing. ## System Architecture Overview
 
 ### Infrastructure Components
 
@@ -87,6 +88,7 @@ pass log all
 ```
 
 #### Pledge/Unveil Security Implementation
+<!-- TODO: Fix heading hierarchy - level 4 after level 1 -->
 
 ```ruby
 # /usr/local/lib/ruby/site_ruby/openbsd_security.rb
@@ -231,6 +233,7 @@ include: "/var/nsd/etc/zones.conf"
 ```
 
 ### DNSSEC Zone Signing Automation
+<!-- TODO: Fix heading hierarchy - level 3 after level 1 -->
 
 ```bash
 #!/usr/bin/env zsh
@@ -254,13 +257,15 @@ generate_zone_keys() {
     cd "$key_dir"
     
     # Generate KSK (Key Signing Key)
-    if [ ! -f "K${zone}.+008+*.key" ]; then
+    if [ !
+<!-- TODO: Break into shorter sentences (705 words > 15) --> -f "K${zone}.+008+*.key" ]; then
         log "Generating KSK for ${zone}"
         ldns-keygen -a RSASHA256 -b 2048 -k "$zone"
     fi
     
     # Generate ZSK (Zone Signing Key)
-    if [ ! -f "K${zone}.+008+*.private" ]; then
+    if [ !
+<!-- TODO: Break into shorter sentences (26 words > 15) --> -f "K${zone}.+008+*.private" ]; then
         log "Generating ZSK for ${zone}"
         ldns-keygen -a RSASHA256 -b 1024 "$zone"
     fi
@@ -272,7 +277,8 @@ sign_zone() {
     local signed_file="${ZONES_DIR}/${zone}.zone.signed"
     local key_dir="${KEYS_DIR}/${zone}"
     
-    if [ ! -f "$zone_file" ]; then
+    if [ !
+<!-- TODO: Break into shorter sentences (30 words > 15) --> -f "$zone_file" ]; then
         log "Error: Zone file not found: $zone_file"
         return 1
     fi
@@ -472,6 +478,7 @@ relay "https_sticky" {
 ```
 
 ### httpd Static Content Server
+<!-- TODO: Fix heading hierarchy - level 3 after level 1 -->
 
 ```bash
 # /etc/httpd.conf - Static Content and ACME Challenge Server
@@ -559,6 +566,7 @@ domain "*.brgen.no" {
 ```
 
 ### Certificate Renewal Automation
+<!-- TODO: Fix heading hierarchy - level 3 after level 1 -->
 
 ```bash
 #!/usr/bin/env zsh
@@ -579,7 +587,8 @@ check_certificate_expiry() {
     local domain="$2"
     local days_threshold="${3:-30}"
     
-    if [ ! -f "$cert_file" ]; then
+    if [ !
+<!-- TODO: Break into shorter sentences (1069 words > 15) --> -f "$cert_file" ]; then
         log "WARNING: Certificate file not found: $cert_file"
         return 1
     fi
@@ -628,7 +637,8 @@ renew_certificate() {
         rcctl start relayd
         
         # Send failure notification
-        echo "Certificate renewal failed for $domain at $(date). Check logs at $LOG_FILE" | \
+        echo "Certificate renewal failed for $domain at $(date).
+<!-- TODO: Break into shorter sentences (163 words > 15) --> Check logs at $LOG_FILE" | \
             mail -s "Certificate Renewal FAILED: $domain" "$NOTIFY_EMAIL"
             
         return 1
@@ -659,19 +669,22 @@ monitor_certificate_health() {
     local cert_file="${CERT_DIR}/${domain}.fullchain.pem"
     
     # Check certificate validity
-    if ! openssl x509 -in "$cert_file" -noout -checkend 86400; then
+    if !
+<!-- TODO: Break into shorter sentences (90 words > 15) --> openssl x509 -in "$cert_file" -noout -checkend 86400; then
         log "ERROR: Certificate $domain is invalid or expires within 24 hours"
         return 1
     fi
     
     # Check certificate chain
-    if ! openssl verify -CAfile /etc/ssl/cert.pem "$cert_file"; then
+    if !
+<!-- TODO: Break into shorter sentences (28 words > 15) --> openssl verify -CAfile /etc/ssl/cert.pem "$cert_file"; then
         log "ERROR: Certificate chain validation failed for $domain"
         return 1
     fi
     
     # Test HTTPS connectivity
-    if ! timeout 10 openssl s_client -connect "${domain}:443" -servername "$domain" < /dev/null; then
+    if !
+<!-- TODO: Break into shorter sentences (23 words > 15) --> timeout 10 openssl s_client -connect "${domain}:443" -servername "$domain" < /dev/null; then
         log "ERROR: HTTPS connection test failed for $domain"
         return 1
     fi
@@ -763,6 +776,7 @@ ssl_prefer_server_ciphers = on
 ```
 
 ### Redis Optimization for Caching
+<!-- TODO: Fix heading hierarchy - level 3 after level 1 -->
 
 ```bash
 # /etc/redis.conf - High-Performance Cache Configuration
@@ -926,7 +940,8 @@ monitor_services() {
     local services=("httpd" "relayd" "nsd" "postgresql" "redis")
     
     for service in "${services[@]}"; do
-        if ! rcctl check "$service"; then
+        if !
+<!-- TODO: Break into shorter sentences (669 words > 15) --> rcctl check "$service"; then
             send_alert "Service Down" "Service $service is not running"
             
             # Attempt to restart service
@@ -973,6 +988,7 @@ main
 ```
 
 ### Application Performance Monitoring
+<!-- TODO: Fix heading hierarchy - level 3 after level 1 -->
 
 ```ruby
 # /usr/local/lib/ruby/site_ruby/application_monitor.rb
@@ -1019,7 +1035,8 @@ class ApplicationMonitor
   def check_app_health(port)
     begin
       response = Net::HTTP.get_response(URI("http://127.0.0.1:#{port}/health"))
-      response.code == "200" ? "healthy" : "unhealthy"
+      response.code == "200" ?
+<!-- TODO: Break into shorter sentences (240 words > 15) --> "healthy" : "unhealthy"
     rescue
       "down"
     end
@@ -1219,7 +1236,8 @@ sync_to_remote() {
         "${BACKUP_ROOT}/" \
         "${REMOTE_BACKUP_USER}@${REMOTE_BACKUP_HOST}:/backups/$(hostname)/"
     
-    if [ $? -eq 0 ]; then
+    if [ $?
+<!-- TODO: Break into shorter sentences (510 words > 15) --> -eq 0 ]; then
         log "Remote backup sync completed successfully"
     else
         log "ERROR: Remote backup sync failed"
@@ -1250,7 +1268,8 @@ verify_backups() {
     # Check if backup files exist and are not empty
     for backup_type in databases configs apps logs; do
         backup_dir="${BACKUP_ROOT}/${backup_type}/${date_dir}"
-        if [ ! -d "$backup_dir" ] || [ -z "$(ls -A $backup_dir)" ]; then
+        if [ !
+<!-- TODO: Break into shorter sentences (115 words > 15) --> -d "$backup_dir" ] || [ -z "$(ls -A $backup_dir)" ]; then
             log "ERROR: Backup verification failed for $backup_type"
             error_count=$((error_count + 1))
         fi
@@ -1258,7 +1277,8 @@ verify_backups() {
     
     # Test database backup integrity
     if [ -f "${BACKUP_ROOT}/databases/${date_dir}/postgresql-all.sql.gz" ]; then
-        if ! gzip -t "${BACKUP_ROOT}/databases/${date_dir}/postgresql-all.sql.gz"; then
+        if !
+<!-- TODO: Break into shorter sentences (36 words > 15) --> gzip -t "${BACKUP_ROOT}/databases/${date_dir}/postgresql-all.sql.gz"; then
             log "ERROR: PostgreSQL backup file is corrupted"
             error_count=$((error_count + 1))
         fi
@@ -1340,13 +1360,15 @@ check_prerequisites() {
     log "Checking prerequisites"
     
     # Check OpenBSD version
-    if ! uname -r | grep -q "7\.[8-9]"; then
+    if !
+<!-- TODO: Break into shorter sentences (165 words > 15) --> uname -r | grep -q "7\.[8-9]"; then
         log "ERROR: OpenBSD 7.8+ required"
         exit 1
     fi
     
     # Check internet connectivity
-    if ! ping -c 1 8.8.8.8 > /dev/null 2>&1; then
+    if !
+<!-- TODO: Break into shorter sentences (21 words > 15) --> ping -c 1 8.8.8.8 > /dev/null 2>&1; then
         log "ERROR: No internet connectivity"
         exit 1
     fi
@@ -1428,7 +1450,8 @@ EOF
     cat > /etc/rc.d/pfguard <<'EOF'
 #!/bin/ksh
 daemon="/usr/local/bin/pf-guard.sh"
-. /etc/rc.d/rc.subr
+.
+<!-- TODO: Break into shorter sentences (257 words > 15) --> /etc/rc.d/rc.subr
 rc_cmd $1
 EOF
     chmod +x /etc/rc.d/pfguard
@@ -1468,14 +1491,16 @@ deploy_applications() {
     # Create application users
     apps=(brgen amber pubattorney bsdports hjerterom privcam blognet ai3)
     for app in "${apps[@]}"; do
-        if ! id "$app" > /dev/null 2>&1; then
+        if !
+<!-- TODO: Break into shorter sentences (135 words > 15) --> id "$app" > /dev/null 2>&1; then
             useradd -m -s /bin/ksh -L "$app" "$app"
             log "Created user: $app"
         fi
     done
     
     # Deploy AI³ system
-    if [ ! -d "/home/ai3/ai3" ]; then
+    if [ !
+<!-- TODO: Break into shorter sentences (26 words > 15) --> -d "/home/ai3/ai3" ]; then
         doas -u ai3 git clone https://github.com/ai3-system/ai3.git /home/ai3/ai3
         cd /home/ai3/ai3
         doas -u ai3 bundle install --deployment
@@ -1484,7 +1509,8 @@ deploy_applications() {
     
     # Deploy Rails applications
     for app in brgen amber pubattorney bsdports hjerterom privcam blognet; do
-        if [ ! -d "/home/${app}/app" ]; then
+        if [ !
+<!-- TODO: Break into shorter sentences (42 words > 15) --> -d "/home/${app}/app" ]; then
             doas -u "$app" rails new "/home/${app}/app" -d postgresql --skip-test
             log "Rails app created: $app"
         fi
@@ -1515,8 +1541,7 @@ finalize_setup() {
     # Send deployment notification
     cat <<EOF | mail -s "Production Deployment Completed - $(hostname)" "$ADMIN_EMAIL"
 Production deployment completed successfully.
-
-Server: $(hostname)
+<!-- TODO: Break into shorter sentences (106 words > 15) --> Server: $(hostname)
 Completion Time: $(date)
 OpenBSD Version: $(uname -r)
 
@@ -1524,7 +1549,8 @@ Services Status:
 $(rcctl ls on)
 
 Next Steps:
-1. Configure domain DNS records
+1.
+<!-- TODO: Break into shorter sentences (17 words > 15) --> Configure domain DNS records
 2. Request SSL certificates: /usr/local/bin/cert-renewal.sh renew brgen.no
 3. Deploy application code
 4. Set up monitoring dashboards
@@ -1560,9 +1586,9 @@ main "$@"
 
 ## Conclusion
 
-This FINAL_OPENBSD_INFRASTRUCTURE.md document provides a comprehensive, production-ready OpenBSD infrastructure framework designed for security, performance, and reliability. The architecture incorporates defense-in-depth security principles, automated certificate management, sophisticated monitoring, and robust disaster recovery capabilities.
-
-**Key Security Features:**
+This FINAL_OPENBSD_INFRASTRUCTURE.md document provides a comprehensive, production-ready OpenBSD infrastructure framework designed for security, performance, and reliability.
+<!-- TODO: Break into shorter sentences (77 words > 15) --> The architecture incorporates defense-in-depth security principles, automated certificate management, sophisticated monitoring, and robust disaster recovery capabilities.
+<!-- TODO: Break into shorter sentences (16 words > 15) --> **Key Security Features:**
 - Advanced pf firewall with DDoS protection and geolocation filtering
 - Pledge/unveil security restrictions for all services
 - Automated intrusion detection and response
@@ -1587,7 +1613,8 @@ This FINAL_OPENBSD_INFRASTRUCTURE.md document provides a comprehensive, producti
 - Proactive maintenance and health checking
 
 **Next Steps for Production Deployment:**
-1. Execute the production deployment script on OpenBSD 7.8+
+1.
+<!-- TODO: Break into shorter sentences (116 words > 15) --> Execute the production deployment script on OpenBSD 7.8+
 2. Configure DNS records for all domains
 3. Request and install SSL certificates for all domains
 4. Deploy application code using the Rails ecosystem
@@ -1597,3 +1624,4 @@ This FINAL_OPENBSD_INFRASTRUCTURE.md document provides a comprehensive, producti
 8. Implement performance monitoring dashboards
 
 This infrastructure is designed to scale horizontally and support the complete AI³ system, Rails applications, and business platforms with enterprise-grade reliability and security.
+<!-- TODO: Break into shorter sentences (27 words > 15) -->

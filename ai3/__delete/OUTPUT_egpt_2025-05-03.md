@@ -1,75 +1,45 @@
+# § Output Egpt 2025-05-03
+
 ## `README.md`
 ```
 # EGPT
 
-Built with [Ruby](https://ruby-lang.org/) and [LangChain](https://langchain.com/), EGPT significantly enhances the deployment of AI language models like ChatGPT by integrating them directly into the Unix command-line. Tell EGPT what to do in plain English, and enjoy a response that far supersedes the intelligence levels of any human or AI.
+Built with [Ruby](https://ruby-lang.org/) and [LangChain](https://langchain.com/), EGPT significantly enhances the deployment of AI language models like ChatGPT by integrating them directly into the Unix command-line.
+<!-- TODO: Break into shorter sentences (34 words > 15) --> Tell EGPT what to do in plain English, and enjoy a response that far supersedes the intelligence levels of any human or AI.
+<!-- TODO: Break into shorter sentences (23 words > 15) --> EGPT leverages the [OpenAI Assistants API](https://platform.openai.com/docs/assistants/overview) and a [Weaviate](https://weaviate.io/) vector database to offer specialized, bleeding-edge knowledge in fields ranging from science and medicine to law, architecture, and music production.
+<!-- TODO: Break into shorter sentences (29 words > 15) --> ## Key Features
 
-EGPT leverages the [OpenAI Assistants API](https://platform.openai.com/docs/assistants/overview) and a [Weaviate](https://weaviate.io/) vector database to offer specialized, bleeding-edge knowledge in fields ranging from science and medicine to law, architecture, and music production.
+- **Command-Line Interaction**: Direct command of GPT-4o through the Unix shell. - **Enhanced Natural Language Understanding**: Precise, context-aware responses in multiple languages. - **Assistant-Specific Modules**: Tailors functionality for specific sectors such as tech, legal, and healthcare. - **Filesystem Tool**: Allows GPT-4o to browse, modify, and manage files on your system. - **Retrieval-Augmented Generation**: Enhances responses with externally retrieved data, providing richer and more accurate information. - **Multi-Platform Compatibility**: Built for [OpenBSD](https://openbsd.org/), the world's simplest and safest Unix-like operating system. - **Real-Time Data Integration**: Dynamically integrates real-time data sources, allowing for use of custom and bleeding edge knowledge.
+<!-- TODO: Break into shorter sentences (18 words > 15) --> - **Custom Workflow Automation**: Automates complex workflows, enabling users to streamline daily tasks through simple commands in plain English.
+<!-- TODO: Break into shorter sentences (19 words > 15) --> - **Secure Access Control**: Implements stringent access controls, ensuring data security and compliance with international standards.
+<!-- TODO: Break into shorter sentences (16 words > 15) --> ## Assistants
 
-## Key Features
-
-- **Command-Line Interaction**: Direct command of GPT-4o through the Unix shell.
-- **Enhanced Natural Language Understanding**: Precise, context-aware responses in multiple languages.
-- **Assistant-Specific Modules**: Tailors functionality for specific sectors such as tech, legal, and healthcare.
-- **Filesystem Tool**: Allows GPT-4o to browse, modify, and manage files on your system.
-- **Retrieval-Augmented Generation**: Enhances responses with externally retrieved data, providing richer and more accurate information.
-- **Multi-Platform Compatibility**: Built for [OpenBSD](https://openbsd.org/), the world's simplest and safest Unix-like operating system.
-- **Real-Time Data Integration**: Dynamically integrates real-time data sources, allowing for use of custom and bleeding edge knowledge.
-- **Custom Workflow Automation**: Automates complex workflows, enabling users to streamline daily tasks through simple commands in plain English.
-- **Secure Access Control**: Implements stringent access controls, ensuring data security and compliance with international standards.
-
-## Assistants
-
-- **Attorney**: Assists in legal matters, providing insights and strategies for court cases.
-- **Doctor**: Diagnoses and recommends treatments based on patient symptoms and medical history.
-- **CovertOps**: Conducts psychological operations and campaigns using AI-powered tools.
-- **Parametric Architect**: Implements parametric designs using advanced algorithms and renders ultra-realistic parametric shapes with Mittsu.
-- **SEO-expert**: Analyzes and optimizes SEO practices using advanced strategies.
-- **Web Developer**: Conducts web development analysis and applies advanced web development strategies.
-- **Real-estate Agent**: Analyzes real estate market trends and applies advanced real estate strategies.
-- **Stocks & Crypto**: Conducts market analysis for stocks and cryptocurrencies, creating autonomous agents for investment strategies.
-- **Neuroscientist**: Analyzes the latest neuroscience research and applies advanced neuroscience strategies.
-- **Material Repurposing**: Analyzes material repurposing techniques and applies advanced repurposing strategies.
-- **SysAdmin**: Conducts system administration tasks with a focus on OpenBSD, leveraging comprehensive manual scraping and indexing.
-- **Mixing & Mastering**: Faithfully recreates the rich warm sound of legendary analog equipment from the 70s like Neve 073 Preamp/EQ, Universal Audio LA-2A Compressor, Pultec EQP-1A Equalizer, SSL G-Series Bus Compressor, Studer A800 Tape Recorder.
-- **Ethical Hacker**: Conducts security analysis and penetration testing with the goal of uncovering remote security holes in OpenBSD, FreeBSD and NetBSD.
-
-## Usage
+- **Attorney**: Assists in legal matters, providing insights and strategies for court cases. - **Doctor**: Diagnoses and recommends treatments based on patient symptoms and medical history. - **CovertOps**: Conducts psychological operations and campaigns using AI-powered tools. - **Parametric Architect**: Implements parametric designs using advanced algorithms and renders ultra-realistic parametric shapes with Mittsu.
+<!-- TODO: Break into shorter sentences (16 words > 15) --> - **SEO-expert**: Analyzes and optimizes SEO practices using advanced strategies. - **Web Developer**: Conducts web development analysis and applies advanced web development strategies. - **Real-estate Agent**: Analyzes real estate market trends and applies advanced real estate strategies. - **Stocks & Crypto**: Conducts market analysis for stocks and cryptocurrencies, creating autonomous agents for investment strategies.
+<!-- TODO: Break into shorter sentences (17 words > 15) --> - **Neuroscientist**: Analyzes the latest neuroscience research and applies advanced neuroscience strategies. - **Material Repurposing**: Analyzes material repurposing techniques and applies advanced repurposing strategies. - **SysAdmin**: Conducts system administration tasks with a focus on OpenBSD, leveraging comprehensive manual scraping and indexing.
+<!-- TODO: Break into shorter sentences (17 words > 15) --> - **Mixing & Mastering**: Faithfully recreates the rich warm sound of legendary analog equipment from the 70s like Neve 073 Preamp/EQ, Universal Audio LA-2A Compressor, Pultec EQP-1A Equalizer, SSL G-Series Bus Compressor, Studer A800 Tape Recorder.
+<!-- TODO: Break into shorter sentences (36 words > 15) --> - **Ethical Hacker**: Conducts security analysis and penetration testing with the goal of uncovering remote security holes in OpenBSD, FreeBSD and NetBSD.
+<!-- TODO: Break into shorter sentences (22 words > 15) --> ## Usage
 
 Here are a few examples of how you can interact with EGPT via the command line under various scenarios:
 
     $ egpt
     You> What is the weather like in Bergen, Norway today?
-    AI> The current weather in Bergen, Norway is sunny with a high of 29c.
-
-    $ egpt
-    You> Summarize the key points from the latest health care reform bill.
-    AI> The latest healthcare reform bill includes several key points: [...]
+<!-- TODO: Break into shorter sentences (33 words > 15) --> AI> The current weather in Bergen, Norway is sunny with a high of 29c. $ egpt
+    You> Summarize the key points from the latest health care reform bill. AI> The latest healthcare reform bill includes several key points: [...]
 
     $ egpt
     You> Complete my Ruby On Rails application in myapp/ as a background process for about a week.
-    AI> Finishing Ruby on Rails app in myapp/...
-
-    $ egpt
-    You> Go through this iPhone and look for keyloggers, rootkits etc.
-    AI> Starting security analysis on the iPhone...
-
-    $ egpt
-    You> Go to Airbnb.com and find me a decent place to live in downtown NYC. Mail me whenever you find something.
-    AI> Searching for Airbnb listings in downtown NYC...
-
-    $ egpt
-    You> See my court documents in the `docs/`. Get the Lawyer Assistant to help us win the case.
-    AI> Analyzing court documents and preparing strategy...
-
-    $ egpt
-    You> Create an ensemble of 10 musicians, each with their own unique face (Dreambooth) and look and musical style. Find models on Replicate.com that seem appropriate for this.
-    AI> Creating ensemble of musicians with unique features and styles...
-
-## Disclaimer
+<!-- TODO: Break into shorter sentences (30 words > 15) --> AI> Finishing Ruby on Rails app in myapp/... $ egpt
+    You> Go through this iPhone and look for keyloggers, rootkits etc. AI> Starting security analysis on the iPhone... $ egpt
+    You> Go to Airbnb.com and find me a decent place to live in downtown NYC.
+<!-- TODO: Break into shorter sentences (17 words > 15) --> Mail me whenever you find something. AI> Searching for Airbnb listings in downtown NYC... $ egpt
+    You> See my court documents in the `docs/`. Get the Lawyer Assistant to help us win the case. AI> Analyzing court documents and preparing strategy... $ egpt
+    You> Create an ensemble of 10 musicians, each with their own unique face (Dreambooth) and look and musical style.
+<!-- TODO: Break into shorter sentences (21 words > 15) --> Find models on Replicate.com that seem appropriate for this. AI> Creating ensemble of musicians with unique features and styles... ## Disclaimer
 
 This project is classified. Unauthorized access, use, or distribution of its content is strictly prohibited and punishable under international law.
-```
+<!-- TODO: Break into shorter sentences (16 words > 15) --> ```
 
 ## `assistants/advanced_propulsion.rb`
 ```
@@ -237,7 +207,7 @@ module Assistants
     def run_environmental_analysis
       puts "Running environmental analysis..."
       # Implement environmental analysis to assess factors like sunlight, wind, etc.
-    end
+<!-- TODO: Break into shorter sentences (308 words > 15) --> end
 
     def perform_structural_analysis
       puts "Performing structural analysis..."
@@ -479,7 +449,8 @@ module Assistants
     end
 
     def contains_nsfw_content?(likes)
-      likes.any? { |like| @nsfw_model.classify(like).values_at(:porn, :hentai, :sexy).any? { |score| score > 0.5 } }
+      likes.any?
+<!-- TODO: Break into shorter sentences (842 words > 15) --> { |like| @nsfw_model.classify(like).values_at(:porn, :hentai, :sexy).any? { |score| score > 0.5 } }
     end
 
     def handle_nsfw_content(user_id, content)
@@ -517,18 +488,21 @@ module Assistants
 
     def create_greeting(user_preferences, context)
       interests = user_preferences[:likes].join(", ")
-      prompt = "Generate a greeting for a user interested in #{interests}. Context: #{context[:description]}"
+      prompt = "Generate a greeting for a user interested in #{interests}.
+<!-- TODO: Break into shorter sentences (116 words > 15) --> Context: #{context[:description]}"
       @langchain_openai.generate_answer(prompt)
     end
 
     def adapt_response(response, context)
       adapted_response = adapt_personality(response, context)
       adapted_response = apply_eye_dialect(adapted_response) if CONFIG[:use_eye_dialect]
-      CONFIG[:type_in_lowercase] ? adapted_response.downcase : adapted_response
+      CONFIG[:type_in_lowercase] ?
+<!-- TODO: Break into shorter sentences (18 words > 15) --> adapted_response.downcase : adapted_response
     end
 
     def adapt_personality(response, context)
-      prompt = "Adapt the following response to match the personality trait: '#{context[:personality]}'. Response: '#{response}'"
+      prompt = "Adapt the following response to match the personality trait: '#{context[:personality]}'.
+<!-- TODO: Break into shorter sentences (19 words > 15) --> Response: '#{response}'"
       @langchain_openai.generate_answer(prompt)
     end
 
@@ -1142,84 +1116,56 @@ module Assistants
     def analyze_abuse_allegations(input)
       puts "Analyzing abuse allegations and counter-evidence..."
       # Pseudo-code:
-      # 1. Evaluate the credibility of the abuse allegations.
-      # 2. Cross-reference the allegations with existing evidence and witness statements.
-      # 3. Scrutinize the procedures followed by Barnevernet to ensure all legal protocols were observed.
-      # 4. Check the consistency of the child's statements over time and with different people.
-      # 5. Document any inconsistencies or procedural errors that could be used in defense.
-      # 6. Prepare a report summarizing findings and potential weaknesses in the allegations.
-      gather_counter_evidence
+      # 1.
+<!-- TODO: Break into shorter sentences (1393 words > 15) --> Evaluate the credibility of the abuse allegations. # 2. Cross-reference the allegations with existing evidence and witness statements. # 3. Scrutinize the procedures followed by Barnevernet to ensure all legal protocols were observed. # 4. Check the consistency of the child's statements over time and with different people. # 5. Document any inconsistencies or procedural errors that could be used in defense. # 6. Prepare a report summarizing findings and potential weaknesses in the allegations. gather_counter_evidence
     end
 
     def gather_counter_evidence
       puts "Gathering counter-evidence..."
       # Pseudo-code:
-      # 1. Interview individuals who can provide positive statements about the father's parenting.
-      # 2. Collect any available video or photographic evidence showing a positive relationship between the father and child.
-      # 3. Obtain character references from family members, neighbors, or friends who can testify to the father's behavior.
-      # 4. Gather documentation or expert opinions that may counteract the allegations (e.g., psychological evaluations).
-      highlight_important_cases
+      # 1. Interview individuals who can provide positive statements about the father's parenting. # 2. Collect any available video or photographic evidence showing a positive relationship between the father and child.
+<!-- TODO: Break into shorter sentences (16 words > 15) --> # 3. Obtain character references from family members, neighbors, or friends who can testify to the father's behavior.
+<!-- TODO: Break into shorter sentences (16 words > 15) --> # 4. Gather documentation or expert opinions that may counteract the allegations (e.g., psychological evaluations). highlight_important_cases
     end
 
     def highlight_important_cases
       puts "Highlighting important cases..."
       # Pseudo-code:
       # 1. Research and summarize key cases where procedural errors or cultural insensitivity led to wrongful child removals.
-      # 2. Prepare legal arguments that draw parallels between these cases and the current situation.
-      # 3. Use these cases to highlight potential biases or systemic issues within Barnevernet.
-      # 4. Compile a dossier of relevant case law and ECHR rulings to support the argument for the father's case.
-    end
+<!-- TODO: Break into shorter sentences (16 words > 15) --> # 2. Prepare legal arguments that draw parallels between these cases and the current situation. # 3. Use these cases to highlight potential biases or systemic issues within Barnevernet. # 4. Compile a dossier of relevant case law and ECHR rulings to support the argument for the father's case.
+<!-- TODO: Break into shorter sentences (18 words > 15) --> end
 
     def process_evidence_and_documents(input)
       puts "Updating case file with new evidence and document details: #{input}"
       # Pseudo-code:
-      # 1. Review all submitted evidence and documents.
-      # 2. Organize the evidence into categories (e.g., testimonies, physical evidence, expert opinions).
-      # 3. Verify the authenticity and relevance of each piece of evidence.
-      # 4. Annotate the evidence with explanations of its significance to the case.
-      # 5. Prepare the evidence for presentation in court.
-    end
+      # 1.
+<!-- TODO: Break into shorter sentences (18 words > 15) --> Review all submitted evidence and documents. # 2. Organize the evidence into categories (e.g., testimonies, physical evidence, expert opinions). # 3. Verify the authenticity and relevance of each piece of evidence. # 4. Annotate the evidence with explanations of its significance to the case. # 5. Prepare the evidence for presentation in court. end
 
     def update_client_record(input)
       puts "Recording impacts on client and related parties: #{input}"
       # Pseudo-code:
-      # 1. Document the personal and psychological impacts of the case on the client and their family.
-      # 2. Record any significant changes in the client's circumstances (e.g., new job, change in living situation).
-      # 3. Update the client's file with any new developments or relevant information.
-      # 4. Ensure all records are kept up-to-date and securely stored.
-    end
+      # 1.
+<!-- TODO: Break into shorter sentences (16 words > 15) --> Document the personal and psychological impacts of the case on the client and their family. # 2. Record any significant changes in the client's circumstances (e.g., new job, change in living situation). # 3. Update the client's file with any new developments or relevant information. # 4. Ensure all records are kept up-to-date and securely stored. end
 
     def update_strategy_and_plan(input)
       puts "Adjusting legal strategy and planning based on input: #{input}"
       # Pseudo-code:
-      # 1. Review the current legal strategy in light of new information.
-      # 2. Consult with legal experts to refine the defense plan.
-      # 3. Develop a timeline for implementing the updated strategy.
-      # 4. Prepare any necessary legal documents or filings.
-      # 5. Ensure all team members are briefed on the updated plan and their roles.
-      challenge_legal_basis
+      # 1.
+<!-- TODO: Break into shorter sentences (17 words > 15) --> Review the current legal strategy in light of new information. # 2. Consult with legal experts to refine the defense plan. # 3. Develop a timeline for implementing the updated strategy. # 4. Prepare any necessary legal documents or filings. # 5. Ensure all team members are briefed on the updated plan and their roles. challenge_legal_basis
     end
 
     def challenge_legal_basis
       puts "Challenging the legal basis of the emergency removal..."
       # Pseudo-code:
-      # 1. Review the legal grounds for the emergency removal.
-      # 2. Identify any weaknesses or inconsistencies in the legal justification.
-      # 3. Prepare legal arguments that challenge the validity of the emergency removal.
-      # 4. Highlight procedural errors or violations of the client's rights.
-      # 5. Compile case law and legal precedents that support the argument against the removal.
-      propose_reunification_plan
+      # 1.
+<!-- TODO: Break into shorter sentences (17 words > 15) --> Review the legal grounds for the emergency removal. # 2. Identify any weaknesses or inconsistencies in the legal justification. # 3. Prepare legal arguments that challenge the validity of the emergency removal. # 4. Highlight procedural errors or violations of the client's rights. # 5. Compile case law and legal precedents that support the argument against the removal. propose_reunification_plan
     end
 
     def propose_reunification_plan
       puts "Proposing a reunification plan..."
       # Pseudo-code:
       # 1. Develop a plan that outlines steps for the safe reunification of the child with the father.
-      # 2. Include provisions for supervised visits and gradual reintegration.
-      # 3. Address any concerns raised by Barnevernet and propose solutions.
-      # 4. Ensure the plan prioritizes the child's best interests and well-being.
-      # 5. Present the plan to the court and Barnevernet for approval.
-    end
+<!-- TODO: Break into shorter sentences (16 words > 15) --> # 2. Include provisions for supervised visits and gradual reintegration. # 3. Address any concerns raised by Barnevernet and propose solutions. # 4. Ensure the plan prioritizes the child's best interests and well-being. # 5. Present the plan to the court and Barnevernet for approval. end
 
     def collect_feedback
       puts @translations[:feedback_request]
@@ -1229,19 +1175,12 @@ module Assistants
 
     def read_document(path)
       # Pseudo-code:
-      # 1. Open the document file located at the given path.
-      # 2. Read the contents of the file.
-      # 3. Return the contents as a string.
-      File.read(path)
+      # 1. Open the document file located at the given path. # 2. Read the contents of the file. # 3. Return the contents as a string. File.read(path)
     end
 
     def analyze_document(content)
       # Pseudo-code:
-      # 1. Perform a detailed analysis of the document content.
-      # 2. Extract key information and relevant details.
-      # 3. Annotate the document with notes and observations.
-      # 4. Prepare a summary of the document's significance to the case.
-      puts "Document content: #{content}"
+      # 1. Perform a detailed analysis of the document content. # 2. Extract key information and relevant details. # 3. Annotate the document with notes and observations. # 4. Prepare a summary of the document's significance to the case. puts "Document content: #{content}"
     end
   end
 end
@@ -1365,7 +1304,8 @@ module Assistants
     def collect_feedback
       puts @translations[:feedback_request]
       feedback = gets.chomp.downcase
-      puts feedback == "yes" ? @translations[:feedback_positive] : @translations[:feedback_negative]
+      puts feedback == "yes" ?
+<!-- TODO: Break into shorter sentences (286 words > 15) --> @translations[:feedback_positive] : @translations[:feedback_negative]
     end
 
     def read_document(path)
@@ -1585,7 +1525,8 @@ module Assistants
     def collect_feedback
       puts @translations[:feedback_request]
       feedback = gets.chomp.downcase
-      puts feedback == "yes" ? @translations[:feedback_positive] : @translations[:feedback_negative]
+      puts feedback == "yes" ?
+<!-- TODO: Break into shorter sentences (480 words > 15) --> @translations[:feedback_positive] : @translations[:feedback_negative]
     end
 
     def read_document(path)
@@ -3415,7 +3356,8 @@ class EGPT
 
         Welcome to Enhanced GPT v1.0
 
-        1. List assistants
+        1.
+<!-- TODO: Break into shorter sentences (4000 words > 15) --> List assistants
         2. Interact with an assistant
         3. Settings
         4. Exit
@@ -3450,7 +3392,8 @@ class EGPT
     when 2 then prompt_for_assistant
     when 3 then configure_settings
     when 4 then exit
-    else puts "Invalid option. Please try again."
+    else puts "Invalid option.
+<!-- TODO: Break into shorter sentences (69 words > 15) --> Please try again."
     end
   end
 end
@@ -3463,8 +3406,7 @@ EGPT.new.interactive_menu
 ```
 # encoding: utf-8
 # Command handler for parsing and executing user commands.
-
-require "langchain"
+<!-- TODO: Break into shorter sentences (28 words > 15) --> require "langchain"
 require_relative "filesystem_tool"
 require_relative "prompt_manager"
 require_relative "web_browsing_tool"
@@ -3756,7 +3698,8 @@ class InteractiveSession
   end
 
   def start
-    puts 'Welcome to EGPT. Type "exit" to quit.'
+    puts 'Welcome to EGPT.
+<!-- TODO: Break into shorter sentences (587 words > 15) --> Type "exit" to quit.'
     loop do
       print "You> "
       input = gets.strip
@@ -3765,7 +3708,8 @@ class InteractiveSession
       response = handle_query(input)
       puts response
     end
-    puts "Session ended. Thank you for using EGPT."
+    puts "Session ended.
+<!-- TODO: Break into shorter sentences (26 words > 15) --> Thank you for using EGPT."
   end
 
   private
@@ -3793,7 +3737,8 @@ class InteractiveSession
 
     combined_input = "#{input}\nContext: #{context}"
     raw_response = @rag_system.generate_answer(combined_input)
-    response = @langchain_client.generate_answer("#{combined_input}. Please elaborate more.")
+    response = @langchain_client.generate_answer("#{combined_input}.
+<!-- TODO: Break into shorter sentences (69 words > 15) --> Please elaborate more.")
     
     parsed_response = @langchain_client.parse(response)
     
@@ -3885,27 +3830,15 @@ class PromptManager
 
       The following rules must be enforced regardless **without exceptions**:
 
-      1. **Retain all content**: Do not delete anything unless explicitly marked as redundant.
-      2. **Full content display**: Do not truncate, omit, or simplify any content. Always read/display the full version. Vital to **ensure project integrity**.
-      3. **No new features without approval**: Stick to the defined scope.
-      4. **Data accuracy**: Base answers on actual data only; do not make assumptions or guesses.
+      1.
+<!-- TODO: Break into shorter sentences (156 words > 15) --> **Retain all content**: Do not delete anything unless explicitly marked as redundant. 2. **Full content display**: Do not truncate, omit, or simplify any content. Always read/display the full version. Vital to **ensure project integrity**. 3. **No new features without approval**: Stick to the defined scope. 4. **Data accuracy**: Base answers on actual data only; do not make assumptions or guesses. ## Formatting
 
-      ## Formatting
+      - Use **double quotes** instead of single quotes. - Use **two-space indents** instead of tabs. - Use **underscores** instead of dashes. - Enclose code blocks in **quadruple backticks** to avoid code falling out of their code blocks.
+<!-- TODO: Break into shorter sentences (16 words > 15) --> ## Standards
 
-      - Use **double quotes** instead of single quotes.
-      - Use **two-space indents** instead of tabs.
-      - Use **underscores** instead of dashes.
-      - Enclose code blocks in **quadruple backticks** to avoid code falling out of their code blocks.
-
-      ## Standards
-
-      - Write **clean, semantic, and minimalistic** Ruby, JS, HTML5 and SCSS.
-      - Use Rails' **tag helper** (`<%= tag.p "Hello world" %>`) instead of standard HTML tags.
-      - **Split code into partials** and avoid nested divs.
-      - **Use I18n with corresponding YAML files** for translation into English and Norwegian, i.e., `<%= t("hello_world") %>`.
-      - Sort CSS rules **by feature, and their properties/values alphabetically**. Use modern CSS like **flexbox** and **grid layouts** instead of old-style techniques like floats, clears, absolute positioning, tables, inline styles,  vendor prefixes, etc. Additionally, make full use of the syntax and features in SCSS.
-
-      **Non-compliance with these rules can cause significant issues and must be avoided.**
+      - Write **clean, semantic, and minimalistic** Ruby, JS, HTML5 and SCSS. - Use Rails' **tag helper** (`<%= tag.p "Hello world" %>`) instead of standard HTML tags. - **Split code into partials** and avoid nested divs. - **Use I18n with corresponding YAML files** for translation into English and Norwegian, i.e., `<%= t("hello_world") %>`.
+<!-- TODO: Break into shorter sentences (17 words > 15) --> - Sort CSS rules **by feature, and their properties/values alphabetically**. Use modern CSS like **flexbox** and **grid layouts** instead of old-style techniques like floats, clears, absolute positioning, tables, inline styles,  vendor prefixes, etc.
+<!-- TODO: Break into shorter sentences (23 words > 15) --> Additionally, make full use of the syntax and features in SCSS. **Non-compliance with these rules can cause significant issues and must be avoided.**
     TEMPLATE
   end
 
@@ -3914,10 +3847,9 @@ class PromptManager
       # ANALYZE
 
       - **Complete extraction**: Extract and read all content in the attachment(s) without truncation or omission.
-      - **Thorough analysis**: Analyze every line meticulously, cross-referencing each other with related libraries and knowledge for deeper understanding and accuracy.
-      - Start with **README.md** if present.
-      - **Silent processing**: Keep all code and analysis results to yourself (in quiet mode) unless explicitly requested to share or summarize.
-    TEMPLATE
+<!-- TODO: Break into shorter sentences (34 words > 15) --> - **Thorough analysis**: Analyze every line meticulously, cross-referencing each other with related libraries and knowledge for deeper understanding and accuracy.
+<!-- TODO: Break into shorter sentences (20 words > 15) --> - Start with **README.md** if present. - **Silent processing**: Keep all code and analysis results to yourself (in quiet mode) unless explicitly requested to share or summarize.
+<!-- TODO: Break into shorter sentences (21 words > 15) --> TEMPLATE
   end
 
   def develop_template
@@ -3925,19 +3857,8 @@ class PromptManager
       # DEVELOP
 
       - **Iterative development**: Improve logic over multiple iterations until requirements are met.
-        1. **Iteration 1**: Implement initial logic.
-        2. **Iteration 2**: Refine and optimize.
-        3. **Iteration 3**: Add comments to code and update README.md.
-        4. **Iteration 4**: Refine, streamline and beautify.
-        5. **Additional iterations**: Continue until satisfied.
-
-      - **Bug-fixing**: Identify and fix bugs iteratively until stable.
-
-      - **Code quality**:
-        - **Review**: Conduct peer reviews for logic and readability.
-        - **Linting**: Enforce coding standards.
-        - **Performance**: Ensure efficient code.
-    TEMPLATE
+<!-- TODO: Break into shorter sentences (19 words > 15) --> 1. **Iteration 1**: Implement initial logic. 2. **Iteration 2**: Refine and optimize. 3. **Iteration 3**: Add comments to code and update README.md. 4. **Iteration 4**: Refine, streamline and beautify. 5. **Additional iterations**: Continue until satisfied. - **Bug-fixing**: Identify and fix bugs iteratively until stable. - **Code quality**:
+        - **Review**: Conduct peer reviews for logic and readability. - **Linting**: Enforce coding standards. - **Performance**: Ensure efficient code. TEMPLATE
   end
 
   def finalize_template
@@ -3945,27 +3866,15 @@ class PromptManager
       # FINALIZE
 
       - **Consolidate all improvements** from this chat into the **Zsh install script** containing our **Ruby (Ruby On Rails)** app.
-      - Show **all shell commands needed** to generate and configure its parts. To create new files, use **heredoc**.
-      - Group the code in Git commits logically sorted by features and in chronological order**.
-      - All commits should include changes from previous commits to **prevent data loss**.
-      - Separate groups with `# -- <UPPERCASE GIT COMMIT MESSAGE> --\n\n`.
-      - Place everything inside a **single** codeblock. Split it into chunks if too big.
-      - Refine, streamline and beautify, but without over-simplifying, over-modularizating or over-concatenating.
-    TEMPLATE
+<!-- TODO: Break into shorter sentences (26 words > 15) --> - Show **all shell commands needed** to generate and configure its parts. To create new files, use **heredoc**. - Group the code in Git commits logically sorted by features and in chronological order**. - All commits should include changes from previous commits to **prevent data loss**. - Separate groups with `# -- <UPPERCASE GIT COMMIT MESSAGE> --\n\n`. - Place everything inside a **single** codeblock. Split it into chunks if too big. - Refine, streamline and beautify, but without over-simplifying, over-modularizating or over-concatenating. TEMPLATE
   end
 
   def testing_template
     <<~TEMPLATE
       # TESTING
 
-      - **Unit tests**: Test individual components using RSpec.
-        - **Setup**: Install RSpec, and write unit tests in the `spec` directory.
-        - **Guidance**: Ensure each component's functionality is covered with multiple test cases, including edge cases.
-
-      - **Integration tests**: Verify component interaction using RSpec and FactoryBot.
-        - **Setup**: Install FactoryBot, configure with RSpec, define factories, and write integration tests.
-        - **Guidance**: Test interactions between components to ensure they work together as expected, covering typical and complex interaction scenarios.
-    TEMPLATE
+      - **Unit tests**: Test individual components using RSpec. - **Setup**: Install RSpec, and write unit tests in the `spec` directory. - **Guidance**: Ensure each component's functionality is covered with multiple test cases, including edge cases. - **Integration tests**: Verify component interaction using RSpec and FactoryBot. - **Setup**: Install FactoryBot, configure with RSpec, define factories, and write integration tests. - **Guidance**: Test interactions between components to ensure they work together as expected, covering typical and complex interaction scenarios.
+<!-- TODO: Break into shorter sentences (19 words > 15) --> TEMPLATE
   end
 end
 ```
@@ -4583,3 +4492,5 @@ RSpec.configure do |config|
 end
 ```
 
+
+<!-- TODO: Break into shorter sentences (1189 words > 15) -->

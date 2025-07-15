@@ -1,3 +1,5 @@
+# § Contractors
+
 - **Borregaard ASA**  
   [borregaard.com](https://www.borregaard.com)  
   *Chemicals Provided:* Renewable biochemicals, cellulose derivatives, amino acids
@@ -37,3 +39,5 @@
 - **Sintef Chemicals**  
   [sintef.no](https://www.sintef.no)  
   *Chemicals Provided:* Research-grade chemicals
+
+<!-- TODO: Break into shorter sentences (106 words > 15) -->

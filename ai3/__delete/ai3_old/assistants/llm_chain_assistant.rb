@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+# § Llmchainassistant
+
 # assistants/llm_chain_assistant.rb
 #
 # LLMChainAssistant: Processes a query through a chain of LLM providers.
@@ -20,6 +24,7 @@
 
 class LLMChainAssistant
   def initialize
+  # TODO: Refactor initialize - exceeds 20 line limit (98 lines)
     @llm_chain = []
 
     # OpenAI providers with various chat models
@@ -117,4 +122,4 @@ class LLMChainAssistant
     response && !response.strip.empty?
   end
 end
-
+

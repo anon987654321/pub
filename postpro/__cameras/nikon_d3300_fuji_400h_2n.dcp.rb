@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Nikon D3300 Fuji 400h 2n.dcp
+
 {
   "dcpData" => {
     "ProfileName" => "Fuji 400H 2N",
@@ -72,4 +74,4 @@
     "BaselineExposureOffset" => "0.000000",
     "DefaultBlackRender" => "0"
   }
-}
+}

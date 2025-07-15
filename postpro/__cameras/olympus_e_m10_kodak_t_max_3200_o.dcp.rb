@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Olympus E M10 Kodak T Max 3200 O.dcp
+
 {
   "dcpData" => {
     "ProfileName" => "Kodak T-MAX 3200 O",

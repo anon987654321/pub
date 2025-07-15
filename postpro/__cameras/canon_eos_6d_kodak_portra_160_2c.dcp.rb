@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Canon Eos 6d Kodak Portra 160 2c.dcp
+
 {
   'dcpData' => {
     'ProfileName' => 'Kodak Portra 160 2C',
@@ -69,4 +71,4 @@
     'BaselineExposureOffset' => '-0.250000',
     'DefaultBlackRender' => '1'
   }
-}
+}

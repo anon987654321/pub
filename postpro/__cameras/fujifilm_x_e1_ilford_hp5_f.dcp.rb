@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Fujifilm X E1 Ilford Hp5 F.dcp
+
 {
   "dcpData" => {
     "ProfileName" => "Ilford HP5 F",
@@ -72,4 +74,4 @@
     "BaselineExposureOffset" => "0.000000",
     "DefaultBlackRender" => "0"
   }
-}
+}

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Canon Eos 1d Mark Iv Ilford Hp5 2c.dcp
+
 {
   'dcpData' => {
     'ProfileName' => 'Ilford HP5 2C',
@@ -66,4 +68,4 @@
     'BaselineExposureOffset' => '0.000000',
     'DefaultBlackRender' => '0'
   }
-}
+}

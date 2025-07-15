@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Olympus E M5 Mark Ii Kodak Tri X 400 Plus O.dcp
+
 {
   "dcpData" => {
     "ProfileName" => "Kodak TRI-X 400 + O",

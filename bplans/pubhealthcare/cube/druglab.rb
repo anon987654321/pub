@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+# § To
+
 #!/usr/bin/env zsh
 
 # --- INITIALIZE REPOSITORY ---
@@ -37,110 +41,116 @@ class LabEquipmentController
   API_ENDPOINT = "http://localhost:3000/api/equipment"
 
   def initialize
-    @uri = URI.parse(API_ENDPOINT)  # Parses the API endpoint into a URI object
-  end
-
-  # Sends commands to the laboratory equipment via API
-  def send_command(action, parameters)
-    request = Net::HTTP::Post.new(@uri, "Content-Type" => "application/json")
-    request.body = { action: action, parameters: parameters }.to_json
-
-    response = Net::HTTP.start(@uri.hostname, @uri.port) do |http|
-      http.request(request)
+  begin
+    # TODO: Refactor initialize - exceeds 20 line limit (107 lines)
+      @uri = URI.parse(API_ENDPOINT)  # Parses the API endpoint into a URI object
     end
-
-    puts "Response: #{response.body}"
-  end
-
-  # Helper method to add reagents to the reaction mixture
-  def add_reagent(name, volume)
-    send_command("add_reagent", { name: name, volume: volume })
-  end
-
-  # Helper method to set the temperature of the reaction
-  def set_temperature(temp, duration)
-    send_command("set_temperature", { temp: temp, duration: duration })
-  end
-
-  # Helper method to stir the mixture at a specified speed and duration
-  def stir(speed, duration)
-    send_command("stir", { speed: speed, duration: duration })
-  end
-
-  # Helper method to cool down the reaction mixture to a specified temperature
-  def cool_down(temp)
-    send_command("cool_down", { temp: temp })
-  end
-
-  # Master method to initiate synthesis based on the drug name
-  def synthesize_drug(drug_name)
-    case drug_name
-    when "DMT"
-      perform_dmt_synthesis
-    when "5-MeO-DMT"
-      perform_5meo_dmt_synthesis
-    when "Dexamphetamine"
-      perform_dexamphetamine_synthesis
-    when "MDMA"
-      perform_mdma_synthesis
-    when "LSD"
-      perform_lsd_synthesis
-    else
-      puts "Drug synthesis process for #{drug_name} is not defined."
+  
+    # Sends commands to the laboratory equipment via API
+    def send_command(action, parameters)
+      request = Net::HTTP::Post.new(@uri, "Content-Type" => "application/json")
+      request.body = { action: action, parameters: parameters }.to_json
+  
+      response = Net::HTTP.start(@uri.hostname, @uri.port) do |http|
+        http.request(request)
+      end
+  
+      puts "Response: #{response.body}"
     end
-  end
-
-  private
-
-  # Specific synthesis steps for DMT
-  def perform_dmt_synthesis
-    add_reagent("Indole", "10g")
-    add_reagent("Oxalyl chloride", "15g")
-    set_temperature("80C", "30min")
-    stir("300rpm", "30min")
-    add_reagent("Dimethylamine", "20g")
-    set_temperature("room_temperature", "12h")
-  end
-
-  # Specific synthesis steps for 5-MeO-DMT
-  def perform_5meo_dmt_synthesis
-    add_reagent("5-Methoxytryptamine", "5g")
-    add_reagent("Methyl iodide", "10g")
-    set_temperature("50C", "2h")
-    stir("250rpm", "2h")
-    cool_down("room_temperature")
-  end
-
-  # Specific synthesis steps for Dexamphetamine
-  def perform_dexamphetamine_synthesis
-    add_reagent("Phenylacetone", "20g")
-    add_reagent("Ammonium formate", "30g")
-    set_temperature("100C", "1h")
-    stir("400rpm", "1h")
-    cool_down("room_temperature")
-  end
-
-  # Specific synthesis steps for MDMA
-  def perform_mdma_synthesis
-    add_reagent("Safrole", "25g")
-    add_reagent("Hydrochloric acid", "20g")
-    add_reagent("Formaldehyde", "15g")
-    set_temperature("65C", "3h")
-    stir("350rpm", "3h")
-    cool_down("room_temperature")
-  end
-
-  # Specific synthesis steps for LSD
-  def perform_lsd_synthesis
-    add_reagent("Ergot alkaloids", "5g")
-    add_reagent("Hydrazine", "10ml")
-    set_temperature("95C", "2h")
-    stir("200rpm", "2h")
-    cool_down("room_temperature")
-    add_reagent("Diethylamine", "5ml")
-    set_temperature("50C", "1h")
-    cool_down("room_temperature")
-    puts "LSD synthesis completed. Please verify with chromatography."
+  
+    # Helper method to add reagents to the reaction mixture
+    def add_reagent(name, volume)
+      send_command("add_reagent", { name: name, volume: volume })
+    end
+  
+    # Helper method to set the temperature of the reaction
+    def set_temperature(temp, duration)
+      send_command("set_temperature", { temp: temp, duration: duration })
+    end
+  
+    # Helper method to stir the mixture at a specified speed and duration
+    def stir(speed, duration)
+      send_command("stir", { speed: speed, duration: duration })
+    end
+  
+    # Helper method to cool down the reaction mixture to a specified temperature
+    def cool_down(temp)
+      send_command("cool_down", { temp: temp })
+    end
+  
+    # Master method to initiate synthesis based on the drug name
+    def synthesize_drug(drug_name)
+      case drug_name
+      when "DMT"
+        perform_dmt_synthesis
+      when "5-MeO-DMT"
+        perform_5meo_dmt_synthesis
+      when "Dexamphetamine"
+        perform_dexamphetamine_synthesis
+      when "MDMA"
+        perform_mdma_synthesis
+      when "LSD"
+        perform_lsd_synthesis
+      else
+        puts "Drug synthesis process for #{drug_name} is not defined."
+      end
+    end
+  
+    private
+  
+    # Specific synthesis steps for DMT
+    def perform_dmt_synthesis
+      add_reagent("Indole", "10g")
+      add_reagent("Oxalyl chloride", "15g")
+      set_temperature("80C", "30min")
+      stir("300rpm", "30min")
+      add_reagent("Dimethylamine", "20g")
+      set_temperature("room_temperature", "12h")
+    end
+  
+    # Specific synthesis steps for 5-MeO-DMT
+    def perform_5meo_dmt_synthesis
+      add_reagent("5-Methoxytryptamine", "5g")
+      add_reagent("Methyl iodide", "10g")
+      set_temperature("50C", "2h")
+      stir("250rpm", "2h")
+      cool_down("room_temperature")
+    end
+  
+    # Specific synthesis steps for Dexamphetamine
+    def perform_dexamphetamine_synthesis
+      add_reagent("Phenylacetone", "20g")
+      add_reagent("Ammonium formate", "30g")
+      set_temperature("100C", "1h")
+      stir("400rpm", "1h")
+      cool_down("room_temperature")
+    end
+  
+    # Specific synthesis steps for MDMA
+    def perform_mdma_synthesis
+      add_reagent("Safrole", "25g")
+      add_reagent("Hydrochloric acid", "20g")
+      add_reagent("Formaldehyde", "15g")
+      set_temperature("65C", "3h")
+      stir("350rpm", "3h")
+      cool_down("room_temperature")
+    end
+  
+    # Specific synthesis steps for LSD
+    def perform_lsd_synthesis
+      add_reagent("Ergot alkaloids", "5g")
+      add_reagent("Hydrazine", "10ml")
+      set_temperature("95C", "2h")
+      stir("200rpm", "2h")
+      cool_down("room_temperature")
+      add_reagent("Diethylamine", "5ml")
+      set_temperature("50C", "1h")
+      cool_down("room_temperature")
+      puts "LSD synthesis completed. Please verify with chromatography."
+    end
+  rescue StandardError => e
+    # TODO: Add proper error handling
+    raise e
   end
 end
 
@@ -165,4 +175,4 @@ git commit -m "Create Lab Equipment Controller Script"
 
 # This section is to ensure that all changes are committed and pushed to the remote repository.
 git add .
-git commit -m "Finalize all changes"
+git commit -m "Finalize all changes"

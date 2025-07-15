@@ -1,17 +1,15 @@
+# § Readme
+
 # brgen
 
 ### brgen.no, oshlo.no, trndheim.no, stvanger.no, trmso.no, longyearbyn.no, reykjavk.is, kobenhvn.dk, stholm.se, gtebrg.se, mlmoe.se, hlsinki.fi, lndon.uk, cardff.uk, mnchester.uk, brmingham.uk, lverpool.uk, edinbrgh.uk, glasgw.uk, amstrdam.nl, rottrdam.nl, utrcht.nl, brssels.be, zrich.ch, lchtenstein.li, frankfrt.de, wrsawa.pl, gdnsk.pl, brdeaux.fr, mrseille.fr, mlan.it, lsbon.pt, lsangeles.com, newyrk.us, chcago.us, houstn.us, dllas.us, austn.us, prtland.com, mnneapolis.com
+<!-- TODO: Fix heading hierarchy - level 3 after level 1 -->
 
-**Brgen** redefines the concept of a social network, leveraging AI to create a hyper-localized platform tailored to major cities around the globe. More than just a social hub, Brgen seamlessly integrates multiple sub-applications, including:
+**Brgen** redefines the concept of a social network, leveraging AI to create a hyper-localized platform tailored to major cities around the globe.
+<!-- TODO: Break into shorter sentences (68 words > 15) --> More than just a social hub, Brgen seamlessly integrates multiple sub-applications, including:
 
 - **Online Marketplace**: A platform for local buying and selling.
-- **Dating Service**: A hyper-localized dating experience.
-- **Music Sharing Platform**: Share, discover, and collaborate on music.
-- **Record Label**: Promote local talent.
-- **Television Channel**: Hyper-local TV content tailored to each city.
-- **Street Food Delivery**: Connect with local street food vendors.
-
-### Cities Supported
+<!-- TODO: Break into shorter sentences (22 words > 15) --> - **Dating Service**: A hyper-localized dating experience. - **Music Sharing Platform**: Share, discover, and collaborate on music. - **Record Label**: Promote local talent. - **Television Channel**: Hyper-local TV content tailored to each city. - **Street Food Delivery**: Connect with local street food vendors. ### Cities Supported
 
 Brgen operates in a growing list of major cities, including:
 
@@ -51,21 +49,15 @@ Brgen operates in a growing list of major cities, including:
   - **Minnesota**: Minneapolis (mnneapolis.com)
 
 ### Monetization Strategies
+<!-- TODO: Fix heading hierarchy - level 3 after level 1 -->
 
 Brgen harnesses sophisticated monetization strategies, including:
 
 - **SEO Strategies**: Leveraging search engine optimization for visibility.
-- **Pay-per-click Advertising**: Generating revenue through targeted ads.
-- **Affiliate Marketing**: Partnering with local and global brands.
-- **Subscription Models**: Offering premium features for users.
+<!-- TODO: Break into shorter sentences (174 words > 15) --> - **Pay-per-click Advertising**: Generating revenue through targeted ads. - **Affiliate Marketing**: Partnering with local and global brands. - **Subscription Models**: Offering premium features for users. ### Key Features
 
-### Key Features
+- **Hyper-localized Content**: Custom content for each city. - **AI-driven Insights**: Personalized user experience using advanced AI models. - **Integrated Services**: All services are tightly integrated, providing a seamless user experience. ### Summary
 
-- **Hyper-localized Content**: Custom content for each city.
-- **AI-driven Insights**: Personalized user experience using advanced AI models.
-- **Integrated Services**: All services are tightly integrated, providing a seamless user experience.
-
-### Summary
-
-Brgen is designed to bring communities together, making each city feel like a closely-knit hub. It leverages AI and innovative monetization strategies to support local businesses and provide a unique social experience.
-
+Brgen is designed to bring communities together, making each city feel like a closely-knit hub.
+<!-- TODO: Break into shorter sentences (17 words > 15) --> It leverages AI and innovative monetization strategies to support local businesses and provide a unique social experience.
+<!-- TODO: Break into shorter sentences (17 words > 15) -->

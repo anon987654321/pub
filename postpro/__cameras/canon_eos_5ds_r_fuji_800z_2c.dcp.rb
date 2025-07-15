@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Canon Eos 5ds R Fuji 800z 2c.dcp
+
 {
   'dcpData' => {
     'ProfileName' => 'Fuji 800Z 2C',
@@ -72,4 +74,4 @@
     'BaselineExposureOffset' => '-0.170000',
     'DefaultBlackRender' => '1'
   }
-}
+}

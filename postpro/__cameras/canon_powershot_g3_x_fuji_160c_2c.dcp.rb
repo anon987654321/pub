@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Canon Powershot G3 X Fuji 160c 2c.dcp
+
 {
   'dcpData' => {
     'ProfileName' => 'Fuji 160C 2C',
@@ -72,4 +74,4 @@
     'BaselineExposureOffset' => '-0.050000',
     'DefaultBlackRender' => '1'
   }
-}
+}

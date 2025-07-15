@@ -7,12 +7,15 @@ require 'digest'
 require 'securerandom'
 require 'json'
 
+# § Enhancedsessionmanager
+
 # Enhanced Session Manager with Cognitive Load Awareness
 # Implements LRU eviction with 7±2 working memory principles
 class EnhancedSessionManager
   attr_accessor :sessions, :max_sessions, :eviction_strategy, :cognitive_monitor
 
   def initialize(max_sessions: 10, eviction_strategy: :cognitive_load_aware)
+  # TODO: Refactor initialize - exceeds 20 line limit (356 lines)
     @sessions = {}
     @max_sessions = max_sessions
     @eviction_strategy = eviction_strategy

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Querycache
+
 # Query Cache - Advanced LRU TTL cache system migrated from ai3_old
 # Manages caching of user queries and their responses with cognitive optimization
 
@@ -15,6 +17,7 @@ class QueryCache
   attr_reader :cache, :logger
 
   def initialize(ttl: 3600, max_size: 100)
+  # TODO: Refactor initialize - exceeds 20 line limit (107 lines)
     if defined?(LruRedux)
       @cache = LruRedux::TTL::Cache.new(max_size, ttl)
     else

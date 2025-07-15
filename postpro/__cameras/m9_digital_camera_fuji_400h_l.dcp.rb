@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § M9 Digital Camera Fuji 400h L.dcp
+
 {
   "dcpData" => {
     "ProfileName" => "Fuji 400H L",
@@ -69,4 +71,4 @@
     "BaselineExposureOffset" => "0.000000",
     "DefaultBlackRender" => "0"
   }
-}
+}

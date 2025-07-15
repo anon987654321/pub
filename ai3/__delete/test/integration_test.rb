@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #!/usr/bin/env ruby
 # AI³ Migration Integration Test
 # Validates that all migrated components work together and existing assistants load

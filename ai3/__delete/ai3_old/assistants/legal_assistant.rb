@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+
+# § Legalassistant
 
 class LegalAssistant
   def initialize
@@ -19,4 +23,4 @@ class LegalAssistant
   rescue => e
     puts "Error: Could not draft the document. Details: #{e.message}"
   end
-end
+end

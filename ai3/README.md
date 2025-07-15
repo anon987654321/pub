@@ -1,19 +1,10 @@
+# § Readme
+
 AI^3 CLI
-AI^3 is a modular command-line interface (CLI) built in Ruby, leveraging LangChain.rb for multi-LLM integration, retrieval-augmented generation (RAG), and role-specific assistants. It runs on OpenBSD with secure execution (pledge/unveil) and supports Ruby 3.2+.
-Features
+AI^3 is a modular command-line interface (CLI) built in Ruby, leveraging LangChain.rb for multi-LLM integration, retrieval-augmented generation (RAG), and role-specific assistants.
+<!-- TODO: Break into shorter sentences (26 words > 15) --> It runs on OpenBSD with secure execution (pledge/unveil) and supports Ruby 3.2+. Features
 
-Interactive CLI: Launch with ruby ai3.rb for a TTY-based interface.
-Multi-LLM Support: Integrates with Grok, Claude, OpenAI, and Ollama.
-RAG: Uses Weaviate for context-aware responses.
-15 Assistants: Specialized roles (e.g., General, Lawyer, Hacker, Medical).
-UniversalScraper: Ferrum-based scraper with page source and screenshots.
-Multimedia: Manages Replicate.com AI models for TV/news broadcasting.
-FileUtils: Grants LLMs command-line access, including root via doas.
-Security: OpenBSD pledge/unveil, encrypted sessions.
-Localization: Supports multiple languages via I18n.
-Caching: Stores LLM responses, scraped data, and multimedia outputs.
-
-Installation
+Interactive CLI: Launch with ruby ai3.rb for a TTY-based interface. Multi-LLM Support: Integrates with Grok, Claude, OpenAI, and Ollama. RAG: Uses Weaviate for context-aware responses. 15 Assistants: Specialized roles (e.g., General, Lawyer, Hacker, Medical). UniversalScraper: Ferrum-based scraper with page source and screenshots. Multimedia: Manages Replicate.com AI models for TV/news broadcasting. FileUtils: Grants LLMs command-line access, including root via doas. Security: OpenBSD pledge/unveil, encrypted sessions. Localization: Supports multiple languages via I18n. Caching: Stores LLM responses, scraped data, and multimedia outputs. Installation
 Prerequisites
 
 OpenBSD (required for pledge/unveil and doas)
@@ -32,19 +23,10 @@ Run the core installation script:./install.sh
 
 
 Installs Ruby gems via Gemfile.
-Prompts for API keys (stored in ~/.ai3_keys).
-Sets ai3.rb as executable.
+<!-- TODO: Break into shorter sentences (45 words > 15) --> Prompts for API keys (stored in ~/.ai3_keys). Sets ai3.rb as executable. Install assistants:./install_ass.sh
 
 
-Install assistants:./install_ass.sh
-
-
-Generates 15 assistant Ruby files in assistants/.
-Configures config.yml and en.yml.
-
-
-
-Post-Installation
+Generates 15 assistant Ruby files in assistants/. Configures config.yml and en.yml. Post-Installation
 
 Run the CLI:ruby ai3.rb
 
@@ -53,14 +35,7 @@ Run the CLI:ruby ai3.rb
 Usage
 Launch the interactive CLI with ruby ai3.rb. Available commands:
 
-chat <query>: Chat with an assistant (e.g., chat What is AI?).
-task <name> [args]: Run a task (e.g., task analyze_market Bitcoin).
-rag <query>: Perform a RAG query (e.g., rag Norwegian laws).
-list: List available assistants.
-help: Show help.
-exit: Exit the CLI.
-
-Assistants
+chat <query>: Chat with an assistant (e.g., chat What is AI?). task <name> [args]: Run a task (e.g., task analyze_market Bitcoin). rag <query>: Perform a RAG query (e.g., rag Norwegian laws). list: List available assistants. help: Show help. exit: Exit the CLI. Assistants
 
 
 
@@ -153,26 +128,11 @@ chat Translate Linux driver
 Advanced Features
 
 UniversalScraper: Uses Ferrum to scrape web content, capturing page source and screenshots to determine depth.
-Multimedia: Combines Replicate.com’s AI models for TV/news broadcasting (e.g., real-time visuals, automated scripts).
-FileUtils: Allows LLMs to:
-Execute system commands (e.g., doas su for root access).
-Browse the internet via UniversalScraper.
-Complete projects (e.g., generate code, manage files).
-Speculative: Orchestrate 3D printing of exoskeletons.
-
-
-
-Configuration
+<!-- TODO: Break into shorter sentences (139 words > 15) --> Multimedia: Combines Replicate.com’s AI models for TV/news broadcasting (e.g., real-time visuals, automated scripts). FileUtils: Allows LLMs to:
+Execute system commands (e.g., doas su for root access). Browse the internet via UniversalScraper. Complete projects (e.g., generate code, manage files). Speculative: Orchestrate 3D printing of exoskeletons. Configuration
 Edit config.yml to customize:
 
-LLM Settings: Primary/secondary LLMs, temperature, max tokens.
-RAG: Weaviate host, index name, sources.
-Scraper: Max depth, timeout, screenshot directory.
-Multimedia: Model cache, output directory.
-FileUtils: Root access, command timeout, max file size.
-Assistants: Tools, URLs, default goals.
-
-Example:
+LLM Settings: Primary/secondary LLMs, temperature, max tokens. RAG: Weaviate host, index name, sources. Scraper: Max depth, timeout, screenshot directory. Multimedia: Model cache, output directory. FileUtils: Root access, command timeout, max file size. Assistants: Tools, URLs, default goals. Example:
 llm:
   primary: "xai"
   temperature: 0.6
@@ -251,22 +211,10 @@ Update config.yml:assistants:
 
 
 Run install_ass.sh to regenerate assistants.
+<!-- TODO: Break into shorter sentences (210 words > 15) --> Security
 
-Security
+OpenBSD: Uses pledge/unveil to restrict system calls and file access. Root Access: Enabled via doas for network diagnostics, system modifications. Encryption: Session data encrypted via SessionManager. Ethics: Input checked for unethical content. Troubleshooting
 
-OpenBSD: Uses pledge/unveil to restrict system calls and file access.
-Root Access: Enabled via doas for network diagnostics, system modifications.
-Encryption: Session data encrypted via SessionManager.
-Ethics: Input checked for unethical content.
-
-Troubleshooting
-
-LLM Errors: Ensure API keys are set in ~/.ai3_keys.
-Weaviate Issues: Verify Weaviate is running at the configured host.
-Scraper Issues: Check Ferrum installation and network connectivity.
-Logs: Check logs/ai3.log for errors.
-
-License
-MIT License. See LICENSE for details.
-Contact
+LLM Errors: Ensure API keys are set in ~/.ai3_keys. Weaviate Issues: Verify Weaviate is running at the configured host. Scraper Issues: Check Ferrum installation and network connectivity. Logs: Check logs/ai3.log for errors. License
+MIT License. See LICENSE for details. Contact
 For support, contact the AI^3 team at support@ai3.example.com.

@@ -1,22 +1,14 @@
+# § Final All Rails Apps
+
 # Rails Apps for OpenBSD 7.7+
 
 Complete Rails applications: `brgen`, `brgen_dating`, `brgen_marketplace`, `brgen_playlist`, `brgen_takeaway`, `brgen_tv`, `amber`, `privcam`, `bsdports`, `hjerterom`, `blognet` on OpenBSD 7.7+, leveraging Hotwire, StimulusReflex, Stimulus Components, and Devise for authentication.
-
-Each app is configured as a Progressive Web App (PWA) with minimalistic views, SCSS targeting direct elements, and anonymous access via `devise-guests`. Deployment uses the existing `openbsd.sh` for DNSSEC, `relayd`, `httpd`, and `acme-client`.
-
-## Overview
+<!-- TODO: Break into shorter sentences (38 words > 15) --> Each app is configured as a Progressive Web App (PWA) with minimalistic views, SCSS targeting direct elements, and anonymous access via `devise-guests`.
+<!-- TODO: Break into shorter sentences (22 words > 15) --> Deployment uses the existing `openbsd.sh` for DNSSEC, `relayd`, `httpd`, and `acme-client`. ## Overview
 
 - **Technology Stack**: Rails 8.0+, Ruby 3.3.0, PostgreSQL, Redis, Hotwire (Turbo, Stimulus), StimulusReflex, Stimulus Components, Devise, `devise-guests`, `omniauth-vipps`, Solid Queue, Solid Cache, Propshaft.
-- **Features**:
-  - Anonymous posting and live chat (`devise-guests`).
-  - Norwegian BankID/Vipps OAuth login (`omniauth-vipps`).
-  - Minimalistic views (semantic HTML, tag helpers, no divitis).
-  - SCSS with direct element targeting (e.g., `article.post`).
-  - PWA with offline caching (service workers).
-  - Competitor-inspired features (e.g., Reddit's communities, Jodel's karma).
-- **Deployment**: OpenBSD 7.7+, with `openbsd.sh` (DNSSEC, `relayd`, `httpd`, `acme-client`).
-
-## Shared Setup (`__shared.sh`)
+<!-- TODO: Break into shorter sentences (25 words > 15) --> - **Features**:
+  - Anonymous posting and live chat (`devise-guests`). - Norwegian BankID/Vipps OAuth login (`omniauth-vipps`). - Minimalistic views (semantic HTML, tag helpers, no divitis). - SCSS with direct element targeting (e.g., `article.post`). - PWA with offline caching (service workers). - Competitor-inspired features (e.g., Reddit's communities, Jodel's karma). - **Deployment**: OpenBSD 7.7+, with `openbsd.sh` (DNSSEC, `relayd`, `httpd`, `acme-client`). ## Shared Setup (`__shared.sh`)
 
 ```sh
 # Lines: 1195
@@ -46,7 +38,8 @@ error() {
 
 command_exists() {
   command -v "$1" > /dev/null 2>&1
-  if [ $? -ne 0 ]; then
+  if [ $?
+<!-- TODO: Break into shorter sentences (68 words > 15) --> -ne 0 ]; then
     error "Command '$1' not found. Please install it."
   fi
 }
@@ -54,11 +47,13 @@ command_exists() {
 init_app() {
   log "Initializing app directory for '$1'"
   mkdir -p "$BASE_DIR/$1"
-  if [ $? -ne 0 ]; then
+  if [ $?
+<!-- TODO: Break into shorter sentences (19 words > 15) --> -ne 0 ]; then
     error "Failed to create app directory '$BASE_DIR/$1'"
   fi
   cd "$BASE_DIR/$1"
-  if [ $? -ne 0 ]; then
+  if [ $?
+<!-- TODO: Break into shorter sentences (17 words > 15) --> -ne 0 ]; then
     error "Failed to change to directory '$BASE_DIR/$1'"
   fi
 }
@@ -66,7 +61,8 @@ init_app() {
 setup_ruby() {
   log "Setting up Ruby $RUBY_VERSION"
   command_exists "ruby"
-  if ! ruby -v | grep -q "$RUBY_VERSION"; then
+  if !
+<!-- TODO: Break into shorter sentences (24 words > 15) --> ruby -v | grep -q "$RUBY_VERSION"; then
     error "Ruby $RUBY_VERSION not found. Please install it manually (e.g., pkg_add ruby-$RUBY_VERSION)."
   fi
   gem install bundler
@@ -78,7 +74,8 @@ setup_ruby() {
 setup_yarn() {
   log "Setting up Node.js $NODE_VERSION and Yarn"
   command_exists "node"
-  if ! node -v | grep -q "v$NODE_VERSION"; then
+  if !
+<!-- TODO: Break into shorter sentences (24 words > 15) --> node -v | grep -q "v$NODE_VERSION"; then
     error "Node.js $NODE_VERSION not found. Please install it manually (e.g., pkg_add node-$NODE_VERSION)."
   fi
   npm install -g yarn
@@ -92,13 +89,15 @@ setup_rails() {
   if [ -f "Gemfile" ]; then
     log "Gemfile exists, skipping Rails new"
   else
-    rails new . -f --skip-bundle --database=postgresql
+    rails new .
+<!-- TODO: Break into shorter sentences (36 words > 15) --> -f --skip-bundle --database=postgresql
     if [ $? -ne 0 ]; then
       error "Failed to create Rails app '$1'"
     fi
   fi
   bundle install
-  if [ $? -ne 0 ]; then
+  if [ $?
+<!-- TODO: Break into shorter sentences (18 words > 15) --> -ne 0 ]; then
     error "Failed to run bundle install"
   fi
 }
@@ -106,7 +105,8 @@ setup_rails() {
 setup_postgresql() {
   log "Checking PostgreSQL for '$1'"
   command_exists "psql"
-  if ! psql -l | grep -q "$1"; then
+  if !
+<!-- TODO: Break into shorter sentences (23 words > 15) --> psql -l | grep -q "$1"; then
     log "Database '$1' not found. Please create it manually (e.g., createdb $1) before proceeding."
     error "Database setup incomplete"
   fi
@@ -115,7 +115,8 @@ setup_postgresql() {
 setup_redis() {
   log "Verifying Redis for '$1'"
   command_exists "redis-server"
-  if ! pgrep redis-server > /dev/null; then
+  if !
+<!-- TODO: Break into shorter sentences (26 words > 15) --> pgrep redis-server > /dev/null; then
     log "Redis not running. Please start it manually (e.g., redis-server &) before proceeding."
     error "Redis not running"
   fi
@@ -123,14 +124,16 @@ setup_redis() {
 
 install_gem() {
   log "Installing gem '$1'"
-  if ! gem list | grep -q "$1"; then
+  if !
+<!-- TODO: Break into shorter sentences (23 words > 15) --> gem list | grep -q "$1"; then
     gem install "$1"
     if [ $? -ne 0 ]; then
       error "Failed to install gem '$1'"
     fi
     echo "gem \"$1\"" >> Gemfile
     bundle install
-    if [ $? -ne 0 ]; then
+    if [ $?
+<!-- TODO: Break into shorter sentences (21 words > 15) --> -ne 0 ]; then
       error "Failed to bundle gem '$1'"
     fi
   fi
@@ -139,11 +142,13 @@ install_gem() {
 setup_core() {
   log "Setting up core Rails configurations with Hotwire and Pagy"
   bundle add hotwire-rails stimulus_reflex turbo-rails pagy
-  if [ $? -ne 0 ]; then
+  if [ $?
+<!-- TODO: Break into shorter sentences (34 words > 15) --> -ne 0 ]; then
     error "Failed to install core gems"
   fi
   bin/rails hotwire:install
-  if [ $? -ne 0 ]; then
+  if [ $?
+<!-- TODO: Break into shorter sentences (16 words > 15) --> -ne 0 ]; then
     error "Failed to install Hotwire"
   fi
 }
@@ -151,7 +156,8 @@ setup_core() {
 setup_devise() {
   log "Setting up Devise with Vipps and guest login, NNG/SEO optimized"
   bundle add devise omniauth-vipps devise-guests
-  if [ $? -ne 0 ]; then
+  if [ $?
+<!-- TODO: Break into shorter sentences (32 words > 15) --> -ne 0 ]; then
     error "Failed to add Devise gems"
   fi
   bin/rails generate devise:install
@@ -283,7 +289,8 @@ EOF
 setup_storage() {
   log "Setting up Active Storage"
   bin/rails active_storage:install
-  if [ $? -ne 0 ]; then
+  if [ $?
+<!-- TODO: Break into shorter sentences (553 words > 15) --> -ne 0 ]; then
     error "Failed to setup Active Storage"
   fi
 }
@@ -291,7 +298,8 @@ setup_storage() {
 setup_stripe() {
   log "Setting up Stripe"
   bundle add stripe
-  if [ $? -ne 0 ]; then
+  if [ $?
+<!-- TODO: Break into shorter sentences (24 words > 15) --> -ne 0 ]; then
     error "Failed to add Stripe gem"
   fi
 }
@@ -299,11 +307,13 @@ setup_stripe() {
 setup_mapbox() {
   log "Setting up Mapbox"
   bundle add mapbox-gl-rails
-  if [ $? -ne 0 ]; then
+  if [ $?
+<!-- TODO: Break into shorter sentences (24 words > 15) --> -ne 0 ]; then
     error "Failed to install Mapbox gem"
   fi
   yarn add mapbox-gl mapbox-gl-geocoder
-  if [ $? -ne 0 ]; then
+  if [ $?
+<!-- TODO: Break into shorter sentences (18 words > 15) --> -ne 0 ]; then
     error "Failed to install Mapbox JS"
   fi
   echo "//= require mapbox-gl" >> app/assets/javascripts/application.js
@@ -315,7 +325,8 @@ setup_mapbox() {
 setup_live_search() {
   log "Setting up live search with StimulusReflex"
   bundle add stimulus_reflex
-  if [ $? -ne 0 ]; then
+  if [ $?
+<!-- TODO: Break into shorter sentences (55 words > 15) --> -ne 0 ]; then
     error "Failed to add StimulusReflex"
   fi
   bin/rails stimulus_reflex:install
@@ -323,7 +334,8 @@ setup_live_search() {
     error "Failed to install StimulusReflex"
   fi
   yarn add stimulus-debounce
-  if [ $? -ne 0 ]; then
+  if [ $?
+<!-- TODO: Break into shorter sentences (16 words > 15) --> -ne 0 ]; then
     error "Failed to install stimulus-debounce"
   fi
 
@@ -386,7 +398,8 @@ EOF
 EOF
 
   cat <<EOF > app/views/shared/_reset_link.html.erb
-<% if query.present? %>
+<% if query.present?
+<!-- TODO: Break into shorter sentences (185 words > 15) --> %>
   <%= link_to t("shared.clear_search"), "#", data: { action: "click->search#reset" }, "aria-label": t("shared.clear_search") %>
 <% end %>
 EOF
@@ -395,11 +408,13 @@ EOF
 setup_infinite_scroll() {
   log "Setting up infinite scroll with StimulusReflex"
   bundle add stimulus_reflex cable_ready pagy
-  if [ $? -ne 0 ]; then
+  if [ $?
+<!-- TODO: Break into shorter sentences (35 words > 15) --> -ne 0 ]; then
     error "Failed to add infinite scroll gems"
   fi
   yarn add stimulus-use
-  if [ $? -ne 0 ]; then
+  if [ $?
+<!-- TODO: Break into shorter sentences (18 words > 15) --> -ne 0 ]; then
     error "Failed to install stimulus-use"
   fi
 
@@ -459,7 +474,8 @@ setup_anon_posting() {
   mkdir -p app/views/posts
   cat <<EOF > app/views/posts/_form.html.erb
 <%= form_with model: post, local: true, data: { controller: "character-counter form-validation", turbo: true } do |form| %>
-  <% if post.errors.any? %>
+  <% if post.errors.any?
+<!-- TODO: Break into shorter sentences (155 words > 15) --> %>
     <%= tag.div role: "alert" do %>
       <%= tag.p t("${APP_NAME}.errors", count: post.errors.count) %>
       <%= tag.ul do %>
@@ -538,7 +554,7 @@ class PostsController < ApplicationController
   def set_post
     @post = Post.find(params[:id])
     redirect_to posts_path, alert: t("${APP_NAME}.not_authorized") unless @post.user == current_user || current_user&.admin?
-  end
+<!-- TODO: Break into shorter sentences (249 words > 15) --> end
 
   def initialize_post
     @post = Post.new
@@ -573,7 +589,8 @@ class ChatReflex < ApplicationReflex
       receiver_id: element.dataset["receiver_id"],
       anonymous: element.dataset["anonymous"] == "true"
     )
-    channel = ActsAsTenant.current_tenant ? "chat_channel_#{ActsAsTenant.current_tenant.subdomain}" : "chat_channel"
+    channel = ActsAsTenant.current_tenant ?
+<!-- TODO: Break into shorter sentences (86 words > 15) --> "chat_channel_#{ActsAsTenant.current_tenant.subdomain}" : "chat_channel"
     ActionCable.server.broadcast(channel, {
       id: message.id,
       content: message.content,
@@ -587,7 +604,8 @@ EOF
   cat <<EOF > app/channels/chat_channel.rb
 class ChatChannel < ApplicationCable::Channel
   def subscribed
-    channel = ActsAsTenant.current_tenant ? "chat_channel_#{ActsAsTenant.current_tenant.subdomain}" : "chat_channel"
+    channel = ActsAsTenant.current_tenant ?
+<!-- TODO: Break into shorter sentences (23 words > 15) --> "chat_channel_#{ActsAsTenant.current_tenant.subdomain}" : "chat_channel"
     stream_from channel
   end
 end
@@ -603,7 +621,8 @@ export default class extends Controller {
 
   connect() {
     this.consumer = createConsumer()
-    const channel = this.element.dataset.tenant ? "chat_channel_#{this.element.dataset.tenant}" : "chat_channel"
+    const channel = this.element.dataset.tenant ?
+<!-- TODO: Break into shorter sentences (48 words > 15) --> "chat_channel_#{this.element.dataset.tenant}" : "chat_channel"
     this.channel = this.consumer.subscriptions.create({ channel: "ChatChannel" }, {
       received: data => {
         this.messagesTarget.insertAdjacentHTML("beforeend", this.renderMessage(data))
@@ -654,14 +673,16 @@ EOF
 setup_expiry_job() {
   log "Setting up expiry job"
   bin/rails generate job expiry
-  if [ $? -ne 0 ]; then
+  if [ $?
+<!-- TODO: Break into shorter sentences (173 words > 15) --> -ne 0 ]; then
     error "Failed to generate expiry job"
   fi
 }
 
 setup_seeds() {
   log "Setting up seeds"
-  if [ ! -f "db/seeds.rb" ]; then
+  if [ !
+<!-- TODO: Break into shorter sentences (21 words > 15) --> -f "db/seeds.rb" ]; then
     echo "# Add seed data here" > "db/seeds.rb"
   fi
 }
@@ -669,11 +690,13 @@ setup_seeds() {
 setup_pwa() {
   log "Setting up PWA with offline support"
   bundle add serviceworker-rails
-  if [ $? -ne 0 ]; then
+  if [ $?
+<!-- TODO: Break into shorter sentences (29 words > 15) --> -ne 0 ]; then
     error "Failed to add serviceworker-rails"
   fi
   bin/rails generate serviceworker:install
-  if [ $? -ne 0 ]; then
+  if [ $?
+<!-- TODO: Break into shorter sentences (16 words > 15) --> -ne 0 ]; then
     error "Failed to setup PWA"
   fi
   cat <<EOF > app/assets/javascripts/serviceworker.js
@@ -707,7 +730,8 @@ EOF
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= t('shared.offline_title', default: 'Offline') %></title>
-  <meta name="description" content="<%= t('shared.offline_description', default: 'You are currently offline. Please check your connection.') %>">
+  <meta name="description" content="<%= t('shared.offline_description', default: 'You are currently offline.
+<!-- TODO: Break into shorter sentences (82 words > 15) --> Please check your connection.') %>">
   <%= stylesheet_link_tag "application" %>
 </head>
 <body>
@@ -725,7 +749,8 @@ EOF
 
 setup_i18n() {
   log "Setting up I18n with shared translations"
-  if [ ! -f "config/locales/en.yml" ]; then
+  if [ !
+<!-- TODO: Break into shorter sentences (55 words > 15) --> -f "config/locales/en.yml" ]; then
     mkdir -p "config/locales"
     cat <<EOF > "config/locales/en.yml"
 en:
@@ -738,7 +763,8 @@ en:
     privacy: "Privacy"
     support: "Support"
     offline_title: "Offline"
-    offline_description: "You are currently offline. Please check your connection."
+    offline_description: "You are currently offline.
+<!-- TODO: Break into shorter sentences (36 words > 15) --> Please check your connection."
     offline_message: "Please check your connection and try again."
     undo: "Undo"
     upvote: "Upvote"
@@ -787,7 +813,8 @@ EOF
 setup_falcon() {
   log "Setting up Falcon for production"
   bundle add falcon
-  if [ $? -ne 0 ]; then
+  if [ $?
+<!-- TODO: Break into shorter sentences (166 words > 15) --> -ne 0 ]; then
     error "Failed to add Falcon gem"
   fi
   if [ -f "bin/falcon-host" ]; then
@@ -809,14 +836,14 @@ generate_social_models() {
 commit() {
   log "Committing changes: '$1'"
   command_exists "git"
-  if ! git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
+  if !
+<!-- TODO: Break into shorter sentences (87 words > 15) --> git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
     git init
     if [ $? -ne 0 ]; then
       error "Failed to initialize Git repository"
     fi
   fi
-  git add .
-  git commit -m "$1"
+  git add . git commit -m "$1"
   if [ $? -ne 0 ]; then
     log "No changes to commit"
   fi
@@ -825,7 +852,8 @@ commit() {
 migrate_db() {
   log "Running database migrations"
   bin/rails db:migrate RAILS_ENV=production
-  if [ $? -ne 0 ]; then
+  if [ $?
+<!-- TODO: Break into shorter sentences (23 words > 15) --> -ne 0 ]; then
     error "Failed to run database migrations"
   fi
 }
@@ -857,7 +885,8 @@ EOF
 setup_stimulus_components() {
   log "Setting up Stimulus components for enhanced UX"
   yarn add stimulus-lightbox stimulus-infinite-scroll stimulus-character-counter stimulus-textarea-autogrow stimulus-carousel stimulus-use stimulus-debounce
-  if [ $? -ne 0 ]; then
+  if [ $?
+<!-- TODO: Break into shorter sentences (183 words > 15) --> -ne 0 ]; then
     error "Failed to install Stimulus components"
   fi
 }
@@ -1338,8 +1367,7 @@ cat <<EOF > app/controllers/application_controller.rb
 class ApplicationController < ActionController::Base
   before_action :set_tenant
   before_action :authenticate_user!, except: [:index, :show], unless: :guest_user_allowed?
-
-  def after_sign_in_path_for(resource)
+<!-- TODO: Break into shorter sentences (996 words > 15) --> def after_sign_in_path_for(resource)
     root_path
   end
 
@@ -1353,7 +1381,7 @@ class ApplicationController < ActionController::Base
   end
 
   def guest_user_allowed?
-    controller_name == "home" || 
+<!-- TODO: Break into shorter sentences (22 words > 15) --> controller_name == "home" || 
     (controller_name == "posts" && action_name.in?(["index", "show", "create"])) || 
     (controller_name == "listings" && action_name.in?(["index", "show"]))
   end
@@ -1425,7 +1453,7 @@ class ListingsController < ApplicationController
   def set_listing
     @listing = Listing.where(community: ActsAsTenant.current_tenant).find(params[:id])
     redirect_to listings_path, alert: t("brgen.not_authorized") unless @listing.user == current_user || current_user&.admin?
-  end
+<!-- TODO: Break into shorter sentences (177 words > 15) --> end
 
   def initialize_listing
     @listing = Listing.new
@@ -1448,7 +1476,8 @@ cat <<EOF > app/views/listings/_listing.html.erb
     <%= tag.p listing.description %>
     <%= tag.p t("brgen.listing_price", price: number_to_currency(listing.price)) %>
     <%= tag.p t("brgen.listing_location", location: listing.location) %>
-    <% if listing.photos.attached? %>
+    <% if listing.photos.attached?
+<!-- TODO: Break into shorter sentences (84 words > 15) --> %>
       <% listing.photos.each do |photo| %>
         <%= image_tag photo, style: "max-width: 200px;", alt: t("brgen.listing_photo", title: listing.title) %>
       <% end %>
@@ -1456,8 +1485,10 @@ cat <<EOF > app/views/listings/_listing.html.erb
     <%= render partial: "shared/vote", locals: { votable: listing } %>
     <%= tag.p class: "post-actions" do %>
       <%= link_to t("brgen.view_listing"), listing_path(listing), "aria-label": t("brgen.view_listing") %>
-      <%= link_to t("brgen.edit_listing"), edit_listing_path(listing), "aria-label": t("brgen.edit_listing") if listing.user == current_user || current_user&.admin? %>
-      <%= button_to t("brgen.delete_listing"), listing_path(listing), method: :delete, data: { turbo_confirm: t("brgen.confirm_delete") }, form: { data: { turbo_frame: "_top" } }, "aria-label": t("brgen.delete_listing") if listing.user == current_user || current_user&.admin? %>
+      <%= link_to t("brgen.edit_listing"), edit_listing_path(listing), "aria-label": t("brgen.edit_listing") if listing.user == current_user || current_user&.admin?
+<!-- TODO: Break into shorter sentences (58 words > 15) --> %>
+      <%= button_to t("brgen.delete_listing"), listing_path(listing), method: :delete, data: { turbo_confirm: t("brgen.confirm_delete") }, form: { data: { turbo_frame: "_top" } }, "aria-label": t("brgen.delete_listing") if listing.user == current_user || current_user&.admin?
+<!-- TODO: Break into shorter sentences (28 words > 15) --> %>
     <% end %>
   <% end %>
 <% end %>
@@ -1468,7 +1499,8 @@ cat <<EOF > app/views/listings/_form.html.erb
   <%= tag.div data: { turbo_frame: "notices" } do %>
     <%= render "shared/notices" %>
   <% end %>
-  <% if listing.errors.any? %>
+  <% if listing.errors.any?
+<!-- TODO: Break into shorter sentences (51 words > 15) --> %>
     <%= tag.div role: "alert" do %>
       <%= tag.p t("brgen.errors", count: listing.errors.count) %>
       <%= tag.ul do %>
@@ -1596,7 +1628,8 @@ cat <<EOF > app/views/listings/index.html.erb
       <% end %>
       <%= tag.div id: "sentinel", class: "hidden", data: { reflex: "ListingsInfiniteScroll#load_more", next_page: @pagy.next || 2 } %>
     <% end %>
-    <%= tag.button t("brgen.load_more"), id: "load-more", data: { reflex: "click->ListingsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ? "" : "hidden", "aria-label": t("brgen.load_more") %>
+    <%= tag.button t("brgen.load_more"), id: "load-more", data: { reflex: "click->ListingsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ?
+<!-- TODO: Break into shorter sentences (755 words > 15) --> "" : "hidden", "aria-label": t("brgen.load_more") %>
   <% end %>
   <%= tag.section aria-labelledby: "search-heading" do %>
     <%= tag.h2 t("brgen.search_title"), id: "search-heading" %>
@@ -1711,7 +1744,8 @@ cat <<EOF > app/views/home/index.html.erb
       <% end %>
       <%= tag.div id: "sentinel", class: "hidden", data: { reflex: "PostsInfiniteScroll#load_more", next_page: @pagy.next || 2 } %>
     <% end %>
-    <%= tag.button t("brgen.load_more"), id: "load-more", data: { reflex: "click->PostsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ? "" : "hidden", "aria-label": t("brgen.load_more") %>
+    <%= tag.button t("brgen.load_more"), id: "load-more", data: { reflex: "click->PostsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ?
+<!-- TODO: Break into shorter sentences (604 words > 15) --> "" : "hidden", "aria-label": t("brgen.load_more") %>
   <% end %>
   <%= tag.section aria-labelledby: "listings-heading" do %>
     <%= tag.h2 t("brgen.listings_title"), id: "listings-heading" %>
@@ -1722,7 +1756,8 @@ cat <<EOF > app/views/home/index.html.erb
       <% end %>
       <%= tag.div id: "sentinel", class: "hidden", data: { reflex: "ListingsInfiniteScroll#load_more", next_page: @pagy.next || 2 } %>
     <% end %>
-    <%= tag.button t("brgen.load_more"), id: "load-more", data: { reflex: "click->ListingsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ? "" : "hidden", "aria-label": t("brgen.load_more") %>
+    <%= tag.button t("brgen.load_more"), id: "load-more", data: { reflex: "click->ListingsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ?
+<!-- TODO: Break into shorter sentences (98 words > 15) --> "" : "hidden", "aria-label": t("brgen.load_more") %>
   <% end %>
   <%= render partial: "shared/chat" %>
   <%= tag.section aria-labelledby: "insights-heading" do %>
@@ -1903,7 +1938,8 @@ EOF
 
 commit "Brgen core setup complete: Multi-tenant social and marketplace platform"
 
-log "Brgen core setup complete. Run 'bin/falcon-host' to start on OpenBSD."
+log "Brgen core setup complete.
+<!-- TODO: Break into shorter sentences (1153 words > 15) --> Run 'bin/falcon-host' to start on OpenBSD."
 
 # Change Log:
 # - Aligned with master.json v6.5.0: Two-space indents, double quotes, heredocs, Strunk & White comments
@@ -2004,7 +2040,7 @@ EOF
 cat <<EOF > app/controllers/profiles_controller.rb
 class ProfilesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_profile, only: [:show, :edit, :update, :destroy]
+<!-- TODO: Break into shorter sentences (332 words > 15) --> before_action :set_profile, only: [:show, :edit, :update, :destroy]
 
   def index
     @pagy, @profiles = pagy(Profile.all.order(created_at: :desc)) unless @stimulus_reflex
@@ -2057,7 +2093,7 @@ class ProfilesController < ApplicationController
   def set_profile
     @profile = Profile.find(params[:id])
     redirect_to profiles_path, alert: t("brgen_dating.not_authorized") unless @profile.user == current_user || current_user&.admin?
-  end
+<!-- TODO: Break into shorter sentences (113 words > 15) --> end
 
   def profile_params
     params.require(:profile).permit(:bio, :location, :lat, :lng, :gender, :age, photos: [])
@@ -2068,7 +2104,7 @@ EOF
 cat <<EOF > app/controllers/matches_controller.rb
 class MatchesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_match, only: [:show, :edit, :update, :destroy]
+<!-- TODO: Break into shorter sentences (24 words > 15) --> before_action :set_match, only: [:show, :edit, :update, :destroy]
 
   def index
     @pagy, @matches = pagy(Match.where(initiator: current_user.profile).or(Match.where(receiver: current_user.profile)).order(created_at: :desc)) unless @stimulus_reflex
@@ -2121,7 +2157,7 @@ class MatchesController < ApplicationController
   def set_match
     @match = Match.where(initiator: current_user.profile).or(Match.where(receiver: current_user.profile)).find(params[:id])
     redirect_to matches_path, alert: t("brgen_dating.not_authorized") unless @match.initiator == current_user.profile || @match.receiver == current_user.profile || current_user&.admin?
-  end
+<!-- TODO: Break into shorter sentences (121 words > 15) --> end
 
   def match_params
     params.require(:match).permit(:receiver_id, :status)
@@ -2213,7 +2249,8 @@ cat <<EOF > app/views/home/index.html.erb
       <% end %>
       <%= tag.div id: "sentinel", class: "hidden", data: { reflex: "ProfilesInfiniteScroll#load_more", next_page: @pagy.next || 2 } %>
     <% end %>
-    <%= tag.button t("brgen_dating.load_more"), id: "load-more", data: { reflex: "click->ProfilesInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ? "" : "hidden", "aria-label": t("brgen_dating.load_more") %>
+    <%= tag.button t("brgen_dating.load_more"), id: "load-more", data: { reflex: "click->ProfilesInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ?
+<!-- TODO: Break into shorter sentences (451 words > 15) --> "" : "hidden", "aria-label": t("brgen_dating.load_more") %>
   <% end %>
   <%= tag.section aria-labelledby: "posts-heading" do %>
     <%= tag.h2 t("brgen_dating.posts_title"), id: "posts-heading" %>
@@ -2223,7 +2260,8 @@ cat <<EOF > app/views/home/index.html.erb
       <% end %>
       <%= tag.div id: "sentinel", class: "hidden", data: { reflex: "PostsInfiniteScroll#load_more", next_page: @pagy.next || 2 } %>
     <% end %>
-    <%= tag.button t("brgen_dating.load_more"), id: "load-more", data: { reflex: "click->PostsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ? "" : "hidden", "aria-label": t("brgen_dating.load_more") %>
+    <%= tag.button t("brgen_dating.load_more"), id: "load-more", data: { reflex: "click->PostsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ?
+<!-- TODO: Break into shorter sentences (87 words > 15) --> "" : "hidden", "aria-label": t("brgen_dating.load_more") %>
   <% end %>
   <%= render partial: "shared/chat" %>
 <% end %>
@@ -2272,7 +2310,8 @@ cat <<EOF > app/views/profiles/index.html.erb
       <% end %>
       <%= tag.div id: "sentinel", class: "hidden", data: { reflex: "ProfilesInfiniteScroll#load_more", next_page: @pagy.next || 2 } %>
     <% end %>
-    <%= tag.button t("brgen_dating.load_more"), id: "load-more", data: { reflex: "click->ProfilesInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ? "" : "hidden", "aria-label": t("brgen_dating.load_more") %>
+    <%= tag.button t("brgen_dating.load_more"), id: "load-more", data: { reflex: "click->ProfilesInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ?
+<!-- TODO: Break into shorter sentences (228 words > 15) --> "" : "hidden", "aria-label": t("brgen_dating.load_more") %>
   <% end %>
   <%= render partial: "shared/search", locals: { model: "Profile", field: "bio" } %>
 <% end %>
@@ -2291,7 +2330,8 @@ cat <<EOF > app/views/profiles/_card.html.erb
     <%= tag.p t("brgen_dating.profile_location", location: profile.location) %>
     <%= tag.p t("brgen_dating.profile_gender", gender: profile.gender) %>
     <%= tag.p t("brgen_dating.profile_age", age: profile.age) %>
-    <% if profile.photos.attached? %>
+    <% if profile.photos.attached?
+<!-- TODO: Break into shorter sentences (97 words > 15) --> %>
       <% profile.photos.each do |photo| %>
         <%= image_tag photo, style: "max-width: 200px;", alt: t("brgen_dating.profile_photo", email: profile.user.email) %>
       <% end %>
@@ -2299,8 +2339,10 @@ cat <<EOF > app/views/profiles/_card.html.erb
     <%= render partial: "shared/vote", locals: { votable: profile } %>
     <%= tag.p class: "post-actions" do %>
       <%= link_to t("brgen_dating.view_profile"), profile_path(profile), "aria-label": t("brgen_dating.view_profile") %>
-      <%= link_to t("brgen_dating.edit_profile"), edit_profile_path(profile), "aria-label": t("brgen_dating.edit_profile") if profile.user == current_user || current_user&.admin? %>
-      <%= button_to t("brgen_dating.delete_profile"), profile_path(profile), method: :delete, data: { turbo_confirm: t("brgen_dating.confirm_delete") }, form: { data: { turbo_frame: "_top" } }, "aria-label": t("brgen_dating.delete_profile") if profile.user == current_user || current_user&.admin? %>
+      <%= link_to t("brgen_dating.edit_profile"), edit_profile_path(profile), "aria-label": t("brgen_dating.edit_profile") if profile.user == current_user || current_user&.admin?
+<!-- TODO: Break into shorter sentences (58 words > 15) --> %>
+      <%= button_to t("brgen_dating.delete_profile"), profile_path(profile), method: :delete, data: { turbo_confirm: t("brgen_dating.confirm_delete") }, form: { data: { turbo_frame: "_top" } }, "aria-label": t("brgen_dating.delete_profile") if profile.user == current_user || current_user&.admin?
+<!-- TODO: Break into shorter sentences (28 words > 15) --> %>
     <% end %>
   <% end %>
 <% end %>
@@ -2311,7 +2353,8 @@ cat <<EOF > app/views/profiles/_form.html.erb
   <%= tag.div data: { turbo_frame: "notices" } do %>
     <%= render "shared/notices" %>
   <% end %>
-  <% if profile.errors.any? %>
+  <% if profile.errors.any?
+<!-- TODO: Break into shorter sentences (51 words > 15) --> %>
     <%= tag.div role: "alert" do %>
       <%= tag.p t("brgen_dating.errors", count: profile.errors.count) %>
       <%= tag.ul do %>
@@ -2355,14 +2398,16 @@ cat <<EOF > app/views/profiles/_form.html.erb
   <%= tag.fieldset do %>
     <%= form.label :photos, t("brgen_dating.profile_photos") %>
     <%= form.file_field :photos, multiple: true, accept: "image/*", data: { controller: "file-preview", "file-preview-target": "input" } %>
-    <% if profile.photos.attached? %>
+    <% if profile.photos.attached?
+<!-- TODO: Break into shorter sentences (329 words > 15) --> %>
       <% profile.photos.each do |photo| %>
         <%= image_tag photo, style: "max-width: 200px;", alt: t("brgen_dating.profile_photo", email: profile.user.email) %>
       <% end %>
     <% end %>
     <%= tag.div data: { "file-preview-target": "preview" }, style: "display: none;" %>
   <% end %>
-  <%= form.submit t("brgen_dating.#{profile.persisted? ? 'update' : 'create'}_profile"), data: { turbo_submits_with: t("brgen_dating.#{profile.persisted? ? 'updating' : 'creating'}_profile") } %>
+  <%= form.submit t("brgen_dating.#{profile.persisted?
+<!-- TODO: Break into shorter sentences (40 words > 15) --> ? 'update' : 'create'}_profile"), data: { turbo_submits_with: t("brgen_dating.#{profile.persisted? ? 'updating' : 'creating'}_profile") } %>
 <% end %>
 EOF
 
@@ -2476,7 +2521,8 @@ cat <<EOF > app/views/matches/index.html.erb
       <% end %>
       <%= tag.div id: "sentinel", class: "hidden", data: { reflex: "MatchesInfiniteScroll#load_more", next_page: @pagy.next || 2 } %>
     <% end %>
-    <%= tag.button t("brgen_dating.load_more"), id: "load-more", data: { reflex: "click->MatchesInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ? "" : "hidden", "aria-label": t("brgen_dating.load_more") %>
+    <%= tag.button t("brgen_dating.load_more"), id: "load-more", data: { reflex: "click->MatchesInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ?
+<!-- TODO: Break into shorter sentences (491 words > 15) --> "" : "hidden", "aria-label": t("brgen_dating.load_more") %>
   <% end %>
 <% end %>
 <%= render "shared/footer" %>
@@ -2494,8 +2540,10 @@ cat <<EOF > app/views/matches/_card.html.erb
     <%= render partial: "shared/vote", locals: { votable: match } %>
     <%= tag.p class: "post-actions" do %>
       <%= link_to t("brgen_dating.view_match"), match_path(match), "aria-label": t("brgen_dating.view_match") %>
-      <%= link_to t("brgen_dating.edit_match"), edit_match_path(match), "aria-label": t("brgen_dating.edit_match") if match.initiator == current_user.profile || match.receiver == current_user.profile || current_user&.admin? %>
-      <%= button_to t("brgen_dating.delete_match"), match_path(match), method: :delete, data: { turbo_confirm: t("brgen_dating.confirm_delete") }, form: { data: { turbo_frame: "_top" } }, "aria-label": t("brgen_dating.delete_match") if match.initiator == current_user.profile || match.receiver == current_user.profile || current_user&.admin? %>
+      <%= link_to t("brgen_dating.edit_match"), edit_match_path(match), "aria-label": t("brgen_dating.edit_match") if match.initiator == current_user.profile || match.receiver == current_user.profile || current_user&.admin?
+<!-- TODO: Break into shorter sentences (105 words > 15) --> %>
+      <%= button_to t("brgen_dating.delete_match"), match_path(match), method: :delete, data: { turbo_confirm: t("brgen_dating.confirm_delete") }, form: { data: { turbo_frame: "_top" } }, "aria-label": t("brgen_dating.delete_match") if match.initiator == current_user.profile || match.receiver == current_user.profile || current_user&.admin?
+<!-- TODO: Break into shorter sentences (32 words > 15) --> %>
     <% end %>
   <% end %>
 <% end %>
@@ -2506,7 +2554,8 @@ cat <<EOF > app/views/matches/_form.html.erb
   <%= tag.div data: { turbo_frame: "notices" } do %>
     <%= render "shared/notices" %>
   <% end %>
-  <% if match.errors.any? %>
+  <% if match.errors.any?
+<!-- TODO: Break into shorter sentences (50 words > 15) --> %>
     <%= tag.div role: "alert" do %>
       <%= tag.p t("brgen_dating.errors", count: match.errors.count) %>
       <%= tag.ul do %>
@@ -2526,7 +2575,8 @@ cat <<EOF > app/views/matches/_form.html.erb
     <%= form.select :status, ["pending", "accepted", "rejected"], { prompt: t("brgen_dating.status_prompt"), selected: match.status }, required: true %>
     <%= tag.span class: "error-message" data: { "form-validation-target": "error", for: "match_status" } %>
   <% end %>
-  <%= form.submit t("brgen_dating.#{match.persisted? ? 'update' : 'create'}_match"), data: { turbo_submits_with: t("brgen_dating.#{match.persisted? ? 'updating' : 'creating'}_match") } %>
+  <%= form.submit t("brgen_dating.#{match.persisted?
+<!-- TODO: Break into shorter sentences (121 words > 15) --> ? 'update' : 'create'}_match"), data: { turbo_submits_with: t("brgen_dating.#{match.persisted? ? 'updating' : 'creating'}_match") } %>
 <% end %>
 EOF
 
@@ -2612,16 +2662,13 @@ generate_turbo_views "matches" "match"
 
 commit "Brgen Dating setup complete: Location-based dating platform with Mapbox, live search, and anonymous features"
 
-log "Brgen Dating setup complete. Run 'bin/falcon-host' with PORT set to start on OpenBSD."
+log "Brgen Dating setup complete.
+<!-- TODO: Break into shorter sentences (348 words > 15) --> Run 'bin/falcon-host' with PORT set to start on OpenBSD."
 
 # Change Log:
 # - Aligned with master.json v6.5.0: Two-space indents, double quotes, heredocs, Strunk & White comments.
-# - Used Rails 8 conventions, Hotwire, Turbo Streams, Stimulus Reflex, I18n, and Falcon.
-# - Leveraged bin/rails generate scaffold for Profiles and Matches to streamline CRUD setup.
-# - Extracted header, footer, search, and model-specific forms/cards into partials for DRY views.
-# - Included Mapbox for profile locations, live search, infinite scroll, and anonymous posting/chat via shared utilities.
-# - Ensured NNG principles, SEO, schema data, and minimal flat design compliance.
-# - Finalized for unprivileged user on OpenBSD 7.5.```
+<!-- TODO: Break into shorter sentences (27 words > 15) --> # - Used Rails 8 conventions, Hotwire, Turbo Streams, Stimulus Reflex, I18n, and Falcon. # - Leveraged bin/rails generate scaffold for Profiles and Matches to streamline CRUD setup. # - Extracted header, footer, search, and model-specific forms/cards into partials for DRY views. # - Included Mapbox for profile locations, live search, infinite scroll, and anonymous posting/chat via shared utilities.
+<!-- TODO: Break into shorter sentences (17 words > 15) --> # - Ensured NNG principles, SEO, schema data, and minimal flat design compliance. # - Finalized for unprivileged user on OpenBSD 7.5.```
 
 ## Brgen Marketplace - E-commerce Platform (`brgen_marketplace.sh`)
 
@@ -2726,7 +2773,7 @@ class ProductsController < ApplicationController
   def set_product
     @product = Product.find(params[:id])
     redirect_to products_path, alert: t("brgen_marketplace.not_authorized") unless @product.user == current_user || current_user&.admin?
-  end
+<!-- TODO: Break into shorter sentences (251 words > 15) --> end
 
   def product_params
     params.require(:product).permit(:name, :price, :description, photos: [])
@@ -2737,7 +2784,7 @@ EOF
 cat <<EOF > app/controllers/orders_controller.rb
 class OrdersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_order, only: [:show, :edit, :update, :destroy]
+<!-- TODO: Break into shorter sentences (21 words > 15) --> before_action :set_order, only: [:show, :edit, :update, :destroy]
 
   def index
     @pagy, @orders = pagy(Order.where(buyer: current_user).order(created_at: :desc)) unless @stimulus_reflex
@@ -2790,7 +2837,7 @@ class OrdersController < ApplicationController
   def set_order
     @order = Order.where(buyer: current_user).find(params[:id])
     redirect_to orders_path, alert: t("brgen_marketplace.not_authorized") unless @order.buyer == current_user || current_user&.admin?
-  end
+<!-- TODO: Break into shorter sentences (115 words > 15) --> end
 
   def order_params
     params.require(:order).permit(:product_id, :status)
@@ -2878,7 +2925,8 @@ cat <<EOF > app/views/home/index.html.erb
       <% end %>
       <%= tag.div id: "sentinel", class: "hidden", data: { reflex: "ProductsInfiniteScroll#load_more", next_page: @pagy.next || 2 } %>
     <% end %>
-    <%= tag.button t("brgen_marketplace.load_more"), id: "load-more", data: { reflex: "click->ProductsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ? "" : "hidden", "aria-label": t("brgen_marketplace.load_more") %>
+    <%= tag.button t("brgen_marketplace.load_more"), id: "load-more", data: { reflex: "click->ProductsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ?
+<!-- TODO: Break into shorter sentences (418 words > 15) --> "" : "hidden", "aria-label": t("brgen_marketplace.load_more") %>
   <% end %>
   <%= tag.section aria-labelledby: "posts-heading" do %>
     <%= tag.h2 t("brgen_marketplace.posts_title"), id: "posts-heading" %>
@@ -2888,7 +2936,8 @@ cat <<EOF > app/views/home/index.html.erb
       <% end %>
       <%= tag.div id: "sentinel", class: "hidden", data: { reflex: "PostsInfiniteScroll#load_more", next_page: @pagy.next || 2 } %>
     <% end %>
-    <%= tag.button t("brgen_marketplace.load_more"), id: "load-more", data: { reflex: "click->PostsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ? "" : "hidden", "aria-label": t("brgen_marketplace.load_more") %>
+    <%= tag.button t("brgen_marketplace.load_more"), id: "load-more", data: { reflex: "click->PostsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ?
+<!-- TODO: Break into shorter sentences (87 words > 15) --> "" : "hidden", "aria-label": t("brgen_marketplace.load_more") %>
   <% end %>
   <%= render partial: "shared/chat" %>
 <% end %>
@@ -2938,7 +2987,8 @@ cat <<EOF > app/views/products/index.html.erb
       <% end %>
       <%= tag.div id: "sentinel", class: "hidden", data: { reflex: "ProductsInfiniteScroll#load_more", next_page: @pagy.next || 2 } %>
     <% end %>
-    <%= tag.button t("brgen_marketplace.load_more"), id: "load-more", data: { reflex: "click->ProductsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ? "" : "hidden", "aria-label": t("brgen_marketplace.load_more") %>
+    <%= tag.button t("brgen_marketplace.load_more"), id: "load-more", data: { reflex: "click->ProductsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ?
+<!-- TODO: Break into shorter sentences (230 words > 15) --> "" : "hidden", "aria-label": t("brgen_marketplace.load_more") %>
   <% end %>
   <%= render partial: "shared/search", locals: { model: "Product", field: "name" } %>
 <% end %>
@@ -2955,7 +3005,8 @@ cat <<EOF > app/views/products/_card.html.erb
     <%= tag.h2 product.name %>
     <%= tag.p product.description %>
     <%= tag.p t("brgen_marketplace.product_price", price: number_to_currency(product.price)) %>
-    <% if product.photos.attached? %>
+    <% if product.photos.attached?
+<!-- TODO: Break into shorter sentences (85 words > 15) --> %>
       <% product.photos.each do |photo| %>
         <%= image_tag photo, style: "max-width: 200px;", alt: t("brgen_marketplace.product_photo", name: product.name) %>
       <% end %>
@@ -2963,8 +3014,10 @@ cat <<EOF > app/views/products/_card.html.erb
     <%= render partial: "shared/vote", locals: { votable: product } %>
     <%= tag.p class: "post-actions" do %>
       <%= link_to t("brgen_marketplace.view_product"), product_path(product), "aria-label": t("brgen_marketplace.view_product") %>
-      <%= link_to t("brgen_marketplace.edit_product"), edit_product_path(product), "aria-label": t("brgen_marketplace.edit_product") if product.user == current_user || current_user&.admin? %>
-      <%= button_to t("brgen_marketplace.delete_product"), product_path(product), method: :delete, data: { turbo_confirm: t("brgen_marketplace.confirm_delete") }, form: { data: { turbo_frame: "_top" } }, "aria-label": t("brgen_marketplace.delete_product") if product.user == current_user || current_user&.admin? %>
+      <%= link_to t("brgen_marketplace.edit_product"), edit_product_path(product), "aria-label": t("brgen_marketplace.edit_product") if product.user == current_user || current_user&.admin?
+<!-- TODO: Break into shorter sentences (58 words > 15) --> %>
+      <%= button_to t("brgen_marketplace.delete_product"), product_path(product), method: :delete, data: { turbo_confirm: t("brgen_marketplace.confirm_delete") }, form: { data: { turbo_frame: "_top" } }, "aria-label": t("brgen_marketplace.delete_product") if product.user == current_user || current_user&.admin?
+<!-- TODO: Break into shorter sentences (28 words > 15) --> %>
     <% end %>
   <% end %>
 <% end %>
@@ -2975,7 +3028,8 @@ cat <<EOF > app/views/products/_form.html.erb
   <%= tag.div data: { turbo_frame: "notices" } do %>
     <%= render "shared/notices" %>
   <% end %>
-  <% if product.errors.any? %>
+  <% if product.errors.any?
+<!-- TODO: Break into shorter sentences (51 words > 15) --> %>
     <%= tag.div role: "alert" do %>
       <%= tag.p t("brgen_marketplace.errors", count: product.errors.count) %>
       <%= tag.ul do %>
@@ -3004,14 +3058,16 @@ cat <<EOF > app/views/products/_form.html.erb
   <%= tag.fieldset do %>
     <%= form.label :photos, t("brgen_marketplace.product_photos") %>
     <%= form.file_field :photos, multiple: true, accept: "image/*", data: { controller: "file-preview", "file-preview-target": "input" } %>
-    <% if product.photos.attached? %>
+    <% if product.photos.attached?
+<!-- TODO: Break into shorter sentences (204 words > 15) --> %>
       <% product.photos.each do |photo| %>
         <%= image_tag photo, style: "max-width: 200px;", alt: t("brgen_marketplace.product_photo", name: product.name) %>
       <% end %>
     <% end %>
     <%= tag.div data: { "file-preview-target": "preview" }, style: "display: none;" %>
   <% end %>
-  <%= form.submit t("brgen_marketplace.#{product.persisted? ? 'update' : 'create'}_product"), data: { turbo_submits_with: t("brgen_marketplace.#{product.persisted? ? 'updating' : 'creating'}_product") } %>
+  <%= form.submit t("brgen_marketplace.#{product.persisted?
+<!-- TODO: Break into shorter sentences (40 words > 15) --> ? 'update' : 'create'}_product"), data: { turbo_submits_with: t("brgen_marketplace.#{product.persisted? ? 'updating' : 'creating'}_product") } %>
 <% end %>
 EOF
 
@@ -3126,7 +3182,8 @@ cat <<EOF > app/views/orders/index.html.erb
       <% end %>
       <%= tag.div id: "sentinel", class: "hidden", data: { reflex: "OrdersInfiniteScroll#load_more", next_page: @pagy.next || 2 } %>
     <% end %>
-    <%= tag.button t("brgen_marketplace.load_more"), id: "load-more", data: { reflex: "click->OrdersInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ? "" : "hidden", "aria-label": t("brgen_marketplace.load_more") %>
+    <%= tag.button t("brgen_marketplace.load_more"), id: "load-more", data: { reflex: "click->OrdersInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ?
+<!-- TODO: Break into shorter sentences (493 words > 15) --> "" : "hidden", "aria-label": t("brgen_marketplace.load_more") %>
   <% end %>
 <% end %>
 <%= render "shared/footer" %>
@@ -3144,8 +3201,10 @@ cat <<EOF > app/views/orders/_card.html.erb
     <%= render partial: "shared/vote", locals: { votable: order } %>
     <%= tag.p class: "post-actions" do %>
       <%= link_to t("brgen_marketplace.view_order"), order_path(order), "aria-label": t("brgen_marketplace.view_order") %>
-      <%= link_to t("brgen_marketplace.edit_order"), edit_order_path(order), "aria-label": t("brgen_marketplace.edit_order") if order.buyer == current_user || current_user&.admin? %>
-      <%= button_to t("brgen_marketplace.delete_order"), order_path(order), method: :delete, data: { turbo_confirm: t("brgen_marketplace.confirm_delete") }, form: { data: { turbo_frame: "_top" } }, "aria-label": t("brgen_marketplace.delete_order") if order.buyer == current_user || current_user&.admin? %>
+      <%= link_to t("brgen_marketplace.edit_order"), edit_order_path(order), "aria-label": t("brgen_marketplace.edit_order") if order.buyer == current_user || current_user&.admin?
+<!-- TODO: Break into shorter sentences (101 words > 15) --> %>
+      <%= button_to t("brgen_marketplace.delete_order"), order_path(order), method: :delete, data: { turbo_confirm: t("brgen_marketplace.confirm_delete") }, form: { data: { turbo_frame: "_top" } }, "aria-label": t("brgen_marketplace.delete_order") if order.buyer == current_user || current_user&.admin?
+<!-- TODO: Break into shorter sentences (28 words > 15) --> %>
     <% end %>
   <% end %>
 <% end %>
@@ -3156,7 +3215,8 @@ cat <<EOF > app/views/orders/_form.html.erb
   <%= tag.div data: { turbo_frame: "notices" } do %>
     <%= render "shared/notices" %>
   <% end %>
-  <% if order.errors.any? %>
+  <% if order.errors.any?
+<!-- TODO: Break into shorter sentences (50 words > 15) --> %>
     <%= tag.div role: "alert" do %>
       <%= tag.p t("brgen_marketplace.errors", count: order.errors.count) %>
       <%= tag.ul do %>
@@ -3176,7 +3236,8 @@ cat <<EOF > app/views/orders/_form.html.erb
     <%= form.select :status, ["pending", "shipped", "delivered"], { prompt: t("brgen_marketplace.status_prompt"), selected: order.status }, required: true %>
     <%= tag.span class: "error-message" data: { "form-validation-target": "error", for: "order_status" } %>
   <% end %>
-  <%= form.submit t("brgen_marketplace.#{order.persisted? ? 'update' : 'create'}_order"), data: { turbo_submits_with: t("brgen_marketplace.#{order.persisted? ? 'updating' : 'creating'}_order") } %>
+  <%= form.submit t("brgen_marketplace.#{order.persisted?
+<!-- TODO: Break into shorter sentences (121 words > 15) --> ? 'update' : 'create'}_order"), data: { turbo_submits_with: t("brgen_marketplace.#{order.persisted? ? 'updating' : 'creating'}_order") } %>
 <% end %>
 EOF
 
@@ -3266,16 +3327,12 @@ generate_turbo_views "orders" "order"
 
 commit "Brgen Marketplace setup complete: E-commerce platform with live search, infinite scroll, and anonymous features"
 
-log "Brgen Marketplace setup complete. Run 'bin/falcon-host' with PORT set to start on OpenBSD."
+log "Brgen Marketplace setup complete.
+<!-- TODO: Break into shorter sentences (357 words > 15) --> Run 'bin/falcon-host' with PORT set to start on OpenBSD."
 
 # Change Log:
 # - Aligned with master.json v6.5.0: Two-space indents, double quotes, heredocs, Strunk & White comments.
-# - Used Rails 8 conventions, Hotwire, Turbo Streams, Stimulus Reflex, I18n, and Falcon.
-# - Leveraged bin/rails generate scaffold for Products and Orders to streamline CRUD setup.
-# - Extracted header, footer, search, and model-specific forms/cards into partials for DRY views.
-# - Included live search, infinite scroll, and anonymous posting/chat via shared utilities.
-# - Ensured NNG principles, SEO, schema data, and minimal flat design compliance.
-# - Finalized for unprivileged user on OpenBSD 7.5.```
+<!-- TODO: Break into shorter sentences (27 words > 15) --> # - Used Rails 8 conventions, Hotwire, Turbo Streams, Stimulus Reflex, I18n, and Falcon. # - Leveraged bin/rails generate scaffold for Products and Orders to streamline CRUD setup. # - Extracted header, footer, search, and model-specific forms/cards into partials for DRY views. # - Included live search, infinite scroll, and anonymous posting/chat via shared utilities. # - Ensured NNG principles, SEO, schema data, and minimal flat design compliance. # - Finalized for unprivileged user on OpenBSD 7.5.```
 
 ## Brgen Playlist - Music/Media Playlists (`brgen_playlist.sh`)
 
@@ -3380,7 +3437,7 @@ class PlaylistsController < ApplicationController
   def set_playlist
     @playlist = Playlist.find(params[:id])
     redirect_to playlists_path, alert: t("brgen_playlist.not_authorized") unless @playlist.user == current_user || current_user&.admin?
-  end
+<!-- TODO: Break into shorter sentences (251 words > 15) --> end
 
   def playlist_params
     params.require(:playlist).permit(:name, :description, :tracks)
@@ -3444,7 +3501,7 @@ class CommentsController < ApplicationController
   def set_comment
     @comment = Comment.find(params[:id])
     redirect_to comments_path, alert: t("brgen_playlist.not_authorized") unless @comment.user == current_user || current_user&.admin?
-  end
+<!-- TODO: Break into shorter sentences (135 words > 15) --> end
 
   def comment_params
     params.require(:comment).permit(:playlist_id, :content)
@@ -3532,7 +3589,8 @@ cat <<EOF > app/views/home/index.html.erb
       <% end %>
       <%= tag.div id: "sentinel", class: "hidden", data: { reflex: "PlaylistsInfiniteScroll#load_more", next_page: @pagy.next || 2 } %>
     <% end %>
-    <%= tag.button t("brgen_playlist.load_more"), id: "load-more", data: { reflex: "click->PlaylistsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ? "" : "hidden", "aria-label": t("brgen_playlist.load_more") %>
+    <%= tag.button t("brgen_playlist.load_more"), id: "load-more", data: { reflex: "click->PlaylistsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ?
+<!-- TODO: Break into shorter sentences (418 words > 15) --> "" : "hidden", "aria-label": t("brgen_playlist.load_more") %>
   <% end %>
   <%= tag.section aria-labelledby: "posts-heading" do %>
     <%= tag.h2 t("brgen_playlist.posts_title"), id: "posts-heading" %>
@@ -3542,7 +3600,8 @@ cat <<EOF > app/views/home/index.html.erb
       <% end %>
       <%= tag.div id: "sentinel", class: "hidden", data: { reflex: "PostsInfiniteScroll#load_more", next_page: @pagy.next || 2 } %>
     <% end %>
-    <%= tag.button t("brgen_playlist.load_more"), id: "load-more", data: { reflex: "click->PostsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ? "" : "hidden", "aria-label": t("brgen_playlist.load_more") %>
+    <%= tag.button t("brgen_playlist.load_more"), id: "load-more", data: { reflex: "click->PostsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ?
+<!-- TODO: Break into shorter sentences (87 words > 15) --> "" : "hidden", "aria-label": t("brgen_playlist.load_more") %>
   <% end %>
   <%= render partial: "shared/chat" %>
 <% end %>
@@ -3587,7 +3646,8 @@ cat <<EOF > app/views/playlists/index.html.erb
       <% end %>
       <%= tag.div id: "sentinel", class: "hidden", data: { reflex: "PlaylistsInfiniteScroll#load_more", next_page: @pagy.next || 2 } %>
     <% end %>
-    <%= tag.button t("brgen_playlist.load_more"), id: "load-more", data: { reflex: "click->PlaylistsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ? "" : "hidden", "aria-label": t("brgen_playlist.load_more") %>
+    <%= tag.button t("brgen_playlist.load_more"), id: "load-more", data: { reflex: "click->PlaylistsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ?
+<!-- TODO: Break into shorter sentences (219 words > 15) --> "" : "hidden", "aria-label": t("brgen_playlist.load_more") %>
   <% end %>
   <%= render partial: "shared/search", locals: { model: "Playlist", field: "name" } %>
 <% end %>
@@ -3607,8 +3667,10 @@ cat <<EOF > app/views/playlists/_card.html.erb
     <%= render partial: "shared/vote", locals: { votable: playlist } %>
     <%= tag.p class: "post-actions" do %>
       <%= link_to t("brgen_playlist.view_playlist"), playlist_path(playlist), "aria-label": t("brgen_playlist.view_playlist") %>
-      <%= link_to t("brgen_playlist.edit_playlist"), edit_playlist_path(playlist), "aria-label": t("brgen_playlist.edit_playlist") if playlist.user == current_user || current_user&.admin? %>
-      <%= button_to t("brgen_playlist.delete_playlist"), playlist_path(playlist), method: :delete, data: { turbo_confirm: t("brgen_playlist.confirm_delete") }, form: { data: { turbo_frame: "_top" } }, "aria-label": t("brgen_playlist.delete_playlist") if playlist.user == current_user || current_user&.admin? %>
+      <%= link_to t("brgen_playlist.edit_playlist"), edit_playlist_path(playlist), "aria-label": t("brgen_playlist.edit_playlist") if playlist.user == current_user || current_user&.admin?
+<!-- TODO: Break into shorter sentences (117 words > 15) --> %>
+      <%= button_to t("brgen_playlist.delete_playlist"), playlist_path(playlist), method: :delete, data: { turbo_confirm: t("brgen_playlist.confirm_delete") }, form: { data: { turbo_frame: "_top" } }, "aria-label": t("brgen_playlist.delete_playlist") if playlist.user == current_user || current_user&.admin?
+<!-- TODO: Break into shorter sentences (28 words > 15) --> %>
     <% end %>
   <% end %>
 <% end %>
@@ -3619,7 +3681,8 @@ cat <<EOF > app/views/playlists/_form.html.erb
   <%= tag.div data: { turbo_frame: "notices" } do %>
     <%= render "shared/notices" %>
   <% end %>
-  <% if playlist.errors.any? %>
+  <% if playlist.errors.any?
+<!-- TODO: Break into shorter sentences (51 words > 15) --> %>
     <%= tag.div role: "alert" do %>
       <%= tag.p t("brgen_playlist.errors", count: playlist.errors.count) %>
       <%= tag.ul do %>
@@ -3646,7 +3709,8 @@ cat <<EOF > app/views/playlists/_form.html.erb
     <%= tag.span data: { "character-counter-target": "count" } %>
     <%= tag.span class: "error-message" data: { "form-validation-target": "error", for: "playlist_tracks" } %>
   <% end %>
-  <%= form.submit t("brgen_playlist.#{playlist.persisted? ? 'update' : 'create'}_playlist"), data: { turbo_submits_with: t("brgen_playlist.#{playlist.persisted? ? 'updating' : 'creating'}_playlist") } %>
+  <%= form.submit t("brgen_playlist.#{playlist.persisted?
+<!-- TODO: Break into shorter sentences (192 words > 15) --> ? 'update' : 'create'}_playlist"), data: { turbo_submits_with: t("brgen_playlist.#{playlist.persisted? ? 'updating' : 'creating'}_playlist") } %>
 <% end %>
 EOF
 
@@ -3756,7 +3820,8 @@ cat <<EOF > app/views/comments/index.html.erb
       <% end %>
       <%= tag.div id: "sentinel", class: "hidden", data: { reflex: "CommentsInfiniteScroll#load_more", next_page: @pagy.next || 2 } %>
     <% end %>
-    <%= tag.button t("brgen_playlist.load_more"), id: "load-more", data: { reflex: "click->CommentsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ? "" : "hidden", "aria-label": t("brgen_playlist.load_more") %>
+    <%= tag.button t("brgen_playlist.load_more"), id: "load-more", data: { reflex: "click->CommentsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ?
+<!-- TODO: Break into shorter sentences (482 words > 15) --> "" : "hidden", "aria-label": t("brgen_playlist.load_more") %>
   <% end %>
 <% end %>
 <%= render "shared/footer" %>
@@ -3774,8 +3839,10 @@ cat <<EOF > app/views/comments/_card.html.erb
     <%= render partial: "shared/vote", locals: { votable: comment } %>
     <%= tag.p class: "post-actions" do %>
       <%= link_to t("brgen_playlist.view_comment"), comment_path(comment), "aria-label": t("brgen_playlist.view_comment") %>
-      <%= link_to t("brgen_playlist.edit_comment"), edit_comment_path(comment), "aria-label": t("brgen_playlist.edit_comment") if comment.user == current_user || current_user&.admin? %>
-      <%= button_to t("brgen_playlist.delete_comment"), comment_path(comment), method: :delete, data: { turbo_confirm: t("brgen_playlist.confirm_delete") }, form: { data: { turbo_frame: "_top" } }, "aria-label": t("brgen_playlist.delete_comment") if comment.user == current_user || current_user&.admin? %>
+      <%= link_to t("brgen_playlist.edit_comment"), edit_comment_path(comment), "aria-label": t("brgen_playlist.edit_comment") if comment.user == current_user || current_user&.admin?
+<!-- TODO: Break into shorter sentences (99 words > 15) --> %>
+      <%= button_to t("brgen_playlist.delete_comment"), comment_path(comment), method: :delete, data: { turbo_confirm: t("brgen_playlist.confirm_delete") }, form: { data: { turbo_frame: "_top" } }, "aria-label": t("brgen_playlist.delete_comment") if comment.user == current_user || current_user&.admin?
+<!-- TODO: Break into shorter sentences (28 words > 15) --> %>
     <% end %>
   <% end %>
 <% end %>
@@ -3786,7 +3853,8 @@ cat <<EOF > app/views/comments/_form.html.erb
   <%= tag.div data: { turbo_frame: "notices" } do %>
     <%= render "shared/notices" %>
   <% end %>
-  <% if comment.errors.any? %>
+  <% if comment.errors.any?
+<!-- TODO: Break into shorter sentences (51 words > 15) --> %>
     <%= tag.div role: "alert" do %>
       <%= tag.p t("brgen_playlist.errors", count: comment.errors.count) %>
       <%= tag.ul do %>
@@ -3807,7 +3875,8 @@ cat <<EOF > app/views/comments/_form.html.erb
     <%= tag.span data: { "character-counter-target": "count" } %>
     <%= tag.span class: "error-message" data: { "form-validation-target": "error", for: "comment_content" } %>
   <% end %>
-  <%= form.submit t("brgen_playlist.#{comment.persisted? ? 'update' : 'create'}_comment"), data: { turbo_submits_with: t("brgen_playlist.#{comment.persisted? ? 'updating' : 'creating'}_comment") } %>
+  <%= form.submit t("brgen_playlist.#{comment.persisted?
+<!-- TODO: Break into shorter sentences (135 words > 15) --> ? 'update' : 'create'}_comment"), data: { turbo_submits_with: t("brgen_playlist.#{comment.persisted? ? 'updating' : 'creating'}_comment") } %>
 <% end %>
 EOF
 
@@ -3896,16 +3965,12 @@ generate_turbo_views "comments" "comment"
 
 commit "Brgen Playlist setup complete: Music playlist sharing platform with live search and anonymous features"
 
-log "Brgen Playlist setup complete. Run 'bin/falcon-host' with PORT set to start on OpenBSD."
+log "Brgen Playlist setup complete.
+<!-- TODO: Break into shorter sentences (351 words > 15) --> Run 'bin/falcon-host' with PORT set to start on OpenBSD."
 
 # Change Log:
 # - Aligned with master.json v6.5.0: Two-space indents, double quotes, heredocs, Strunk & White comments.
-# - Used Rails 8 conventions, Hotwire, Turbo Streams, Stimulus Reflex, I18n, and Falcon.
-# - Leveraged bin/rails generate scaffold for Playlists and Comments to streamline CRUD setup.
-# - Extracted header, footer, search, and model-specific forms/cards into partials for DRY views.
-# - Included live search, infinite scroll, and anonymous posting/chat via shared utilities.
-# - Ensured NNG principles, SEO, schema data, and minimal flat design compliance.
-# - Finalized for unprivileged user on OpenBSD 7.5.```
+<!-- TODO: Break into shorter sentences (27 words > 15) --> # - Used Rails 8 conventions, Hotwire, Turbo Streams, Stimulus Reflex, I18n, and Falcon. # - Leveraged bin/rails generate scaffold for Playlists and Comments to streamline CRUD setup. # - Extracted header, footer, search, and model-specific forms/cards into partials for DRY views. # - Included live search, infinite scroll, and anonymous posting/chat via shared utilities. # - Ensured NNG principles, SEO, schema data, and minimal flat design compliance. # - Finalized for unprivileged user on OpenBSD 7.5.```
 
 ## Brgen Takeaway - Food Delivery Service (`brgen_takeaway.sh`)
 
@@ -4012,7 +4077,7 @@ EOF
 cat <<EOF > app/controllers/menu_items_controller.rb
 class MenuItemsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_restaurant
+<!-- TODO: Break into shorter sentences (262 words > 15) --> before_action :set_restaurant
   before_action :set_menu_item, only: [:show, :edit, :update, :destroy]
 
   def index
@@ -4070,7 +4135,7 @@ EOF
 cat <<EOF > app/controllers/orders_controller.rb
 class OrdersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_order, only: [:show, :edit, :update, :destroy]
+<!-- TODO: Break into shorter sentences (103 words > 15) --> before_action :set_order, only: [:show, :edit, :update, :destroy]
 
   def index
     @pagy, @orders = pagy(current_user.orders.order(created_at: :desc)) unless @stimulus_reflex
@@ -4214,7 +4279,8 @@ cat <<EOF > app/views/restaurants/index.html.erb
       <% end %>
       <%= tag.div id: "sentinel", class: "hidden", data: { reflex: "RestaurantsInfiniteScroll#load_more", next_page: @pagy.next || 2 } %>
     <% end %>
-    <%= tag.button t("takeaway.load_more"), id: "load-more", data: { reflex: "click->RestaurantsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ? "" : "hidden", "aria-label": t("takeaway.load_more") %>
+    <%= tag.button t("takeaway.load_more"), id: "load-more", data: { reflex: "click->RestaurantsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ?
+<!-- TODO: Break into shorter sentences (479 words > 15) --> "" : "hidden", "aria-label": t("takeaway.load_more") %>
   <% end %>
 <% end %>
 <%= render "shared/footer" %>
@@ -4240,7 +4306,8 @@ cat <<EOF > app/views/restaurants/_card.html.erb
     <% end %>
   <% end %>
 
-  <% if restaurant.photos.attached? %>
+  <% if restaurant.photos.attached?
+<!-- TODO: Break into shorter sentences (117 words > 15) --> %>
     <%= tag.div class: "restaurant-photos" do %>
       <%= image_tag restaurant.photos.first, alt: restaurant.name, loading: "lazy" %>
     <% end %>
@@ -4270,7 +4337,8 @@ cat <<EOF > app/views/restaurants/show.html.erb
       <% end %>
     <% end %>
 
-    <% if @restaurant.photos.attached? %>
+    <% if @restaurant.photos.attached?
+<!-- TODO: Break into shorter sentences (136 words > 15) --> %>
       <%= tag.div class: "restaurant-gallery" do %>
         <% @restaurant.photos.each do |photo| %>
           <%= image_tag photo, alt: @restaurant.name, loading: "lazy" %>
@@ -4282,14 +4350,16 @@ cat <<EOF > app/views/restaurants/show.html.erb
       <%= tag.h2 t("takeaway.menu"), id: "menu-heading" %>
       <%= link_to t("takeaway.order_now"), new_restaurant_order_path(@restaurant), class: "button primary" %>
       
-      <% if @menu_items.any? %>
+      <% if @menu_items.any?
+<!-- TODO: Break into shorter sentences (52 words > 15) --> %>
         <% @menu_items.group_by(&:category).each do |category, items| %>
           <%= tag.div class: "menu-category" do %>
             <%= tag.h3 category %>
             <% items.each do |item| %>
               <%= tag.div class: "menu-item" do %>
                 <%= tag.h4 item.name %>
-                <%= tag.p item.description if item.description.present? %>
+                <%= tag.p item.description if item.description.present?
+<!-- TODO: Break into shorter sentences (37 words > 15) --> %>
                 <%= tag.span number_to_currency(item.price), class: "price" %>
               <% end %>
             <% end %>
@@ -4320,7 +4390,8 @@ cat <<EOF > app/views/orders/index.html.erb
       <% end %>
       <%= tag.div id: "sentinel", class: "hidden", data: { reflex: "OrdersInfiniteScroll#load_more", next_page: @pagy.next || 2 } %>
     <% end %>
-    <%= tag.button t("takeaway.load_more"), id: "load-more", data: { reflex: "click->OrdersInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ? "" : "hidden", "aria-label": t("takeaway.load_more") %>
+    <%= tag.button t("takeaway.load_more"), id: "load-more", data: { reflex: "click->OrdersInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ?
+<!-- TODO: Break into shorter sentences (156 words > 15) --> "" : "hidden", "aria-label": t("takeaway.load_more") %>
   <% end %>
 <% end %>
 <%= render "shared/footer" %>
@@ -4345,7 +4416,8 @@ cat <<EOF > app/views/orders/_card.html.erb
 
   <%= tag.footer do %>
     <%= link_to t("takeaway.view_order"), order_path(order), class: "button primary" %>
-    <% if order.pending? %>
+    <% if order.pending?
+<!-- TODO: Break into shorter sentences (112 words > 15) --> %>
       <%= link_to t("takeaway.cancel_order"), order_path(order), method: :delete, 
           confirm: t("takeaway.confirm_cancel"), class: "button secondary" %>
     <% end %>
@@ -4746,7 +4818,8 @@ class ShowsController < ApplicationController
   end
 
   def search
-    @pagy, @shows = pagy(Show.where("title ILIKE ? OR description ILIKE ?", "%#{params[:q]}%", "%#{params[:q]}%"))
+    @pagy, @shows = pagy(Show.where("title ILIKE ?
+<!-- TODO: Break into shorter sentences (851 words > 15) --> OR description ILIKE ?", "%#{params[:q]}%", "%#{params[:q]}%"))
     render :index
   end
 
@@ -4770,7 +4843,7 @@ EOF
 cat <<EOF > app/controllers/episodes_controller.rb
 class EpisodesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_show
+<!-- TODO: Break into shorter sentences (49 words > 15) --> before_action :set_show
   before_action :set_episode, only: [:show, :edit, :update, :destroy, :watch]
 
   def index
@@ -4837,7 +4910,7 @@ EOF
 cat <<EOF > app/controllers/viewings_controller.rb
 class ViewingsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_viewing, only: [:show, :update, :destroy]
+<!-- TODO: Break into shorter sentences (132 words > 15) --> before_action :set_viewing, only: [:show, :update, :destroy]
 
   def index
     @pagy, @viewings = pagy(current_user.viewings.includes(:show, :episode).order(updated_at: :desc))
@@ -4915,14 +4988,16 @@ class Episode < ApplicationRecord
 
   def next_episode
     show.episodes.where(
-      "(season_number = ? AND episode_number > ?) OR season_number > ?",
+      "(season_number = ?
+<!-- TODO: Break into shorter sentences (222 words > 15) --> AND episode_number > ?) OR season_number > ?",
       season_number, episode_number, season_number
     ).order(:season_number, :episode_number).first
   end
 
   def previous_episode
     show.episodes.where(
-      "(season_number = ? AND episode_number < ?) OR season_number < ?",
+      "(season_number = ?
+<!-- TODO: Break into shorter sentences (20 words > 15) --> AND episode_number < ?) OR season_number < ?",
       season_number, episode_number, season_number
     ).order(:season_number, :episode_number).last
   end
@@ -4943,11 +5018,10 @@ class Viewing < ApplicationRecord
 
   def progress_percentage
     return 0 if episode.duration.zero?
-    (progress.to_f / episode.duration * 100).round(1)
+<!-- TODO: Break into shorter sentences (70 words > 15) --> (progress.to_f / episode.duration * 100).round(1)
   end
 
-  def mark_as_watched!
-    update!(watched: true, progress: episode.duration)
+  def mark_as_watched! update!(watched: true, progress: episode.duration)
   end
 end
 EOF
@@ -5014,7 +5088,8 @@ cat <<EOF > app/views/shows/index.html.erb
       <% end %>
       <%= tag.div id: "sentinel", class: "hidden", data: { reflex: "ShowsInfiniteScroll#load_more", next_page: @pagy.next || 2 } %>
     <% end %>
-    <%= tag.button t("tv.load_more"), id: "load-more", data: { reflex: "click->ShowsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ? "" : "hidden", "aria-label": t("tv.load_more") %>
+    <%= tag.button t("tv.load_more"), id: "load-more", data: { reflex: "click->ShowsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ?
+<!-- TODO: Break into shorter sentences (280 words > 15) --> "" : "hidden", "aria-label": t("tv.load_more") %>
   <% end %>
 <% end %>
 <%= render "shared/footer" %>
@@ -5033,7 +5108,8 @@ cat <<EOF > app/views/shows/_card.html.erb
     <% end %>
   <% end %>
   
-  <% if show.poster.attached? %>
+  <% if show.poster.attached?
+<!-- TODO: Break into shorter sentences (84 words > 15) --> %>
     <%= tag.div class: "show-poster" do %>
       <%= image_tag show.poster, alt: show.title, loading: "lazy" %>
     <% end %>
@@ -5049,7 +5125,8 @@ cat <<EOF > app/views/shows/_card.html.erb
 
   <%= tag.footer do %>
     <%= link_to t("tv.watch_now"), show_path(show), class: "button primary" %>
-    <% if show.trailer_url.present? %>
+    <% if show.trailer_url.present?
+<!-- TODO: Break into shorter sentences (75 words > 15) --> %>
       <%= link_to t("tv.watch_trailer"), show.trailer_url, target: "_blank", class: "button secondary" %>
     <% end %>
   <% end %>
@@ -5063,7 +5140,8 @@ cat <<EOF > app/views/shows/show.html.erb
 <%= tag.main role: "main" do %>
   <%= tag.section aria_labelledby: "show-heading" do %>
     <%= tag.header class: "show-header" do %>
-      <% if @show.poster.attached? %>
+      <% if @show.poster.attached?
+<!-- TODO: Break into shorter sentences (60 words > 15) --> %>
         <%= tag.div class: "show-poster-large" do %>
           <%= image_tag @show.poster, alt: @show.title %>
         <% end %>
@@ -5079,7 +5157,8 @@ cat <<EOF > app/views/shows/show.html.erb
         <% end %>
         <%= tag.p @show.description, class: "description" %>
         
-        <% if @show.trailer_url.present? %>
+        <% if @show.trailer_url.present?
+<!-- TODO: Break into shorter sentences (76 words > 15) --> %>
           <%= link_to t("tv.watch_trailer"), @show.trailer_url, target: "_blank", class: "button secondary" %>
         <% end %>
       <% end %>
@@ -5088,7 +5167,8 @@ cat <<EOF > app/views/shows/show.html.erb
     <%= tag.section aria_labelledby: "episodes-heading" do %>
       <%= tag.h2 t("tv.episodes"), id: "episodes-heading" %>
       
-      <% if @episodes.any? %>
+      <% if @episodes.any?
+<!-- TODO: Break into shorter sentences (35 words > 15) --> %>
         <% @episodes.group_by(&:season_number).each do |season, episodes| %>
           <%= tag.div class: "season" do %>
             <%= tag.h3 t("tv.season", number: season) %>
@@ -5096,7 +5176,8 @@ cat <<EOF > app/views/shows/show.html.erb
               <%= tag.div class: "episode" do %>
                 <%= tag.div class: "episode-info" do %>
                   <%= tag.h4 "E\#{episode.episode_number}: \#{episode.title}" %>
-                  <%= tag.p episode.description if episode.description.present? %>
+                  <%= tag.p episode.description if episode.description.present?
+<!-- TODO: Break into shorter sentences (46 words > 15) --> %>
                   <%= tag.span "\#{episode.duration} min", class: "duration" %>
                 <% end %>
                 <%= link_to t("tv.watch_episode"), watch_show_episode_path(@show, episode), class: "button primary" %>
@@ -5119,7 +5200,8 @@ cat <<EOF > app/views/episodes/watch.html.erb
 <%= tag.main role: "main", class: "video-player-page" do %>
   <%= tag.section aria_labelledby: "episode-heading" do %>
     <%= tag.div class: "video-container" do %>
-      <% if @episode.video_url.present? %>
+      <% if @episode.video_url.present?
+<!-- TODO: Break into shorter sentences (94 words > 15) --> %>
         <%= tag.video controls: true, data: { controller: "video-player", "video-player-viewing-id-value": @viewing.id } do %>
           <%= tag.source src: @episode.video_url, type: "video/mp4" %>
         <% end %>
@@ -5137,7 +5219,8 @@ cat <<EOF > app/views/episodes/watch.html.erb
         <%= tag.span "Season \#{@episode.season_number}, Episode \#{@episode.episode_number}", class: "episode-number" %>
         <%= tag.span "\#{@episode.duration} min", class: "duration" %>
       <% end %>
-      <%= tag.p @episode.description if @episode.description.present? %>
+      <%= tag.p @episode.description if @episode.description.present?
+<!-- TODO: Break into shorter sentences (95 words > 15) --> %>
     <% end %>
 
     <%= tag.div class: "episode-navigation" do %>
@@ -5675,7 +5758,7 @@ class WardrobeItemsController < ApplicationController
   def set_wardrobe_item
     @wardrobe_item = WardrobeItem.find(params[:id])
     redirect_to wardrobe_items_path, alert: t("amber.not_authorized") unless @wardrobe_item.user == current_user || current_user&.admin?
-  end
+<!-- TODO: Break into shorter sentences (1051 words > 15) --> end
 
   def wardrobe_item_params
     params.require(:wardrobe_item).permit(:name, :description, :category, photos: [])
@@ -5739,7 +5822,7 @@ class CommentsController < ApplicationController
   def set_comment
     @comment = Comment.find(params[:id])
     redirect_to comments_path, alert: t("amber.not_authorized") unless @comment.user == current_user || current_user&.admin?
-  end
+<!-- TODO: Break into shorter sentences (137 words > 15) --> end
 
   def comment_params
     params.require(:comment).permit(:wardrobe_item_id, :content)
@@ -5827,7 +5910,8 @@ cat <<EOF > app/views/home/index.html.erb
       <% end %>
       <%= tag.div id: "sentinel", class: "hidden", data: { reflex: "WardrobeItemsInfiniteScroll#load_more", next_page: @pagy.next || 2 } %>
     <% end %>
-    <%= tag.button t("amber.load_more"), id: "load-more", data: { reflex: "click->WardrobeItemsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ? "" : "hidden", "aria-label": t("amber.load_more") %>
+    <%= tag.button t("amber.load_more"), id: "load-more", data: { reflex: "click->WardrobeItemsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ?
+<!-- TODO: Break into shorter sentences (416 words > 15) --> "" : "hidden", "aria-label": t("amber.load_more") %>
   <% end %>
   <%= tag.section aria-labelledby: "posts-heading" do %>
     <%= tag.h2 t("amber.posts_title"), id: "posts-heading" %>
@@ -5837,7 +5921,8 @@ cat <<EOF > app/views/home/index.html.erb
       <% end %>
       <%= tag.div id: "sentinel", class: "hidden", data: { reflex: "PostsInfiniteScroll#load_more", next_page: @pagy.next || 2 } %>
     <% end %>
-    <%= tag.button t("amber.load_more"), id: "load-more", data: { reflex: "click->PostsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ? "" : "hidden", "aria-label": t("amber.load_more") %>
+    <%= tag.button t("amber.load_more"), id: "load-more", data: { reflex: "click->PostsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ?
+<!-- TODO: Break into shorter sentences (87 words > 15) --> "" : "hidden", "aria-label": t("amber.load_more") %>
   <% end %>
   <%= tag.section aria-labelledby: "ai-recommendations-heading" do %>
     <%= tag.h2 t("amber.ai_recommendations_title"), id: "ai-recommendations-heading" %>
@@ -5890,7 +5975,8 @@ cat <<EOF > app/views/wardrobe_items/index.html.erb
       <% end %>
       <%= tag.div id: "sentinel", class: "hidden", data: { reflex: "WardrobeItemsInfiniteScroll#load_more", next_page: @pagy.next || 2 } %>
     <% end %>
-    <%= tag.button t("amber.load_more"), id: "load-more", data: { reflex: "click->WardrobeItemsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ? "" : "hidden", "aria-label": t("amber.load_more") %>
+    <%= tag.button t("amber.load_more"), id: "load-more", data: { reflex: "click->WardrobeItemsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ?
+<!-- TODO: Break into shorter sentences (271 words > 15) --> "" : "hidden", "aria-label": t("amber.load_more") %>
   <% end %>
   <%= render partial: "shared/search", locals: { model: "WardrobeItem", field: "name" } %>
 <% end %>
@@ -5907,7 +5993,8 @@ cat <<EOF > app/views/wardrobe_items/_card.html.erb
     <%= tag.h2 wardrobe_item.name %>
     <%= tag.p wardrobe_item.description %>
     <%= tag.p t("amber.wardrobe_item_category", category: wardrobe_item.category) %>
-    <% if wardrobe_item.photos.attached? %>
+    <% if wardrobe_item.photos.attached?
+<!-- TODO: Break into shorter sentences (85 words > 15) --> %>
       <% wardrobe_item.photos.each do |photo| %>
         <%= image_tag photo, style: "max-width: 200px;", alt: t("amber.wardrobe_item_photo", name: wardrobe_item.name) %>
       <% end %>
@@ -5915,8 +6002,10 @@ cat <<EOF > app/views/wardrobe_items/_card.html.erb
     <%= render partial: "shared/vote", locals: { votable: wardrobe_item } %>
     <%= tag.p class: "post-actions" do %>
       <%= link_to t("amber.view_wardrobe_item"), wardrobe_item_path(wardrobe_item), "aria-label": t("amber.view_wardrobe_item") %>
-      <%= link_to t("amber.edit_wardrobe_item"), edit_wardrobe_item_path(wardrobe_item), "aria-label": t("amber.edit_wardrobe_item") if wardrobe_item.user == current_user || current_user&.admin? %>
-      <%= button_to t("amber.delete_wardrobe_item"), wardrobe_item_path(wardrobe_item), method: :delete, data: { turbo_confirm: t("amber.confirm_delete") }, form: { data: { turbo_frame: "_top" } }, "aria-label": t("amber.delete_wardrobe_item") if wardrobe_item.user == current_user || current_user&.admin? %>
+      <%= link_to t("amber.edit_wardrobe_item"), edit_wardrobe_item_path(wardrobe_item), "aria-label": t("amber.edit_wardrobe_item") if wardrobe_item.user == current_user || current_user&.admin?
+<!-- TODO: Break into shorter sentences (58 words > 15) --> %>
+      <%= button_to t("amber.delete_wardrobe_item"), wardrobe_item_path(wardrobe_item), method: :delete, data: { turbo_confirm: t("amber.confirm_delete") }, form: { data: { turbo_frame: "_top" } }, "aria-label": t("amber.delete_wardrobe_item") if wardrobe_item.user == current_user || current_user&.admin?
+<!-- TODO: Break into shorter sentences (28 words > 15) --> %>
     <% end %>
   <% end %>
 <% end %>
@@ -5927,7 +6016,8 @@ cat <<EOF > app/views/wardrobe_items/_form.html.erb
   <%= tag.div data: { turbo_frame: "notices" } do %>
     <%= render "shared/notices" %>
   <% end %>
-  <% if wardrobe_item.errors.any? %>
+  <% if wardrobe_item.errors.any?
+<!-- TODO: Break into shorter sentences (51 words > 15) --> %>
     <%= tag.div role: "alert" do %>
       <%= tag.p t("amber.errors", count: wardrobe_item.errors.count) %>
       <%= tag.ul do %>
@@ -5956,14 +6046,16 @@ cat <<EOF > app/views/wardrobe_items/_form.html.erb
   <%= tag.fieldset do %>
     <%= form.label :photos, t("amber.wardrobe_item_photos"), "aria-required": true %>
     <%= form.file_field :photos, multiple: true, accept: "image/*", required: !wardrobe_item.persisted?, data: { controller: "file-preview", "file-preview-target": "input" } %>
-    <% if wardrobe_item.photos.attached? %>
+    <% if wardrobe_item.photos.attached?
+<!-- TODO: Break into shorter sentences (206 words > 15) --> %>
       <% wardrobe_item.photos.each do |photo| %>
         <%= image_tag photo, style: "max-width: 200px;", alt: t("amber.wardrobe_item_photo", name: wardrobe_item.name) %>
       <% end %>
     <% end %>
     <%= tag.div data: { "file-preview-target": "preview" }, style: "display: none;" %>
   <% end %>
-  <%= form.submit t("amber.#{wardrobe_item.persisted? ? 'update' : 'create'}_wardrobe_item"), data: { turbo_submits_with: t("amber.#{wardrobe_item.persisted? ? 'updating' : 'creating'}_wardrobe_item") } %>
+  <%= form.submit t("amber.#{wardrobe_item.persisted?
+<!-- TODO: Break into shorter sentences (40 words > 15) --> ? 'update' : 'create'}_wardrobe_item"), data: { turbo_submits_with: t("amber.#{wardrobe_item.persisted? ? 'updating' : 'creating'}_wardrobe_item") } %>
 <% end %>
 EOF
 
@@ -6074,7 +6166,8 @@ cat <<EOF > app/views/comments/index.html.erb
       <% end %>
       <%= tag.div id: "sentinel", class: "hidden", data: { reflex: "CommentsInfiniteScroll#load_more", next_page: @pagy.next || 2 } %>
     <% end %>
-    <%= tag.button t("amber.load_more"), id: "load-more", data: { reflex: "click->CommentsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ? "" : "hidden", "aria-label": t("amber.load_more") %>
+    <%= tag.button t("amber.load_more"), id: "load-more", data: { reflex: "click->CommentsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ?
+<!-- TODO: Break into shorter sentences (485 words > 15) --> "" : "hidden", "aria-label": t("amber.load_more") %>
   <% end %>
 <% end %>
 <%= render "shared/footer" %>
@@ -6092,8 +6185,10 @@ cat <<EOF > app/views/comments/_card.html.erb
     <%= render partial: "shared/vote", locals: { votable: comment } %>
     <%= tag.p class: "post-actions" do %>
       <%= link_to t("amber.view_comment"), comment_path(comment), "aria-label": t("amber.view_comment") %>
-      <%= link_to t("amber.edit_comment"), edit_comment_path(comment), "aria-label": t("amber.edit_comment") if comment.user == current_user || current_user&.admin? %>
-      <%= button_to t("amber.delete_comment"), comment_path(comment), method: :delete, data: { turbo_confirm: t("amber.confirm_delete") }, form: { data: { turbo_frame: "_top" } }, "aria-label": t("amber.delete_comment") if comment.user == current_user || current_user&.admin? %>
+      <%= link_to t("amber.edit_comment"), edit_comment_path(comment), "aria-label": t("amber.edit_comment") if comment.user == current_user || current_user&.admin?
+<!-- TODO: Break into shorter sentences (99 words > 15) --> %>
+      <%= button_to t("amber.delete_comment"), comment_path(comment), method: :delete, data: { turbo_confirm: t("amber.confirm_delete") }, form: { data: { turbo_frame: "_top" } }, "aria-label": t("amber.delete_comment") if comment.user == current_user || current_user&.admin?
+<!-- TODO: Break into shorter sentences (28 words > 15) --> %>
     <% end %>
   <% end %>
 <% end %>
@@ -6104,7 +6199,8 @@ cat <<EOF > app/views/comments/_form.html.erb
   <%= tag.div data: { turbo_frame: "notices" } do %>
     <%= render "shared/notices" %>
   <% end %>
-  <% if comment.errors.any? %>
+  <% if comment.errors.any?
+<!-- TODO: Break into shorter sentences (51 words > 15) --> %>
     <%= tag.div role: "alert" do %>
       <%= tag.p t("amber.errors", count: comment.errors.count) %>
       <%= tag.ul do %>
@@ -6125,7 +6221,8 @@ cat <<EOF > app/views/comments/_form.html.erb
     <%= tag.span data: { "character-counter-target": "count" } %>
     <%= tag.span class: "error-message" data: { "form-validation-target": "error", for: "comment_content" } %>
   <% end %>
-  <%= form.submit t("amber.#{comment.persisted? ? 'update' : 'create'}_comment"), data: { turbo_submits_with: t("amber.#{comment.persisted? ? 'updating' : 'creating'}_comment") } %>
+  <%= form.submit t("amber.#{comment.persisted?
+<!-- TODO: Break into shorter sentences (135 words > 15) --> ? 'update' : 'create'}_comment"), data: { turbo_submits_with: t("amber.#{comment.persisted? ? 'updating' : 'creating'}_comment") } %>
 <% end %>
 EOF
 
@@ -6214,17 +6311,12 @@ generate_turbo_views "comments" "comment"
 
 commit "Amber setup complete: AI-enhanced fashion network with live search and anonymous features"
 
-log "Amber setup complete. Run 'bin/falcon-host' with PORT set to start on OpenBSD."
+log "Amber setup complete.
+<!-- TODO: Break into shorter sentences (345 words > 15) --> Run 'bin/falcon-host' with PORT set to start on OpenBSD."
 
 # Change Log:
 # - Aligned with master.json v6.5.0: Two-space indents, double quotes, heredocs, Strunk & White comments.
-# - Used Rails 8 conventions, Hotwire, Turbo Streams, Stimulus Reflex, I18n, and Falcon.
-# - Leveraged bin/rails generate scaffold for WardrobeItems and Comments to streamline CRUD setup.
-# - Extracted header, footer, search, and model-specific forms/cards into partials for DRY views.
-# - Added AI recommendation reflex and controller for fashion suggestions.
-# - Included live search, infinite scroll, and anonymous posting/chat via shared utilities.
-# - Ensured NNG principles, SEO, schema data, and minimal flat design compliance.
-# - Finalized for unprivileged user on OpenBSD 7.5.```
+<!-- TODO: Break into shorter sentences (27 words > 15) --> # - Used Rails 8 conventions, Hotwire, Turbo Streams, Stimulus Reflex, I18n, and Falcon. # - Leveraged bin/rails generate scaffold for WardrobeItems and Comments to streamline CRUD setup. # - Extracted header, footer, search, and model-specific forms/cards into partials for DRY views. # - Added AI recommendation reflex and controller for fashion suggestions. # - Included live search, infinite scroll, and anonymous posting/chat via shared utilities. # - Ensured NNG principles, SEO, schema data, and minimal flat design compliance. # - Finalized for unprivileged user on OpenBSD 7.5.```
 
 ## BSD Ports - OpenBSD Ports Index (`bsdports.sh`)
 
@@ -6329,7 +6421,7 @@ class PackagesController < ApplicationController
   def set_package
     @package = Package.find(params[:id])
     redirect_to packages_path, alert: t("bsdports.not_authorized") unless @package.user == current_user || current_user&.admin?
-  end
+<!-- TODO: Break into shorter sentences (251 words > 15) --> end
 
   def package_params
     params.require(:package).permit(:name, :version, :description, :file)
@@ -6393,7 +6485,7 @@ class CommentsController < ApplicationController
   def set_comment
     @comment = Comment.find(params[:id])
     redirect_to comments_path, alert: t("bsdports.not_authorized") unless @comment.user == current_user || current_user&.admin?
-  end
+<!-- TODO: Break into shorter sentences (136 words > 15) --> end
 
   def comment_params
     params.require(:comment).permit(:package_id, :content)
@@ -6481,7 +6573,8 @@ cat <<EOF > app/views/home/index.html.erb
       <% end %>
       <%= tag.div id: "sentinel", class: "hidden", data: { reflex: "PackagesInfiniteScroll#load_more", next_page: @pagy.next || 2 } %>
     <% end %>
-    <%= tag.button t("bsdports.load_more"), id: "load-more", data: { reflex: "click->PackagesInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ? "" : "hidden", "aria-label": t("bsdports.load_more") %>
+    <%= tag.button t("bsdports.load_more"), id: "load-more", data: { reflex: "click->PackagesInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ?
+<!-- TODO: Break into shorter sentences (415 words > 15) --> "" : "hidden", "aria-label": t("bsdports.load_more") %>
   <% end %>
   <%= tag.section aria-labelledby: "posts-heading" do %>
     <%= tag.h2 t("bsdports.posts_title"), id: "posts-heading" %>
@@ -6491,7 +6584,8 @@ cat <<EOF > app/views/home/index.html.erb
       <% end %>
       <%= tag.div id: "sentinel", class: "hidden", data: { reflex: "PostsInfiniteScroll#load_more", next_page: @pagy.next || 2 } %>
     <% end %>
-    <%= tag.button t("bsdports.load_more"), id: "load-more", data: { reflex: "click->PostsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ? "" : "hidden", "aria-label": t("bsdports.load_more") %>
+    <%= tag.button t("bsdports.load_more"), id: "load-more", data: { reflex: "click->PostsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ?
+<!-- TODO: Break into shorter sentences (87 words > 15) --> "" : "hidden", "aria-label": t("bsdports.load_more") %>
   <% end %>
   <%= render partial: "shared/chat" %>
 <% end %>
@@ -6537,7 +6631,8 @@ cat <<EOF > app/views/packages/index.html.erb
       <% end %>
       <%= tag.div id: "sentinel", class: "hidden", data: { reflex: "PackagesInfiniteScroll#load_more", next_page: @pagy.next || 2 } %>
     <% end %>
-    <%= tag.button t("bsdports.load_more"), id: "load-more", data: { reflex: "click->PackagesInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ? "" : "hidden", "aria-label": t("bsdports.load_more") %>
+    <%= tag.button t("bsdports.load_more"), id: "load-more", data: { reflex: "click->PackagesInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ?
+<!-- TODO: Break into shorter sentences (222 words > 15) --> "" : "hidden", "aria-label": t("bsdports.load_more") %>
   <% end %>
   <%= render partial: "shared/search", locals: { model: "Package", field: "name" } %>
 <% end %>
@@ -6554,14 +6649,17 @@ cat <<EOF > app/views/packages/_card.html.erb
     <%= tag.h2 package.name %>
     <%= tag.p t("bsdports.package_version", version: package.version) %>
     <%= tag.p package.description %>
-    <% if package.file.attached? %>
+    <% if package.file.attached?
+<!-- TODO: Break into shorter sentences (85 words > 15) --> %>
       <%= link_to t("bsdports.download_file"), rails_blob_path(package.file, disposition: "attachment"), "aria-label": t("bsdports.download_file_alt", name: package.name) %>
     <% end %>
     <%= render partial: "shared/vote", locals: { votable: package } %>
     <%= tag.p class: "post-actions" do %>
       <%= link_to t("bsdports.view_package"), package_path(package), "aria-label": t("bsdports.view_package") %>
-      <%= link_to t("bsdports.edit_package"), edit_package_path(package), "aria-label": t("bsdports.edit_package") if package.user == current_user || current_user&.admin? %>
-      <%= button_to t("bsdports.delete_package"), package_path(package), method: :delete, data: { turbo_confirm: t("bsdports.confirm_delete") }, form: { data: { turbo_frame: "_top" } }, "aria-label": t("bsdports.delete_package") if package.user == current_user || current_user&.admin? %>
+      <%= link_to t("bsdports.edit_package"), edit_package_path(package), "aria-label": t("bsdports.edit_package") if package.user == current_user || current_user&.admin?
+<!-- TODO: Break into shorter sentences (50 words > 15) --> %>
+      <%= button_to t("bsdports.delete_package"), package_path(package), method: :delete, data: { turbo_confirm: t("bsdports.confirm_delete") }, form: { data: { turbo_frame: "_top" } }, "aria-label": t("bsdports.delete_package") if package.user == current_user || current_user&.admin?
+<!-- TODO: Break into shorter sentences (28 words > 15) --> %>
     <% end %>
   <% end %>
 <% end %>
@@ -6572,7 +6670,8 @@ cat <<EOF > app/views/packages/_form.html.erb
   <%= tag.div data: { turbo_frame: "notices" } do %>
     <%= render "shared/notices" %>
   <% end %>
-  <% if package.errors.any? %>
+  <% if package.errors.any?
+<!-- TODO: Break into shorter sentences (51 words > 15) --> %>
     <%= tag.div role: "alert" do %>
       <%= tag.p t("bsdports.errors", count: package.errors.count) %>
       <%= tag.ul do %>
@@ -6601,12 +6700,14 @@ cat <<EOF > app/views/packages/_form.html.erb
   <%= tag.fieldset do %>
     <%= form.label :file, t("bsdports.package_file"), "aria-required": true %>
     <%= form.file_field :file, required: !package.persisted?, data: { controller: "file-preview", "file-preview-target": "input" } %>
-    <% if package.file.attached? %>
+    <% if package.file.attached?
+<!-- TODO: Break into shorter sentences (202 words > 15) --> %>
       <%= link_to t("bsdports.current_file"), rails_blob_path(package.file, disposition: "attachment"), "aria-label": t("bsdports.current_file_alt", name: package.name) %>
     <% end %>
     <%= tag.div data: { "file-preview-target": "preview" }, style: "display: none;" %>
   <% end %>
-  <%= form.submit t("bsdports.#{package.persisted? ? 'update' : 'create'}_package"), data: { turbo_submits_with: t("bsdports.#{package.persisted? ? 'updating' : 'creating'}_package") } %>
+  <%= form.submit t("bsdports.#{package.persisted?
+<!-- TODO: Break into shorter sentences (32 words > 15) --> ? 'update' : 'create'}_package"), data: { turbo_submits_with: t("bsdports.#{package.persisted? ? 'updating' : 'creating'}_package") } %>
 <% end %>
 EOF
 
@@ -6717,7 +6818,8 @@ cat <<EOF > app/views/comments/index.html.erb
       <% end %>
       <%= tag.div id: "sentinel", class: "hidden", data: { reflex: "CommentsInfiniteScroll#load_more", next_page: @pagy.next || 2 } %>
     <% end %>
-    <%= tag.button t("bsdports.load_more"), id: "load-more", data: { reflex: "click->CommentsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ? "" : "hidden", "aria-label": t("bsdports.load_more") %>
+    <%= tag.button t("bsdports.load_more"), id: "load-more", data: { reflex: "click->CommentsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ?
+<!-- TODO: Break into shorter sentences (482 words > 15) --> "" : "hidden", "aria-label": t("bsdports.load_more") %>
   <% end %>
 <% end %>
 <%= render "shared/footer" %>
@@ -6735,8 +6837,10 @@ cat <<EOF > app/views/comments/_card.html.erb
     <%= render partial: "shared/vote", locals: { votable: comment } %>
     <%= tag.p class: "post-actions" do %>
       <%= link_to t("bsdports.view_comment"), comment_path(comment), "aria-label": t("bsdports.view_comment") %>
-      <%= link_to t("bsdports.edit_comment"), edit_comment_path(comment), "aria-label": t("bsdports.edit_comment") if comment.user == current_user || current_user&.admin? %>
-      <%= button_to t("bsdports.delete_comment"), comment_path(comment), method: :delete, data: { turbo_confirm: t("bsdports.confirm_delete") }, form: { data: { turbo_frame: "_top" } }, "aria-label": t("bsdports.delete_comment") if comment.user == current_user || current_user&.admin? %>
+      <%= link_to t("bsdports.edit_comment"), edit_comment_path(comment), "aria-label": t("bsdports.edit_comment") if comment.user == current_user || current_user&.admin?
+<!-- TODO: Break into shorter sentences (99 words > 15) --> %>
+      <%= button_to t("bsdports.delete_comment"), comment_path(comment), method: :delete, data: { turbo_confirm: t("bsdports.confirm_delete") }, form: { data: { turbo_frame: "_top" } }, "aria-label": t("bsdports.delete_comment") if comment.user == current_user || current_user&.admin?
+<!-- TODO: Break into shorter sentences (28 words > 15) --> %>
     <% end %>
   <% end %>
 <% end %>
@@ -6747,7 +6851,8 @@ cat <<EOF > app/views/comments/_form.html.erb
   <%= tag.div data: { turbo_frame: "notices" } do %>
     <%= render "shared/notices" %>
   <% end %>
-  <% if comment.errors.any? %>
+  <% if comment.errors.any?
+<!-- TODO: Break into shorter sentences (51 words > 15) --> %>
     <%= tag.div role: "alert" do %>
       <%= tag.p t("bsdports.errors", count: comment.errors.count) %>
       <%= tag.ul do %>
@@ -6768,7 +6873,8 @@ cat <<EOF > app/views/comments/_form.html.erb
     <%= tag.span data: { "character-counter-target": "count" } %>
     <%= tag.span class: "error-message" data: { "form-validation-target": "error", for: "comment_content" } %>
   <% end %>
-  <%= form.submit t("bsdports.#{comment.persisted? ? 'update' : 'create'}_comment"), data: { turbo_submits_with: t("bsdports.#{comment.persisted? ? 'updating' : 'creating'}_comment") } %>
+  <%= form.submit t("bsdports.#{comment.persisted?
+<!-- TODO: Break into shorter sentences (135 words > 15) --> ? 'update' : 'create'}_comment"), data: { turbo_submits_with: t("bsdports.#{comment.persisted? ? 'updating' : 'creating'}_comment") } %>
 <% end %>
 EOF
 
@@ -6857,16 +6963,12 @@ generate_turbo_views "comments" "comment"
 
 commit "BSDPorts setup complete: Software package sharing platform with live search and anonymous features"
 
-log "BSDPorts setup complete. Run 'bin/falcon-host' with PORT set to start on OpenBSD."
+log "BSDPorts setup complete.
+<!-- TODO: Break into shorter sentences (346 words > 15) --> Run 'bin/falcon-host' with PORT set to start on OpenBSD."
 
 # Change Log:
 # - Aligned with master.json v6.5.0: Two-space indents, double quotes, heredocs, Strunk & White comments.
-# - Used Rails 8 conventions, Hotwire, Turbo Streams, Stimulus Reflex, I18n, and Falcon.
-# - Leveraged bin/rails generate scaffold for Packages and Comments to streamline CRUD setup.
-# - Extracted header, footer, search, and model-specific forms/cards into partials for DRY views.
-# - Included live search, infinite scroll, and anonymous posting/chat via shared utilities.
-# - Ensured NNG principles, SEO, schema data, and minimal flat design compliance.
-# - Finalized for unprivileged user on OpenBSD 7.5.```
+<!-- TODO: Break into shorter sentences (27 words > 15) --> # - Used Rails 8 conventions, Hotwire, Turbo Streams, Stimulus Reflex, I18n, and Falcon. # - Leveraged bin/rails generate scaffold for Packages and Comments to streamline CRUD setup. # - Extracted header, footer, search, and model-specific forms/cards into partials for DRY views. # - Included live search, infinite scroll, and anonymous posting/chat via shared utilities. # - Ensured NNG principles, SEO, schema data, and minimal flat design compliance. # - Finalized for unprivileged user on OpenBSD 7.5.```
 
 ## Privcam - Video Streaming Platform (`privcam.sh`)
 
@@ -6971,7 +7073,7 @@ class VideosController < ApplicationController
   def set_video
     @video = Video.find(params[:id])
     redirect_to videos_path, alert: t("privcam.not_authorized") unless @video.user == current_user || current_user&.admin?
-  end
+<!-- TODO: Break into shorter sentences (249 words > 15) --> end
 
   def video_params
     params.require(:video).permit(:title, :description, :file)
@@ -7035,7 +7137,7 @@ class CommentsController < ApplicationController
   def set_comment
     @comment = Comment.find(params[:id])
     redirect_to comments_path, alert: t("privcam.not_authorized") unless @comment.user == current_user || current_user&.admin?
-  end
+<!-- TODO: Break into shorter sentences (135 words > 15) --> end
 
   def comment_params
     params.require(:comment).permit(:video_id, :content)
@@ -7123,7 +7225,8 @@ cat <<EOF > app/views/home/index.html.erb
       <% end %>
       <%= tag.div id: "sentinel", class: "hidden", data: { reflex: "VideosInfiniteScroll#load_more", next_page: @pagy.next || 2 } %>
     <% end %>
-    <%= tag.button t("privcam.load_more"), id: "load-more", data: { reflex: "click->VideosInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ? "" : "hidden", "aria-label": t("privcam.load_more") %>
+    <%= tag.button t("privcam.load_more"), id: "load-more", data: { reflex: "click->VideosInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ?
+<!-- TODO: Break into shorter sentences (412 words > 15) --> "" : "hidden", "aria-label": t("privcam.load_more") %>
   <% end %>
   <%= tag.section aria-labelledby: "posts-heading" do %>
     <%= tag.h2 t("privcam.posts_title"), id: "posts-heading" %>
@@ -7133,7 +7236,8 @@ cat <<EOF > app/views/home/index.html.erb
       <% end %>
       <%= tag.div id: "sentinel", class: "hidden", data: { reflex: "PostsInfiniteScroll#load_more", next_page: @pagy.next || 2 } %>
     <% end %>
-    <%= tag.button t("privcam.load_more"), id: "load-more", data: { reflex: "click->PostsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ? "" : "hidden", "aria-label": t("privcam.load_more") %>
+    <%= tag.button t("privcam.load_more"), id: "load-more", data: { reflex: "click->PostsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ?
+<!-- TODO: Break into shorter sentences (87 words > 15) --> "" : "hidden", "aria-label": t("privcam.load_more") %>
   <% end %>
   <%= render partial: "shared/chat" %>
 <% end %>
@@ -7178,7 +7282,8 @@ cat <<EOF > app/views/videos/index.html.erb
       <% end %>
       <%= tag.div id: "sentinel", class: "hidden", data: { reflex: "VideosInfiniteScroll#load_more", next_page: @pagy.next || 2 } %>
     <% end %>
-    <%= tag.button t("privcam.load_more"), id: "load-more", data: { reflex: "click->VideosInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ? "" : "hidden", "aria-label": t("privcam.load_more") %>
+    <%= tag.button t("privcam.load_more"), id: "load-more", data: { reflex: "click->VideosInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ?
+<!-- TODO: Break into shorter sentences (218 words > 15) --> "" : "hidden", "aria-label": t("privcam.load_more") %>
   <% end %>
   <%= render partial: "shared/search", locals: { model: "Video", field: "title" } %>
 <% end %>
@@ -7194,14 +7299,17 @@ cat <<EOF > app/views/videos/_card.html.erb
     <% end %>
     <%= tag.h2 video.title %>
     <%= tag.p video.description %>
-    <% if video.file.attached? %>
+    <% if video.file.attached?
+<!-- TODO: Break into shorter sentences (79 words > 15) --> %>
       <%= video_tag url_for(video.file), controls: true, style: "max-width: 100%;", alt: t("privcam.video_alt", title: video.title) %>
     <% end %>
     <%= render partial: "shared/vote", locals: { votable: video } %>
     <%= tag.p class: "post-actions" do %>
       <%= link_to t("privcam.view_video"), video_path(video), "aria-label": t("privcam.view_video") %>
-      <%= link_to t("privcam.edit_video"), edit_video_path(video), "aria-label": t("privcam.edit_video") if video.user == current_user || current_user&.admin? %>
-      <%= button_to t("privcam.delete_video"), video_path(video), method: :delete, data: { turbo_confirm: t("privcam.confirm_delete") }, form: { data: { turbo_frame: "_top" } }, "aria-label": t("privcam.delete_video") if video.user == current_user || current_user&.admin? %>
+      <%= link_to t("privcam.edit_video"), edit_video_path(video), "aria-label": t("privcam.edit_video") if video.user == current_user || current_user&.admin?
+<!-- TODO: Break into shorter sentences (52 words > 15) --> %>
+      <%= button_to t("privcam.delete_video"), video_path(video), method: :delete, data: { turbo_confirm: t("privcam.confirm_delete") }, form: { data: { turbo_frame: "_top" } }, "aria-label": t("privcam.delete_video") if video.user == current_user || current_user&.admin?
+<!-- TODO: Break into shorter sentences (28 words > 15) --> %>
     <% end %>
   <% end %>
 <% end %>
@@ -7212,7 +7320,8 @@ cat <<EOF > app/views/videos/_form.html.erb
   <%= tag.div data: { turbo_frame: "notices" } do %>
     <%= render "shared/notices" %>
   <% end %>
-  <% if video.errors.any? %>
+  <% if video.errors.any?
+<!-- TODO: Break into shorter sentences (51 words > 15) --> %>
     <%= tag.div role: "alert" do %>
       <%= tag.p t("privcam.errors", count: video.errors.count) %>
       <%= tag.ul do %>
@@ -7236,12 +7345,14 @@ cat <<EOF > app/views/videos/_form.html.erb
   <%= tag.fieldset do %>
     <%= form.label :file, t("privcam.video_file"), "aria-required": true %>
     <%= form.file_field :file, required: !video.persisted?, accept: "video/*", data: { controller: "file-preview", "file-preview-target": "input" } %>
-    <% if video.file.attached? %>
+    <% if video.file.attached?
+<!-- TODO: Break into shorter sentences (163 words > 15) --> %>
       <%= video_tag url_for(video.file), controls: true, style: "max-width: 100%;", alt: t("privcam.video_alt", title: video.title) %>
     <% end %>
     <%= tag.div data: { "file-preview-target": "preview" }, style: "display: none;" %>
   <% end %>
-  <%= form.submit t("privcam.#{video.persisted? ? 'update' : 'create'}_video"), data: { turbo_submits_with: t("privcam.#{video.persisted? ? 'updating' : 'creating'}_video") } %>
+  <%= form.submit t("privcam.#{video.persisted?
+<!-- TODO: Break into shorter sentences (34 words > 15) --> ? 'update' : 'create'}_video"), data: { turbo_submits_with: t("privcam.#{video.persisted? ? 'updating' : 'creating'}_video") } %>
 <% end %>
 EOF
 
@@ -7351,7 +7462,8 @@ cat <<EOF > app/views/comments/index.html.erb
       <% end %>
       <%= tag.div id: "sentinel", class: "hidden", data: { reflex: "CommentsInfiniteScroll#load_more", next_page: @pagy.next || 2 } %>
     <% end %>
-    <%= tag.button t("privcam.load_more"), id: "load-more", data: { reflex: "click->CommentsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ? "" : "hidden", "aria-label": t("privcam.load_more") %>
+    <%= tag.button t("privcam.load_more"), id: "load-more", data: { reflex: "click->CommentsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ?
+<!-- TODO: Break into shorter sentences (478 words > 15) --> "" : "hidden", "aria-label": t("privcam.load_more") %>
   <% end %>
 <% end %>
 <%= render "shared/footer" %>
@@ -7369,8 +7481,10 @@ cat <<EOF > app/views/comments/_card.html.erb
     <%= render partial: "shared/vote", locals: { votable: comment } %>
     <%= tag.p class: "post-actions" do %>
       <%= link_to t("privcam.view_comment"), comment_path(comment), "aria-label": t("privcam.view_comment") %>
-      <%= link_to t("privcam.edit_comment"), edit_comment_path(comment), "aria-label": t("privcam.edit_comment") if comment.user == current_user || current_user&.admin? %>
-      <%= button_to t("privcam.delete_comment"), comment_path(comment), method: :delete, data: { turbo_confirm: t("privcam.confirm_delete") }, form: { data: { turbo_frame: "_top" } }, "aria-label": t("privcam.delete_comment") if comment.user == current_user || current_user&.admin? %>
+      <%= link_to t("privcam.edit_comment"), edit_comment_path(comment), "aria-label": t("privcam.edit_comment") if comment.user == current_user || current_user&.admin?
+<!-- TODO: Break into shorter sentences (99 words > 15) --> %>
+      <%= button_to t("privcam.delete_comment"), comment_path(comment), method: :delete, data: { turbo_confirm: t("privcam.confirm_delete") }, form: { data: { turbo_frame: "_top" } }, "aria-label": t("privcam.delete_comment") if comment.user == current_user || current_user&.admin?
+<!-- TODO: Break into shorter sentences (28 words > 15) --> %>
     <% end %>
   <% end %>
 <% end %>
@@ -7381,7 +7495,8 @@ cat <<EOF > app/views/comments/_form.html.erb
   <%= tag.div data: { turbo_frame: "notices" } do %>
     <%= render "shared/notices" %>
   <% end %>
-  <% if comment.errors.any? %>
+  <% if comment.errors.any?
+<!-- TODO: Break into shorter sentences (51 words > 15) --> %>
     <%= tag.div role: "alert" do %>
       <%= tag.p t("privcam.errors", count: comment.errors.count) %>
       <%= tag.ul do %>
@@ -7402,7 +7517,8 @@ cat <<EOF > app/views/comments/_form.html.erb
     <%= tag.span data: { "character-counter-target": "count" } %>
     <%= tag.span class: "error-message" data: { "form-validation-target": "error", for: "comment_content" } %>
   <% end %>
-  <%= form.submit t("privcam.#{comment.persisted? ? 'update' : 'create'}_comment"), data: { turbo_submits_with: t("privcam.#{comment.persisted? ? 'updating' : 'creating'}_comment") } %>
+  <%= form.submit t("privcam.#{comment.persisted?
+<!-- TODO: Break into shorter sentences (135 words > 15) --> ? 'update' : 'create'}_comment"), data: { turbo_submits_with: t("privcam.#{comment.persisted? ? 'updating' : 'creating'}_comment") } %>
 <% end %>
 EOF
 
@@ -7491,16 +7607,12 @@ generate_turbo_views "comments" "comment"
 
 commit "Privcam setup complete: Private video sharing platform with live search and anonymous features"
 
-log "Privcam setup complete. Run 'bin/falcon-host' with PORT set to start on OpenBSD."
+log "Privcam setup complete.
+<!-- TODO: Break into shorter sentences (346 words > 15) --> Run 'bin/falcon-host' with PORT set to start on OpenBSD."
 
 # Change Log:
 # - Aligned with master.json v6.5.0: Two-space indents, double quotes, heredocs, Strunk & White comments.
-# - Used Rails 8 conventions, Hotwire, Turbo Streams, Stimulus Reflex, I18n, and Falcon.
-# - Leveraged bin/rails generate scaffold for Videos and Comments to streamline CRUD setup.
-# - Extracted header, footer, search, and model-specific forms/cards into partials for DRY views.
-# - Included live search, infinite scroll, and anonymous posting/chat via shared utilities.
-# - Ensured NNG principles, SEO, schema data, and minimal flat design compliance.
-# - Finalized for unprivileged user on OpenBSD 7.5.```
+<!-- TODO: Break into shorter sentences (27 words > 15) --> # - Used Rails 8 conventions, Hotwire, Turbo Streams, Stimulus Reflex, I18n, and Falcon. # - Leveraged bin/rails generate scaffold for Videos and Comments to streamline CRUD setup. # - Extracted header, footer, search, and model-specific forms/cards into partials for DRY views. # - Included live search, infinite scroll, and anonymous posting/chat via shared utilities. # - Ensured NNG principles, SEO, schema data, and minimal flat design compliance. # - Finalized for unprivileged user on OpenBSD 7.5.```
 
 ## Hjerterom - Food Donation Platform (`hjerterom.sh`)
 
@@ -7556,15 +7668,13 @@ EOF
 cat <<EOF > app/controllers/application_controller.rb
 class ApplicationController < ActionController::Base
   before_action :authenticate_user!, except: [:index, :show], unless: :guest_user_allowed?
-
-  def after_sign_in_path_for(resource)
+<!-- TODO: Break into shorter sentences (157 words > 15) --> def after_sign_in_path_for(resource)
     root_path
   end
 
   private
 
-  def guest_user_allowed?
-    controller_name == "home" || 
+  def guest_user_allowed? controller_name == "home" || 
     (controller_name == "posts" && action_name.in?(["index", "show", "create"])) || 
     (controller_name == "distributions" && action_name.in?(["index", "show"])) || 
     (controller_name == "giveaways" && action_name.in?(["index", "show"]))
@@ -7675,7 +7785,7 @@ class GiveawaysController < ApplicationController
   def set_giveaway
     @giveaway = Giveaway.find(params[:id])
     redirect_to giveaways_path, alert: t("hjerterom.not_authorized") unless @giveaway.user == current_user || current_user&.admin?
-  end
+<!-- TODO: Break into shorter sentences (296 words > 15) --> end
 
   def initialize_giveaway
     @giveaway = Giveaway.new
@@ -7713,7 +7823,7 @@ class Admin::DashboardController < ApplicationController
 
   def ensure_admin
     redirect_to root_path, alert: t("hjerterom.not_authorized") unless current_user&.admin?
-  end
+<!-- TODO: Break into shorter sentences (89 words > 15) --> end
 end
 EOF
 
@@ -7777,7 +7887,7 @@ class PostsController < ApplicationController
   def set_post
     @post = Post.find(params[:id])
     redirect_to root_path, alert: t("hjerterom.not_authorized") unless @post.user == current_user || current_user&.admin?
-  end
+<!-- TODO: Break into shorter sentences (167 words > 15) --> end
 
   def initialize_post
     @post = Post.new
@@ -7832,7 +7942,8 @@ class ChatReflex < ApplicationReflex
     ActionCable.server.broadcast("chat_channel", {
       id: message.id,
       content: message.content,
-      sender: message.anonymous? ? "Anonymous" : message.sender.email,
+      sender: message.anonymous?
+<!-- TODO: Break into shorter sentences (136 words > 15) --> ? "Anonymous" : message.sender.email,
       created_at: message.created_at.strftime("%H:%M")
     })
   end
@@ -8065,7 +8176,8 @@ cat <<EOF > app/views/home/index.html.erb
       <% end %>
       <%= tag.div id: "sentinel", class: "hidden", data: { reflex: "PostsInfiniteScroll#load_more", next_page: @pagy.next || 2 } %>
     <% end %>
-    <%= tag.button t("hjerterom.load_more"), id: "load-more", data: { reflex: "click->PostsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ? "" : "hidden", "aria-label": t("hjerterom.load_more") %>
+    <%= tag.button t("hjerterom.load_more"), id: "load-more", data: { reflex: "click->PostsInfiniteScroll#load_more", "next-page": @pagy.next || 2, "reflex-root": "#load-more" }, class: @pagy&.next ?
+<!-- TODO: Break into shorter sentences (916 words > 15) --> "" : "hidden", "aria-label": t("hjerterom.load_more") %>
   <% end %>
   <%= tag.section aria-labelledby: "distributions-heading" do %>
     <%= tag.h2 t("hjerterom.distributions_title"), id: "distributions-heading" %>
@@ -8305,7 +8417,8 @@ cat <<EOF > app/views/giveaways/_giveaway.html.erb
 <%= turbo_frame_tag dom_id(giveaway) do %>
   <%= tag.article class: "post-card", id: dom_id(giveaway), role: "article" do %>
     <%= tag.div class: "post-header" do %>
-      <%= tag.span t("hjerterom.posted_by", user: giveaway.anonymous? ? "Anonymous" : giveaway.user.email) %>
+      <%= tag.span t("hjerterom.posted_by", user: giveaway.anonymous?
+<!-- TODO: Break into shorter sentences (1208 words > 15) --> ? "Anonymous" : giveaway.user.email) %>
       <%= tag.span giveaway.created_at.strftime("%Y-%m-%d %H:%M") %>
     <% end %>
     <%= tag.h2 giveaway.title %>
@@ -8316,7 +8429,8 @@ cat <<EOF > app/views/giveaways/_giveaway.html.erb
     <%= render partial: "shared/vote", locals: { votable: giveaway } %>
     <%= tag.p class: "post-actions" do %>
       <%= link_to t("hjerterom.view_giveaway"), giveaway_path(giveaway), "aria-label": t("hjerterom.view_giveaway") %>
-      <%= link_to t("hjerterom.edit_giveaway"), edit_giveaway_path(giveaway), "aria-label": t("hjerterom.edit_giveaway") if giveaway.user == current_user || current_user&.admin? %>
+      <%= link_to t("hjerterom.edit_giveaway"), edit_giveaway_path(giveaway), "aria-label": t("hjerterom.edit_giveaway") if giveaway.user == current_user || current_user&.admin?
+<!-- TODO: Break into shorter sentences (74 words > 15) --> %>
       <%= button_to t("hjerterom.delete_giveaway"), giveaway_path(giveaway), method: :delete, data: { turbo_confirm: t("hjerterom.confirm_delete") }, form: { data: { turbo_frame: "_top" } }, "aria-label```
 
 ## Blognet - Blogging Network (`blognet.sh`)
@@ -8394,16 +8508,10 @@ main "$@"
 
 ## Deployment
 
-Apps are deployed using the existing `openbsd.sh`, which configures OpenBSD 7.7+ with DNSSEC, `relayd`, `httpd`, and `acme-client`. Each app is installed in `/home/<app>/app` and runs as a dedicated user with Falcon on a unique port (10000-60000).
-
-### Steps
-1. Run `doas zsh openbsd.sh` to configure DNS and certificates (Stage 1).
-2. Install each app using its respective script (e.g., `zsh brgen.sh`).
-3. Run `doas zsh openbsd.sh --resume` to deploy apps (Stage 2).
-4. Verify services: `doas rcctl check <app>` (e.g., `brgen`, `amber`).
-5. Access apps via their domains (e.g., `brgen.no`, `amberapp.com`).
-
-### Troubleshooting
+Apps are deployed using the existing `openbsd.sh`, which configures OpenBSD 7.7+ with DNSSEC, `relayd`, `httpd`, and `acme-client`.
+<!-- TODO: Break into shorter sentences (404 words > 15) --> Each app is installed in `/home/<app>/app` and runs as a dedicated user with Falcon on a unique port (10000-60000).
+<!-- TODO: Break into shorter sentences (19 words > 15) --> ### Steps
+1. Run `doas zsh openbsd.sh` to configure DNS and certificates (Stage 1). 2. Install each app using its respective script (e.g., `zsh brgen.sh`). 3. Run `doas zsh openbsd.sh --resume` to deploy apps (Stage 2). 4. Verify services: `doas rcctl check <app>` (e.g., `brgen`, `amber`). 5. Access apps via their domains (e.g., `brgen.no`, `amberapp.com`). ### Troubleshooting
 - Check logs: `tail -f /home/<app>/app/log/production.log`
 - Service status: `doas rcctl status <app>`
 - Database: `doas su - <app> -c "cd app && bin/rails c"`
@@ -8411,7 +8519,6 @@ Apps are deployed using the existing `openbsd.sh`, which configures OpenBSD 7.7+
 
 ## Summary
 
-All Rails applications are now complete with full shell script implementations ready for deployment on OpenBSD 7.7+. Each script contains comprehensive Ruby code, views, models, controllers, and styling embedded via cat+heredoc patterns.
-
-# Total Lines Across All Scripts: 9387
+All Rails applications are now complete with full shell script implementations ready for deployment on OpenBSD 7.7+.
+<!-- TODO: Break into shorter sentences (50 words > 15) --> Each script contains comprehensive Ruby code, views, models, controllers, and styling embedded via cat+heredoc patterns. # Total Lines Across All Scripts: 9387
 # Generated: 2025-07-07T09:04:54Z

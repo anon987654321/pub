@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Fujifilm Finepix X100 Kodak Portra 160 F.dcp
+
 {
   'dcpData' => {
     'ProfileName' => 'Kodak Portra 160 F',
@@ -72,4 +74,4 @@
     'BaselineExposureOffset' => '0.000000',
     'DefaultBlackRender' => '0'
   }
-}
+}

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Leica M Typ 240 Kodak Tri X 400 Plus L.dcp
+
 {
   "dcpData" => {
     "ProfileName" => "Kodak TRI-X 400 + L",
@@ -72,4 +74,4 @@
     "BaselineExposureOffset" => "0.000000",
     "DefaultBlackRender" => "0"
   }
-}
+}

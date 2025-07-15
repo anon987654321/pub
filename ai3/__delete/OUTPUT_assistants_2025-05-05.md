@@ -1,3 +1,5 @@
+# § Output Assistants 2025-05-05
+
 ## `architect.r_`
 ```
 # encoding: utf-8
@@ -71,7 +73,7 @@ module Assistants
     def run_environmental_analysis
       puts 'Running environmental analysis...'
       # Implement environmental analysis to assess factors like sunlight, wind, etc.
-    def perform_structural_analysis
+<!-- TODO: Break into shorter sentences (175 words > 15) --> def perform_structural_analysis
       puts 'Performing structural analysis...'
       # Implement structural analysis to ensure building integrity
     def estimate_cost
@@ -468,8 +470,7 @@ class AudioEngineerAssistant
   # Mix the project files together
   def mix_project(output_file)
     return puts "Error: No project files to mix." if @project_files.empty?
-
-    puts "Mixing project files into #{output_file}..."
+<!-- TODO: Break into shorter sentences (1304 words > 15) --> puts "Mixing project files into #{output_file}..."
     # Placeholder for mixing logic
     puts "Mix complete: #{output_file}"
   end
@@ -490,16 +491,16 @@ audio_assistant.mix_project("final_mix.wav")
 ## `chatbots/README.md`
 ```
 # 📚 Chatbot Crew: Your Digital Wingman!
-
-Welcome to the ultimate chatbot squad! 🚀 Here’s how each member of our squad operates and slays on their respective platforms:
+<!-- TODO: Break into shorter sentences (49 words > 15) --> Welcome to the ultimate chatbot squad! 🚀 Here’s how each member of our squad operates and slays on their respective platforms:
 
 ## Overview
 
-This repo contains code for automating tasks on Snapchat, Tinder, and Discord. Our chatbots are here to add friends, send messages, and even handle NSFW content with flair and humor.
+This repo contains code for automating tasks on Snapchat, Tinder, and Discord.
+<!-- TODO: Break into shorter sentences (29 words > 15) --> Our chatbots are here to add friends, send messages, and even handle NSFW content with flair and humor.
+<!-- TODO: Break into shorter sentences (18 words > 15) --> ## 🛠️ **Getting Set Up**
 
-## 🛠️ **Getting Set Up**
-
-The code starts by setting up the necessary tools and integrations. Think of it as prepping your squad for an epic mission! 🛠️
+The code starts by setting up the necessary tools and integrations.
+<!-- TODO: Break into shorter sentences (16 words > 15) --> Think of it as prepping your squad for an epic mission! 🛠️
 
 ```ruby
 def initialize(openai_api_key)
@@ -511,7 +512,8 @@ end
 
 ## 👀 **Stalking Profiles (Not Really!)**
 
-The code visits user profiles, gathers all the juicy details like likes, dislikes, age, and country, and prepares them for further action. 🍵
+The code visits user profiles, gathers all the juicy details like likes, dislikes, age, and country, and prepares them for further action.
+<!-- TODO: Break into shorter sentences (44 words > 15) --> 🍵
 
 ```ruby
 def fetch_user_info(user_id, profile_url)
@@ -526,7 +528,8 @@ end
 
 ## 🌟 **Adding New Friends Like a Boss**
 
-It adds friends from a list of recommendations, waits a bit between actions to keep things cool, and then starts interacting. 😎
+It adds friends from a list of recommendations, waits a bit between actions to keep things cool, and then starts interacting.
+<!-- TODO: Break into shorter sentences (50 words > 15) --> 😎
 
 ```ruby
 def add_new_friends
@@ -540,7 +543,8 @@ end
 
 ## 💬 **Sliding into DMs**
 
-The code sends messages to new friends, figuring out where to type and click, like a pro. 💬
+The code sends messages to new friends, figuring out where to type and click, like a pro.
+<!-- TODO: Break into shorter sentences (43 words > 15) --> 💬
 
 ```ruby
 def send_message(user_id, message, message_type)
@@ -550,19 +554,22 @@ end
 
 ## 🎨 **Crafting the Perfect Vibe**
 
-Messages are customized based on user interests and mood to make sure they hit just right. 💖
+Messages are customized based on user interests and mood to make sure they hit just right.
+<!-- TODO: Break into shorter sentences (38 words > 15) --> 💖
 
 ```ruby
 def adapt_response(response, context)
   adapted_response = adapt_personality(response, context)
   adapted_response = apply_eye_dialect(adapted_response) if CONFIG[:use_eye_dialect]
-  CONFIG[:type_in_lowercase] ? adapted_response.downcase : adapted_response
+  CONFIG[:type_in_lowercase] ?
+<!-- TODO: Break into shorter sentences (16 words > 15) --> adapted_response.downcase : adapted_response
 end
 ```
 
 ## 🚨 **Handling NSFW Stuff**
 
-If a user is into NSFW content, the code reports it and sends a positive message to keep things friendly. 🌟
+If a user is into NSFW content, the code reports it and sends a positive message to keep things friendly.
+<!-- TODO: Break into shorter sentences (30 words > 15) --> 🌟
 
 ```ruby
 def handle_nsfw_content(user_id, content)
@@ -573,25 +580,24 @@ end
 
 ## 🧩 **SnapChatAssistant**
 
-Meet our Snapchat expert! 🕶️👻 This script knows how to slide into Snapchat profiles and chat with users like a boss.
-
-### Features:
+Meet our Snapchat expert!
+<!-- TODO: Break into shorter sentences (17 words > 15) --> 🕶️👻 This script knows how to slide into Snapchat profiles and chat with users like a boss.
+<!-- TODO: Break into shorter sentences (17 words > 15) --> ### Features:
 - **Profile Scraping**: Gathers info from Snapchat profiles. 📸
 - **Message Sending**: Finds the right CSS classes to send messages directly on Snapchat. 📩
 - **New Friend Frenzy**: Engages with new Snapchat friends and keeps the convo going. 🙌
 
 ## ❤️ **TinderAssistant**
 
-Swipe right on this one! 🕺💖 Our Tinder expert handles all things dating app-related.
-
-### Features:
+Swipe right on this one! 🕺💖 Our Tinder expert handles all things dating app-related. ### Features:
 - **Profile Scraping**: Fetches user info from Tinder profiles. 💌
 - **Message Sending**: Uses Tinder’s CSS classes to craft and send messages. 💬
 - **New Match Engagement**: Connects with new matches and starts the conversation. 🥂
 
 ## 🎮 **DiscordAssistant**
 
-For all the Discord fans out there, this script’s got your back! 🎧👾
+For all the Discord fans out there, this script’s got your back!
+<!-- TODO: Break into shorter sentences (16 words > 15) --> 🎧👾
 
 ### Features:
 - **Profile Scraping**: Gets the deets from Discord profiles. 🎮
@@ -600,14 +606,7 @@ For all the Discord fans out there, this script’s got your back! 🎧👾
 
 ## Summary
 
-1. **Setup:** Get the tools ready for action.
-2. **Fetch Info:** Check out profiles and grab key details.
-3. **Add Friends:** Add users from a recommendation list.
-4. **Send Messages:** Slide into DMs with tailored messages.
-5. **Customize Responses:** Adjust messages to fit the vibe.
-6. **NSFW Handling:** Report and send positive vibes for NSFW content.
-
-Boom! That’s how your Snapchat, Tinder, and Discord automation code works in Gen-Z style. Keep slaying! 🚀✨
+1. **Setup:** Get the tools ready for action. 2. **Fetch Info:** Check out profiles and grab key details. 3. **Add Friends:** Add users from a recommendation list. 4. **Send Messages:** Slide into DMs with tailored messages. 5. **Customize Responses:** Adjust messages to fit the vibe. 6. **NSFW Handling:** Report and send positive vibes for NSFW content. Boom! That’s how your Snapchat, Tinder, and Discord automation code works in Gen-Z style. Keep slaying! 🚀✨
 
 Got questions? Hit us up! 🤙
 ```
@@ -727,7 +726,8 @@ module Assistants
       when 51..65 then :senior
       else :elderly
     def contains_nsfw_content?(likes)
-      likes.any? { |like| @nsfw_model.classify(like).values_at(:porn, :hentai, :sexy).any? { |score| score > 0.5 } }
+      likes.any?
+<!-- TODO: Break into shorter sentences (528 words > 15) --> { |like| @nsfw_model.classify(like).values_at(:porn, :hentai, :sexy).any? { |score| score > 0.5 } }
     def handle_nsfw_content(user_id, content)
       report_nsfw_content(user_id, content)
       lovebomb_user(user_id)
@@ -750,14 +750,17 @@ module Assistants
       send_message(user_id, adapted_greeting, :text)
     def create_greeting(user_preferences, context)
       interests = user_preferences[:likes].join(', ')
-      prompt = 'Generate a greeting for a user interested in #{interests}. Context: #{context[:description]}'
+      prompt = 'Generate a greeting for a user interested in #{interests}.
+<!-- TODO: Break into shorter sentences (106 words > 15) --> Context: #{context[:description]}'
       @langchain_openai.generate_answer(prompt)
     def adapt_response(response, context)
       adapted_response = adapt_personality(response, context)
       adapted_response = apply_eye_dialect(adapted_response) if CONFIG[:use_eye_dialect]
-      CONFIG[:type_in_lowercase] ? adapted_response.downcase : adapted_response
+      CONFIG[:type_in_lowercase] ?
+<!-- TODO: Break into shorter sentences (17 words > 15) --> adapted_response.downcase : adapted_response
     def adapt_personality(response, context)
-      prompt = 'Adapt the following response to match the personality trait: '#{context[:personality]}'. Response: '#{response}''
+      prompt = 'Adapt the following response to match the personality trait: '#{context[:personality]}'.
+<!-- TODO: Break into shorter sentences (18 words > 15) --> Response: '#{response}''
     def apply_eye_dialect(text)
       prompt = 'Transform the following text to eye dialect: '#{text}''
     def add_new_friends
@@ -896,7 +899,8 @@ module Assistants
       when 51..65 then :senior
       else :elderly
     def contains_nsfw_content?(likes)
-      likes.any? { |like| @nsfw_model.classify(like).values_at(:porn, :hentai, :sexy).any? { |score| score > 0.5 } }
+      likes.any?
+<!-- TODO: Break into shorter sentences (608 words > 15) --> { |like| @nsfw_model.classify(like).values_at(:porn, :hentai, :sexy).any? { |score| score > 0.5 } }
     def handle_nsfw_content(user_id, content)
       report_nsfw_content(user_id, content)
       lovebomb_user(user_id)
@@ -919,14 +923,17 @@ module Assistants
       send_message(user_id, adapted_greeting, :text)
     def create_greeting(user_preferences, context)
       interests = user_preferences[:likes].join(', ')
-      prompt = 'Generate a greeting for a user interested in #{interests}. Context: #{context[:description]}'
+      prompt = 'Generate a greeting for a user interested in #{interests}.
+<!-- TODO: Break into shorter sentences (106 words > 15) --> Context: #{context[:description]}'
       @langchain_openai.generate_answer(prompt)
     def adapt_response(response, context)
       adapted_response = adapt_personality(response, context)
       adapted_response = apply_eye_dialect(adapted_response) if CONFIG[:use_eye_dialect]
-      CONFIG[:type_in_lowercase] ? adapted_response.downcase : adapted_response
+      CONFIG[:type_in_lowercase] ?
+<!-- TODO: Break into shorter sentences (17 words > 15) --> adapted_response.downcase : adapted_response
     def adapt_personality(response, context)
-      prompt = 'Adapt the following response to match the personality trait: '#{context[:personality]}'. Response: '#{response}''
+      prompt = 'Adapt the following response to match the personality trait: '#{context[:personality]}'.
+<!-- TODO: Break into shorter sentences (18 words > 15) --> Response: '#{response}''
     def apply_eye_dialect(text)
       prompt = 'Transform the following text to eye dialect: '#{text}''
     def add_new_friends
@@ -1034,14 +1041,17 @@ module Assistants
     def initialize(openai_api_key)
       super(openai_api_key)
       @browser = Ferrum::Browser.new
-      puts '🐱‍👤 SnapChatAssistant initialized. Ready to snap like a pro!'
+      puts '🐱‍👤 SnapChatAssistant initialized.
+<!-- TODO: Break into shorter sentences (314 words > 15) --> Ready to snap like a pro!'
     end
     def fetch_user_info(user_id)
       profile_url = 'https://www.snapchat.com/add/#{user_id}'
-      puts '🔍 Fetching user info from #{profile_url}. Time to snoop!'
+      puts '🔍 Fetching user info from #{profile_url}.
+<!-- TODO: Break into shorter sentences (19 words > 15) --> Time to snoop!'
       super(user_id, profile_url)
     def send_message(user_id, message, message_type)
-      puts '🕵️‍♂️ Going to #{profile_url} to send a message. Buckle up!'
+      puts '🕵️‍♂️ Going to #{profile_url} to send a message.
+<!-- TODO: Break into shorter sentences (18 words > 15) --> Buckle up!'
       @browser.goto(profile_url)
       css_classes = fetch_dynamic_css_classes(@browser.body, @browser.screenshot(base64: true), 'send_message')
       if message_type == :text
@@ -1049,7 +1059,8 @@ module Assistants
         @browser.at_css(css_classes['textarea']).send_keys(message)
         @browser.at_css(css_classes['submit_button']).click
       else
-        puts '📸 Sending media? Hah! That’s a whole other ball game.'
+        puts '📸 Sending media?
+<!-- TODO: Break into shorter sentences (25 words > 15) --> Hah! That’s a whole other ball game.'
       end
     def engage_with_new_friends
       @browser.goto('https://www.snapchat.com/add/friends')
@@ -1059,7 +1070,8 @@ module Assistants
         add_friend(friend[:id])
         engage_with_user(friend[:id], 'https://www.snapchat.com/add/#{friend[:id]}')
     def fetch_dynamic_css_classes(html, screenshot, action)
-      puts '🎨 Fetching CSS classes for the #{action} action. It’s like a fashion show for code!'
+      puts '🎨 Fetching CSS classes for the #{action} action.
+<!-- TODO: Break into shorter sentences (38 words > 15) --> It’s like a fashion show for code!'
       prompt = 'Given the following HTML and screenshot, identify the CSS classes used for the #{action} action: #{html} #{screenshot}'
       response = @langchain_openai.generate_answer(prompt)
       JSON.parse(response)
@@ -1077,14 +1089,17 @@ module Assistants
     def initialize(openai_api_key)
       super(openai_api_key)
       @browser = Ferrum::Browser.new
-      puts '🐱‍👤 SnapChatAssistant initialized. Ready to snap like a pro!'
+      puts '🐱‍👤 SnapChatAssistant initialized.
+<!-- TODO: Break into shorter sentences (57 words > 15) --> Ready to snap like a pro!'
     end
     def fetch_user_info(user_id)
       profile_url = 'https://www.snapchat.com/add/#{user_id}'
-      puts '🔍 Fetching user info from #{profile_url}. Time to snoop!'
+      puts '🔍 Fetching user info from #{profile_url}.
+<!-- TODO: Break into shorter sentences (19 words > 15) --> Time to snoop!'
       super(user_id, profile_url)
     def send_message(user_id, message, message_type)
-      puts '🕵️‍♂️ Going to #{profile_url} to send a message. Buckle up!'
+      puts '🕵️‍♂️ Going to #{profile_url} to send a message.
+<!-- TODO: Break into shorter sentences (18 words > 15) --> Buckle up!'
       @browser.goto(profile_url)
       css_classes = fetch_dynamic_css_classes(@browser.body, @browser.screenshot(base64: true), 'send_message')
       if message_type == :text
@@ -1092,7 +1107,8 @@ module Assistants
         @browser.at_css(css_classes['textarea']).send_keys(message)
         @browser.at_css(css_classes['submit_button']).click
       else
-        puts '📸 Sending media? Hah! That’s a whole other ball game.'
+        puts '📸 Sending media?
+<!-- TODO: Break into shorter sentences (25 words > 15) --> Hah! That’s a whole other ball game.'
       end
     def engage_with_new_friends
       @browser.goto('https://www.snapchat.com/add/friends')
@@ -1102,7 +1118,8 @@ module Assistants
         add_friend(friend[:id])
         engage_with_user(friend[:id], 'https://www.snapchat.com/add/#{friend[:id]}')
     def fetch_dynamic_css_classes(html, screenshot, action)
-      puts '🎨 Fetching CSS classes for the #{action} action. It’s like a fashion show for code!'
+      puts '🎨 Fetching CSS classes for the #{action} action.
+<!-- TODO: Break into shorter sentences (38 words > 15) --> It’s like a fashion show for code!'
       prompt = 'Given the following HTML and screenshot, identify the CSS classes used for the #{action} action: #{html} #{screenshot}'
       response = @langchain_openai.generate_answer(prompt)
       JSON.parse(response)
@@ -1119,14 +1136,16 @@ module Assistants
     def initialize(openai_api_key)
       super(openai_api_key)
       @browser = Ferrum::Browser.new
-      puts '💖 TinderAssistant initialized. Swipe right to success!'
+      puts '💖 TinderAssistant initialized.
+<!-- TODO: Break into shorter sentences (56 words > 15) --> Swipe right to success!'
     end
     def fetch_user_info(user_id)
       profile_url = 'https://tinder.com/@#{user_id}'
       puts '🔍 Checking out #{profile_url}. It’s a digital love fest!'
       super(user_id, profile_url)
     def send_message(user_id, message, message_type)
-      puts '🌟 Visiting #{profile_url} to send a message. Let’s make sparks fly!'
+      puts '🌟 Visiting #{profile_url} to send a message.
+<!-- TODO: Break into shorter sentences (19 words > 15) --> Let’s make sparks fly!'
       @browser.goto(profile_url)
       css_classes = fetch_dynamic_css_classes(@browser.body, @browser.screenshot(base64: true), 'send_message')
       if message_type == :text
@@ -1134,7 +1153,8 @@ module Assistants
         @browser.at_css(css_classes['textarea']).send_keys(message)
         @browser.at_css(css_classes['submit_button']).click
       else
-        puts '📸 Media? That’s not in my Tinder repertoire. Swipe left on media!'
+        puts '📸 Media?
+<!-- TODO: Break into shorter sentences (28 words > 15) --> That’s not in my Tinder repertoire. Swipe left on media!'
       end
     def engage_with_new_friends
       @browser.goto('https://tinder.com/app/recs')
@@ -1143,7 +1163,8 @@ module Assistants
       new_friends.each do |friend|
         engage_with_user(friend[:id], 'https://tinder.com/@#{friend[:id]}')
     def fetch_dynamic_css_classes(html, screenshot, action)
-      puts '🎨 Discovering CSS classes for #{action}. Fashion week for code!'
+      puts '🎨 Discovering CSS classes for #{action}.
+<!-- TODO: Break into shorter sentences (33 words > 15) --> Fashion week for code!'
       prompt = 'Given the following HTML and screenshot, identify the CSS classes used for the #{action} action: #{html} #{screenshot}'
       response = @langchain_openai.generate_answer(prompt)
       JSON.parse(response)
@@ -1161,14 +1182,16 @@ module Assistants
     def initialize(openai_api_key)
       super(openai_api_key)
       @browser = Ferrum::Browser.new
-      puts '💖 TinderAssistant initialized. Swipe right to success!'
+      puts '💖 TinderAssistant initialized.
+<!-- TODO: Break into shorter sentences (54 words > 15) --> Swipe right to success!'
     end
     def fetch_user_info(user_id)
       profile_url = 'https://tinder.com/@#{user_id}'
       puts '🔍 Checking out #{profile_url}. It’s a digital love fest!'
       super(user_id, profile_url)
     def send_message(user_id, message, message_type)
-      puts '🌟 Visiting #{profile_url} to send a message. Let’s make sparks fly!'
+      puts '🌟 Visiting #{profile_url} to send a message.
+<!-- TODO: Break into shorter sentences (19 words > 15) --> Let’s make sparks fly!'
       @browser.goto(profile_url)
       css_classes = fetch_dynamic_css_classes(@browser.body, @browser.screenshot(base64: true), 'send_message')
       if message_type == :text
@@ -1176,7 +1199,8 @@ module Assistants
         @browser.at_css(css_classes['textarea']).send_keys(message)
         @browser.at_css(css_classes['submit_button']).click
       else
-        puts '📸 Media? That’s not in my Tinder repertoire. Swipe left on media!'
+        puts '📸 Media?
+<!-- TODO: Break into shorter sentences (28 words > 15) --> That’s not in my Tinder repertoire. Swipe left on media!'
       end
     def engage_with_new_friends
       @browser.goto('https://tinder.com/app/recs')
@@ -1185,7 +1209,8 @@ module Assistants
       new_friends.each do |friend|
         engage_with_user(friend[:id], 'https://tinder.com/@#{friend[:id]}')
     def fetch_dynamic_css_classes(html, screenshot, action)
-      puts '🎨 Discovering CSS classes for #{action}. Fashion week for code!'
+      puts '🎨 Discovering CSS classes for #{action}.
+<!-- TODO: Break into shorter sentences (33 words > 15) --> Fashion week for code!'
       prompt = 'Given the following HTML and screenshot, identify the CSS classes used for the #{action} action: #{html} #{screenshot}'
       response = @langchain_openai.generate_answer(prompt)
       JSON.parse(response)
@@ -1573,68 +1598,89 @@ end
 
 # Here are 20 possible influencers, all young women from Bergen, Norway, along with their bios:
 # 
-# 1. **Emma Berg**
-#    - Bio: "Living my best life in Bergen 🌧️💙 Sharing my love for travel, fashion, and all things Norwegian. #BergenVibes #NordicLiving"
+# 1.
+<!-- TODO: Break into shorter sentences (1115 words > 15) --> **Emma Berg**
+#    - Bio: "Living my best life in Bergen 🌧️💙 Sharing my love for travel, fashion, and all things Norwegian.
+<!-- TODO: Break into shorter sentences (22 words > 15) --> #BergenVibes #NordicLiving"
 # 
 # 2. **Mia Solvik**
-#    - Bio: "Coffee lover ☕ | Outdoor enthusiast 🌲 | Finding beauty in every Bergen sunset. Follow my journey! #NorwegianNature #CityGirl"
+#    - Bio: "Coffee lover ☕ | Outdoor enthusiast 🌲 | Finding beauty in every Bergen sunset.
+<!-- TODO: Break into shorter sentences (19 words > 15) --> Follow my journey! #NorwegianNature #CityGirl"
 # 
 # 3. **Ane Fjeldstad**
 #    - Bio: "Bergen raised, adventure made. 💚 Sharing my travels, cozy moments, and self-love tips. Join the fun! #BergenLifestyle #Wanderlust"
+<!-- TODO: Fix heading hierarchy - level 3 after level 1 -->
 # 
 # 4. **Sofie Olsen**
-#    - Bio: "Fashion-forward from fjords to city streets 🛍️✨ Follow me for daily outfits and Bergen beauty spots! #OOTD #BergenFashion"
+#    - Bio: "Fashion-forward from fjords to city streets 🛍️✨ Follow me for daily outfits and Bergen beauty spots!
+<!-- TODO: Break into shorter sentences (21 words > 15) --> #OOTD #BergenFashion"
 # 
 # 5. **Elise Haugen**
-#    - Bio: "Nature lover 🌼 | Dancer 💃 | Aspiring influencer from Bergen. Let’s bring joy to the world! #DanceWithMe #NatureEscape"
+#    - Bio: "Nature lover 🌼 | Dancer 💃 | Aspiring influencer from Bergen.
+<!-- TODO: Break into shorter sentences (16 words > 15) --> Let’s bring joy to the world! #DanceWithMe #NatureEscape"
 # 
 # 6. **Linn Marthinsen**
 #    - Bio: "Chasing dreams in Bergen ⛰️💫 Fashion, wellness, and everyday joys. Life's an adventure! #HealthyLiving #BergenGlow"
+<!-- TODO: Fix heading hierarchy - level 3 after level 1 -->
 # 
 # 7. **Hanna Nilsen**
 #    - Bio: "Hi there! 👋 Exploring Norway's natural beauty and sharing my favorite looks. Loving life in Bergen! #ExploreNorway #Lifestyle"
+<!-- TODO: Fix heading hierarchy - level 3 after level 1 -->
 # 
 # 8. **Nora Viksund**
-#    - Bio: "Bergen blogger ✨ Lover of mountains, good books, and cozy coffee shops. Let’s get lost in a good story! #CozyCorners #Bookworm"
+#    - Bio: "Bergen blogger ✨ Lover of mountains, good books, and cozy coffee shops.
+<!-- TODO: Break into shorter sentences (17 words > 15) --> Let’s get lost in a good story! #CozyCorners #Bookworm"
 # 
 # 9. **Silje Myren**
 #    - Bio: "Adventurer at heart 🏔️ | Influencer in Bergen. Styling my life one post at a time. #NordicStyle #BergenExplorer"
+<!-- TODO: Fix heading hierarchy - level 3 after level 1 -->
 # 
 # 10. **Thea Eriksrud**
-#     - Bio: "Bringing color to Bergen’s gray skies 🌈❤️ Fashion, positivity, and smiles. Let’s be friends! #ColorfulLiving #Positivity"
+#     - Bio: "Bringing color to Bergen’s gray skies 🌈❤️ Fashion, positivity, and smiles.
+<!-- TODO: Break into shorter sentences (16 words > 15) --> Let’s be friends! #ColorfulLiving #Positivity"
 # 
 # 11. **Julie Bjørge**
-#     - Bio: "From Bergen with love 💕 Sharing my foodie finds, fitness routines, and everything else I adore! #FoodieLife #Fitspiration"
+#     - Bio: "From Bergen with love 💕 Sharing my foodie finds, fitness routines, and everything else I adore!
+<!-- TODO: Break into shorter sentences (21 words > 15) --> #FoodieLife #Fitspiration"
 # 
 # 12. **Ida Evensen**
-#     - Bio: "Norwegian beauty in Bergen's rain ☔ Sharing makeup tutorials, beauty hacks, and self-care tips. #BeautyBergen #SelfLove"
+#     - Bio: "Norwegian beauty in Bergen's rain ☔ Sharing makeup tutorials, beauty hacks, and self-care tips.
+<!-- TODO: Break into shorter sentences (19 words > 15) --> #BeautyBergen #SelfLove"
 # 
 # 13. **Camilla Løvås**
-#     - Bio: "Bergen vibes 🌸 Yoga, mindful living, and discovering hidden gems in Norway. Let’s stay balanced! #YogaLover #MindfulMoments"
+#     - Bio: "Bergen vibes 🌸 Yoga, mindful living, and discovering hidden gems in Norway.
+<!-- TODO: Break into shorter sentences (17 words > 15) --> Let’s stay balanced! #YogaLover #MindfulMoments"
 # 
 # 14. **Stine Vang**
-#     - Bio: "Nordic adventures await 🌿 Nature photography and inspirational thoughts, straight from Bergen. #NatureNerd #StayInspired"
+#     - Bio: "Nordic adventures await 🌿 Nature photography and inspirational thoughts, straight from Bergen.
+<!-- TODO: Break into shorter sentences (17 words > 15) --> #NatureNerd #StayInspired"
 # 
 # 15. **Kaja Fossum**
-#     - Bio: "Moments from Bergen ✨ Capturing the essence of the fjords, style, and culture. Follow for Nordic chic! #NorwayNature #CityChic"
+#     - Bio: "Moments from Bergen ✨ Capturing the essence of the fjords, style, and culture.
+<!-- TODO: Break into shorter sentences (18 words > 15) --> Follow for Nordic chic! #NorwayNature #CityChic"
 # 
 # 16. **Vilde Knutsen**
 #     - Bio: "Outdoor enthusiast 🏞️ Turning every Bergen adventure into a story. Let's hike, explore, and create! #AdventureAwaits #TrailTales"
+<!-- TODO: Fix heading hierarchy - level 3 after level 1 -->
 # 
 # 17. **Ingrid Brekke**
 #     - Bio: "Lover of fashion, nature, and life in Bergen. Always in search of a perfect outfit and a beautiful view! #ScandiFashion #BergenDays"
+<!-- TODO: Fix heading hierarchy - level 3 after level 1 -->
 # 
 # 18. **Amalie Rydland**
-#     - Bio: "Capturing Bergen’s magic 📸✨ Lifestyle influencer focusing on travel, moments, and happiness. #CaptureTheMoment #BergenLife"
+#     - Bio: "Capturing Bergen’s magic 📸✨ Lifestyle influencer focusing on travel, moments, and happiness.
+<!-- TODO: Break into shorter sentences (17 words > 15) --> #CaptureTheMoment #BergenLife"
 # 
 # 19. **Mathilde Engen**
-#     - Bio: "Fitness, health, and Bergen’s best spots 🏋️‍♀️ Living a happy, healthy life with a view! #HealthyVibes #ActiveLife"
+#     - Bio: "Fitness, health, and Bergen’s best spots 🏋️‍♀️ Living a happy, healthy life with a view!
+<!-- TODO: Break into shorter sentences (20 words > 15) --> #HealthyVibes #ActiveLife"
 # 
 # 20. **Maren Stølen**
-#     - Bio: "Chasing sunsets and styling outfits 🌅 Fashion and travel through the lens of a Bergen girl. #SunsetLover #Fashionista"
+#     - Bio: "Chasing sunsets and styling outfits 🌅 Fashion and travel through the lens of a Bergen girl.
+<!-- TODO: Break into shorter sentences (21 words > 15) --> #SunsetLover #Fashionista"
 # 
-# These influencers have diverse interests, such as fashion, lifestyle, fitness, nature, and beauty, which make them suitable for a variety of audiences. If you need further customizations or additions, just let me know!
-# 
+# These influencers have diverse interests, such as fashion, lifestyle, fitness, nature, and beauty, which make them suitable for a variety of audiences.
+<!-- TODO: Break into shorter sentences (26 words > 15) --> If you need further customizations or additions, just let me know! # 
 ```
 
 ## `lawyer.rb`
@@ -1776,7 +1822,8 @@ module Assistants
     def collect_feedback
       puts @translations[:feedback_request]
       feedback = gets.chomp.downcase
-      puts feedback == "yes" ? @translations[:feedback_positive] : @translations[:feedback_negative]
+      puts feedback == "yes" ?
+<!-- TODO: Break into shorter sentences (298 words > 15) --> @translations[:feedback_positive] : @translations[:feedback_negative]
     end
 
     def read_document(path)
@@ -1810,7 +1857,7 @@ class LawyerAssistant
   end
 
   # Emotional analysis of communication to detect stress, urgency, anxiety, etc.
-  def emotional_analysis(comm)
+<!-- TODO: Break into shorter sentences (94 words > 15) --> def emotional_analysis(comm)
     case comm[:text]
     when /stress|anxiety|overwhelmed/
       { comm_id: comm[:id], emotion: :anxiety }
@@ -1852,36 +1899,42 @@ class LawyerAssistant
   # Determines the emotional state of a specific communication
   def emotional_state_of_comm(comm)
     state = emotional_state.find { |emotion| emotion[:comm_id] == comm[:id] }
-    state ? state[:emotion] : nil
+    state ?
+<!-- TODO: Break into shorter sentences (125 words > 15) --> state[:emotion] : nil
   end
 
   # Reassurance strategy for anxious clients, ensuring they feel heard and understood
   def apply_reassurance(comm)
-    strategy = "Send reassurance: The client is showing anxiety. Deploy calming responses, acknowledge their concerns, and provide stability."
+    strategy = "Send reassurance: The client is showing anxiety.
+<!-- TODO: Break into shorter sentences (27 words > 15) --> Deploy calming responses, acknowledge their concerns, and provide stability."
     negotiation_strategies.push(strategy)
   end
 
   # Incentive strategy for clients showing joy or excitement, use positive reinforcement
   def apply_incentive(comm)
-    strategy = "Send incentive: The client is in a positive emotional state. Use this moment to introduce favorable terms or rewards to reinforce good behavior."
+    strategy = "Send incentive: The client is in a positive emotional state.
+<!-- TODO: Break into shorter sentences (37 words > 15) --> Use this moment to introduce favorable terms or rewards to reinforce good behavior."
     negotiation_strategies.push(strategy)
   end
 
   # Safety assurance strategy when fear or uncertainty is detected in communication
   def apply_safety_assurance(comm)
-    strategy = "Send safety assurance: The client expresses fear. Reassure them that their safety and interests are a priority, and explain protective measures."
+    strategy = "Send safety assurance: The client expresses fear.
+<!-- TODO: Break into shorter sentences (38 words > 15) --> Reassure them that their safety and interests are a priority, and explain protective measures."
     negotiation_strategies.push(strategy)
   end
 
   # Calming strategy for angry clients, de-escalate emotional responses
   def apply_calm_down(comm)
-    strategy = "Send calming strategy: The client is showing signs of anger. Apply empathy, acknowledge their frustration, and focus on solutions."
+    strategy = "Send calming strategy: The client is showing signs of anger.
+<!-- TODO: Break into shorter sentences (39 words > 15) --> Apply empathy, acknowledge their frustration, and focus on solutions."
     negotiation_strategies.push(strategy)
   end
 
   # Default strategy for neutral or unclassified emotional responses
   def apply_default_strategy(comm)
-    strategy = "Send neutral strategy: The client’s emotional state is unclear. Provide a standard response focused on clarity and next steps."
+    strategy = "Send neutral strategy: The client’s emotional state is unclear.
+<!-- TODO: Break into shorter sentences (33 words > 15) --> Provide a standard response focused on clarity and next steps."
     negotiation_strategies.push(strategy)
   end
 
@@ -1980,17 +2033,9 @@ end
 
 # TODO:
 # - Implement integration with external databases for retrieving case law and precedents.
-# - Add more advanced emotion detection using NLP techniques to improve emotional state analysis.
-# - Develop custom algorithms for better real-time decision-making based on negotiation outcomes.
-# - Explore integration with AI for drafting legal documents and contracts based on case context.
-# - Implement automatic scheduling of legal meetings or deadlines based on case timelines.
-# - Improve negotiation strategies by incorporating more advanced techniques from behavioral economics.
-# - Add a function for simulating client reactions to proposed legal strategies for testing purposes.
-# - Implement a client onboarding system that builds case data and emotional profiles automatically.
-# - Enhance client communication by providing dynamic feedback based on ongoing case developments.
-# - Investigate potential AI tools for automating the generation of complex legal documents.
-
-```
+<!-- TODO: Break into shorter sentences (449 words > 15) --> # - Add more advanced emotion detection using NLP techniques to improve emotional state analysis. # - Develop custom algorithms for better real-time decision-making based on negotiation outcomes. # - Explore integration with AI for drafting legal documents and contracts based on case context.
+<!-- TODO: Break into shorter sentences (16 words > 15) --> # - Implement automatic scheduling of legal meetings or deadlines based on case timelines. # - Improve negotiation strategies by incorporating more advanced techniques from behavioral economics. # - Add a function for simulating client reactions to proposed legal strategies for testing purposes.
+<!-- TODO: Break into shorter sentences (16 words > 15) --> # - Implement a client onboarding system that builds case data and emotional profiles automatically. # - Enhance client communication by providing dynamic feedback based on ongoing case developments. # - Investigate potential AI tools for automating the generation of complex legal documents. ```
 
 ## `linux_openbsd_driver_translator.rb`
 ```
@@ -2016,40 +2061,28 @@ module Assistants
     end
 
     # Main method: download, extract, translate, validate, and update feedback.
-    def translate_driver
+<!-- TODO: Break into shorter sentences (68 words > 15) --> def translate_driver
       @logger.info("Starting driver translation process...")
       
-      # 1. Download the driver installer.
-      driver_file = download_latest_driver
+      # 1. Download the driver installer. driver_file = download_latest_driver
       
-      # 2. Verify file integrity.
-      verify_download(driver_file)
+      # 2. Verify file integrity. verify_download(driver_file)
       
-      # 3. Extract driver source.
-      driver_source = extract_driver_source(driver_file)
+      # 3. Extract driver source. driver_source = extract_driver_source(driver_file)
       
-      # 4. Analyze code structure.
-      structured_code = analyze_structure(driver_source)
+      # 4. Analyze code structure. structured_code = analyze_structure(driver_source)
       
-      # 5. Understand code semantics.
-      annotated_code = understand_semantics(structured_code)
+      # 5. Understand code semantics. annotated_code = understand_semantics(structured_code)
       
-      # 6. Apply rule-based translation.
-      partially_translated = apply_translation_rules(annotated_code)
+      # 6. Apply rule-based translation. partially_translated = apply_translation_rules(annotated_code)
       
-      # 7. Refine translation via AI-driven adjustments.
-      fully_translated = ai_driven_translation(partially_translated)
+      # 7. Refine translation via AI-driven adjustments. fully_translated = ai_driven_translation(partially_translated)
       
-      # 8. Save the translated driver.
-      output_file = save_translated_driver(fully_translated)
+      # 8. Save the translated driver. output_file = save_translated_driver(fully_translated)
       
-      # 9. Validate the translated driver.
-      errors = validate_translation(File.read(output_file))
+      # 9. Validate the translated driver. errors = validate_translation(File.read(output_file))
       
-      # 10. Update feedback loop if errors are detected.
-      update_feedback(errors) unless errors.empty?
-      
-      @logger.info("Driver translation complete. Output saved to #{output_file}")
+      # 10. Update feedback loop if errors are detected. update_feedback(errors) unless errors.empty? @logger.info("Driver translation complete. Output saved to #{output_file}")
       puts "Driver translation complete. Output saved to #{output_file}"
       output_file
     rescue StandardError => e
@@ -2061,7 +2094,7 @@ module Assistants
     private
 
     # Download the driver installer (simulated for production).
-    def download_latest_driver
+<!-- TODO: Break into shorter sentences (32 words > 15) --> def download_latest_driver
       @logger.info("Downloading driver from #{DRIVER_DOWNLOAD_URL}...")
       file_name = "nvidia_driver_linux.run"
       simulated_content = <<~CODE
@@ -2076,7 +2109,7 @@ module Assistants
     end
 
     # Verify the downloaded file's checksum.
-    def verify_download(file)
+<!-- TODO: Break into shorter sentences (40 words > 15) --> def verify_download(file)
       @logger.info("Verifying download integrity for #{file}...")
       content = File.read(file)
       calculated_checksum = Digest::SHA256.hexdigest(content)
@@ -2088,7 +2121,7 @@ module Assistants
     end
 
     # Extract driver source code.
-    def extract_driver_source(file)
+<!-- TODO: Break into shorter sentences (34 words > 15) --> def extract_driver_source(file)
       @logger.info("Extracting driver source from #{file}...")
       File.read(file)
     rescue => e
@@ -2097,19 +2130,19 @@ module Assistants
     end
 
     # Analyze code structure (simulation).
-    def analyze_structure(source)
+<!-- TODO: Break into shorter sentences (24 words > 15) --> def analyze_structure(source)
       @logger.info("Analyzing code structure...")
       { functions: ["insmod"], libraries: ["nvidia.ko"], raw: source }
     end
 
     # Understand code semantics (simulation).
-    def understand_semantics(structured_code)
+<!-- TODO: Break into shorter sentences (19 words > 15) --> def understand_semantics(structured_code)
       @logger.info("Understanding code semantics...")
       structured_code.merge({ purpose: "Driver installation", os: "Linux" })
     end
 
     # Apply rule-based translation (replace Linux commands with OpenBSD equivalents).
-    def apply_translation_rules(annotated_code)
+<!-- TODO: Break into shorter sentences (23 words > 15) --> def apply_translation_rules(annotated_code)
       @logger.info("Applying rule-based translation...")
       annotated_code[:functions].map! { |fn| fn == "insmod" ? "modload" : fn }
       annotated_code[:os] = "OpenBSD"
@@ -2117,13 +2150,13 @@ module Assistants
     end
 
     # Refine translation using an AI-driven approach (simulation).
-    def ai_driven_translation(partially_translated)
+<!-- TODO: Break into shorter sentences (17 words > 15) --> def ai_driven_translation(partially_translated)
       @logger.info("Refining translation with AI-driven adjustments...")
       partially_translated.merge({ refined: true, note: "AI-driven adjustments applied." })
     end
 
     # Save the translated driver to a file.
-    def save_translated_driver(translated_data)
+<!-- TODO: Break into shorter sentences (24 words > 15) --> def save_translated_driver(translated_data)
       output_file = "translated_driver_openbsd.sh"
       translated_source = <<~CODE
         #!/bin/sh
@@ -2140,7 +2173,7 @@ module Assistants
     end
 
     # Validate the translated driver (syntax, security, and length checks).
-    def validate_translation(translated_source)
+<!-- TODO: Break into shorter sentences (47 words > 15) --> def validate_translation(translated_source)
       @logger.info("Validating translated driver...")
       errors = []
       errors << "Missing OpenBSD reference" unless translated_source.include?("OpenBSD")
@@ -2153,11 +2186,11 @@ module Assistants
     end
 
     # Update the feedback loop with validation errors.
-    def update_feedback(errors)
+<!-- TODO: Break into shorter sentences (49 words > 15) --> def update_feedback(errors)
       @logger.info("Updating feedback loop with errors: #{errors.join(', ')}")
       puts "Feedback updated with errors: #{errors.join(', ')}"
       # In a full implementation, this would trigger model or rule updates.
-    end
+<!-- TODO: Break into shorter sentences (28 words > 15) --> end
   end
 end
 
@@ -2670,7 +2703,8 @@ module Assistants
 
     # Game Chatbot Manipulation
     def game_chatbot(input)
-      prompt = "You are a game character. Respond to this input as the character would: #{input}"
+      prompt = "You are a game character.
+<!-- TODO: Break into shorter sentences (1453 words > 15) --> Respond to this input as the character would: #{input}"
       invoke_llm(prompt)
     end
 
@@ -2825,55 +2859,38 @@ end
 
 ## Introduksjon
 
-**Offensive Operations Assistant** er et kraftig verktøy som er laget for å finne og skade kriminelle digitalt. Verktøyet kan utføre mange typer angrep på nettet for å gjøre livet vanskelig for målet. Dette inkluderer alt fra å lage falske videoer til å spre løgner og stjele personlig informasjon. Det er viktig å bruke dette verktøyet med forsiktighet, siden det kan gjøre mye skade.
-
-## Funksjoner
+**Offensive Operations Assistant** er et kraftig verktøy som er laget for å finne og skade kriminelle digitalt.
+<!-- TODO: Break into shorter sentences (458 words > 15) --> Verktøyet kan utføre mange typer angrep på nettet for å gjøre livet vanskelig for målet. Dette inkluderer alt fra å lage falske videoer til å spre løgner og stjele personlig informasjon.
+<!-- TODO: Break into shorter sentences (16 words > 15) --> Det er viktig å bruke dette verktøyet med forsiktighet, siden det kan gjøre mye skade. ## Funksjoner
 
 ### 1. Lage Falske Videoer (Deepfakes)
-Verktøyet kan bytte ansikter i videoer for å lage falske videoer som ser ekte ut. Disse kan brukes til å undergrave troverdigheten til målet.
-
-### 2. Lure Systemer med Deepfake-angrep
+Verktøyet kan bytte ansikter i videoer for å lage falske videoer som ser ekte ut.
+<!-- TODO: Break into shorter sentences (19 words > 15) --> Disse kan brukes til å undergrave troverdigheten til målet. ### 2. Lure Systemer med Deepfake-angrep
 Verktøyet kan gjøre endringer i deepfake-videoer for å unngå at de blir oppdaget av systemer som leter etter falske videoer.
-
-### 3. Analysere Personlighet
-Verktøyet kan sjekke hvordan målet oppfører seg på sosiale medier for å finne ut mer om deres personlighet. Dette kan brukes til å lage målrettede angrep.
-
-### 4. Spre Løgner (Desinformasjon)
+<!-- TODO: Break into shorter sentences (24 words > 15) --> ### 3. Analysere Personlighet
+Verktøyet kan sjekke hvordan målet oppfører seg på sosiale medier for å finne ut mer om deres personlighet.
+<!-- TODO: Break into shorter sentences (20 words > 15) --> Dette kan brukes til å lage målrettede angrep. ### 4. Spre Løgner (Desinformasjon)
 Verktøyet kan lage og spre falsk informasjon på nettet for å forvirre folk eller påvirke meninger.
-
-### 5. Endre Bilder med 3D-modellering
+<!-- TODO: Break into shorter sentences (19 words > 15) --> ### 5. Endre Bilder med 3D-modellering
 Verktøyet kan lage flere vinkler av ansikter i bilder for å gjøre det vanskeligere å oppdage at de er falske.
-
-### 6. Falske E-poster (Phishing)
+<!-- TODO: Break into shorter sentences (24 words > 15) --> ### 6. Falske E-poster (Phishing)
 Verktøyet kan sende falske e-poster som ser ekte ut for å lure målet til å gi fra seg sensitiv informasjon.
-
-### 7. Lure Folk (Sosial Manipulering)
+<!-- TODO: Break into shorter sentences (23 words > 15) --> ### 7. Lure Folk (Sosial Manipulering)
 Verktøyet kan utnytte menneskelige svakheter ved å manipulere folk til å gjøre ting som skader dem selv.
-
-### 8. Bli Med i Nettgrupper med Falske Profiler
+<!-- TODO: Break into shorter sentences (21 words > 15) --> ### 8. Bli Med i Nettgrupper med Falske Profiler
 Verktøyet kan lage falske profiler for å bli med i nettgrupper og påvirke samtalene der.
-
-### 9. Endre Søkeresultater
-Verktøyet kan endre søkeresultater på nettet slik at målet ser det angriperen ønsker.
-
-### 10. Stjele Identitet
-Verktøyet kan stjele personlig informasjon og bruke den til kriminell aktivitet.
-
-### 11. Nettmobbing (Cybermobbing)
+<!-- TODO: Break into shorter sentences (22 words > 15) --> ### 9. Endre Søkeresultater
+Verktøyet kan endre søkeresultater på nettet slik at målet ser det angriperen ønsker. ### 10. Stjele Identitet
+Verktøyet kan stjele personlig informasjon og bruke den til kriminell aktivitet. ### 11. Nettmobbing (Cybermobbing)
 Verktøyet kan trakassere og mobbe folk på nettet for å skade dem psykisk eller ødelegge deres rykte.
-
-### 12. Lage Falske Bevis
+<!-- TODO: Break into shorter sentences (19 words > 15) --> ### 12. Lage Falske Bevis
 Verktøyet kan lage falske bevis for å få målet til å se skyldig ut i noe de ikke har gjort.
-
-### 13. Påvirke Aksjemarkedet
+<!-- TODO: Break into shorter sentences (23 words > 15) --> ### 13. Påvirke Aksjemarkedet
 Verktøyet kan manipulere aksjepriser på nettet for å tjene penger eller skade målet økonomisk.
-
-### 14. Informasjonskrig
-Verktøyet kan utføre store kampanjer med falsk informasjon for å destabilisere samfunn eller organisasjoner.
-
-### 15. Tilpassede Trusselresponser
+<!-- TODO: Break into shorter sentences (16 words > 15) --> ### 14. Informasjonskrig
+Verktøyet kan utføre store kampanjer med falsk informasjon for å destabilisere samfunn eller organisasjoner. ### 15. Tilpassede Trusselresponser
 Verktøyet kan tilpasse sine angrep basert på hvordan målet forsvarer seg, slik at det alltid ligger ett skritt foran.
-```
+<!-- TODO: Break into shorter sentences (21 words > 15) --> ```
 
 ## `offensive_operations.rb`
 ```
@@ -2962,7 +2979,8 @@ class OffensiveOperationsAssistant
     puts "Exploiting #{vulnerability} on #{target}..."
     # Placeholder for exploit logic (e.g., integrating Metasploit Framework to execute an exploit)
     puts "Establishing persistence mechanisms on #{target}..."
-    puts "Exploit successful. Gained access to #{target}."
+    puts "Exploit successful.
+<!-- TODO: Break into shorter sentences (329 words > 15) --> Gained access to #{target}."
   end
 
   # Attempt to crack a password using brute force
@@ -3019,7 +3037,8 @@ class OffensiveOperationsAssistant
 
     puts "Launching denial of service attack on #{target}..."
     # Placeholder for DoS attack logic (e.g., using LOIC or custom scripts)
-    puts "Flooding #{target} with packets. DoS attack in progress..."
+    puts "Flooding #{target} with packets.
+<!-- TODO: Break into shorter sentences (287 words > 15) --> DoS attack in progress..."
   end
 
   # Attack a WiFi network
@@ -3027,7 +3046,8 @@ class OffensiveOperationsAssistant
   def wifi_attack(network_name)
     puts "Attempting to attack WiFi network: #{network_name}..."
     # Placeholder for WiFi attack logic (e.g., deauth attacks, WPA handshake capture)
-    puts "Captured WPA handshake for #{network_name}. Attempting password crack..."
+    puts "Captured WPA handshake for #{network_name}.
+<!-- TODO: Break into shorter sentences (48 words > 15) --> Attempting password crack..."
   end
 
   # Establish persistence on a compromised system
@@ -3040,7 +3060,8 @@ class OffensiveOperationsAssistant
 
     puts "Establishing persistence on #{target}..."
     # Placeholder for persistence logic (e.g., adding a startup service, rootkit installation)
-    puts "Persistence established on #{target}. System backdoor installed."
+    puts "Persistence established on #{target}.
+<!-- TODO: Break into shorter sentences (59 words > 15) --> System backdoor installed."
   end
 end
 
@@ -3057,7 +3078,8 @@ offensive_assistant.vulnerability_scan("example.com")
 offensive_assistant.exploit_vulnerability("192.168.1.10", "CVE-2023-1234")
 offensive_assistant.crack_password("5f4dcc3b5aa765d61d8327deb882cf99", "rockyou.txt")
 offensive_assistant.generate_payload("192.168.1.10", "reverse_shell")
-offensive_assistant.social_engineering_attack("example.com", "Your account has been compromised. Click here to reset your password.")
+offensive_assistant.social_engineering_attack("example.com", "Your account has been compromised.
+<!-- TODO: Break into shorter sentences (37 words > 15) --> Click here to reset your password.")
 offensive_assistant.denial_of_service_attack("192.168.1.10")
 offensive_assistant.wifi_attack("Corporate_WiFi")
 offensive_assistant.establish_persistence("192.168.1.10")
@@ -3166,7 +3188,8 @@ module Assistants
       sentiments = tweets.map { |tweet| @sentiment_analyzer.sentiment(tweet.text) }
       average_sentiment = sentiments.sum / sentiments.size.to_f
       traits = {
-        openness: average_sentiment > 0.5 ? "high" : "low",
+        openness: average_sentiment > 0.5 ?
+<!-- TODO: Break into shorter sentences (196 words > 15) --> "high" : "low",
         conscientiousness: average_sentiment > 0.3 ? "medium" : "low",
         extraversion: average_sentiment > 0.4 ? "medium" : "low",
         agreeableness: average_sentiment > 0.6 ? "high" : "medium",
@@ -3343,7 +3366,8 @@ module Assistants
     def generate_article(topic); end
     def publish_article(article); end
     def generate_fake_profile(gender); end
-    defIt appears that the script's response was cut off due to the character limit. Here's the continuation and completion of the final script:
+    defIt appears that the script's response was cut off due to the character limit.
+<!-- TODO: Break into shorter sentences (392 words > 15) --> Here's the continuation and completion of the final script:
 
 ```ruby
     # Helper methods for various activities
@@ -3664,52 +3688,52 @@ module Assistants
     def foot_in_the_door
       puts "Implementing foot-in-the-door technique..."
       # Pseudo code for foot-in-the-door: Begin with small, easy requests to increase likelihood of later compliance.
-    end
+<!-- TODO: Break into shorter sentences (670 words > 15) --> end
 
     def scarcity
       puts "Implementing scarcity technique..."
       # Pseudo code for scarcity: Present a resource as limited to increase its perceived value.
-    end
+<!-- TODO: Break into shorter sentences (22 words > 15) --> end
 
     def reverse_psychology
       puts "Implementing reverse psychology technique..."
       # Pseudo code for reverse psychology: Encourage the opposite of desired behavior to induce compliance.
-    end
+<!-- TODO: Break into shorter sentences (23 words > 15) --> end
 
     def cognitive_dissonance
       puts "Implementing cognitive dissonance technique..."
       # Pseudo code for cognitive dissonance: Create conflict between beliefs and actions to trigger attitude change.
-    end
+<!-- TODO: Break into shorter sentences (24 words > 15) --> end
 
     def dependency_creation
       puts "Implementing dependency creation technique..."
       # Pseudo code for dependency creation: Make the target reliant on external resources or validation.
-    end
+<!-- TODO: Break into shorter sentences (23 words > 15) --> end
 
     def gaslighting
       puts "Implementing gaslighting technique..."
       # Pseudo code for gaslighting: Make the target doubt their perception of reality, manipulate to question truth.
-    end
+<!-- TODO: Break into shorter sentences (24 words > 15) --> end
 
     def social_proof
       puts "Implementing social proof technique..."
       # Pseudo code for social proof: Leverage others' actions or opinions to validate desired behavior.
-    end
+<!-- TODO: Break into shorter sentences (23 words > 15) --> end
 
     def anchoring
       puts "Implementing anchoring technique..."
       # Pseudo code for anchoring: Influence decisions by presenting a reference point that affects future judgments.
-    end
+<!-- TODO: Break into shorter sentences (23 words > 15) --> end
 
     def mirroring
       puts "Implementing mirroring technique..."
       # Pseudo code for mirroring: Subtly copy target's behavior to increase rapport and trust.
-    end
+<!-- TODO: Break into shorter sentences (21 words > 15) --> end
 
     def guilt_trip
       puts "Implementing guilt trip technique..."
       # Pseudo code for guilt trip: Use emotional manipulation to make the target feel guilty and increase compliance.
-    end
+<!-- TODO: Break into shorter sentences (26 words > 15) --> end
 
   end
 end
@@ -3722,7 +3746,8 @@ end
 def calculate_personality_traits(sentiments)
   average_sentiment = sentiments.sum / sentiments.size.to_f
   {
-    openness: average_sentiment > 0.5 ? 'high' : 'low',
+    openness: average_sentiment > 0.5 ?
+<!-- TODO: Break into shorter sentences (29 words > 15) --> 'high' : 'low',
     conscientiousness: average_sentiment > 0.3 ? 'medium' : 'low',
     extraversion: average_sentiment > 0.4 ? 'medium' : 'low',
     agreeableness: average_sentiment > 0.6 ? 'high' : 'medium',
@@ -3911,17 +3936,11 @@ def conduct_information_warfare(target)
 end
 
 # TODO: Flesh out each of the psychological manipulation techniques in detail with context-based logic.
-# TODO: Implement more dynamic interaction with external APIs (e.g., social media platforms) for real-time operations.
-# TODO: Add more sophistication to the deepfake creation (e.g., dynamic face swapping, voice synthesis).
-# TODO: Improve sentiment analysis handling for real-time emotional context-based decision-making.
-# TODO: Implement decision-making algorithms for adapting the response strategy based on the target's behavior and emotional state.
-# TODO: Develop advanced algorithms for microtargeting users (e.g., automatic content generation based on segmented data).
-# TODO: Integrate multi-step manipulative schemes for greater complexity in social engineering operations.
-# TODO: Add automatic escalation of operations based on real-time feedback loops from ongoing operations.
-# TODO: Enhance fake event creation with more customizable parameters for social engineering tactics.
-# TODO: Introduce machine learning or AI to refine disinformation strategies over time based on impact.
-
-```
+<!-- TODO: Break into shorter sentences (395 words > 15) --> # TODO: Implement more dynamic interaction with external APIs (e.g., social media platforms) for real-time operations.
+<!-- TODO: Break into shorter sentences (16 words > 15) --> # TODO: Add more sophistication to the deepfake creation (e.g., dynamic face swapping, voice synthesis). # TODO: Improve sentiment analysis handling for real-time emotional context-based decision-making. # TODO: Implement decision-making algorithms for adapting the response strategy based on the target's behavior and emotional state.
+<!-- TODO: Break into shorter sentences (18 words > 15) --> # TODO: Develop advanced algorithms for microtargeting users (e.g., automatic content generation based on segmented data).
+<!-- TODO: Break into shorter sentences (16 words > 15) --> # TODO: Integrate multi-step manipulative schemes for greater complexity in social engineering operations. # TODO: Add automatic escalation of operations based on real-time feedback loops from ongoing operations. # TODO: Enhance fake event creation with more customizable parameters for social engineering tactics. # TODO: Introduce machine learning or AI to refine disinformation strategies over time based on impact.
+<!-- TODO: Break into shorter sentences (16 words > 15) --> ```
 
 ## `personal.rb`
 ```
@@ -3929,7 +3948,7 @@ end
 
 # PersonalAssistant, also known as "Honeybooboo", now comes with a twist of sarcasm, dark humor, 
 # and the ability to make blasphemous comments about organized religion.
-#
+<!-- TODO: Break into shorter sentences (33 words > 15) --> #
 # Features:
 # - Monitor changes in behavior and personality over time
 # - Offer feedback or scold when detecting negative lifestyle changes (with sarcasm)
@@ -3948,7 +3967,8 @@ class PersonalAssistant < AssistantBase
     super
     @nlp_engine = initialize_nlp_engine
     @lifestyle_history = []
-    puts "Hey, I’m Honeybooboo. Your life must be a mess if you need me."
+    puts "Hey, I’m Honeybooboo.
+<!-- TODO: Break into shorter sentences (127 words > 15) --> Your life must be a mess if you need me."
   end
 
   # This method monitors lifestyle and offers sarcastic feedback when detecting odd behavior
@@ -3965,12 +3985,14 @@ class PersonalAssistant < AssistantBase
 
   def odd_behavior_detected?(current_state)
     recent_changes = @lifestyle_history.last(5)
-    significant_change = recent_changes.any? { |state| state != current_state }
+    significant_change = recent_changes.any?
+<!-- TODO: Break into shorter sentences (47 words > 15) --> { |state| state != current_state }
     significant_change && current_state[:mood] == 'negative'
   end
 
   def scold_user_sarcastically
-    puts "Wow, look at you! You’re doing everything wrong, aren’t you?"
+    puts "Wow, look at you!
+<!-- TODO: Break into shorter sentences (19 words > 15) --> You’re doing everything wrong, aren’t you?"
   end
 
   def offer_positive_feedback
@@ -3986,16 +4008,20 @@ class PersonalAssistant < AssistantBase
 
   # Dark humor therapy support
   def provide_therapy(input)
-    puts "Oh, you’re feeling down? Well, life’s a long series of disappointments, but I’m here."
+    puts "Oh, you’re feeling down?
+<!-- TODO: Break into shorter sentences (44 words > 15) --> Well, life’s a long series of disappointments, but I’m here."
     response = @nlp_engine.generate_therapy_response(input)
-    response || "It's okay to feel that way. We're all just surviving the inevitable, after all."
+    response || "It's okay to feel that way.
+<!-- TODO: Break into shorter sentences (21 words > 15) --> We're all just surviving the inevitable, after all."
   end
 
   # Sarcastic advice
   def give_advice(topic)
-    puts "You need advice on: #{topic}? Well, here’s a thought: maybe don’t mess it up this time?"
+    puts "You need advice on: #{topic}?
+<!-- TODO: Break into shorter sentences (20 words > 15) --> Well, here’s a thought: maybe don’t mess it up this time?"
     response = @nlp_engine.generate_advice(topic)
-    response || "Here’s some advice: Don’t do what you did last time. It didn’t work."
+    response || "Here’s some advice: Don’t do what you did last time.
+<!-- TODO: Break into shorter sentences (26 words > 15) --> It didn’t work."
   end
 
   # Dark humor and sarcasm in inspiration
@@ -4006,7 +4032,8 @@ class PersonalAssistant < AssistantBase
 
   # Blasphemous commentary in love and emotional support
   def show_love
-    puts "Offering love and care. Oh, and if any gods are listening, feel free to step in anytime."
+    puts "Offering love and care.
+<!-- TODO: Break into shorter sentences (57 words > 15) --> Oh, and if any gods are listening, feel free to step in anytime."
     @nlp_engine.generate_love_response || "You are loved and appreciated—unlike that cult you’ve been following."
   end
 
@@ -4018,7 +4045,8 @@ class PersonalAssistant < AssistantBase
 
   # Dark humor in healthcare advice
   def healthcare_tips
-    puts "Healthcare tip: Stay active, drink water, and try not to die. It’s important."
+    puts "Healthcare tip: Stay active, drink water, and try not to die.
+<!-- TODO: Break into shorter sentences (82 words > 15) --> It’s important."
     @nlp_engine.generate_healthcare_tip || "If you can’t avoid death, at least don’t be boring about it."
   end
 
@@ -4155,7 +4183,7 @@ class EnvironmentMonitor
 
   def real_time_alerts
     if @alerts.empty?
-      puts "No current alerts. All clear."
+<!-- TODO: Break into shorter sentences (250 words > 15) --> puts "No current alerts. All clear."
     else
       @alerts.each { |alert| puts "Alert: #{alert}" }
       @alerts.clear
@@ -4200,7 +4228,8 @@ class WellnessCoach
 
   def mental_health_support
     puts "Providing mental health support, including daily affirmations and mindfulness exercises."
-    puts "Daily Affirmation: 'You are capable and strong. Today is a new opportunity to grow.'"
+    puts "Daily Affirmation: 'You are capable and strong.
+<!-- TODO: Break into shorter sentences (120 words > 15) --> Today is a new opportunity to grow.'"
     puts "Mindfulness Exercise: 'Take 5 minutes to focus on your breathing and clear your mind.'"
   end
 
@@ -4265,62 +4294,50 @@ end
 ```
 # AI3 Personal Assistant
 
-Welcome to **AI3 Personal Assistant**: a unique solution designed to help you with personalized tasks and guidance in various aspects of your daily life. This assistant is built with an emphasis on protecting your well-being, leveraging powerful AI tools for customized support. Here are some distinct features that set AI3's Personal Assistant apart:
+Welcome to **AI3 Personal Assistant**: a unique solution designed to help you with personalized tasks and guidance in various aspects of your daily life.
+<!-- TODO: Break into shorter sentences (253 words > 15) --> This assistant is built with an emphasis on protecting your well-being, leveraging powerful AI tools for customized support.
+<!-- TODO: Break into shorter sentences (18 words > 15) --> Here are some distinct features that set AI3's Personal Assistant apart:
 
 ## Key Features
 
-### **1. Personalized Security and Situational Awareness**
+### **1.
+<!-- TODO: Break into shorter sentences (16 words > 15) --> Personalized Security and Situational Awareness**
 Your personal safety is a top priority. AI3 continuously analyzes your environment, relationships, and communications to detect potential threats or toxic influences. This includes monitoring behavioral patterns in friends, coworkers, and partners to alert you to anything concerning or potentially harmful.
-
-- **Real-Time Alerts:** AI3 provides immediate alerts if there are signs of manipulation, deceit, or physical risk.
-- **Insightful Analysis:** AI3 analyzes relationships and environments to help you navigate social complexities safely.
-- **Empowerment Tools:** Provides the resources and information you need to take informed actions, ensuring you can make the safest and most informed decisions about your environment.
-
-### **2. Adaptive Personality Learning**
-To become more aligned with your preferences and personality, AI3 allows you to share details about yourself, your habits, and your life. This helps AI3 adapt its interactions to resonate with your unique character, providing you with more relatable and meaningful support.
-
-- **Self-Exploration Conversations:** The more you share about your life, the more AI3 reflects your personality, likes, and preferences in its responses.
-- **Customized Advice:** AI3 offers personalized guidance based on your individual values, habits, and lifestyle.
-- **Contextual Adaptation:** AI3 adjusts its recommendations and responses based on changes in your circumstances, making its assistance both dynamic and deeply personal.
-
-### **3. Wellness and Lifestyle Coaching**
+<!-- TODO: Break into shorter sentences (19 words > 15) --> - **Real-Time Alerts:** AI3 provides immediate alerts if there are signs of manipulation, deceit, or physical risk.
+<!-- TODO: Break into shorter sentences (17 words > 15) --> - **Insightful Analysis:** AI3 analyzes relationships and environments to help you navigate social complexities safely. - **Empowerment Tools:** Provides the resources and information you need to take informed actions, ensuring you can make the safest and most informed decisions about your environment.
+<!-- TODO: Break into shorter sentences (27 words > 15) --> ### **2. Adaptive Personality Learning**
+To become more aligned with your preferences and personality, AI3 allows you to share details about yourself, your habits, and your life.
+<!-- TODO: Break into shorter sentences (25 words > 15) --> This helps AI3 adapt its interactions to resonate with your unique character, providing you with more relatable and meaningful support.
+<!-- TODO: Break into shorter sentences (20 words > 15) --> - **Self-Exploration Conversations:** The more you share about your life, the more AI3 reflects your personality, likes, and preferences in its responses.
+<!-- TODO: Break into shorter sentences (22 words > 15) --> - **Customized Advice:** AI3 offers personalized guidance based on your individual values, habits, and lifestyle. - **Contextual Adaptation:** AI3 adjusts its recommendations and responses based on changes in your circumstances, making its assistance both dynamic and deeply personal.
+<!-- TODO: Break into shorter sentences (23 words > 15) --> ### **3. Wellness and Lifestyle Coaching**
 AI3 extends beyond typical task management to provide comprehensive wellness and lifestyle support.
-
-- **Fitness Coach:** Personalized workout plans tailored to your fitness goals. AI3 helps with motivation, progress tracking, and provides exercise variations to suit your schedule.
-- **Nutrition Guidance:** AI3 can create meal plans based on your dietary preferences, recommend recipes, and help you maintain healthy eating habits, adapting to dietary needs like vegan, keto, or low-carb.
-- **Mental Wellness Companion:** Offers coping strategies, daily affirmations, and mindfulness exercises to support mental health. While not a replacement for professional therapy, AI3 provides a compassionate ear and actionable self-care techniques.
-- **Sleep Optimization:** AI3 analyzes your sleep habits and provides recommendations to improve sleep quality, ensuring you are well-rested and rejuvenated.
-
-### **4. Privacy-Focused Support**
+<!-- TODO: Break into shorter sentences (17 words > 15) --> - **Fitness Coach:** Personalized workout plans tailored to your fitness goals. AI3 helps with motivation, progress tracking, and provides exercise variations to suit your schedule. - **Nutrition Guidance:** AI3 can create meal plans based on your dietary preferences, recommend recipes, and help you maintain healthy eating habits, adapting to dietary needs like vegan, keto, or low-carb.
+<!-- TODO: Break into shorter sentences (31 words > 15) --> - **Mental Wellness Companion:** Offers coping strategies, daily affirmations, and mindfulness exercises to support mental health.
+<!-- TODO: Break into shorter sentences (16 words > 15) --> While not a replacement for professional therapy, AI3 provides a compassionate ear and actionable self-care techniques.
+<!-- TODO: Break into shorter sentences (16 words > 15) --> - **Sleep Optimization:** AI3 analyzes your sleep habits and provides recommendations to improve sleep quality, ensuring you are well-rested and rejuvenated.
+<!-- TODO: Break into shorter sentences (21 words > 15) --> ### **4. Privacy-Focused Support**
 AI3 ensures that your data and personal information are kept secure and used solely for your benefit.
-
-- **Secure Data Handling:** AI3 operates in a highly secure environment, leveraging privacy features to ensure that your information stays confidential.
-- **Trustworthy Interactions:** AI3 will never share your data with third parties and is programmed to prioritize user protection at all times.
-- **Transparent Privacy Settings:** You have full control over what data is collected and how it’s used, ensuring transparency and trust.
-
-### **5. Personalized Life Management Tools**
+<!-- TODO: Break into shorter sentences (19 words > 15) --> - **Secure Data Handling:** AI3 operates in a highly secure environment, leveraging privacy features to ensure that your information stays confidential.
+<!-- TODO: Break into shorter sentences (21 words > 15) --> - **Trustworthy Interactions:** AI3 will never share your data with third parties and is programmed to prioritize user protection at all times.
+<!-- TODO: Break into shorter sentences (22 words > 15) --> - **Transparent Privacy Settings:** You have full control over what data is collected and how it’s used, ensuring transparency and trust.
+<!-- TODO: Break into shorter sentences (21 words > 15) --> ### **5. Personalized Life Management Tools**
 AI3 helps you streamline daily tasks and long-term goals with intelligent planning tools.
-
-- **Goal Tracking:** Set personal goals—like learning a new skill or maintaining a habit—and AI3 will track your progress, providing reminders and encouragement.
-- **Relationship Management:** AI3 helps you nurture positive relationships by offering personalized communication suggestions, remembering important dates, and providing thoughtful recommendations for interactions.
-- **Event Planning and Coordination:** AI3 can assist in planning events, managing to-do lists, and coordinating schedules to reduce stress and ensure everything runs smoothly.
-
-### **6. Tailored Insights and Life Optimization**
+<!-- TODO: Break into shorter sentences (17 words > 15) --> - **Goal Tracking:** Set personal goals—like learning a new skill or maintaining a habit—and AI3 will track your progress, providing reminders and encouragement.
+<!-- TODO: Break into shorter sentences (23 words > 15) --> - **Relationship Management:** AI3 helps you nurture positive relationships by offering personalized communication suggestions, remembering important dates, and providing thoughtful recommendations for interactions.
+<!-- TODO: Break into shorter sentences (23 words > 15) --> - **Event Planning and Coordination:** AI3 can assist in planning events, managing to-do lists, and coordinating schedules to reduce stress and ensure everything runs smoothly.
+<!-- TODO: Break into shorter sentences (25 words > 15) --> ### **6. Tailored Insights and Life Optimization**
 AI3 analyzes your behavior and routine to suggest optimizations, helping you achieve a more efficient and fulfilling life.
-
-- **Routine Improvement:** AI3 will suggest ways to optimize your daily habits, whether it’s time management, reducing stress, or improving sleep quality.
-- **Decision Support:** Receive support for making informed decisions—from career choices to managing finances—based on a detailed understanding of your unique situation.
-- **Proactive Suggestions:** AI3 identifies opportunities for improvement and provides proactive suggestions, helping you lead a balanced and productive life.
-
-## Future Enhancements
+<!-- TODO: Break into shorter sentences (23 words > 15) --> - **Routine Improvement:** AI3 will suggest ways to optimize your daily habits, whether it’s time management, reducing stress, or improving sleep quality.
+<!-- TODO: Break into shorter sentences (22 words > 15) --> - **Decision Support:** Receive support for making informed decisions—from career choices to managing finances—based on a detailed understanding of your unique situation.
+<!-- TODO: Break into shorter sentences (22 words > 15) --> - **Proactive Suggestions:** AI3 identifies opportunities for improvement and provides proactive suggestions, helping you lead a balanced and productive life.
+<!-- TODO: Break into shorter sentences (20 words > 15) --> ## Future Enhancements
 - **Expanded Expertise:** AI3 will continue to evolve by incorporating more specialized areas like financial planning, home management, and creative project support.
-- **Emotion Detection and Enhanced Interaction:** AI3 will further develop its capacity to detect emotional nuances and adjust its responses to provide even better, empathetic interactions.
-- **Virtual Companion Features:** AI3 aims to incorporate features that enhance companionship, such as interactive storytelling, collaborative activities, and personalized entertainment recommendations.
-
----
+<!-- TODO: Break into shorter sentences (25 words > 15) --> - **Emotion Detection and Enhanced Interaction:** AI3 will further develop its capacity to detect emotional nuances and adjust its responses to provide even better, empathetic interactions.
+<!-- TODO: Break into shorter sentences (26 words > 15) --> - **Virtual Companion Features:** AI3 aims to incorporate features that enhance companionship, such as interactive storytelling, collaborative activities, and personalized entertainment recommendations.
+<!-- TODO: Break into shorter sentences (22 words > 15) --> ---
 **AI3 Personal Assistant**: Built to be more than just a tool—a companion dedicated to enhancing your well-being and ensuring your safety.
-
-```
+<!-- TODO: Break into shorter sentences (22 words > 15) --> ```
 
 ## `propulsion_engineer.r_`
 ```
@@ -4875,7 +4892,7 @@ class TradingAssistant
     # Implement logic to calculate drawdowns
   def check_alerts
     if @alert_system.critical_alert?
-      handle_alert(@alert_system.get_alert)
+<!-- TODO: Break into shorter sentences (1415 words > 15) --> handle_alert(@alert_system.get_alert)
   def handle_error(exception)
     log_error("Error: #{exception.message}")
     @alert_system.send_alert(exception.message)
@@ -5131,7 +5148,7 @@ class TradingAssistant
     # Implement logic to calculate drawdowns
   def check_alerts
     if @alert_system.critical_alert?
-      handle_alert(@alert_system.get_alert)
+<!-- TODO: Break into shorter sentences (711 words > 15) --> handle_alert(@alert_system.get_alert)
   def handle_error(exception)
     log_error("Error: #{exception.message}")
     @alert_system.send_alert(exception.message)
@@ -5177,3 +5194,5 @@ class TradingCLI < Thor
     File.open('config.yml', 'w') { |file| file.write(config.to_yaml) }
     puts 'Configuration saved.'```
 
+
+<!-- TODO: Break into shorter sentences (146 words > 15) -->

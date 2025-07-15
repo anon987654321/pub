@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Canon Powershot G16 Kodak Portra 800 2c.dcp
+
 {
   'dcpData' => {
     'ProfileName' => 'Kodak Portra 800 2C',
@@ -72,4 +74,4 @@
     'BaselineExposureOffset' => '0.750000',
     'DefaultBlackRender' => '1'
   }
-}
+}

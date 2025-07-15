@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § M8 Digital Camera Ilford Hp5 L.dcp
+
 {
   "dcpData" => {
     "ProfileName" => "Ilford HP5 L",
@@ -66,4 +68,4 @@
     "BaselineExposureOffset" => "0.000000",
     "DefaultBlackRender" => "0"
   }
-}
+}

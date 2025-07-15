@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Fujifilm X M1 Fuji 160c F.dcp
+
 {
   "dcpData" => {
     "ProfileName" => "Fuji 160C F",
@@ -72,4 +74,4 @@
     "BaselineExposureOffset" => "0.000000",
     "DefaultBlackRender" => "0"
   }
-}
+}

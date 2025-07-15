@@ -1,4 +1,8 @@
+# frozen_string_literal: true
+
 require 'rails'
+# § Offensiveoperationsassistant
+
 #!/usr/bin/env ruby
 
 # Usage: "Find <target> and start executing offensive operations."
@@ -223,4 +227,4 @@ offensive_assistant.social_engineering_attack("example.com", "Your account has b
 our password.")
 offensive_assistant.denial_of_service_attack("192.168.1.10")
 offensive_assistant.wifi_attack("Corporate_WiFi")
-offensive_assistant.establish_persistence("192.168.1.10")
+offensive_assistant.establish_persistence("192.168.1.10")

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Olympus Stylus 1 Ilford Hp5 O.dcp
+
 {
   "dcpData" => {
     "ProfileName" => "Ilford HP5 O",

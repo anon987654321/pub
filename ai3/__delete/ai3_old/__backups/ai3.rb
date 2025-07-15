@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+# § Ai3
+
 #!/usr/bin/env ruby
 #!/usr/bin/env ruby
 #!/usr/bin/env ruby
@@ -519,200 +523,206 @@ class AI3
 class AI3
 class AI3
   def initialize
-  def initialize
-  def initialize
-  def initialize
-  def initialize
-  def initialize
-  def initialize
-  def initialize
-  def initialize
-  def initialize
-  def initialize
-  def initialize
-  def initialize
-  def initialize
-  def initialize
-  def initialize
-    logger.info "AI^3 Initialized"
-    logger.info "AI^3 Initialized"
-    logger.info "AI^3 Initialized"
-    logger.info "AI^3 Initialized"
-    logger.info "AI^3 Initialized"
-    logger.info "AI^3 Initialized"
-    logger.info "AI^3 Initialized"
-    logger.info "AI^3 Initialized"
-    logger.info "AI^3 Initialized"
-    logger.info "AI^3 Initialized"
-    logger.info "AI^3 Initialized"
-    logger.info "AI^3 Initialized"
-    logger.info "AI^3 Initialized"
-    logger.info "AI^3 Initialized"
-    logger.info "AI^3 Initialized"
-    logger.info "AI^3 Initialized"
-attr_accessor :interactive_session
-attr_accessor :interactive_session
-attr_accessor :interactive_session
-attr_accessor :interactive_session
-attr_accessor :interactive_session
-attr_accessor :interactive_session
-attr_accessor :interactive_session
-attr_accessor :interactive_session
-attr_accessor :interactive_session
-attr_accessor :interactive_session
-attr_accessor :interactive_session
-attr_accessor :interactive_session
-attr_accessor :interactive_session
-attr_accessor :interactive_session
-attr_accessor :interactive_session
-attr_accessor :interactive_session
-attr_accessor :tool_manager
-attr_accessor :tool_manager
-attr_accessor :tool_manager
-attr_accessor :tool_manager
-attr_accessor :tool_manager
-attr_accessor :tool_manager
-attr_accessor :tool_manager
-attr_accessor :tool_manager
-attr_accessor :tool_manager
-attr_accessor :tool_manager
-attr_accessor :tool_manager
-attr_accessor :tool_manager
-attr_accessor :tool_manager
-attr_accessor :tool_manager
-attr_accessor :tool_manager
-attr_accessor :tool_manager
-  end
-  end
-  end
-  end
-  end
-  end
-  end
-  end
-  end
-  end
-  end
-  end
-  end
-  end
-  end
-  end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  # Start the interactive CLI session
-  # Start the interactive CLI session
-  # Start the interactive CLI session
-  # Start the interactive CLI session
-  # Start the interactive CLI session
-  # Start the interactive CLI session
-  # Start the interactive CLI session
-  # Start the interactive CLI session
-  # Start the interactive CLI session
-  # Start the interactive CLI session
-  # Start the interactive CLI session
-  # Start the interactive CLI session
-  # Start the interactive CLI session
-  # Start the interactive CLI session
-  # Start the interactive CLI session
-  # Start the interactive CLI session
-  # Start the interactive CLI session
-  # Start the interactive CLI session
-  # Start the interactive CLI session
-  # Start the interactive CLI session
-  # Start the interactive CLI session
-  # Start the interactive CLI session
-  # Start the interactive CLI session
-  # Start the interactive CLI session
-  # Start the interactive CLI session
-  # Start the interactive CLI session
-  # Start the interactive CLI session
-  # Start the interactive CLI session
-  # Start the interactive CLI session
-  # Start the interactive CLI session
-  # Start the interactive CLI session
-  # Start the interactive CLI session
-  # Start the interactive CLI session
-  # Start the interactive CLI session
-  # Start the interactive CLI session
-  # Start the interactive CLI session
-  def start
-  def start
-  def start
-  def start
-  def start
-  def start
-  def start
-  def start
-  def start
-  def start
-  def start
-  def start
-  def start
-  def start
-  def start
-  def start
-    logger.info "Starting AI^3 Interactive CLI..."
-    logger.info "Starting AI^3 Interactive CLI..."
-    logger.info "Starting AI^3 Interactive CLI..."
-    logger.info "Starting AI^3 Interactive CLI..."
-    logger.info "Starting AI^3 Interactive CLI..."
-    logger.info "Starting AI^3 Interactive CLI..."
-    logger.info "Starting AI^3 Interactive CLI..."
-    logger.info "Starting AI^3 Interactive CLI..."
-    logger.info "Starting AI^3 Interactive CLI..."
-    logger.info "Starting AI^3 Interactive CLI..."
-    logger.info "Starting AI^3 Interactive CLI..."
-    logger.info "Starting AI^3 Interactive CLI..."
-    logger.info "Starting AI^3 Interactive CLI..."
-    logger.info "Starting AI^3 Interactive CLI..."
-    logger.info "Starting AI^3 Interactive CLI..."
-    logger.info "Starting AI^3 Interactive CLI..."
-    @interactive_session.start
-    @interactive_session.start
-    @interactive_session.start
-    @interactive_session.start
-    @interactive_session.start
-    @interactive_session.start
-    @interactive_session.start
-    @interactive_session.start
-    @interactive_session.start
-    @interactive_session.start
-    @interactive_session.start
-    @interactive_session.start
-    @interactive_session.start
-    @interactive_session.start
-    @interactive_session.start
-    @interactive_session.start
-  end
-  end
-  end
-  end
-  end
-  end
-  end
-  end
-  end
-  end
-  end
-  end
-  end
-  end
-  end
+  begin
+    # TODO: Refactor initialize - exceeds 20 line limit (197 lines)
+    def initialize
+    def initialize
+    def initialize
+    def initialize
+    def initialize
+    def initialize
+    def initialize
+    def initialize
+    def initialize
+    def initialize
+    def initialize
+    def initialize
+    def initialize
+    def initialize
+    def initialize
+      logger.info "AI^3 Initialized"
+      logger.info "AI^3 Initialized"
+      logger.info "AI^3 Initialized"
+      logger.info "AI^3 Initialized"
+      logger.info "AI^3 Initialized"
+      logger.info "AI^3 Initialized"
+      logger.info "AI^3 Initialized"
+      logger.info "AI^3 Initialized"
+      logger.info "AI^3 Initialized"
+      logger.info "AI^3 Initialized"
+      logger.info "AI^3 Initialized"
+      logger.info "AI^3 Initialized"
+      logger.info "AI^3 Initialized"
+      logger.info "AI^3 Initialized"
+      logger.info "AI^3 Initialized"
+      logger.info "AI^3 Initialized"
+  attr_accessor :interactive_session
+  attr_accessor :interactive_session
+  attr_accessor :interactive_session
+  attr_accessor :interactive_session
+  attr_accessor :interactive_session
+  attr_accessor :interactive_session
+  attr_accessor :interactive_session
+  attr_accessor :interactive_session
+  attr_accessor :interactive_session
+  attr_accessor :interactive_session
+  attr_accessor :interactive_session
+  attr_accessor :interactive_session
+  attr_accessor :interactive_session
+  attr_accessor :interactive_session
+  attr_accessor :interactive_session
+  attr_accessor :interactive_session
+  attr_accessor :tool_manager
+  attr_accessor :tool_manager
+  attr_accessor :tool_manager
+  attr_accessor :tool_manager
+  attr_accessor :tool_manager
+  attr_accessor :tool_manager
+  attr_accessor :tool_manager
+  attr_accessor :tool_manager
+  attr_accessor :tool_manager
+  attr_accessor :tool_manager
+  attr_accessor :tool_manager
+  attr_accessor :tool_manager
+  attr_accessor :tool_manager
+  attr_accessor :tool_manager
+  attr_accessor :tool_manager
+  attr_accessor :tool_manager
+    end
+    end
+    end
+    end
+    end
+    end
+    end
+    end
+    end
+    end
+    end
+    end
+    end
+    end
+    end
+    end
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    # Start the interactive CLI session
+    # Start the interactive CLI session
+    # Start the interactive CLI session
+    # Start the interactive CLI session
+    # Start the interactive CLI session
+    # Start the interactive CLI session
+    # Start the interactive CLI session
+    # Start the interactive CLI session
+    # Start the interactive CLI session
+    # Start the interactive CLI session
+    # Start the interactive CLI session
+    # Start the interactive CLI session
+    # Start the interactive CLI session
+    # Start the interactive CLI session
+    # Start the interactive CLI session
+    # Start the interactive CLI session
+    # Start the interactive CLI session
+    # Start the interactive CLI session
+    # Start the interactive CLI session
+    # Start the interactive CLI session
+    # Start the interactive CLI session
+    # Start the interactive CLI session
+    # Start the interactive CLI session
+    # Start the interactive CLI session
+    # Start the interactive CLI session
+    # Start the interactive CLI session
+    # Start the interactive CLI session
+    # Start the interactive CLI session
+    # Start the interactive CLI session
+    # Start the interactive CLI session
+    # Start the interactive CLI session
+    # Start the interactive CLI session
+    # Start the interactive CLI session
+    # Start the interactive CLI session
+    # Start the interactive CLI session
+    # Start the interactive CLI session
+    def start
+    def start
+    def start
+    def start
+    def start
+    def start
+    def start
+    def start
+    def start
+    def start
+    def start
+    def start
+    def start
+    def start
+    def start
+    def start
+      logger.info "Starting AI^3 Interactive CLI..."
+      logger.info "Starting AI^3 Interactive CLI..."
+      logger.info "Starting AI^3 Interactive CLI..."
+      logger.info "Starting AI^3 Interactive CLI..."
+      logger.info "Starting AI^3 Interactive CLI..."
+      logger.info "Starting AI^3 Interactive CLI..."
+      logger.info "Starting AI^3 Interactive CLI..."
+      logger.info "Starting AI^3 Interactive CLI..."
+      logger.info "Starting AI^3 Interactive CLI..."
+      logger.info "Starting AI^3 Interactive CLI..."
+      logger.info "Starting AI^3 Interactive CLI..."
+      logger.info "Starting AI^3 Interactive CLI..."
+      logger.info "Starting AI^3 Interactive CLI..."
+      logger.info "Starting AI^3 Interactive CLI..."
+      logger.info "Starting AI^3 Interactive CLI..."
+      logger.info "Starting AI^3 Interactive CLI..."
+      @interactive_session.start
+      @interactive_session.start
+      @interactive_session.start
+      @interactive_session.start
+      @interactive_session.start
+      @interactive_session.start
+      @interactive_session.start
+      @interactive_session.start
+      @interactive_session.start
+      @interactive_session.start
+      @interactive_session.start
+      @interactive_session.start
+      @interactive_session.start
+      @interactive_session.start
+      @interactive_session.start
+      @interactive_session.start
+    end
+    end
+    end
+    end
+    end
+    end
+    end
+    end
+    end
+    end
+    end
+    end
+    end
+    end
+    end
+    end
+  rescue StandardError => e
+    # TODO: Add proper error handling
+    raise e
   end
 end
 end
@@ -769,4 +779,4 @@ AI3.new.start if __FILE__ == $0
 require 'rails'
 require 'rails'
 require 'rails'
-require 'rails'
+require 'rails'

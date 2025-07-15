@@ -9,6 +9,8 @@ require "logger"
 require "thor"
 require "fileutils"
 
+# § Tradingbot
+
 # Dette prosjektet simulerer en hedgefonds-baserte "swarm" av autonome trading-roboter.
 # Hver robot fungerer uavhengig, lagrer sin tilstand i en .bin-fil og henter dynamisk informasjon
 # ved hjelp av RAG for å forbedre handelsbeslutninger.
@@ -18,6 +20,7 @@ class TradingBot
   attr_reader :id, :config
 
   def initialize(id)
+  # TODO: Refactor initialize - exceeds 20 line limit (59 lines)
     @id = id
     load_configuration
     setup_logging
@@ -80,6 +83,7 @@ end
 # Robot som henter markedsdata fra Binance
 class MarketDataBot < TradingBot
   def initialize(id)
+  # TODO: Refactor initialize - exceeds 20 line limit (28 lines)
     super(id)
     connect_to_binance
   end
@@ -111,6 +115,7 @@ end
 # Robot som henter sentimentdata fra nyheter og analyserer med OpenAI
 class SentimentAnalysisBot < TradingBot
   def initialize(id)
+  # TODO: Refactor initialize - exceeds 20 line limit (40 lines)
     super(id)
     connect_to_openai
   end
@@ -154,58 +159,64 @@ end
 # Robot som utfører handel basert på datainnhenting fra andre roboter
 class TradingExecutionBot < TradingBot
   def initialize(id)
-    super(id)
-    connect_to_binance
-  end
-
-  private
-
-  def connect_to_binance
-    @binance_client = Binance::Client::REST.new(api_key: @config["binance_api_key"], secret_key: @config["binance_api_secret"])
-    @logger.info("#{id} tilkoblet Binance API")
-  end
-
-  # Utfører handel basert på sanntidsdata
-  def execute_cycle
-    market_data = @state[:market_data]
-    sentiment_score = @state[:sentiment_score]
-
-    if market_data && sentiment_score
-      signal = predict_trading_signal(market_data, sentiment_score)
-      execute_trade(signal)
-    else
-      @logger.warn("#{id} mangler nødvendig data for handel")
+  begin
+    # TODO: Refactor initialize - exceeds 20 line limit (55 lines)
+      super(id)
+      connect_to_binance
     end
-  end
-
-  # Forutsier handelsbeslutning basert på markedsdata og sentimentanalyse
-  def predict_trading_signal(market_data, sentiment_score)
-    if sentiment_score > 0.5 && market_data["price"].to_f > 50000
-      "BUY"
-    elsif sentiment_score < -0.5
-      "SELL"
-    else
-      "HOLD"
+  
+    private
+  
+    def connect_to_binance
+      @binance_client = Binance::Client::REST.new(api_key: @config["binance_api_key"], secret_key: @config["binance_api_secret"])
+      @logger.info("#{id} tilkoblet Binance API")
     end
-  end
-
-  # Utfører handelen basert på signalet
-  def execute_trade(signal)
-    case signal
-    when "BUY"
-      @binance_client.create_order(symbol: @config["trading_pair"], side: "BUY", type: "MARKET", quantity: 0.001)
-      log_trade("KJØP")
-    when "SELL"
-      @binance_client.create_order(symbol: @config["trading_pair"], side: "SELL", type: "MARKET", quantity: 0.001)
-      log_trade("SELG")
-    else
-      log_trade("HOLD")
+  
+    # Utfører handel basert på sanntidsdata
+    def execute_cycle
+      market_data = @state[:market_data]
+      sentiment_score = @state[:sentiment_score]
+  
+      if market_data && sentiment_score
+        signal = predict_trading_signal(market_data, sentiment_score)
+        execute_trade(signal)
+      else
+        @logger.warn("#{id} mangler nødvendig data for handel")
+      end
     end
-  end
-
-  # Logger handelsbeslutningen
-  def log_trade(action)
-    @logger.info("#{id} utførte handel: #{action}")
+  
+    # Forutsier handelsbeslutning basert på markedsdata og sentimentanalyse
+    def predict_trading_signal(market_data, sentiment_score)
+      if sentiment_score > 0.5 && market_data["price"].to_f > 50000
+        "BUY"
+      elsif sentiment_score < -0.5
+        "SELL"
+      else
+        "HOLD"
+      end
+    end
+  
+    # Utfører handelen basert på signalet
+    def execute_trade(signal)
+      case signal
+      when "BUY"
+        @binance_client.create_order(symbol: @config["trading_pair"], side: "BUY", type: "MARKET", quantity: 0.001)
+        log_trade("KJØP")
+      when "SELL"
+        @binance_client.create_order(symbol: @config["trading_pair"], side: "SELL", type: "MARKET", quantity: 0.001)
+        log_trade("SELG")
+      else
+        log_trade("HOLD")
+      end
+    end
+  
+    # Logger handelsbeslutningen
+    def log_trade(action)
+      @logger.info("#{id} utførte handel: #{action}")
+    end
+  rescue StandardError => e
+    # TODO: Add proper error handling
+    raise e
   end
 end
 
@@ -213,35 +224,41 @@ end
 class TradingCLI < Thor
   desc "run", "Kjør alle roboter i swarmen"
   def run
-    bots = [
-      MarketDataBot.new("bot_00001"),
-      SentimentAnalysisBot.new("bot_00002"),
-      TradingExecutionBot.new("bot_00003")
-    ]
-    threads = bots.map { |bot| Thread.new { bot.run } }
-    threads.each(&:join)
+  begin
+    # TODO: Refactor run - exceeds 20 line limit (33 lines)
+      bots = [
+        MarketDataBot.new("bot_00001"),
+        SentimentAnalysisBot.new("bot_00002"),
+        TradingExecutionBot.new("bot_00003")
+      ]
+      threads = bots.map { |bot| Thread.new { bot.run } }
+      threads.each(&:join)
+    end
+  
+    desc "configure", "Sett opp konfigurasjon"
+    def configure
+      puts 'Angi Binance API-nøkkel:'
+      binance_api_key = STDIN.gets.chomp
+      puts 'Angi Binance API-hemmelighet:'
+      binance_api_secret = STDIN.gets.chomp
+      puts 'Angi News API-nøkkel:'
+      news_api_key = STDIN.gets.chomp
+      puts 'Angi OpenAI API-nøkkel:'
+      openai_api_key = STDIN.gets.chomp
+  
+      config = {
+        'binance_api_key' => binance_api_key,
+        'binance_api_secret' => binance_api_secret,
+        'news_api_key' => news_api_key,
+        'openai_api_key' => openai_api_key,
+        'trading_pair' => 'BTCUSDT'  # Standard handelspar
+      }
+  
+      File.open('config.yml', 'w') { |file| file.write(config.to_yaml) }
+      puts 'Konfigurasjon lagret.'
+    end
+  rescue StandardError => e
+    # TODO: Add proper error handling
+    raise e
   end
-
-  desc "configure", "Sett opp konfigurasjon"
-  def configure
-    puts 'Angi Binance API-nøkkel:'
-    binance_api_key = STDIN.gets.chomp
-    puts 'Angi Binance API-hemmelighet:'
-    binance_api_secret = STDIN.gets.chomp
-    puts 'Angi News API-nøkkel:'
-    news_api_key = STDIN.gets.chomp
-    puts 'Angi OpenAI API-nøkkel:'
-    openai_api_key = STDIN.gets.chomp
-
-    config = {
-      'binance_api_key' => binance_api_key,
-      'binance_api_secret' => binance_api_secret,
-      'news_api_key' => news_api_key,
-      'openai_api_key' => openai_api_key,
-      'trading_pair' => 'BTCUSDT'  # Standard handelspar
-    }
-
-    File.open('config.yml', 'w') { |file| file.write(config.to_yaml) }
-    puts 'Konfigurasjon lagret.'
-  end
-end
+end

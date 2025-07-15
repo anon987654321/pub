@@ -1,31 +1,23 @@
+# § Readme
+
 # LA 2.0: LA2.gov
 ## AI-driven Urban Reconstruction
 
-LA2.gov harnesses AI, swarm robotics, and innovative design principles like swarmism, tectonism, and parametric design to rebuild cities sustainably. Imagine cities dynamically redesigned and reconstructed to adapt to changing needs and trends.
-
-Our mission begins with revitalizing Los Angeles and extends globally, aiming to elevate third-world cities to first-world standards.
-
-LA2.gov transforms cityscapes into evolving examples of human creativity and AI's capabilities. Join us in redefining urban life, one city at a time.
-
-## Overview
+LA2.gov harnesses AI, swarm robotics, and innovative design principles like swarmism, tectonism, and parametric design to rebuild cities sustainably.
+<!-- TODO: Break into shorter sentences (30 words > 15) --> Imagine cities dynamically redesigned and reconstructed to adapt to changing needs and trends. Our mission begins with revitalizing Los Angeles and extends globally, aiming to elevate third-world cities to first-world standards.
+<!-- TODO: Break into shorter sentences (18 words > 15) --> LA2.gov transforms cityscapes into evolving examples of human creativity and AI's capabilities. Join us in redefining urban life, one city at a time. ## Overview
 
 LA2.gov integrates key strategies:
 
 - **Swarmism**: Utilizes swarm intelligence to address complex architectural problems, inspired by the collective behaviors of bees and ants.
-
-- **Tectonism**: Focuses on construction both as a practical craft and an art form, creating structures that are both functional and aesthetically pleasing.
-
-- **Parametric design**: Employs algorithms to shape building elements and components, driven by parameters that define the relationship between design objectives and outcomes.
-
-## Structure
+<!-- TODO: Break into shorter sentences (25 words > 15) --> - **Tectonism**: Focuses on construction both as a practical craft and an art form, creating structures that are both functional and aesthetically pleasing.
+<!-- TODO: Break into shorter sentences (23 words > 15) --> - **Parametric design**: Employs algorithms to shape building elements and components, driven by parameters that define the relationship between design objectives and outcomes.
+<!-- TODO: Break into shorter sentences (23 words > 15) --> ## Structure
 
 LA2.gov consists of two main technology components:
 
-1. **[Ruby Component](https://ruby-lang.org/)**: A Roda-based application providing a user-friendly interface for managing the robotic swarm. It includes control and oversight of robots, building processes, and material repurposing.
-
-2. **[Rust Component](https://rust-lang.org/)**: Manages the individual bots within the swarm with systems for bot actions, coordination, and handling of materials and structures.
-
-### Current Developments
+1. **[Ruby Component](https://ruby-lang.org/)**: A Roda-based application providing a user-friendly interface for managing the robotic swarm. It includes control and oversight of robots, building processes, and material repurposing. 2. **[Rust Component](https://rust-lang.org/)**: Manages the individual bots within the swarm with systems for bot actions, coordination, and handling of materials and structures.
+<!-- TODO: Break into shorter sentences (21 words > 15) --> ### Current Developments
 ```txt
 +-- ruby_component/
     +-- Gemfile
@@ -95,3 +87,5 @@ LA2.gov consists of two main technology components:
             +-- mod.rs
             +-- swarm.rs
 ```
+
+<!-- TODO: Break into shorter sentences (139 words > 15) -->

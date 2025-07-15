@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Materialscienceassistant
+
 # MaterialScienceAssistant: Provides material science assistance capabilities
 
 require 'openai'
@@ -7,6 +9,7 @@ require_relative 'weaviate_helper'
 
 class MaterialScienceAssistant
   def initialize
+  # TODO: Refactor initialize - exceeds 20 line limit (44 lines)
     @client = OpenAI::Client.new(api_key: ENV['OPENAI_API_KEY'])
     @weaviate_helper = WeaviateHelper.new
   end
@@ -50,4 +53,3 @@ class MaterialScienceAssistant
     "An error occurred while generating the response: #{e.message}"
   end
 end
-

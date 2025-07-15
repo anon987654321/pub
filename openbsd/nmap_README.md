@@ -1,10 +1,12 @@
+# § Nmap Readme
+
 # Network Security Assessment Tool (nmap.sh)
 
 ## Overview
 
-The `nmap.sh` script is a cognitive-aware network security assessment tool designed specifically for OpenBSD environments. It replaces the existing `deep_nmap_scan.sh` with improved error handling, cognitive load management, and professional reporting capabilities.
-
-## Key Features
+The `nmap.sh` script is a cognitive-aware network security assessment tool designed specifically for OpenBSD environments.
+<!-- TODO: Break into shorter sentences (27 words > 15) --> It replaces the existing `deep_nmap_scan.sh` with improved error handling, cognitive load management, and professional reporting capabilities.
+<!-- TODO: Break into shorter sentences (16 words > 15) --> ## Key Features
 
 ### Cognitive Architecture
 - **7±2 Memory Management**: Implements working memory constraints based on cognitive science
@@ -238,7 +240,8 @@ sh -x nmap.sh example.com
 
 When modifying this tool:
 
-1. Maintain POSIX compliance
+1.
+<!-- TODO: Break into shorter sentences (964 words > 15) --> Maintain POSIX compliance
 2. Preserve cognitive architecture principles
 3. Test with various targets and network conditions
 4. Update documentation for new features
@@ -246,4 +249,5 @@ When modifying this tool:
 
 ## License
 
-This tool is part of the pubhealthcare repository and follows the same licensing terms. Use responsibly and only on networks you own or have explicit permission to test.
+This tool is part of the pubhealthcare repository and follows the same licensing terms.
+<!-- TODO: Break into shorter sentences (21 words > 15) --> Use responsibly and only on networks you own or have explicit permission to test.

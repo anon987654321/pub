@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Leica X1 Kodak T Max 3200 L.dcp
+
 {
   "dcpData" => {
     "ProfileName" => "Kodak T-MAX 3200 L",
@@ -66,4 +68,4 @@
     "BaselineExposureOffset" => "0.000000",
     "DefaultBlackRender" => "0"
   }
-}
+}

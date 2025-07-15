@@ -1,9 +1,10 @@
+# § Prompts
+
 
 # ControlNet with M-LSD Lines
 
 Stable Diffusion 1.5 and ControlNet using simple M-LSD straight line detection.
-
-https://replicate.com/jagilley/controlnet-hough
+<!-- TODO: Break into shorter sentences (19 words > 15) --> https://replicate.com/jagilley/controlnet-hough
 
 - scale: 26
 - prompt: `future downtown los angeles in parametric architecture, photorealistic, ultrarealistic, hyperrealistic, early morning`
@@ -14,3 +15,5 @@ https://replicate.com/jagilley/controlnet-hough
 - image_resolution: 512
 - detect_resolution: 512
 - distance_threshold: 0.26
+
+<!-- TODO: Break into shorter sentences (54 words > 15) -->

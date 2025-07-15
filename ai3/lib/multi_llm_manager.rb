@@ -6,6 +6,8 @@ require 'ollama-ai'
 require 'faraday'
 require 'json'
 
+# § Multillmmanager
+
 # Multi-LLM Manager with fallback chains and circuit breaker protection
 class MultiLLMManager
   PROVIDERS = {
@@ -18,6 +20,7 @@ class MultiLLMManager
   attr_reader :current_provider, :fallback_chain, :circuit_breakers
 
   def initialize(config = {})
+  # TODO: Refactor initialize - exceeds 20 line limit (206 lines)
     @config = config
     @providers = {}
     @fallback_chain = [:xai, :anthropic, :openai, :ollama]
@@ -227,96 +230,114 @@ end
 # X.AI/Grok Provider
 class XAIProvider
   def initialize(config)
-    @api_key = config['xai_api_key'] || ENV['XAI_API_KEY']
-    @base_url = 'https://api.x.ai/v1'
-    @client = setup_client
-  end
-
-  def query(prompt, max_tokens: 1000)
-    unless @api_key
-      raise "X.AI API key not configured"
+  begin
+    # TODO: Refactor initialize - exceeds 20 line limit (40 lines)
+      @api_key = config['xai_api_key'] || ENV['XAI_API_KEY']
+      @base_url = 'https://api.x.ai/v1'
+      @client = setup_client
     end
-    
-    response = @client.post('/chat/completions') do |req|
-      req.headers['Authorization'] = "Bearer #{@api_key}"
-      req.headers['Content-Type'] = 'application/json'
-      req.body = {
-        model: 'grok-beta',
-        messages: [{ role: 'user', content: prompt }],
-        max_tokens: max_tokens,
-        temperature: 0.7
-      }.to_json
+  
+    def query(prompt, max_tokens: 1000)
+      unless @api_key
+        raise "X.AI API key not configured"
+      end
+      
+      response = @client.post('/chat/completions') do |req|
+        req.headers['Authorization'] = "Bearer #{@api_key}"
+        req.headers['Content-Type'] = 'application/json'
+        req.body = {
+          model: 'grok-beta',
+          messages: [{ role: 'user', content: prompt }],
+          max_tokens: max_tokens,
+          temperature: 0.7
+        }.to_json
+      end
+      
+      if response.success?
+        result = JSON.parse(response.body)
+        result.dig('choices', 0, 'message', 'content')
+      else
+        raise "X.AI API error: #{response.status} - #{response.body}"
+      end
     end
-    
-    if response.success?
-      result = JSON.parse(response.body)
-      result.dig('choices', 0, 'message', 'content')
-    else
-      raise "X.AI API error: #{response.status} - #{response.body}"
+  
+    private
+  
+    def setup_client
+      Faraday.new(url: @base_url) do |f|
+        f.request :json
+        f.response :json
+        f.adapter Faraday.default_adapter
+      end
     end
-  end
-
-  private
-
-  def setup_client
-    Faraday.new(url: @base_url) do |f|
-      f.request :json
-      f.response :json
-      f.adapter Faraday.default_adapter
-    end
+  rescue StandardError => e
+    # TODO: Add proper error handling
+    raise e
   end
 end
 
 # Anthropic/Claude Provider
 class AnthropicProvider
   def initialize(config)
-    @api_key = config['anthropic_api_key'] || ENV['ANTHROPIC_API_KEY']
-    @client = @api_key ? Anthropic::Client.new(access_token: @api_key) : nil
-  end
-
-  def query(prompt, max_tokens: 1000)
-    unless @client
-      raise "Anthropic API key not configured"
+  begin
+      @api_key = config['anthropic_api_key'] || ENV['ANTHROPIC_API_KEY']
+      @client = @api_key ? Anthropic::Client.new(access_token: @api_key) : nil
     end
-    
-    response = @client.messages(
-      model: 'claude-3-sonnet-20240229',
-      max_tokens: max_tokens,
-      messages: [{ role: 'user', content: prompt }]
-    )
-    
-    response.dig('content', 0, 'text')
+  
+    def query(prompt, max_tokens: 1000)
+      unless @client
+        raise "Anthropic API key not configured"
+      end
+      
+      response = @client.messages(
+        model: 'claude-3-sonnet-20240229',
+        max_tokens: max_tokens,
+        messages: [{ role: 'user', content: prompt }]
+      )
+      
+      response.dig('content', 0, 'text')
+    end
+  rescue StandardError => e
+    # TODO: Add proper error handling
+    raise e
   end
 end
 
 # OpenAI Provider
 class OpenAIProvider
   def initialize(config)
-    @api_key = config['openai_api_key'] || ENV['OPENAI_API_KEY']
-    @client = @api_key ? OpenAI::Client.new(access_token: @api_key) : nil
-  end
-
-  def query(prompt, max_tokens: 1000)
-    unless @client
-      raise "OpenAI API key not configured"
+  begin
+    # TODO: Refactor initialize - exceeds 20 line limit (22 lines)
+      @api_key = config['openai_api_key'] || ENV['OPENAI_API_KEY']
+      @client = @api_key ? OpenAI::Client.new(access_token: @api_key) : nil
     end
-    
-    response = @client.chat(
-      parameters: {
-        model: 'gpt-3.5-turbo',  # Will upgrade to o3-mini when available
-        messages: [{ role: 'user', content: prompt }],
-        max_tokens: max_tokens,
-        temperature: 0.7
-      }
-    )
-    
-    response.dig('choices', 0, 'message', 'content')
+  
+    def query(prompt, max_tokens: 1000)
+      unless @client
+        raise "OpenAI API key not configured"
+      end
+      
+      response = @client.chat(
+        parameters: {
+          model: 'gpt-3.5-turbo',  # Will upgrade to o3-mini when available
+          messages: [{ role: 'user', content: prompt }],
+          max_tokens: max_tokens,
+          temperature: 0.7
+        }
+      )
+      
+      response.dig('choices', 0, 'message', 'content')
+    end
+  rescue StandardError => e
+    # TODO: Add proper error handling
+    raise e
   end
 end
 
 # Ollama Provider (Local)
 class OllamaProvider
   def initialize(config)
+  # TODO: Refactor initialize - exceeds 20 line limit (40 lines)
     @base_url = config['ollama_url'] || 'http://localhost:11434'
     @model = config['ollama_model'] || 'deepseek-r1:1.5b'
     @client = setup_client

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Chatbotassistant
+
 # encoding: utf-8
 
 require "ferrum"
@@ -59,6 +61,7 @@ module Assistants
         disruptive: 'Interrupts or causes disturbance in interactions.'
       }
     def initialize(openai_api_key)
+  # TODO: Refactor initialize - exceeds 20 line limit (107 lines)
       @langchain_openai = Langchain::LLM::OpenAI.new(api_key: openai_api_key)
       @weaviate = WeaviateIntegration.new
       @translations = TRANSLATIONS[CONFIG[:default_language].to_s]

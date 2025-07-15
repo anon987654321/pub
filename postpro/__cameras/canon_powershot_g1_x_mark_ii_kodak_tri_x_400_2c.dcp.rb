@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Canon Powershot G1 X Mark Ii Kodak Tri X 400 2c.dcp
+
 {
   'dcpData' => {
     'ProfileName' => 'Kodak TRI-X 400 2C',
@@ -72,4 +74,4 @@
     'BaselineExposureOffset' => '0.000000',
     'DefaultBlackRender' => '0'
   }
-}
+}

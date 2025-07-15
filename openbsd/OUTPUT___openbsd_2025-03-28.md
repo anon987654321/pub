@@ -1,16 +1,14 @@
+# § Output Openbsd 2025-03-28
+
 ## `README.md`
 ```
 # OpenBSD
 
-Ruby On Rails, Falcon and gems run from an unprivileged user account that that only owns `tmp/` and `log/`. This ensures not only that the root system remains unaffected from a break-in attempt, but that a compromised app will not have access to modify any of its runtime files.
-
-- `relayd(8)` reverse proxy listens on HTTP/2 and forwards connctions to Falcon in addition to handling all TLS, which is disabled internally in Rails to save resources. 
-- `httpd(8)` and `acme-client(1)` listens on HTTP/1.1 for ACME-challenges for Let's Encrypt TLS certificate generation.
-- `pf(4)` is the firewall that together with `pf-badhost` blocks out some 600.000.000 bad IP-addresses, and bans anyone who attempts SSH bruteforce attacks.
-
-On top of this `nsd(8)` handles DNS zonefiles and OpenSMTPD emails.
-
-- - -
+Ruby On Rails, Falcon and gems run from an unprivileged user account that that only owns `tmp/` and `log/`.
+<!-- TODO: Break into shorter sentences (29 words > 15) --> This ensures not only that the root system remains unaffected from a break-in attempt, but that a compromised app will not have access to modify any of its runtime files.
+<!-- TODO: Break into shorter sentences (30 words > 15) --> - `relayd(8)` reverse proxy listens on HTTP/2 and forwards connctions to Falcon in addition to handling all TLS, which is disabled internally in Rails to save resources.
+<!-- TODO: Break into shorter sentences (27 words > 15) --> - `httpd(8)` and `acme-client(1)` listens on HTTP/1.1 for ACME-challenges for Let's Encrypt TLS certificate generation. - `pf(4)` is the firewall that together with `pf-badhost` blocks out some 600.000.000 bad IP-addresses, and bans anyone who attempts SSH bruteforce attacks.
+<!-- TODO: Break into shorter sentences (23 words > 15) --> On top of this `nsd(8)` handles DNS zonefiles and OpenSMTPD emails. - - -
 
 *Edit configs to taste and deploy to root*
 
@@ -32,7 +30,8 @@ On top of this `nsd(8)` handles DNS zonefiles and OpenSMTPD emails.
 *Set the shell path*
 
     echo "PATH=$PATH:$HOME/.local/share/gem/ruby/3.1/bin; export PATH" >> ~/.kshrc
-    . ~/.kshrc
+    .
+<!-- TODO: Break into shorter sentences (62 words > 15) --> ~/.kshrc
 
 *Nokogiri*
 
@@ -114,8 +113,7 @@ To install 7.1-alpha:
 ## Firewall
 
 Install [pf-badhost](https://www.geoghegan.ca/pub/pf-badhost/latest/install/openbsd.txt).
-
-## DNS server
+<!-- TODO: Break into shorter sentences (249 words > 15) --> ## DNS server
 
     # rcctl enable nsd
     # rcctl start nsd
@@ -273,7 +271,8 @@ daemon_flags="--config /home/bsdports/bsdports/config.ru --bind http://127.0.0.1
 daemon="/home/bsdports/.local/share/gem/ruby/3.1/bin/falcon31"
 daemon_rtable=0
 
-. /etc/rc.d/rc.subr
+.
+<!-- TODO: Break into shorter sentences (455 words > 15) --> /etc/rc.d/rc.subr
 
 pexp="$(eval echo "ruby31: "${daemon}${daemon_flags:+ ${daemon_flags}})"
 
@@ -433,7 +432,7 @@ zone:
 ## `var/nsd/zones/master/bsdports.net.zone`
 ```
 $ORIGIN bsdports.net.
-$TTL 24h
+<!-- TODO: Break into shorter sentences (419 words > 15) --> $TTL 24h
 
 @ 1h IN SOA ns.bsdports.net. admin.bsdports.net. (
   2022121201 ; Serial YYYYMMDDnn
@@ -444,9 +443,7 @@ $TTL 24h
 )
 
 @ IN NS ns.bsdports.net.
-@ IN NS ns.hyp.net.
-
-ns IN A 209.250.248.67
+<!-- TODO: Break into shorter sentences (23 words > 15) --> @ IN NS ns.hyp.net. ns IN A 209.250.248.67
 ns.hyp.net IN A 194.63.248.53
 
 www IN CNAME @
@@ -454,14 +451,14 @@ www IN CNAME @
 @ IN A 209.250.248.67
 
 ; https://letsencrypt.org/docs/caa/
-bsdports.net. 3m IN CAA 0 issue "letsencrypt.org"
+bsdports.net.
+<!-- TODO: Break into shorter sentences (19 words > 15) --> 3m IN CAA 0 issue "letsencrypt.org"
 
 ```
 
 ## `var/nsd/zones/master/bsdports.org.zone`
 ```
-$ORIGIN bsdports.org.
-$TTL 24h
+$ORIGIN bsdports.org. $TTL 24h
 
 @ 1h IN SOA ns.bsdports.net. admin.bsdports.net. (
   2022121201 ; Serial YYYYMMDDnn
@@ -472,9 +469,7 @@ $TTL 24h
 )
 
 @ IN NS ns.bsdports.net.
-@ IN NS ns.hyp.net.
-
-www IN CNAME @
+<!-- TODO: Break into shorter sentences (23 words > 15) --> @ IN NS ns.hyp.net. www IN CNAME @
 
 @ IN A 209.250.248.67
 
@@ -482,4 +477,4 @@ www IN CNAME @
 bsdports.org. 3m IN CAA 0 issue "letsencrypt.org"
 
 ```
-
+

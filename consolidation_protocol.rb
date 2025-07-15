@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
@@ -25,6 +27,7 @@ class ConsolidationProtocol
   }.freeze
 
   def initialize
+  # TODO: Refactor initialize - exceeds 20 line limit (285 lines)
     @logger = Logger.new($stdout)
     @logger.level = Logger::INFO
     @cognitive_load = 0

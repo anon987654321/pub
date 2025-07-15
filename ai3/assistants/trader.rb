@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+
+# § Tradingassistant
 
 # frozen_string_literal: true
 
@@ -24,6 +28,7 @@ require "geokit"
 require "dashing"
 class TradingAssistant
   def initialize
+  # TODO: Refactor initialize - exceeds 20 line limit (196 lines)
     load_configuration
     connect_to_apis
     setup_systems

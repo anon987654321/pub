@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Olympus Stylus 1 Kodak Portra 400 O.dcp
+
 {
   "dcpData" => {
     "ProfileName" => "Kodak Portra 400 O",

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# § Hospital
+
 puts "Creating hospital representation..."
 
 module PubHealthcare
@@ -161,4 +163,4 @@ puts "Creating blogging platform content..."
 
 PubHealthcare::CATEGORIES.each do |category_data|
   Category.create(name: category_data[:name], description: category_data[:description])
-end
+end
