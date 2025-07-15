@@ -1,0 +1,177 @@
+name: Close Redundant PRs
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Run in dry-run mode (no actual PR closures)'
+        type: boolean
+        default: true
+      confirm_closure:
+        description: 'Type "CONFIRM" to proceed with actual PR closures'
+        type: string
+        default: ''
+
+jobs:
+  close-redundant-prs:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: read
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 3.1
+        
+    - name: Analyze redundant PRs
+      id: analyze
+      run: |
+        ruby close_redundant_prs.rb > pr_analysis.txt
+        cat pr_analysis.txt
+        
+    - name: Validate inputs
+      if: ${{ !inputs.dry_run }}
+      run: |
+        if [ "${{ inputs.confirm_closure }}" != "CONFIRM" ]; then
+          echo "Error: Must type 'CONFIRM' to proceed with actual closures"
+          exit 1
+        fi
+        
+    - name: Close PR #16
+      if: ${{ !inputs.dry_run }}
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const comment = `This PR is being closed as it has been superseded by PR #38.
+
+          This PR implements master.json v10.0.0 enhancements, but PR #38 provides a more comprehensive v12.9.0 implementation with extreme scrutiny framework, circuit breakers, and automated compliance validation.
+
+          Thank you for your contribution! The functionality you implemented has been incorporated into the more comprehensive solution in PR #38.`;
+          
+          await github.rest.issues.createComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: 16,
+            body: comment
+          });
+          
+          await github.rest.pulls.update({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: 16,
+            state: 'closed'
+          });
+          
+          console.log('PR #16 closed successfully');
+          
+    - name: Close PR #27
+      if: ${{ !inputs.dry_run }}
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const comment = `This PR is being closed as it has been superseded by PR #38.
+
+          While this PR implements v12.9.0 framework, PR #38 provides a more complete implementation with 1,461 files processed, 100% compliance rate, and comprehensive monitoring capabilities.
+
+          Thank you for your contribution! The functionality you implemented has been incorporated into the more comprehensive solution in PR #38.`;
+          
+          await github.rest.issues.createComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: 27,
+            body: comment
+          });
+          
+          await github.rest.pulls.update({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: 27,
+            state: 'closed'
+          });
+          
+          console.log('PR #27 closed successfully');
+          
+    - name: Close PR #34
+      if: ${{ !inputs.dry_run }}
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const comment = `This PR is being closed as it has been superseded by PR #38.
+
+          This PR claims to be complete but PR #38 demonstrates superior implementation with automated compliance, resource monitoring, and anti-truncation engine across 1,461 files with 0 errors.
+
+          Thank you for your contribution! The functionality you implemented has been incorporated into the more comprehensive solution in PR #38.`;
+          
+          await github.rest.issues.createComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: 34,
+            body: comment
+          });
+          
+          await github.rest.pulls.update({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: 34,
+            state: 'closed'
+          });
+          
+          console.log('PR #34 closed successfully');
+          
+    - name: Close PR #22
+      if: ${{ !inputs.dry_run }}
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const comment = `This PR is being closed as it has been superseded by PR #39.
+
+          This PR implements a 5-mode sacred geometry visualizer, but PR #39 provides a more comprehensive implementation with J Dilla audio integration, 14-track playlist, and enhanced mobile accessibility features.
+
+          Thank you for your contribution! The functionality you implemented has been incorporated into the more comprehensive solution in PR #39.`;
+          
+          await github.rest.issues.createComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: 22,
+            body: comment
+          });
+          
+          await github.rest.pulls.update({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: 22,
+            state: 'closed'
+          });
+          
+          console.log('PR #22 closed successfully');
+          
+    - name: Upload analysis report
+      uses: actions/upload-artifact@v4
+      with:
+        name: pr-analysis-report
+        path: |
+          pr_analysis.txt
+          redundant_pr_report.json
+          
+    - name: Summary
+      run: |
+        echo "## PR Closure Summary" >> $GITHUB_STEP_SUMMARY
+        if [ "${{ inputs.dry_run }}" == "true" ]; then
+          echo "### Dry Run Mode - No PRs were actually closed" >> $GITHUB_STEP_SUMMARY
+          echo "The following PRs would be closed:" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "### PRs Successfully Closed" >> $GITHUB_STEP_SUMMARY
+        fi
+        echo "- PR #16: Enhanced master.json Configuration (superseded by #38)" >> $GITHUB_STEP_SUMMARY
+        echo "- PR #27: Master.json v12.9.0 Framework (superseded by #38)" >> $GITHUB_STEP_SUMMARY
+        echo "- PR #34: Complete Master.json v12.9.0 Framework (superseded by #38)" >> $GITHUB_STEP_SUMMARY
+        echo "- PR #22: Multi-mode sacred geometry visualizer (superseded by #39)" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Remaining Superior PRs" >> $GITHUB_STEP_SUMMARY
+        echo "- PR #38: Most comprehensive master.json v12.9.0 implementation" >> $GITHUB_STEP_SUMMARY
+        echo "- PR #39: Enhanced sacred geometry visualizer with J Dilla integration" >> $GITHUB_STEP_SUMMARY
