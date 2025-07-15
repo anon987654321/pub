@@ -30,6 +30,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>J Dilla - Ultra Minimal Mobile Carousel</title>
+  <meta name="description" content="J Dilla audio visualizer with distorted warp tunnel effects and keyboard controls">
+  <meta name="keywords" content="J Dilla, audio visualizer, warp tunnel, music, accessibility">
   <script src="https://www.youtube.com/iframe_api"></script>
   <style>
     /* ULTRA MINIMAL MOBILE STYLES */
@@ -110,8 +112,15 @@
       transition: background 0.3s;
     }
 
-    .play-pause:hover {
+    .play-pause:hover,
+    .play-pause:focus {
       background: rgba(255, 255, 255, 0.1);
+      outline: 2px solid #fff;
+      outline-offset: 2px;
+    }
+
+    .play-pause:active {
+      transform: scale(0.95);
     }
 
     .track-info {
@@ -143,6 +152,42 @@
       opacity: 0.4;
       margin-top: 1px;
       text-align: center;
+    }
+
+    /* Skip links for keyboard navigation */
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 6px;
+      background: #000;
+      color: #fff;
+      padding: 8px;
+      z-index: 10000;
+      text-decoration: none;
+      border-radius: 4px;
+    }
+
+    .skip-link:focus {
+      top: 6px;
+    }
+
+    /* Screen reader only content */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* Improved focus indicators for accessibility */
+    *:focus {
+      outline: 2px solid #fff;
+      outline-offset: 2px;
     }
 
     /* STARFIELD VISUALIZER STYLES (PRESERVED EXACTLY) */
@@ -182,6 +227,17 @@
       font-size: 14px;
       margin-bottom: 10px;
       display: block;
+    }
+
+    #btStartAudioVisualization:hover,
+    #btStartAudioVisualization:focus {
+      background: #9a3be8;
+      outline: 2px solid #fff;
+      outline-offset: 2px;
+    }
+
+    #btStartAudioVisualization:active {
+      transform: scale(0.95);
     }
 
     #txtStatus {
@@ -284,35 +340,41 @@
   </style>
 </head>
 <body>
+  <!-- Skip navigation links -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <a href="#audio-controls" class="skip-link">Skip to audio controls</a>
+  
   <!-- AUTO-ROTATING CAROUSEL -->
-  <div class="auto-carousel">
+  <main class="auto-carousel" role="main" aria-label="J Dilla Audio Visualizer" id="main-content">
     
     <!-- Slide 1: Distorted Warp Tunnel (DEFAULT/PRIMARY) -->
-    <div class="visualizer-slide active" id="warp-tunnel-slide">
+    <section class="visualizer-slide active" id="warp-tunnel-slide" aria-labelledby="warp-tunnel-title">
+      <h1 id="warp-tunnel-title" class="sr-only">Distorted Warp Tunnel Visualizer</h1>
       <div class="warp-tunnel-slide" id="warp-tunnel-container">
-        <canvas id="warp-canvas" role="img" aria-label="Distorted warp tunnel visualization"></canvas>
+        <canvas id="warp-canvas" role="img" aria-label="Distorted warp tunnel visualization with audio-reactive particles and effects"></canvas>
       </div>
-    </div>
+    </section>
 
     <!-- Slide 2: Starfield Warp Tunnel (PRESERVED EXACTLY) -->
-    <div class="visualizer-slide" id="starfield-slide">
+    <section class="visualizer-slide" id="starfield-slide" aria-labelledby="starfield-title">
+      <h1 id="starfield-title" class="sr-only">Starfield Warp Tunnel Visualizer</h1>
       <div class="starfield-slide" id="starfield-container">
-        <div id="audio-controls">
-          <button id="btStartAudioVisualization">Start Audio Visualization</button>
-          <div id="txtStatus">Waiting Patiently For You... Please Click the Start Button.</div>
+        <div id="audio-controls" role="region" aria-label="Audio visualization controls">
+          <button id="btStartAudioVisualization" aria-describedby="txtStatus">Start Audio Visualization</button>
+          <div id="txtStatus" aria-live="polite" aria-atomic="true">Waiting Patiently For You... Please Click the Start Button.</div>
         </div>
       </div>
-    </div>
+    </section>
 
     <!-- Slide 3: Ultimate J Dilla Experience (PRESERVED EXACTLY) -->
-    <div class="visualizer-slide" id="ultimate-slide">
+    <section class="visualizer-slide" id="ultimate-slide" aria-labelledby="ultimate-title">
       <div class="placeholder-slide">
-        <h1 class="placeholder-title">Ultimate J Dilla Experience</h1>
+        <h1 class="placeholder-title" id="ultimate-title">Ultimate J Dilla Experience</h1>
         <p class="placeholder-subtitle">
           Comprehensive UI with performance monitoring and advanced controls.
           This visualizer would feature real-time audio analysis with cognitive load management.
         </p>
-        <ul class="placeholder-features">
+        <ul class="placeholder-features" aria-label="Ultimate J Dilla Experience features">
           <li>Real-time performance monitoring</li>
           <li>Advanced audio visualization controls</li>
           <li>Cognitive load management system</li>
@@ -320,17 +382,17 @@
           <li>Flow state preservation features</li>
         </ul>
       </div>
-    </div>
+    </section>
 
     <!-- Slide 4: Master.json Compliant (PRESERVED EXACTLY) -->
-    <div class="visualizer-slide" id="master-slide">
+    <section class="visualizer-slide" id="master-slide" aria-labelledby="master-title">
       <div class="placeholder-slide">
-        <h1 class="placeholder-title">Master.json Compliant Engine</h1>
+        <h1 class="placeholder-title" id="master-title">Master.json Compliant Engine</h1>
         <p class="placeholder-subtitle">
           Advanced visual engine built according to master.json v12.3.0 specifications.
           Features progressive disclosure and working memory optimization.
         </p>
-        <ul class="placeholder-features">
+        <ul class="placeholder-features" aria-label="Master.json compliance features">
           <li>Master.json v12.3.0 compliance</li>
           <li>Progressive disclosure interface</li>
           <li>Working memory limits (7±2 concepts)</li>
@@ -339,20 +401,20 @@
           <li>Double quotes everywhere</li>
         </ul>
       </div>
-    </div>
+    </section>
 
-  </div>
+  </main>
 
-  <!-- MINIMAL TOUCH CONTROLS -->
-  <div class="minimal-controls">
-    <button class="play-pause" id="play-pause-btn">⏯</button>
-    <div class="track-info">
-      <div class="track-title" id="current-track-title">Microphone Master [Extended]</div>
-      <div class="track-artist" id="current-track-artist">J Dilla</div>
-      <div class="visualizer-indicator" id="visualizer-indicator">Distorted Warp Tunnel</div>
-      <div class="keyboard-hint">Space: Play/Pause • ← → : Change Visualizer • ↑ ↓ : Change Track</div>
+  <!-- ACCESSIBLE CONTROLS -->
+  <aside class="minimal-controls" role="complementary" aria-label="Audio player controls">
+    <button class="play-pause" id="play-pause-btn" aria-label="Play or pause audio" aria-pressed="false">⏯</button>
+    <div class="track-info" role="status" aria-live="polite">
+      <div class="track-title" id="current-track-title" aria-label="Current track title">Microphone Master [Extended]</div>
+      <div class="track-artist" id="current-track-artist" aria-label="Current artist">J Dilla</div>
+      <div class="visualizer-indicator" id="visualizer-indicator" aria-label="Current visualizer">Distorted Warp Tunnel</div>
+      <div class="keyboard-hint" aria-label="Keyboard shortcuts">Space: Play/Pause • ← → : Change Visualizer • ↑ ↓ : Change Track</div>
     </div>
-  </div>
+  </aside>
 
   <!-- YouTube Player (Hidden) -->
   <div id="youtube-player"></div>
@@ -459,9 +521,13 @@
     }
 
     function onPlayerStateChange(event) {
+      const playPauseBtn = document.getElementById('play-pause-btn');
+      
       if (event.data === YT.PlayerState.PLAYING) {
         isPlaying = true;
-        document.getElementById('play-pause-btn').textContent = '⏸';
+        playPauseBtn.textContent = '⏸';
+        playPauseBtn.setAttribute('aria-pressed', 'true');
+        playPauseBtn.setAttribute('aria-label', 'Pause audio');
         
         // Start auto-rotation when playing
         if (!isAutoRotating) {
@@ -469,7 +535,9 @@
         }
       } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
         isPlaying = false;
-        document.getElementById('play-pause-btn').textContent = '▶';
+        playPauseBtn.textContent = '▶';
+        playPauseBtn.setAttribute('aria-pressed', 'false');
+        playPauseBtn.setAttribute('aria-label', 'Play audio');
         
         if (event.data === YT.PlayerState.ENDED) {
           nextTrack();
