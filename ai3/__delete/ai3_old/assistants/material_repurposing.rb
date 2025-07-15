@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # MaterialRepurposing – Provides suggestions for repurposing materials.
 #
 # Restored full logic from old versions.
@@ -6,14 +8,14 @@ require_relative '../lib/weaviate_integration'
 module Assistants
   class MaterialRepurposing
     URLS = [
-      "https://recycling.com/",
-      "https://epa.gov/recycle",
-      "https://recyclenow.com/",
-      "https://terracycle.com/",
-      "https://earth911.com/",
-      "https://recycling-product-news.com/"
+      'https://recycling.com/',
+      'https://epa.gov/recycle',
+      'https://recyclenow.com/',
+      'https://terracycle.com/',
+      'https://earth911.com/',
+      'https://recycling-product-news.com/'
     ]
-    def initialize(language: "en")
+    def initialize(language: 'en')
       @universal_scraper = UniversalScraper.new
       @weaviate_integration = WeaviateIntegration.new
       @language = language
@@ -21,7 +23,7 @@ module Assistants
     end
 
     def conduct_material_repurposing_analysis
-      puts "Analyzing material repurposing techniques..."
+      puts 'Analyzing material repurposing techniques...'
       URLS.each do |url|
         unless @weaviate_integration.check_if_indexed(url)
           data = @universal_scraper.scrape(url)
@@ -49,9 +51,9 @@ module Assistants
       innovate_sustainable_designs
     end
 
-    def optimize_material_recycling; puts "Optimizing material recycling..."; end
-    def enhance_upcycling_methods; puts "Enhancing upcycling methods..."; end
-    def improve_waste_management; puts "Improving waste management..."; end
-    def innovate_sustainable_designs; puts "Innovating sustainable designs..."; end
+    def optimize_material_recycling = puts('Optimizing material recycling...')
+    def enhance_upcycling_methods = puts('Enhancing upcycling methods...')
+    def improve_waste_management = puts('Improving waste management...')
+    def innovate_sustainable_designs = puts('Innovating sustainable designs...')
   end
 end

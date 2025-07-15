@@ -1,10 +1,8 @@
 module BCrypt
-
-  class Error < StandardError  # :nodoc:
+  class Error < StandardError # :nodoc:
   end
 
-  module Errors  # :nodoc:
-
+  module Errors # :nodoc:
     # The salt parameter provided to bcrypt() is invalid.
     class InvalidSalt < BCrypt::Error; end
 
@@ -16,7 +14,5 @@ module BCrypt
 
     # The secret parameter provided to bcrypt() is invalid.
     class InvalidSecret < BCrypt::Error; end
-
   end
-
 end

@@ -2,13 +2,17 @@ require 'concurrent/atomic/atomic_reference'
 
 module Concurrent
   module Concern
-
     # Include where logging is needed
     #
     # @!visibility private
     module Logging
       # The same as Logger::Severity but we copy it here to avoid a dependency on the logger gem just for these 7 constants
-      DEBUG, INFO, WARN, ERROR, FATAL, UNKNOWN = 0, 1, 2, 3, 4, 5
+      DEBUG = 0
+      INFO = 1
+      WARN = 2
+      ERROR = 3
+      FATAL = 4
+      UNKNOWN = 5
       SEV_LABEL = %w[DEBUG INFO WARN ERROR FATAL ANY].freeze
 
       # Logs through {Concurrent.global_logger}, it can be overridden by setting @logger
@@ -23,9 +27,9 @@ module Concurrent
                    Concurrent.global_logger
                  end
         logger.call level, progname, message, &block
-      rescue => error
-        $stderr.puts "`Concurrent.global_logger` failed to log #{[level, progname, message, block]}\n" +
-          "#{error.message} (#{error.class})\n#{error.backtrace.join "\n"}"
+      rescue StandardError => e
+        warn "`Concurrent.global_logger` failed to log #{[level, progname, message, block]}\n" +
+             "#{e.message} (#{e.class})\n#{e.backtrace.join "\n"}"
       end
     end
   end
@@ -38,11 +42,11 @@ module Concurrent
   def self.create_simple_logger(level = :FATAL, output = $stderr)
     level = Concern::Logging.const_get(level) unless level.is_a?(Integer)
 
-    # TODO (pitr-ch 24-Dec-2016): figure out why it had to be replaced, stdlogger was deadlocking
+    # TODO: (pitr-ch 24-Dec-2016): figure out why it had to be replaced, stdlogger was deadlocking
     lambda do |severity, progname, message = nil, &block|
       return false if severity < level
 
-      message           = block ? block.call : message
+      message           = block.call if block
       formatted_message = case message
                           when String
                             message
@@ -102,10 +106,10 @@ module Concurrent
     Concurrent.global_logger = create_stdlib_logger level, output
   end
 
-  # TODO (pitr-ch 27-Dec-2016): remove deadlocking stdlib_logger methods
+  # TODO: (pitr-ch 27-Dec-2016): remove deadlocking stdlib_logger methods
 
   # Suppresses all output when used for logging.
-  NULL_LOGGER   = lambda { |level, progname, message = nil, &block| }
+  NULL_LOGGER   = ->(level, progname, message = nil, &block) {}
 
   # @!visibility private
   GLOBAL_LOGGER = AtomicReference.new(create_simple_logger(:WARN))

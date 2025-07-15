@@ -81,7 +81,7 @@ class GoalTracker
 
   private
 
-  def calculate_progress(goal)
+  def calculate_progress(_goal)
     # Simulate a dynamic calculation of progress
     rand(0..100)
   end
@@ -115,14 +115,14 @@ class EnvironmentMonitor
   end
 
   def analyze(surroundings:, relationships:)
-    puts "Analyzing environment and relationships for potential risks..."
+    puts 'Analyzing environment and relationships for potential risks...'
     analyze_surroundings(surroundings)
     analyze_relationships(relationships)
   end
 
   def real_time_alerts
     if @alerts.empty?
-      puts "No current alerts. All clear."
+      puts 'No current alerts. All clear.'
     else
       @alerts.each { |alert| puts "Alert: #{alert}" }
       @alerts.clear
@@ -132,16 +132,14 @@ class EnvironmentMonitor
   private
 
   def analyze_surroundings(surroundings)
-    if surroundings[:risk]
-      @alerts << "Potential risk detected in your surroundings: #{surroundings[:description]}"
-    end
+    return unless surroundings[:risk]
+
+    @alerts << "Potential risk detected in your surroundings: #{surroundings[:description]}"
   end
 
   def analyze_relationships(relationships)
     relationships.each do |relationship|
-      if relationship[:toxic]
-        @alerts << "Toxic behavior detected in relationship with #{relationship[:name]}"
-      end
+      @alerts << "Toxic behavior detected in relationship with #{relationship[:name]}" if relationship[:toxic]
     end
   end
 end
@@ -166,13 +164,13 @@ class WellnessCoach
   end
 
   def mental_health_support
-    puts "Providing mental health support, including daily affirmations and mindfulness exercises."
+    puts 'Providing mental health support, including daily affirmations and mindfulness exercises.'
     puts "Daily Affirmation: 'You are capable and strong. Today is a new opportunity to grow.'"
     puts "Mindfulness Exercise: 'Take 5 minutes to focus on your breathing and clear your mind.'"
   end
 
   def suggest_routine_improvements(user_profile)
-    puts "Analyzing current routine for improvements..."
+    puts 'Analyzing current routine for improvements...'
     suggestions = generate_suggestions(user_profile)
     suggestions.each { |suggestion| puts "Suggestion: #{suggestion}" }
   end
@@ -194,20 +192,20 @@ class WellnessCoach
     "Meal plan for #{dietary_preferences}: Includes balanced portions of proteins, carbs, and fats."
   end
 
-  def generate_suggestions(user_profile)
+  def generate_suggestions(_user_profile)
     # Generate dynamic suggestions for routine improvements
     [
-      "Add a 10-minute morning stretch to improve flexibility and reduce stress.",
-      "Incorporate a short walk after meals to aid digestion.",
-      "Set a regular sleep schedule to enhance overall well-being."
+      'Add a 10-minute morning stretch to improve flexibility and reduce stress.',
+      'Incorporate a short walk after meals to aid digestion.',
+      'Set a regular sleep schedule to enhance overall well-being.'
     ]
   end
 end
 
 class PrivacyManager
-  def self.secure_data_handling(user_profile)
-    puts "Ensuring data privacy and security for user profile."
-    puts "Data is encrypted and stored securely."
+  def self.secure_data_handling(_user_profile)
+    puts 'Ensuring data privacy and security for user profile.'
+    puts 'Data is encrypted and stored securely.'
   end
 end
 
@@ -218,11 +216,8 @@ class DecisionSupport
     puts "Recommendation: #{recommendation}"
   end
 
-  private
-
-  def self.generate_recommendation(context)
+  def self.generate_recommendation(_context)
     # Generate a dynamic recommendation based on the context
-    "Based on your current goals, it may be beneficial to focus on time management strategies."
+    'Based on your current goals, it may be beneficial to focus on time management strategies.'
   end
 end
-

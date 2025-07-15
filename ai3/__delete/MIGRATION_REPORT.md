@@ -2,7 +2,8 @@
 
 ## Migration Summary
 
-This document records the successful migration of critical AI³ components from `ai3_old/` to the current system, preserving valuable logic while enabling safe cleanup operations.
+This document records the successful migration of critical AI³ components from `ai3_old/` to the current system,
+preserving valuable logic while enabling safe cleanup operations.
 
 ## Components Successfully Migrated
 

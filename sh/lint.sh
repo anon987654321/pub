@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #!/usr/bin/env zsh
 # Checks and fixes Ruby code files for errors.
 # Usage: ./lint.sh

@@ -1,15 +1,26 @@
 Postpro.rb – Analog and Cinematic Post-Processing
-Postpro.rb transforms digital images with analog and cinematic effects, blending vintage charm with experimental lo-fi aesthetics. Powered by libvips and ruby-vips, it creates unique variations with randomized, layered effects for maximum variety.
+Postpro.rb transforms digital images with analog and cinematic effects,
+blending vintage charm with experimental lo-fi aesthetics. Powered by libvips and ruby-vips,
+it creates unique variations with randomized,
+layered effects for maximum variety.
 Version: 13.4.27Last Modified: 2025-04-26T11:16:00ZAuthor: PubHealthcare  
 
 Key Features
 
 Consolidated Effects: 30 streamlined effects (e.g., optical_flare, tone_grading, vhs_artifact) in a unified format, no scanlines.
 Enhanced Analogness: Emulsion layering, temporal wear, spectral color drift for realistic film effects.
-True Random Layering: 3–5 effects (professional, intensity 0.1–0.4) or 5–8 (experimental, intensity 0.2–0.6), mood-based (warm, cool, neutral).
+True Random Layering: 3–5 effects (professional,
+intensity 0.1–0.4) or 5–8 (experimental,
+intensity 0.2–0.6),
+mood-based (warm,
+cool,
+neutral).
 Efficiency: Effect batching, lazy evaluation, capped noise cache, cached web palette.
 Robustness: Handles zero-band images, band mismatches, file permissions, and recipe collisions.
-CLI Workflow: Interactive prompts with clear error messages for mode, files, variations, web optimization (256-color palette).
+CLI Workflow: Interactive prompts with clear error messages for mode,
+files,
+variations,
+web optimization (256-color palette).
 Debugging: Memory usage logging in postpro.log.
 
 Installation
@@ -76,4 +87,4 @@ ruby postpro.rb
 # Optimize for web? Yes
 
 License
-MIT License. See LICENSE for details.
+MIT License. See LICENSE for details.

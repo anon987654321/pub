@@ -1,9 +1,7 @@
 require 'concurrent/utility/engine'
 require 'concurrent/thread_safe/util'
-require 'set'
 
 module Concurrent
-
   # @!macro concurrent_set
   #
   #   A thread-safe subclass of Set. This version locks against the object
@@ -20,8 +18,7 @@ module Concurrent
   #   @see http://ruby-doc.org/stdlib-2.4.0/libdoc/set/rdoc/Set.html Ruby standard library `Set`
 
   # @!macro internal_implementation_note
-  SetImplementation = case
-                      when Concurrent.on_cruby?
+  SetImplementation = if Concurrent.on_cruby?
                         # The CRuby implementation of Set is written in Ruby itself and is
                         # not thread safe for certain methods.
                         require 'monitor'
@@ -33,7 +30,7 @@ module Concurrent
                         ThreadSafe::Util.make_synchronized_on_cruby CRubySet
                         CRubySet
 
-                      when Concurrent.on_jruby?
+                      elsif Concurrent.on_jruby?
                         require 'jruby/synchronized'
 
                         class JRubySet < ::Set
@@ -42,7 +39,7 @@ module Concurrent
 
                         JRubySet
 
-                      when Concurrent.on_truffleruby?
+                      elsif Concurrent.on_truffleruby?
                         require 'concurrent/thread_safe/util/data_structures'
 
                         class TruffleRubySet < ::Set
@@ -61,4 +58,3 @@ module Concurrent
   class Set < SetImplementation
   end
 end
-

@@ -1,24 +1,24 @@
 # frozen_string_literal: true
 
-#!/usr/bin/env ruby
+# !/usr/bin/env ruby
 
 # Usage: "Find <target> and start executing offensive operations."
 
 class OffensiveOperationsAssistant
   def initialize
     # Define the toolkit for offensive operations
-    @tools = [
-      :port_scanner, 
-      :vulnerability_scanner, 
-      :exploit_framework, 
-      :password_cracker, 
-      :payload_generator, 
-      :social_engineering_toolkit, 
-      :network_mapper,
-      :phishing_kit,
-      :denial_of_service_tool,
-      :wifi_attack_suite,
-      :advanced_persistence_toolkit
+    @tools = %i[
+      port_scanner
+      vulnerability_scanner
+      exploit_framework
+      password_cracker
+      payload_generator
+      social_engineering_toolkit
+      network_mapper
+      phishing_kit
+      denial_of_service_tool
+      wifi_attack_suite
+      advanced_persistence_toolkit
     ]
     # Initialize an empty target list
     @targets = []
@@ -56,7 +56,7 @@ class OffensiveOperationsAssistant
     # Placeholder for actual port scanning logic
     # Example: using Ruby's Socket library or calling nmap
     # Add network mapper functionality
-    puts "Mapping network topology for better reconnaissance..."
+    puts 'Mapping network topology for better reconnaissance...'
     puts "Open ports found on #{target}: 22, 80, 443"
   end
 
@@ -70,7 +70,7 @@ class OffensiveOperationsAssistant
 
     puts "Scanning #{target} for vulnerabilities..."
     # Placeholder for vulnerability scanning logic (e.g., using OpenVAS or integrating Metasploit)
-    puts "Vulnerabilities found: CVE-2023-1234, CVE-2023-5678, CVE-2023-8910"
+    puts 'Vulnerabilities found: CVE-2023-1234, CVE-2023-5678, CVE-2023-8910'
   end
 
   # Attempt to exploit a known vulnerability on the target
@@ -99,7 +99,7 @@ class OffensiveOperationsAssistant
 
     puts "Attempting to crack password hash: #{hash}..."
     # Placeholder for password cracking logic (e.g., using John the Ripper or Hydra)
-    puts "Password cracked: my_secret_password"
+    puts 'Password cracked: my_secret_password'
   end
 
   # Generate a payload for a specific target
@@ -113,7 +113,7 @@ class OffensiveOperationsAssistant
 
     puts "Generating #{payload_type} payload for #{target}..."
     # Placeholder for payload generation logic (e.g., using msfvenom from Metasploit)
-    puts "Embedding anti-forensics and obfuscation techniques into payload..."
+    puts 'Embedding anti-forensics and obfuscation techniques into payload...'
     puts "Payload generated: payload_#{target}_#{payload_type}.bin"
   end
 
@@ -128,7 +128,7 @@ class OffensiveOperationsAssistant
 
     puts "Conducting social engineering attack on #{target} with message: '#{message}'"
     # Placeholder for social engineering logic (e.g., sending phishing emails)
-    puts "Conducting advanced spear-phishing with embedded malware..."
+    puts 'Conducting advanced spear-phishing with embedded malware...'
     puts "Social engineering attack sent successfully to #{target}."
   end
 
@@ -171,17 +171,17 @@ end
 offensive_assistant = OffensiveOperationsAssistant.new
 
 # Adding targets
-offensive_assistant.add_target("192.168.1.10")
-offensive_assistant.add_target("example.com")
+offensive_assistant.add_target('192.168.1.10')
+offensive_assistant.add_target('example.com')
 
 # Running operations
-offensive_assistant.port_scan("192.168.1.10")
-offensive_assistant.vulnerability_scan("example.com")
-offensive_assistant.exploit_vulnerability("192.168.1.10", "CVE-2023-1234")
-offensive_assistant.crack_password("5f4dcc3b5aa765d61d8327deb882cf99", "rockyou.txt")
-offensive_assistant.generate_payload("192.168.1.10", "reverse_shell")
-offensive_assistant.social_engineering_attack("example.com", "Your account has been compromised. Click here to reset your password.")
-offensive_assistant.denial_of_service_attack("192.168.1.10")
-offensive_assistant.wifi_attack("Corporate_WiFi")
-offensive_assistant.establish_persistence("192.168.1.10")
-
+offensive_assistant.port_scan('192.168.1.10')
+offensive_assistant.vulnerability_scan('example.com')
+offensive_assistant.exploit_vulnerability('192.168.1.10', 'CVE-2023-1234')
+offensive_assistant.crack_password('5f4dcc3b5aa765d61d8327deb882cf99', 'rockyou.txt')
+offensive_assistant.generate_payload('192.168.1.10', 'reverse_shell')
+offensive_assistant.social_engineering_attack('example.com',
+                                              'Your account has been compromised. Click here to reset your password.')
+offensive_assistant.denial_of_service_attack('192.168.1.10')
+offensive_assistant.wifi_attack('Corporate_WiFi')
+offensive_assistant.establish_persistence('192.168.1.10')

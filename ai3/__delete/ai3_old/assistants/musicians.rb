@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Musicians Assistant – Provides musical suggestions and creative input.
 #
 # Restored full logic from musicians.r_ and musicians.rb.
@@ -12,13 +14,13 @@ require_relative '../lib/langchainrb'
 module Assistants
   class Musician
     URLS = [
-      "https://soundcloud.com/",
-      "https://bandcamp.com/",
-      "https://spotify.com/",
-      "https://youtube.com/",
-      "https://mixcloud.com/"
+      'https://soundcloud.com/',
+      'https://bandcamp.com/',
+      'https://spotify.com/',
+      'https://youtube.com/',
+      'https://mixcloud.com/'
     ]
-    def initialize(language: "en")
+    def initialize(language: 'en')
       @universal_scraper = UniversalScraper.new
       @weaviate_integration = WeaviateIntegration.new
       @language = language
@@ -26,7 +28,7 @@ module Assistants
     end
 
     def create_music
-      puts "Creating music with unique styles and personalities..."
+      puts 'Creating music with unique styles and personalities...'
       create_swarm_of_agents
     end
 
@@ -42,7 +44,7 @@ module Assistants
     end
 
     def create_swarm_of_agents
-      puts "Creating swarm of autonomous reasoning agents..."
+      puts 'Creating swarm of autonomous reasoning agents...'
       agents = []
       10.times do |i|
         agents << Langchainrb::Agent.new(name: "musician_#{i}", task: generate_task(i), data_sources: URLS)
@@ -53,17 +55,17 @@ module Assistants
 
     def generate_task(i)
       case i
-      when 0 then "Create an electronic dance track."
-      when 1 then "Compose a classical-modern fusion piece."
-      when 2 then "Produce a hip-hop track with unique beats."
-      when 3 then "Develop a rock song with heavy guitar."
-      when 4 then "Compose a jazz fusion piece."
-      when 5 then "Create ambient music with soothing soundscapes."
-      when 6 then "Develop a catchy pop song."
-      when 7 then "Produce a reggae track."
-      when 8 then "Compose an experimental track."
-      when 9 then "Create a soundtrack for a short film."
-      else "General music production."
+      when 0 then 'Create an electronic dance track.'
+      when 1 then 'Compose a classical-modern fusion piece.'
+      when 2 then 'Produce a hip-hop track with unique beats.'
+      when 3 then 'Develop a rock song with heavy guitar.'
+      when 4 then 'Compose a jazz fusion piece.'
+      when 5 then 'Create ambient music with soothing soundscapes.'
+      when 6 then 'Develop a catchy pop song.'
+      when 7 then 'Produce a reggae track.'
+      when 8 then 'Compose an experimental track.'
+      when 9 then 'Create a soundtrack for a short film.'
+      else 'General music production.'
       end
     end
 

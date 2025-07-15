@@ -14,29 +14,28 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
+require 'spec_helper'
 
-require "spec_helper"
+require 'addressable/uri'
 
-require "addressable/uri"
-
-describe Addressable::URI, "when created with a URI known to cause crashes " +
-    "in certain browsers" do
-  it "should parse correctly" do
+describe Addressable::URI, 'when created with a URI known to cause crashes ' +
+                           'in certain browsers' do
+  it 'should parse correctly' do
     uri = Addressable::URI.parse('%%30%30')
     expect(uri.path).to eq('%%30%30')
     expect(uri.normalize.path).to eq('%2500')
   end
 
-  it "should parse correctly as a full URI" do
+  it 'should parse correctly as a full URI' do
     uri = Addressable::URI.parse('http://www.example.com/%%30%30')
     expect(uri.path).to eq('/%%30%30')
     expect(uri.normalize.path).to eq('/%2500')
   end
 end
 
-describe Addressable::URI, "when created with a URI known to cause crashes " +
-    "in certain browsers" do
-  it "should parse correctly" do
+describe Addressable::URI, 'when created with a URI known to cause crashes ' +
+                           'in certain browsers' do
+  it 'should parse correctly' do
     uri = Addressable::URI.parse('لُصّبُلُلصّبُررً ॣ ॣh ॣ ॣ 冗')
     expect(uri.path).to eq('لُصّبُلُلصّبُررً ॣ ॣh ॣ ॣ 冗')
     expect(uri.normalize.path).to eq(
@@ -46,7 +45,7 @@ describe Addressable::URI, "when created with a URI known to cause crashes " +
     )
   end
 
-  it "should parse correctly as a full URI" do
+  it 'should parse correctly as a full URI' do
     uri = Addressable::URI.parse('http://www.example.com/لُصّبُلُلصّبُررً ॣ ॣh ॣ ॣ 冗')
     expect(uri.path).to eq('/لُصّبُلُلصّبُررً ॣ ॣh ॣ ॣ 冗')
     expect(uri.normalize.path).to eq(

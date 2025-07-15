@@ -7,7 +7,6 @@ require 'concurrent/errors'
 require 'concurrent/options'
 
 module Concurrent
-
   # Executes a collection of tasks, each after a given delay. A master task
   # monitors the set and schedules each task for execution at the appropriate
   # time. Tasks are run on the global thread pool or on the supplied executor.
@@ -17,7 +16,6 @@ module Concurrent
   #
   # @!macro monotonic_clock_warning
   class TimerSet < RubyExecutorService
-
     # Create a new set of timed tasks.
     #
     # @!macro executor_options
@@ -28,7 +26,7 @@ module Concurrent
     #     `:operation` returns the global operation pool, and `:immediate` returns a new
     #     `ImmediateExecutor` object.
     def initialize(opts = {})
-      super(opts)
+      super
     end
 
     # Post a task to be execute run after a given delay (in seconds). If the
@@ -48,8 +46,9 @@ module Concurrent
     def post(delay, *args, &task)
       raise ArgumentError.new('no block given') unless block_given?
       return false unless running?
-      opts = { executor:  @task_executor,
-               args:      args,
+
+      opts = { executor: @task_executor,
+               args: args,
                timer_set: self }
       task = ScheduledTask.execute(delay, opts, &task) # may raise exception
       task.unscheduled? ? false : task
@@ -93,8 +92,9 @@ module Concurrent
     # @!visibility private
     def ns_post_task(task)
       return false unless ns_running?
+
       ns_reset_if_forked
-      if (task.initial_delay) <= 0.01
+      if task.initial_delay <= 0.01
         task.executor.post { task.process_task }
       else
         @queue.push(task)
@@ -127,11 +127,11 @@ module Concurrent
     end
 
     def ns_reset_if_forked
-      if $$ != @ruby_pid
-        @queue.clear
-        @condition.reset
-        @ruby_pid = $$
-      end
+      return unless $$ != @ruby_pid
+
+      @queue.clear
+      @condition.reset
+      @ruby_pid = $$
     end
 
     # Run a loop and execute tasks in the scheduled order and at the approximate
@@ -142,7 +142,10 @@ module Concurrent
     # @!visibility private
     def process_tasks
       loop do
-        task = synchronize { @condition.reset; @queue.peek }
+        task = synchronize do
+          @condition.reset
+          @queue.peek
+        end
         break unless task
 
         now  = Concurrent.monotonic_time

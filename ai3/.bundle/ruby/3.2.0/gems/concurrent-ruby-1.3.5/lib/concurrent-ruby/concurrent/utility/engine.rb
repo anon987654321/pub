@@ -1,7 +1,6 @@
 module Concurrent
   # @!visibility private
   module Utility
-
     # @!visibility private
     module EngineDetector
       def on_cruby?
@@ -33,8 +32,8 @@ module Concurrent
         comparisons = { :== => [0],
                         :>= => [1, 0],
                         :<= => [-1, 0],
-                        :>  => [1],
-                        :<  => [-1] }
+                        :> => [1],
+                        :< => [-1] }
         comparisons.fetch(comparison).include? result
       end
     end

@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
+
 #
 # MiniGPT v1.2 — minimal CLI for Grok, Claude Instant, and OpenAI
 #
@@ -7,16 +8,16 @@
 #
 
 begin
-  require "langchain"
+  require 'langchain'
 rescue LoadError
-  abort "Please `gem install langchainrb` before running."
+  abort 'Please `gem install langchainrb` before running.'
 end
 
 # Prompt for API keys if missing
 api_keys = {
-  "GEMINI" => ENV["GOOGLE_API_KEY"],
-  "CLAUDE" => ENV["ANTHROPIC_API_KEY"],
-  "OPENAI" => ENV["OPENAI_API_KEY"]
+  'GEMINI' => ENV.fetch('GOOGLE_API_KEY', nil),
+  'CLAUDE' => ENV.fetch('ANTHROPIC_API_KEY', nil),
+  'OPENAI' => ENV.fetch('OPENAI_API_KEY', nil)
 }
 
 api_keys.each do |name, key|
@@ -31,27 +32,25 @@ end
 
 # Initialize clients
 clients = {
-  "Grok (Google Gemini)" => Langchain::LLM::GoogleGemini.new(
-    api_key: api_keys["GEMINI"]
+  'Grok (Google Gemini)' => Langchain::LLM::GoogleGemini.new(
+    api_key: api_keys['GEMINI']
   ),
-  "Claude Instant" => Langchain::LLM::Anthropic.new(
-    api_key: api_keys["CLAUDE"]
+  'Claude Instant' => Langchain::LLM::Anthropic.new(
+    api_key: api_keys['CLAUDE']
   ),
-  "OpenAI" => Langchain::LLM::OpenAI.new(
-    api_key: api_keys["OPENAI"]
+  'OpenAI' => Langchain::LLM::OpenAI.new(
+    api_key: api_keys['OPENAI']
   )
 }
 
 # Rotating spinner for progress
 def rotating_animation(thread)
-  spinner = ["/", "-", "\\", "|"]
+  spinner = ['/', '-', '\\', '|']
   index = 0
   while thread.alive?
     print "\r#{spinner[index]}"
     index += 1
-    if index >= spinner.length
-      index = 0
-    end
+    index = 0 if index >= spinner.length
     sleep(0.1)
   end
   print "\r"
@@ -59,43 +58,38 @@ end
 
 # Extract response uniformly
 def extract_response(resp)
-  if resp.respond_to?("content")
+  if resp.respond_to?('content')
     resp.content
   elsif resp.is_a?(Hash)
-    resp.dig("choices", 0, "message", "content")
+    resp.dig('choices', 0, 'message', 'content')
   else
     resp.to_s
   end
 end
 
-puts "MiniGPT: compare responses from three LLMs"
+puts 'MiniGPT: compare responses from three LLMs'
 
 loop do
   print "\n> "
   input_line = gets
-  if input_line.nil?
-    break
-  end
+  break if input_line.nil?
+
   input = input_line.chomp
-  if input.strip.empty?
-    break
-  end
+  break if input.strip.empty?
 
   clients.each do |name, client|
-    begin
-      response_thread = Thread.new do
-        client.chat(
-          messages: [
-            { role: "user", content: input }
-          ]
-        )
-      end
-      rotating_animation(response_thread)
-      response = response_thread.value
-      puts "\n[#{name}]\n#{extract_response(response)}"
-    rescue StandardError => e
-      warn "[#{name} failed] #{e.message}"
+    response_thread = Thread.new do
+      client.chat(
+        messages: [
+          { role: 'user', content: input }
+        ]
+      )
     end
+    rotating_animation(response_thread)
+    response = response_thread.value
+    puts "\n[#{name}]\n#{extract_response(response)}"
+  rescue StandardError => e
+    warn "[#{name} failed] #{e.message}"
   end
 
   puts "\n— done —\n"

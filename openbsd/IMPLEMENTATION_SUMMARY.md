@@ -149,7 +149,9 @@ sh demo_cognitive_features.sh
 
 ## 📈 Impact
 
-This implementation transforms network scanning from a cognitively demanding, error-prone task into a managed, professional workflow that:
+This implementation transforms network scanning from a cognitively demanding,
+error-prone task into a managed,
+professional workflow that:
 
 - **Reduces cognitive load** through scientific memory management
 - **Improves reliability** with comprehensive error handling
@@ -157,10 +159,15 @@ This implementation transforms network scanning from a cognitively demanding, er
 - **Ensures compatibility** with POSIX compliance
 - **Follows security best practices** for OpenBSD environments
 
-The tool successfully demonstrates how cognitive science principles can be applied to improve technical tools, making them more usable, reliable, and professional.
+The tool successfully demonstrates how cognitive science principles can be applied to improve technical tools,
+making them more usable,
+reliable,
+and professional.
 
 ---
 
 ## ✅ Project Status: COMPLETE
 
-All requirements have been met, comprehensive testing validates functionality, and documentation supports both technical and business users. The improved nmap.sh tool is ready for production use in OpenBSD environments.
+All requirements have been met,
+comprehensive testing validates functionality,
+and documentation supports both technical and business users. The improved nmap.sh tool is ready for production use in OpenBSD environments.

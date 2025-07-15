@@ -1,7 +1,6 @@
 require 'concurrent/synchronization/safe_initialization'
 
 module Concurrent
-
   # @!macro atomic_boolean
   # @!visibility private
   # @!macro internal_implementation_note
@@ -48,11 +47,11 @@ module Concurrent
     protected
 
     # @!visibility private
-    def synchronize
+    def synchronize(&)
       if @Lock.owned?
         yield
       else
-        @Lock.synchronize { yield }
+        @Lock.synchronize(&)
       end
     end
 

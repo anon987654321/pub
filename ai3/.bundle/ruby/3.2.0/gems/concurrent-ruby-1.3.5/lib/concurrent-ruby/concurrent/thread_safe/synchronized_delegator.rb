@@ -33,7 +33,7 @@ module Concurrent
       @monitor = Monitor.new
     end
 
-    def method_missing(method, *args, &block)
+    def method_missing(method, *args, &)
       monitor = @monitor
       begin
         monitor.enter
@@ -42,6 +42,5 @@ module Concurrent
         monitor.exit
       end
     end
-
   end
 end

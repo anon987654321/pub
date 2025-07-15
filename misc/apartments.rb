@@ -1,20 +1,22 @@
-require "logger"
-require "sqlite3"
-require "mail"
-require "concurrent-ruby"
-require "net/http"
-require_relative "../lib/scraper"
+# frozen_string_literal: true
+
+require 'logger'
+require 'sqlite3'
+require 'mail'
+require 'concurrent-ruby'
+require 'net/http'
+require_relative '../lib/scraper'
 
 # Main class for managing apartment hunting
 class ApartmentHunter
-  TARGET_URL = "https://www.finn.no/realestate/lettings/search.html"
-  NOTIFICATION_INTERVAL = 3600  # Notification interval in seconds
+  TARGET_URL = 'https://www.finn.no/realestate/lettings/search.html'
+  NOTIFICATION_INTERVAL = 3600 # Notification interval in seconds
 
   def initialize(api_key)
     @api_key = api_key
     @scraper = Scraper.new(@api_key, TARGET_URL)
-    @logger = Logger.new("apartment_hunter.log")
-    @user_webhook_url = nil  # Optional: Set this if using webhooks for notification
+    @logger = Logger.new('apartment_hunter.log')
+    @user_webhook_url = nil # Optional: Set this if using webhooks for notification
     setup_mailer
     setup_database
     define_search_criteria
@@ -22,7 +24,7 @@ class ApartmentHunter
 
   def define_search_criteria
     @search_criteria = {
-      city: "Bergen",
+      city: 'Bergen',
       max_price: 9000,
       min_size: 20,
       animals: true,
@@ -37,7 +39,7 @@ class ApartmentHunter
 
   def setup_mailer
     settings = {
-      address: "localhost",
+      address: 'localhost',
       port: 25,
       enable_starttls_auto: false
     }
@@ -45,7 +47,7 @@ class ApartmentHunter
   end
 
   def setup_database
-    @db = SQLite3::Database.new "listings.db"
+    @db = SQLite3::Database.new 'listings.db'
     @db.execute <<-SQL
       CREATE TABLE IF NOT EXISTS listings (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -56,12 +58,12 @@ class ApartmentHunter
   end
 
   def monitor_listings
-    @logger.info("Starting to monitor listings...")
+    @logger.info('Starting to monitor listings...')
     while keep_monitoring?
       perform_listing_checks
       sleep NOTIFICATION_INTERVAL
     end
-    @logger.info("Monitoring stopped.")
+    @logger.info('Monitoring stopped.')
   end
 
   def keep_monitoring?
@@ -76,18 +78,19 @@ class ApartmentHunter
     listings = @scraper.fetch_listings
     listings.each do |listing|
       next if listing_seen?(listing[:url])
+
       mark_listing_as_seen(listing[:url])
       notify_user_of_listing(listing) if meets_criteria?(listing)
     end
   end
 
   def listing_seen?(url)
-    result = @db.execute("SELECT seen FROM listings WHERE url = ?", [url])
-    !result.empty? && result.first["seen"] == 1
+    result = @db.execute('SELECT seen FROM listings WHERE url = ?', [url])
+    !result.empty? && result.first['seen'] == 1
   end
 
   def mark_listing_as_seen(url)
-    @db.execute("INSERT OR IGNORE INTO listings (url, seen) VALUES (?, TRUE)", [url])
+    @db.execute('INSERT OR IGNORE INTO listings (url, seen) VALUES (?, TRUE)', [url])
   end
 
   def meets_criteria?(listing)
@@ -104,15 +107,15 @@ class ApartmentHunter
 
   def send_webhook_notification(listing)
     uri = URI(@user_webhook_url)
-    response = Net::HTTP.post_form(uri, "url" => listing[:url])
+    response = Net::HTTP.post_form(uri, 'url' => listing[:url])
     response.is_a?(Net::HTTPSuccess)
   end
 
   def send_email_notification(listing)
     Mailer.send_email(
-      subject: "New Apartment Listing Found!",
+      subject: 'New Apartment Listing Found!',
       body: "Found a new listing: #{listing[:url]}",
-      to: "user@example.com"
+      to: 'user@example.com'
     )
   end
 end
@@ -122,7 +125,7 @@ class Mailer
     Mail.defaults { delivery_method :smtp, options }
   end
 
-  def self.send_email(subject:, body:, to:, from: "noreply@nav.no")
+  def self.send_email(subject:, body:, to:, from: 'noreply@nav.no')
     mail = Mail.new do
       from from
       to to
@@ -136,7 +139,7 @@ class Mailer
 end
 
 if __FILE__ == $0
-  api_key = ENV["API_KEY"] || raise("API key not set")
+  api_key = ENV['API_KEY'] || raise('API key not set')
   hunter = ApartmentHunter.new(api_key)
   hunter.monitor_listings
 end

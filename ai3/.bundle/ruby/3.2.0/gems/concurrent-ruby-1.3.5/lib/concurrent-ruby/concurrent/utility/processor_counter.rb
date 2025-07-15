@@ -5,7 +5,6 @@ require 'concurrent/delay'
 module Concurrent
   # @!visibility private
   module Utility
-
     # @!visibility private
     class ProcessorCounter
       def initialize
@@ -57,18 +56,18 @@ module Concurrent
       end
 
       def compute_physical_processor_count
-        ppc = case RbConfig::CONFIG["target_os"]
+        ppc = case RbConfig::CONFIG['target_os']
               when /darwin\d\d/
-                IO.popen("/usr/sbin/sysctl -n hw.physicalcpu", &:read).to_i
+                IO.popen('/usr/sbin/sysctl -n hw.physicalcpu', &:read).to_i
               when /linux/
                 cores = {} # unique physical ID / core ID combinations
                 phy   = 0
-                IO.read("/proc/cpuinfo").scan(/^physical id.*|^core id.*/) do |ln|
-                  if ln.start_with?("physical")
+                IO.read('/proc/cpuinfo').scan(/^physical id.*|^core id.*/) do |ln|
+                  if ln.start_with?('physical')
                     phy = ln[/\d+/]
-                  elsif ln.start_with?("core")
-                    cid        = phy + ":" + ln[/\d+/]
-                    cores[cid] = true if not cores[cid]
+                  elsif ln.start_with?('core')
+                    cid        = phy + ':' + ln[/\d+/]
+                    cores[cid] = true unless cores[cid]
                   end
                 end
                 cores.count
@@ -77,7 +76,7 @@ module Concurrent
                 result = run('powershell -command "Get-CimInstance -ClassName Win32_Processor -Property NumberOfCores | Select-Object -Property NumberOfCores"')
                 if !result || $?.exitstatus != 0
                   # fallback to deprecated wmic for older systems
-                  result = run("wmic cpu get NumberOfCores")
+                  result = run('wmic cpu get NumberOfCores')
                 end
                 if !result || $?.exitstatus != 0
                   # Bail out if both commands returned something unexpected
@@ -92,8 +91,8 @@ module Concurrent
               end
         # fall back to logical count if physical info is invalid
         ppc > 0 ? ppc : processor_count
-      rescue
-        return 1
+      rescue StandardError
+        1
       end
 
       def run(command)
@@ -102,36 +101,38 @@ module Concurrent
       end
 
       def compute_cpu_quota
-        if RbConfig::CONFIG["target_os"].include?("linux")
-          if File.exist?("/sys/fs/cgroup/cpu.max")
-            # cgroups v2: https://docs.kernel.org/admin-guide/cgroup-v2.html#cpu-interface-files
-            cpu_max = File.read("/sys/fs/cgroup/cpu.max")
-            return nil if cpu_max.start_with?("max ") # no limit
-            max, period = cpu_max.split.map(&:to_f)
-            max / period
-          elsif File.exist?("/sys/fs/cgroup/cpu,cpuacct/cpu.cfs_quota_us")
-            # cgroups v1: https://kernel.googlesource.com/pub/scm/linux/kernel/git/glommer/memcg/+/cpu_stat/Documentation/cgroups/cpu.txt
-            max = File.read("/sys/fs/cgroup/cpu,cpuacct/cpu.cfs_quota_us").to_i
-            # If the cpu.cfs_quota_us is -1, cgroup does not adhere to any CPU time restrictions
-            # https://docs.kernel.org/scheduler/sched-bwc.html#management
-            return nil if max <= 0
-            period = File.read("/sys/fs/cgroup/cpu,cpuacct/cpu.cfs_period_us").to_f
-            max / period
-          end
+        return unless RbConfig::CONFIG['target_os'].include?('linux')
+
+        if File.exist?('/sys/fs/cgroup/cpu.max')
+          # cgroups v2: https://docs.kernel.org/admin-guide/cgroup-v2.html#cpu-interface-files
+          cpu_max = File.read('/sys/fs/cgroup/cpu.max')
+          return nil if cpu_max.start_with?('max ') # no limit
+
+          max, period = cpu_max.split.map(&:to_f)
+          max / period
+        elsif File.exist?('/sys/fs/cgroup/cpu,cpuacct/cpu.cfs_quota_us')
+          # cgroups v1: https://kernel.googlesource.com/pub/scm/linux/kernel/git/glommer/memcg/+/cpu_stat/Documentation/cgroups/cpu.txt
+          max = File.read('/sys/fs/cgroup/cpu,cpuacct/cpu.cfs_quota_us').to_i
+          # If the cpu.cfs_quota_us is -1, cgroup does not adhere to any CPU time restrictions
+          # https://docs.kernel.org/scheduler/sched-bwc.html#management
+          return nil if max <= 0
+
+          period = File.read('/sys/fs/cgroup/cpu,cpuacct/cpu.cfs_period_us').to_f
+          max / period
         end
       end
 
       def compute_cpu_shares
-        if RbConfig::CONFIG["target_os"].include?("linux")
-          if File.exist?("/sys/fs/cgroup/cpu.weight")
-            # cgroups v2: https://docs.kernel.org/admin-guide/cgroup-v2.html#cpu-interface-files
-            # Ref: https://github.com/kubernetes/enhancements/tree/master/keps/sig-node/2254-cgroup-v2#phase-1-convert-from-cgroups-v1-settings-to-v2
-            weight = File.read("/sys/fs/cgroup/cpu.weight").to_f
-            ((((weight - 1) * 262142) / 9999) + 2) / 1024
-          elsif File.exist?("/sys/fs/cgroup/cpu/cpu.shares")
-            # cgroups v1: https://kernel.googlesource.com/pub/scm/linux/kernel/git/glommer/memcg/+/cpu_stat/Documentation/cgroups/cpu.txt
-            File.read("/sys/fs/cgroup/cpu/cpu.shares").to_f / 1024
-          end
+        return unless RbConfig::CONFIG['target_os'].include?('linux')
+
+        if File.exist?('/sys/fs/cgroup/cpu.weight')
+          # cgroups v2: https://docs.kernel.org/admin-guide/cgroup-v2.html#cpu-interface-files
+          # Ref: https://github.com/kubernetes/enhancements/tree/master/keps/sig-node/2254-cgroup-v2#phase-1-convert-from-cgroups-v1-settings-to-v2
+          weight = File.read('/sys/fs/cgroup/cpu.weight').to_f
+          ((((weight - 1) * 262_142) / 9999) + 2) / 1024
+        elsif File.exist?('/sys/fs/cgroup/cpu/cpu.shares')
+          # cgroups v1: https://kernel.googlesource.com/pub/scm/linux/kernel/git/glommer/memcg/+/cpu_stat/Documentation/cgroups/cpu.txt
+          File.read('/sys/fs/cgroup/cpu/cpu.shares').to_f / 1024
         end
       end
     end

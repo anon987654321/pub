@@ -7,7 +7,6 @@ require 'concurrent/utility/engine'
 require 'concurrent/utility/monotonic_time'
 
 module Concurrent
-
   # @!macro exchanger
   #
   #   A synchronization point at which threads can pair and swap elements within
@@ -36,7 +35,6 @@ module Concurrent
 
   # @!visibility private
   class AbstractExchanger < Synchronization::Object
-
     # @!visibility private
     CANCEL = ::Object.new
     private_constant :CANCEL
@@ -78,11 +76,9 @@ module Concurrent
     #   @return [Object] the value exchanged by the other thread
     #   @raise [Concurrent::TimeoutError] on timeout
     def exchange!(value, timeout = nil)
-      if (value = do_exchange(value, timeout)) == CANCEL
-        raise Concurrent::TimeoutError
-      else
-        value
-      end
+      raise Concurrent::TimeoutError if (value = do_exchange(value, timeout)) == CANCEL
+
+      value
     end
 
     # @!macro exchanger_method_do_exchange
@@ -168,7 +164,6 @@ module Concurrent
     #
     # @return [Object, CANCEL] the value exchanged by the other thread; {CANCEL} on timeout
     def do_exchange(value, timeout)
-
       # ALGORITHM
       #
       # From the original Java version:
@@ -268,18 +263,17 @@ module Concurrent
         elsif other.nil? && compare_and_set_slot(nil, me)
           # try to occupy
           timeout = end_at - Concurrent.monotonic_time if timeout
-          if me.latch.wait(timeout)
-            # happy path
+          break me.value if me.latch.wait(timeout)
+          # happy path
+
+          # attempt to remove myself from the slot
+          if compare_and_set_slot(me, nil)
+            break CANCEL
+          elsif !me.compare_and_set_value(nil, CANCEL)
+            # I've failed to block the fulfiller
             break me.value
-          else
-            # attempt to remove myself from the slot
-            if compare_and_set_slot(me, nil)
-              break CANCEL
-            elsif !me.compare_and_set_value(nil, CANCEL)
-              # I've failed to block the fulfiller
-              break me.value
-            end
           end
+
         end
         break CANCEL if timeout && Concurrent.monotonic_time >= end_at
       end
@@ -294,7 +288,6 @@ module Concurrent
     # @!macro internal_implementation_note
     # @!visibility private
     class JavaExchanger < AbstractExchanger
-
       def initialize
         @exchanger = java.util.concurrent.Exchanger.new
       end
@@ -324,8 +317,7 @@ module Concurrent
 
   # @!visibility private
   # @!macro internal_implementation_note
-  ExchangerImplementation = case
-                            when Concurrent.on_jruby?
+  ExchangerImplementation = if Concurrent.on_jruby?
                               JavaExchanger
                             else
                               RubyExchanger
@@ -334,7 +326,6 @@ module Concurrent
 
   # @!macro exchanger
   class Exchanger < ExchangerImplementation
-
     # @!method initialize
     #   Creates exchanger instance
 

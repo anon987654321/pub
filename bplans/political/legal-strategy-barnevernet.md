@@ -1,6 +1,10 @@
 # **Oppsummering**
 
-Barnevernets håndtering av saken har flere alvorlige svakheter, inkludert brudd på rettssikkerheten, mangelfulle bevis, og ignorering av både barnets ønsker og farens voldelige atferd. Ved å utnytte disse svakhetene kombinert med en nyskapende strategi som involverer **AI3-visualisering**, kan du både gjennoppta saken og utfordre Barnevernet på et systemisk nivå.
+Barnevernets håndtering av saken har flere alvorlige svakheter,
+inkludert brudd på rettssikkerheten,
+mangelfulle bevis,
+og ignorering av både barnets ønsker og farens voldelige atferd. Ved å utnytte disse svakhetene kombinert med en nyskapende strategi som involverer **AI3-visualisering**,
+kan du både gjennoppta saken og utfordre Barnevernet på et systemisk nivå.
 
 ---
 
@@ -15,7 +19,8 @@ Barnevernets håndtering av saken har flere alvorlige svakheter, inkludert brudd
    - **Subjektive vurderinger:** Barnevernet har ikke lagt frem objektive data som støtter deres avgjørelse.
 
 ### 3. **Ignorering av barnets ønsker**
-   - **Barnets ønske ble oversett:** Barnet ønsket å bli hos moren, men dette ble ikke tilstrekkelig vurdert.
+   - **Barnets ønske ble oversett:** Barnet ønsket å bli hos moren,
+men dette ble ikke tilstrekkelig vurdert.
 
 ### 4. **Farens vold er ikke tilstrekkelig vurdert**
    - **Voldelig miljø ignorert:** Farenes voldelige atferd og morens beskyttelsestiltak ble ikke vurdert grundig.
@@ -53,7 +58,9 @@ Barnevernets håndtering av saken har flere alvorlige svakheter, inkludert brudd
 
 # **Bruk av AI3-Visualisering i Saken**
 
-Ved å bruke **AI3-visualisering** kan vi presentere bevis på en måte som gjør komplekse fakta enklere å forstå og tydeligere for retten. AI3 kan vise sammenhenger mellom dokumenter, mangler og feil, og gi et interaktivt bilde av Barnevernets avgjørelser.
+Ved å bruke **AI3-visualisering** kan vi presentere bevis på en måte som gjør komplekse fakta enklere å forstå og tydeligere for retten. AI3 kan vise sammenhenger mellom dokumenter,
+mangler og feil,
+og gi et interaktivt bilde av Barnevernets avgjørelser.
 
 ### **Hvordan AI3 kan hjelpe:**
    - **Avdekke skjulte mønstre:** Avsløre motstridende informasjon eller hull i Barnevernets vurderinger.
@@ -85,4 +92,3 @@ Ved å bruke **AI3-visualisering** kan vi presentere bevis på en måte som gjø
 
 ### 3. **Familieorientert fokus**
    - Prioriter støtte til familier fremfor umiddelbar fjerning av barnet.
-

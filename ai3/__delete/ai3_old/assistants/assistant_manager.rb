@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 # AI3 Assistant Manager - Custom Agent Logic Based on Langchainrb Concepts
 
@@ -18,10 +19,10 @@ class AssistantManager
     if assistant
       result = assistant.perform_task(task)
       puts "Task result from #{assistant_name}: #{result}"
-      return result
+      result
     else
       puts "No assistant found with name: #{assistant_name}"
-      return nil
+      nil
     end
   end
 end

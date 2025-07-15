@@ -18,7 +18,7 @@ module BCrypt
     # Maximum possible size of bcrypt() salts.
     MAX_SALT_LENGTH = 16
 
-    if RUBY_PLATFORM != "java"
+    if RUBY_PLATFORM != 'java'
       # C-level routines which, if they don't get the right input, will crash the
       # hell out of the Ruby process.
       private_class_method :__bc_salt
@@ -46,57 +46,48 @@ module BCrypt
     #
     #   # cost can still be overridden as needed
     #   BCrypt::Password.create('secret', :cost => 6).cost  #=> 6
-    def self.cost=(cost)
-      @cost = cost
+    class << self
+      attr_writer :cost
     end
 
     # Given a secret and a valid salt (see BCrypt::Engine.generate_salt) calculates
     # a bcrypt() password hash. Secrets longer than 72 bytes are truncated.
     def self.hash_secret(secret, salt, _ = nil)
       unless _.nil?
-        warn "[DEPRECATION] Passing the third argument to " \
-             "`BCrypt::Engine.hash_secret` is deprecated. " \
-             "Please do not pass the third argument which " \
-             "is currently not used."
+        warn '[DEPRECATION] Passing the third argument to ' \
+             '`BCrypt::Engine.hash_secret` is deprecated. ' \
+             'Please do not pass the third argument which ' \
+             'is currently not used.'
       end
 
-      if valid_secret?(secret)
-        if valid_salt?(salt)
-          if RUBY_PLATFORM == "java"
-            Java.bcrypt_jruby.BCrypt.hashpw(secret.to_s.to_java_bytes, salt.to_s)
-          else
-            secret = secret.to_s
-            secret = secret.byteslice(0, MAX_SECRET_BYTESIZE) if secret && secret.bytesize > MAX_SECRET_BYTESIZE
-            __bc_crypt(secret, salt)
-          end
-        else
-          raise Errors::InvalidSalt.new("invalid salt")
-        end
+      raise Errors::InvalidSecret.new('invalid secret') unless valid_secret?(secret)
+      raise Errors::InvalidSalt.new('invalid salt') unless valid_salt?(salt)
+
+      if RUBY_PLATFORM == 'java'
+        Java.bcrypt_jruby.BCrypt.hashpw(secret.to_s.to_java_bytes, salt.to_s)
       else
-        raise Errors::InvalidSecret.new("invalid secret")
+        secret = secret.to_s
+        secret = secret.byteslice(0, MAX_SECRET_BYTESIZE) if secret && secret.bytesize > MAX_SECRET_BYTESIZE
+        __bc_crypt(secret, salt)
       end
     end
 
     # Generates a random salt with a given computational cost.
     def self.generate_salt(cost = self.cost)
       cost = cost.to_i
-      if cost > 0
-        if cost < MIN_COST
-          cost = MIN_COST
-        end
-        if RUBY_PLATFORM == "java"
-          Java.bcrypt_jruby.BCrypt.gensalt(cost)
-        else
-          __bc_salt("$2a$", cost, OpenSSL::Random.random_bytes(MAX_SALT_LENGTH))
-        end
+      raise Errors::InvalidCost.new('cost must be numeric and > 0') unless cost > 0
+
+      cost = MIN_COST if cost < MIN_COST
+      if RUBY_PLATFORM == 'java'
+        Java.bcrypt_jruby.BCrypt.gensalt(cost)
       else
-        raise Errors::InvalidCost.new("cost must be numeric and > 0")
+        __bc_salt('$2a$', cost, OpenSSL::Random.random_bytes(MAX_SALT_LENGTH))
       end
     end
 
     # Returns true if +salt+ is a valid bcrypt() salt, false if not.
     def self.valid_salt?(salt)
-      !!(salt =~ /\A\$[0-9a-z]{2,}\$[0-9]{2,}\$[A-Za-z0-9\.\/]{22,}\z/)
+      !!(salt =~ %r{\A\$[0-9a-z]{2,}\$[0-9]{2,}\$[A-Za-z0-9\./]{22,}\z})
     end
 
     # Returns true if +secret+ is a valid bcrypt() secret, false if not.
@@ -117,9 +108,9 @@ module BCrypt
     #   # should take less than 1000ms
     #   BCrypt::Password.create("woo", :cost => 12)
     def self.calibrate(upper_time_limit_in_ms)
-      (BCrypt::Engine::MIN_COST..BCrypt::Engine::MAX_COST-1).each do |i|
+      (BCrypt::Engine::MIN_COST..BCrypt::Engine::MAX_COST - 1).each do |i|
         start_time = Time.now
-        Password.create("testing testing", :cost => i+1)
+        Password.create('testing testing', cost: i + 1)
         end_time = Time.now - start_time
         return i if end_time * 1_000 > upper_time_limit_in_ms
       end
@@ -130,5 +121,4 @@ module BCrypt
       salt[4..5].to_i
     end
   end
-
 end
