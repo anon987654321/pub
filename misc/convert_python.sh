@@ -1,3 +1,5 @@
+#!/bin/bash
+
 require 'octokit'
 require 'net/http'
 require 'uri'

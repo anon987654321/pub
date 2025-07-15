@@ -1,6 +1,8 @@
 # Brgen Marketplace: Din Markedsplass på Nett 🛒🛍️
 
-Brgen Marketplace er en nettbasert markedsplass som kombinerer funksjonene fra et tradisjonelt kjøp- og salg-forum med avanserte e-handelsmuligheter. Denne plattformen gir brukerne muligheten til å kjøpe og selge alt fra elektronikk til klær, og gir en opplevelse som minner om Amazon, men med fokus på lokal tilhørighet og brukerstyrte annonser.
+Brgen Marketplace er en nettbasert markedsplass som kombinerer funksjonene fra et tradisjonelt kjøp- og salg-forum med avanserte e-handelsmuligheter. Denne plattformen gir brukerne muligheten til å kjøpe og selge alt fra elektronikk til klær,
+og gir en opplevelse som minner om Amazon,
+men med fokus på lokal tilhørighet og brukerstyrte annonser.
 
 ## Funksjoner 🚀
 
@@ -24,5 +26,7 @@ Brgen Marketplace er en nettbasert markedsplass som kombinerer funksjonene fra e
 - **AI Chat og Live Chat** 🗨️: Integrert for å tilby både AI-assisterte anbefalinger og sanntidskommunikasjon mellom kjøpere og selgere.
 
 ## Målsetting 🎯
-Brgen Marketplace ønsker å gjøre kjøp og salg enklere, tryggere og mer lokaltilpasset, samtidig som brukerne får en moderne og responsiv netthandelsopplevelse. Plattformen gir folk mulighet til å være både kjøper og selger, og legger til rette for trygg kommunikasjon og praktiske e-handelsverktøy
-
+Brgen Marketplace ønsker å gjøre kjøp og salg enklere,
+tryggere og mer lokaltilpasset,
+samtidig som brukerne får en moderne og responsiv netthandelsopplevelse. Plattformen gir folk mulighet til å være både kjøper og selger,
+og legger til rette for trygg kommunikasjon og praktiske e-handelsverktøy

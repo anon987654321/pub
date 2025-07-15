@@ -1,8 +1,27 @@
 # Rails Apps for OpenBSD 7.7+
 
-Complete Rails applications: `brgen`, `brgen_dating`, `brgen_marketplace`, `brgen_playlist`, `brgen_takeaway`, `brgen_tv`, `amber`, `privcam`, `bsdports`, `hjerterom`, `blognet` on OpenBSD 7.7+, leveraging Hotwire, StimulusReflex, Stimulus Components, and Devise for authentication.
+Complete Rails applications: `brgen`,
+`brgen_dating`,
+`brgen_marketplace`,
+`brgen_playlist`,
+`brgen_takeaway`,
+`brgen_tv`,
+`amber`,
+`privcam`,
+`bsdports`,
+`hjerterom`,
+`blognet` on OpenBSD 7.7+,
+leveraging Hotwire,
+StimulusReflex,
+Stimulus Components,
+and Devise for authentication.
 
-Each app is configured as a Progressive Web App (PWA) with minimalistic views, SCSS targeting direct elements, and anonymous access via `devise-guests`. Deployment uses the existing `openbsd.sh` for DNSSEC, `relayd`, `httpd`, and `acme-client`.
+Each app is configured as a Progressive Web App (PWA) with minimalistic views,
+SCSS targeting direct elements,
+and anonymous access via `devise-guests`. Deployment uses the existing `openbsd.sh` for DNSSEC,
+`relayd`,
+`httpd`,
+and `acme-client`.
 
 ## Overview
 
@@ -272,7 +291,11 @@ EOF
 EOF
 
   cat <<EOF > app/views/shared/_vote.html.erb
-<%= tag.div class: "vote", id: "vote-#{votable.id}", data: { controller: "vote", "vote-votable-type-value": votable.class.name, "vote-votable-id-value": votable.id } do %>
+<%= tag.div class: "vote",
+id: "vote-#{votable.id}",
+data: { controller: "vote",
+"vote-votable-type-value": votable.class.name,
+"vote-votable-id-value": votable.id } do %>
   <%= button_tag "▲", data: { action: "click->vote#upvote" }, "aria-label": t("shared.upvote") %>
   <%= tag.span votable.votes.sum(:value), class: "vote-count" %>
   <%= button_tag "▼", data: { action: "click->vote#downvote" }, "aria-label": t("shared.downvote") %>
@@ -471,7 +494,14 @@ setup_anon_posting() {
   <% end %>
   <%= tag.fieldset do %>
     <%= form.label :body, t("${APP_NAME}.post_body"), "aria-required": true %>
-    <%= form.text_area :body, placeholder: t("${APP_NAME}.whats_on_your_mind"), required: true, data: { "character-counter-target": "input", "textarea-autogrow-target": "input", "form-validation-target": "input", action: "input->character-counter#count input->textarea-autogrow#resize input->form-validation#validate" }, title: t("${APP_NAME}.post_body_help") %>
+    <%= form.text_area :body,
+placeholder: t("${APP_NAME}.whats_on_your_mind"),
+required: true,
+data: { "character-counter-target": "input",
+"textarea-autogrow-target": "input",
+"form-validation-target": "input",
+action: "input->character-counter#count input->textarea-autogrow#resize input->form-validation#validate" },
+title: t("${APP_NAME}.post_body_help") %>
     <%= tag.span data: { "character-counter-target": "count" } %>
     <%= tag.span class: "error-message" data: { "form-validation-target": "error", for: "post_body" } %>
   <% end %>
@@ -638,13 +668,20 @@ EOF
 
   mkdir -p app/views/shared
   cat <<EOF > app/views/shared/_chat.html.erb
-<%= tag.section id: "chat" aria-labelledby: "chat-heading" data: { controller: "chat", "chat-receiver-id": "global", "chat-anonymous": "true", tenant: ActsAsTenant.current_tenant&.subdomain } do %>
+<%= tag.section id: "chat" aria-labelledby: "chat-heading" data: { controller: "chat",
+"chat-receiver-id": "global",
+"chat-anonymous": "true",
+tenant: ActsAsTenant.current_tenant&.subdomain } do %>
   <%= tag.h2 t("${APP_NAME}.chat_title"), id: "chat-heading" %>
   <%= tag.div id: "messages" data: { "chat-target": "messages" }, "aria-live": "polite" %>
   <%= form_with url: "#", method: :post, local: true do |form| %>
     <%= tag.fieldset do %>
       <%= form.label :content, t("${APP_NAME}.chat_placeholder"), class: "sr-only" %>
-      <%= form.text_field :content, placeholder: t("${APP_NAME}.chat_placeholder"), data: { "chat-target": "input", action: "submit->chat#send" }, "aria-label": t("${APP_NAME}.chat_placeholder") %>
+      <%= form.text_field :content,
+placeholder: t("${APP_NAME}.chat_placeholder"),
+data: { "chat-target": "input",
+action: "submit->chat#send" },
+"aria-label": t("${APP_NAME}.chat_placeholder") %>
     <% end %>
   <% end %>
 <% end %>
@@ -838,19 +875,34 @@ generate_turbo_views() {
 <%= turbo_stream.append "${2}s", partial: "$1/${2}", locals: { ${2}: @${2} } %>
 <%= turbo_stream.replace "notices", partial: "shared/notices", locals: { notice: t("${1#*/}.${2}_created") } %>
 <%= turbo_stream.update "new_${2}_form", partial: "$1/form", locals: { ${2}: @${2}.class.new } %>
-<%= turbo_stream.append "undo", content: link_to(t("shared.undo"), revert_${1#*/}_path(@${2}), method: :post, data: { turbo: true }, "aria-label": t("shared.undo")) %>
+<%= turbo_stream.append "undo",
+content: link_to(t("shared.undo"),
+revert_${1#*/}_path(@${2}),
+method: :post,
+data: { turbo: true },
+"aria-label": t("shared.undo")) %>
 EOF
 
   cat <<EOF > "app/views/$1/update.turbo_stream.erb"
 <%= turbo_stream.replace @${2}, partial: "$1/${2}", locals: { ${2}: @${2} } %>
 <%= turbo_stream.replace "notices", partial: "shared/notices", locals: { notice: t("${1#*/}.${2}_updated") } %>
-<%= turbo_stream.append "undo", content: link_to(t("shared.undo"), revert_${1#*/}_path(@${2}), method: :post, data: { turbo: true }, "aria-label": t("shared.undo")) %>
+<%= turbo_stream.append "undo",
+content: link_to(t("shared.undo"),
+revert_${1#*/}_path(@${2}),
+method: :post,
+data: { turbo: true },
+"aria-label": t("shared.undo")) %>
 EOF
 
   cat <<EOF > "app/views/$1/destroy.turbo_stream.erb"
 <%= turbo_stream.remove @${2} %>
 <%= turbo_stream.replace "notices", partial: "shared/notices", locals: { notice: t("${1#*/}.${2}_deleted") } %>
-<%= turbo_stream.append "undo", content: link_to(t("shared.undo"), revert_${1#*/}_path(@${2}), method: :post, data: { turbo: true }, "aria-label": t("shared.undo")) %>
+<%= turbo_stream.append "undo",
+content: link_to(t("shared.undo"),
+revert_${1#*/}_path(@${2}),
+method: :post,
+data: { turbo: true },
+"aria-label": t("shared.undo")) %>
 EOF
 }
 
@@ -1480,23 +1532,42 @@ cat <<EOF > app/views/listings/_form.html.erb
   <% end %>
   <%= tag.fieldset do %>
     <%= form.label :title, t("Brgen.listing_title"), "aria-required": true %>
-    <%= form.text_field :title, required: true, data: { "form-validation-target": "input", action: "input->form-validation#validate" }, title: t("brgen.listing_title_help") %>
+    <%= form.text_field :title,
+required: true,
+data: { "form-validation-target": "input",
+action: "input->form-validation#validate" },
+title: t("brgen.listing_title_help") %>
     <%= tag.span class: "error-message" data: { "form-validation-target": "error", for: "listing_title" } %>
   <% end %>
   <%= tag.fieldset do %>
     <%= form.label :description, t("brgen.listing_description"), "aria-required": true %>
-    <%= form.text_area :description, required: true, data: { "character-counter-target": "input", "textarea-autogrow-target": "input", "form-validation-target": "input", action: "input->character-counter#count input->textarea-autogrow#resize input->form-validation#validate" }, title: t("brgen.listing_description_help") %>
+    <%= form.text_area :description,
+required: true,
+data: { "character-counter-target": "input",
+"textarea-autogrow-target": "input",
+"form-validation-target": "input",
+action: "input->character-counter#count input->textarea-autogrow#resize input->form-validation#validate" },
+title: t("brgen.listing_description_help") %>
     <%= tag.span data: { "character-counter-target": "count" } %>
     <%= tag.span class: "error-message" data: { "form-validation-target": "error", for: "listing_description" } %>
   <% end %>
   <%= tag.fieldset do %>
     <%= form.label :price, t("brgen.listing_price"), "aria-required": true %>
-    <%= form.number_field :price, required: true, step: 0.01, data: { "form-validation-target": "input", action: "input->form-validation#validate" }, title: t("brgen.listing_price_help") %>
+    <%= form.number_field :price,
+required: true,
+step: 0.01,
+data: { "form-validation-target": "input",
+action: "input->form-validation#validate" },
+title: t("brgen.listing_price_help") %>
     <%= tag.span class: "error-message" data: { "form-validation-target": "error", for: "listing_price" } %>
   <% end %>
   <%= tag.fieldset do %>
     <%= form.label :category, t("brgen.listing_category"), "aria-required": true %>
-    <%= form.text_field :category, required: true, data: { "form-validation-target": "input", action: "input->form-validation#validate" }, title: t("brgen.listing_category_help") %>
+    <%= form.text_field :category,
+required: true,
+data: { "form-validation-target": "input",
+action: "input->form-validation#validate" },
+title: t("brgen.listing_category_help") %>
     <%= tag.span class: "error-message" data: { "form-validation-target": "error", for: "listing_category" } %>
   <% end %>
   <%= tag.fieldset do %>
@@ -1506,22 +1577,40 @@ cat <<EOF > app/views/listings/_form.html.erb
   <% end %>
   <%= tag.fieldset do %>
     <%= form.label :location, t("brgen.listing_location"), "aria-required": true %>
-    <%= form.text_field :location, required: true, data: { "form-validation-target": "input", action: "input->form-validation#validate" }, title: t("brgen.listing_location_help") %>
+    <%= form.text_field :location,
+required: true,
+data: { "form-validation-target": "input",
+action: "input->form-validation#validate" },
+title: t("brgen.listing_location_help") %>
     <%= tag.span class: "error-message" data: { "form-validation-target": "error", for: "listing_location" } %>
   <% end %>
   <%= tag.fieldset do %>
     <%= form.label :lat, t("brgen.listing_lat"), "aria-required": true %>
-    <%= form.number_field :lat, required: true, step: "any", data: { "form-validation-target": "input", action: "input->form-validation#validate" }, title: t("brgen.listing_lat_help") %>
+    <%= form.number_field :lat,
+required: true,
+step: "any",
+data: { "form-validation-target": "input",
+action: "input->form-validation#validate" },
+title: t("brgen.listing_lat_help") %>
     <%= tag.span class: "error-message" data: { "form-validation-target": "error", for: "listing_lat" } %>
   <% end %>
   <%= tag.fieldset do %>
     <%= form.label :lng, t("brgen.listing_lng"), "aria-required": true %>
-    <%= form.number_field :lng, required: true, step: "any", data: { "form-validation-target": "input", action: "input->form-validation#validate" }, title: t("brgen.listing_lng_help") %>
+    <%= form.number_field :lng,
+required: true,
+step: "any",
+data: { "form-validation-target": "input",
+action: "input->form-validation#validate" },
+title: t("brgen.listing_lng_help") %>
     <%= tag.span class: "error-message" data: { "form-validation-target": "error", for: "listing_lng" } %>
   <% end %>
   <%= tag.fieldset do %>
     <%= form.label :photos, t("brgen.listing_photos") %>
-    <%= form.file_field :photos, multiple: true, accept: "image/*", data: { controller: "file-preview", "file-preview-target": "input" } %>
+    <%= form.file_field :photos,
+multiple: true,
+accept: "image/*",
+data: { controller: "file-preview",
+"file-preview-target": "input" } %>
     <%= tag.div data: { "file-preview-target": "preview" }, style: "display: none;" %>
   <% end %>
   <%= form.submit %>
@@ -1601,7 +1690,11 @@ cat <<EOF > app/views/listings/index.html.erb
   <%= tag.section aria-labelledby: "search-heading" do %>
     <%= tag.h2 t("brgen.search_title"), id: "search-heading" %>
     <%= tag.div data: { controller: "search", model: "Listing", field: "title" } do %>
-      <%= tag.input type: "text", placeholder: t("brgen.search_placeholder"), data: { "search-target": "input", action: "input->search#search" }, "aria-label": t("brgen.search_listings") %>
+      <%= tag.input type: "text",
+placeholder: t("brgen.search_placeholder"),
+data: { "search-target": "input",
+action: "input->search#search" },
+"aria-label": t("brgen.search_listings") %>
       <%= tag.div id: "search-results", data: { "search-target": "results" } %>
       <%= tag.div id: "reset-link" %>
     <% end %>
@@ -1653,7 +1746,12 @@ cat <<EOF > app/views/cities/_city.html.erb
       <%= link_to t("brgen.view_posts"), "http://#{city.subdomain}.brgen.#{city.tld}/posts", "aria-label": t("brgen.view_posts") %>
       <%= link_to t("brgen.view_listings"), "http://#{city.subdomain}.brgen.#{city.tld}/listings", "aria-label": t("brgen.view_listings") %>
       <%= link_to t("brgen.edit_city"), edit_city_path(city), "aria-label": t("brgen.edit_city") if current_user %>
-      <%= button_to t("brgen.delete_city"), city_path(city), method: :delete, data: { turbo_confirm: t("brgen.confirm_delete") }, form: { data: { turbo_frame: "_top" } }, "aria-label": t("brgen.delete_city") if current_user %>
+      <%= button_to t("brgen.delete_city"),
+city_path(city),
+method: :delete,
+data: { turbo_confirm: t("brgen.confirm_delete") },
+form: { data: { turbo_frame: "_top" } },
+"aria-label": t("brgen.delete_city") if current_user %>
     <% end %>
   <% end %>
 <% end %>
@@ -1698,7 +1796,11 @@ cat <<EOF > app/views/home/index.html.erb
   <%= tag.section aria-labelledby: "search-heading" do %>
     <%= tag.h2 t("brgen.search_title"), id: "search-heading" %>
     <%= tag.div data: { controller: "search", model: "Post", field: "title" } do %>
-      <%= tag.input type: "text", placeholder: t("brgen.search_placeholder"), data: { "search-target": "input", action: "input->search#search" }, "aria-label": t("brgen.search_posts") %>
+      <%= tag.input type: "text",
+placeholder: t("brgen.search_placeholder"),
+data: { "search-target": "input",
+action: "input->search#search" },
+"aria-label": t("brgen.search_posts") %>
       <%= tag.div id: "search-results", data: { "search-target": "results" } %>
       <%= tag.div id: "reset-link" %>
     <% end %>
@@ -1869,8 +1971,18 @@ cities = [
   { name: "Marseille", subdomain: "mrseille", country: "France", city: "Marseille", language: "fr", tld: "fr" },
   { name: "Milan", subdomain: "mlan", country: "Italy", city: "Milan", language: "it", tld: "it" },
   { name: "Lisbon", subdomain: "lsbon", country: "Portugal", city: "Lisbon", language: "pt", tld: "pt" },
-  { name: "Los Angeles", subdomain: "lsangeles", country: "USA", city: "Los Angeles", language: "en", tld: "org" },
-  { name: "New York", subdomain: "newyrk", country: "USA", city: "New York", language: "en", tld: "org" },
+  { name: "Los Angeles",
+subdomain: "lsangeles",
+country: "USA",
+city: "Los Angeles",
+language: "en",
+tld: "org" },
+  { name: "New York",
+subdomain: "newyrk",
+country: "USA",
+city: "New York",
+language: "en",
+tld: "org" },
   { name: "Chicago", subdomain: "chcago", country: "USA", city: "Chicago", language: "en", tld: "org" },
   { name: "Houston", subdomain: "houstn", country: "USA", city: "Houston", language: "en", tld: "org" },
   { name: "Dallas", subdomain: "dllas", country: "USA", city: "Dallas", language: "en", tld: "org" },
@@ -1895,9 +2007,20 @@ EOF
 mkdir -p app/views/brgen_logo
 
 cat <<EOF > app/views/brgen_logo/_logo.html.erb
-<%= tag.svg xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 100 50", role: "img", class: "logo", "aria-label": t("brgen.logo_alt") do %>
+<%= tag.svg xmlns: "http://www.w3.org/2000/svg",
+viewBox: "0 0 100 50",
+role: "img",
+class: "logo",
+"aria-label": t("brgen.logo_alt") do %>
   <%= tag.title t("brgen.logo_title", default: "Brgen Logo") %>
-  <%= tag.text x: "50", y: "30", "text-anchor": "middle", "font-family": "Helvetica, Arial, sans-serif", "font-size": "20", fill: "#1a73e8" do %>Brgen<% end %>
+  <%= tag.text x: "50",
+y: "30",
+"text-anchor": "middle",
+"font-family": "Helvetica,
+Arial,
+sans-serif",
+"font-size": "20",
+fill: "#1a73e8" do %>Brgen<% end %>
 <% end %>
 EOF
 
@@ -2141,9 +2264,20 @@ EOF
 mkdir -p app/views/brgen_dating_logo
 
 cat <<EOF > app/views/brgen_dating_logo/_logo.html.erb
-<%= tag.svg xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 100 50", role: "img", class: "logo", "aria-label": t("brgen_dating.logo_alt") do %>
+<%= tag.svg xmlns: "http://www.w3.org/2000/svg",
+viewBox: "0 0 100 50",
+role: "img",
+class: "logo",
+"aria-label": t("brgen_dating.logo_alt") do %>
   <%= tag.title t("brgen_dating.logo_title", default: "Brgen Dating Logo") %>
-  <%= tag.path d: "M50 15 C70 5, 90 25, 50 45 C10 25, 30 5, 50 15", fill: "#e91e63", stroke: "#1a73e8", "stroke-width": "2" %>
+  <%= tag.path d: "M50 15 C70 5,
+90 25,
+50 45 C10 25,
+30 5,
+50 15",
+fill: "#e91e63",
+stroke: "#1a73e8",
+"stroke-width": "2" %>
 <% end %>
 EOF
 
@@ -2323,38 +2457,70 @@ cat <<EOF > app/views/profiles/_form.html.erb
   <% end %>
   <%= tag.fieldset do %>
     <%= form.label :bio, t("brgen_dating.profile_bio"), "aria-required": true %>
-    <%= form.text_area :bio, required: true, data: { "character-counter-target": "input", "textarea-autogrow-target": "input", "form-validation-target": "input", action: "input->character-counter#count input->textarea-autogrow#resize input->form-validation#validate" }, title: t("brgen_dating.profile_bio_help") %>
+    <%= form.text_area :bio,
+required: true,
+data: { "character-counter-target": "input",
+"textarea-autogrow-target": "input",
+"form-validation-target": "input",
+action: "input->character-counter#count input->textarea-autogrow#resize input->form-validation#validate" },
+title: t("brgen_dating.profile_bio_help") %>
     <%= tag.span data: { "character-counter-target": "count" } %>
     <%= tag.span class: "error-message" data: { "form-validation-target": "error", for: "profile_bio" } %>
   <% end %>
   <%= tag.fieldset do %>
     <%= form.label :location, t("brgen_dating.profile_location"), "aria-required": true %>
-    <%= form.text_field :location, required: true, data: { "form-validation-target": "input", action: "input->form-validation#validate" }, title: t("brgen_dating.profile_location_help") %>
+    <%= form.text_field :location,
+required: true,
+data: { "form-validation-target": "input",
+action: "input->form-validation#validate" },
+title: t("brgen_dating.profile_location_help") %>
     <%= tag.span class: "error-message" data: { "form-validation-target": "error", for: "profile_location" } %>
   <% end %>
   <%= tag.fieldset do %>
     <%= form.label :lat, t("brgen_dating.profile_lat"), "aria-required": true %>
-    <%= form.number_field :lat, required: true, step: "any", data: { "form-validation-target": "input", action: "input->form-validation#validate" }, title: t("brgen_dating.profile_lat_help") %>
+    <%= form.number_field :lat,
+required: true,
+step: "any",
+data: { "form-validation-target": "input",
+action: "input->form-validation#validate" },
+title: t("brgen_dating.profile_lat_help") %>
     <%= tag.span class: "error-message" data: { "form-validation-target": "error", for: "profile_lat" } %>
   <% end %>
   <%= tag.fieldset do %>
     <%= form.label :lng, t("brgen_dating.profile_lng"), "aria-required": true %>
-    <%= form.number_field :lng, required: true, step: "any", data: { "form-validation-target": "input", action: "input->form-validation#validate" }, title: t("brgen_dating.profile_lng_help") %>
+    <%= form.number_field :lng,
+required: true,
+step: "any",
+data: { "form-validation-target": "input",
+action: "input->form-validation#validate" },
+title: t("brgen_dating.profile_lng_help") %>
     <%= tag.span class: "error-message" data: { "form-validation-target": "error", for: "profile_lng" } %>
   <% end %>
   <%= tag.fieldset do %>
     <%= form.label :gender, t("brgen_dating.profile_gender"), "aria-required": true %>
-    <%= form.text_field :gender, required: true, data: { "form-validation-target": "input", action: "input->form-validation#validate" }, title: t("brgen_dating.profile_gender_help") %>
+    <%= form.text_field :gender,
+required: true,
+data: { "form-validation-target": "input",
+action: "input->form-validation#validate" },
+title: t("brgen_dating.profile_gender_help") %>
     <%= tag.span class: "error-message" data: { "form-validation-target": "error", for: "profile_gender" } %>
   <% end %>
   <%= tag.fieldset do %>
     <%= form.label :age, t("brgen_dating.profile_age"), "aria-required": true %>
-    <%= form.number_field :age, required: true, data: { "form-validation-target": "input", action: "input->form-validation#validate" }, title: t("brgen_dating.profile_age_help") %>
+    <%= form.number_field :age,
+required: true,
+data: { "form-validation-target": "input",
+action: "input->form-validation#validate" },
+title: t("brgen_dating.profile_age_help") %>
     <%= tag.span class: "error-message" data: { "form-validation-target": "error", for: "profile_age" } %>
   <% end %>
   <%= tag.fieldset do %>
     <%= form.label :photos, t("brgen_dating.profile_photos") %>
-    <%= form.file_field :photos, multiple: true, accept: "image/*", data: { controller: "file-preview", "file-preview-target": "input" } %>
+    <%= form.file_field :photos,
+multiple: true,
+accept: "image/*",
+data: { controller: "file-preview",
+"file-preview-target": "input" } %>
     <% if profile.photos.attached? %>
       <% profile.photos.each do |photo| %>
         <%= image_tag photo, style: "max-width: 200px;", alt: t("brgen_dating.profile_photo", email: profile.user.email) %>
@@ -2362,7 +2528,8 @@ cat <<EOF > app/views/profiles/_form.html.erb
     <% end %>
     <%= tag.div data: { "file-preview-target": "preview" }, style: "display: none;" %>
   <% end %>
-  <%= form.submit t("brgen_dating.#{profile.persisted? ? 'update' : 'create'}_profile"), data: { turbo_submits_with: t("brgen_dating.#{profile.persisted? ? 'updating' : 'creating'}_profile") } %>
+  <%= form.submit t("brgen_dating.#{profile.persisted? ? 'update' : 'create'}_profile"),
+data: { turbo_submits_with: t("brgen_dating.#{profile.persisted? ? 'updating' : 'creating'}_profile") } %>
 <% end %>
 EOF
 
@@ -2523,10 +2690,17 @@ cat <<EOF > app/views/matches/_form.html.erb
   <% end %>
   <%= tag.fieldset do %>
     <%= form.label :status, t("brgen_dating.match_status"), "aria-required": true %>
-    <%= form.select :status, ["pending", "accepted", "rejected"], { prompt: t("brgen_dating.status_prompt"), selected: match.status }, required: true %>
+    <%= form.select :status,
+["pending",
+"accepted",
+"rejected"],
+{ prompt: t("brgen_dating.status_prompt"),
+selected: match.status },
+required: true %>
     <%= tag.span class: "error-message" data: { "form-validation-target": "error", for: "match_status" } %>
   <% end %>
-  <%= form.submit t("brgen_dating.#{match.persisted? ? 'update' : 'create'}_match"), data: { turbo_submits_with: t("brgen_dating.#{match.persisted? ? 'updating' : 'creating'}_match") } %>
+  <%= form.submit t("brgen_dating.#{match.persisted? ? 'update' : 'create'}_match"),
+data: { turbo_submits_with: t("brgen_dating.#{match.persisted? ? 'updating' : 'creating'}_match") } %>
 <% end %>
 EOF
 
@@ -2810,9 +2984,20 @@ EOF
 mkdir -p app/views/brgen_marketplace_logo
 
 cat <<EOF > app/views/brgen_marketplace_logo/_logo.html.erb
-<%= tag.svg xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 100 50", role: "img", class: "logo", "aria-label": t("brgen_marketplace.logo_alt") do %>
+<%= tag.svg xmlns: "http://www.w3.org/2000/svg",
+viewBox: "0 0 100 50",
+role: "img",
+class: "logo",
+"aria-label": t("brgen_marketplace.logo_alt") do %>
   <%= tag.title t("brgen_marketplace.logo_title", default: "Brgen Marketplace Logo") %>
-  <%= tag.text x: "50", y: "30", "text-anchor": "middle", "font-family": "Helvetica, Arial, sans-serif", "font-size": "16", fill: "#4caf50" do %>Marketplace<% end %>
+  <%= tag.text x: "50",
+y: "30",
+"text-anchor": "middle",
+"font-family": "Helvetica,
+Arial,
+sans-serif",
+"font-size": "16",
+fill: "#4caf50" do %>Marketplace<% end %>
 <% end %>
 EOF
 
@@ -2987,23 +3172,42 @@ cat <<EOF > app/views/products/_form.html.erb
   <% end %>
   <%= tag.fieldset do %>
     <%= form.label :name, t("brgen_marketplace.product_name"), "aria-required": true %>
-    <%= form.text_field :name, required: true, data: { "form-validation-target": "input", action: "input->form-validation#validate" }, title: t("brgen_marketplace.product_name_help") %>
+    <%= form.text_field :name,
+required: true,
+data: { "form-validation-target": "input",
+action: "input->form-validation#validate" },
+title: t("brgen_marketplace.product_name_help") %>
     <%= tag.span class: "error-message" data: { "form-validation-target": "error", for: "product_name" } %>
   <% end %>
   <%= tag.fieldset do %>
     <%= form.label :price, t("brgen_marketplace.product_price"), "aria-required": true %>
-    <%= form.number_field :price, required: true, step: 0.01, data: { "form-validation-target": "input", action: "input->form-validation#validate" }, title: t("brgen_marketplace.product_price_help") %>
+    <%= form.number_field :price,
+required: true,
+step: 0.01,
+data: { "form-validation-target": "input",
+action: "input->form-validation#validate" },
+title: t("brgen_marketplace.product_price_help") %>
     <%= tag.span class: "error-message" data: { "form-validation-target": "error", for: "product_price" } %>
   <% end %>
   <%= tag.fieldset do %>
     <%= form.label :description, t("brgen_marketplace.product_description"), "aria-required": true %>
-    <%= form.text_area :description, required: true, data: { "character-counter-target": "input", "textarea-autogrow-target": "input", "form-validation-target": "input", action: "input->character-counter#count input->textarea-autogrow#resize input->form-validation#validate" }, title: t("brgen_marketplace.product_description_help") %>
+    <%= form.text_area :description,
+required: true,
+data: { "character-counter-target": "input",
+"textarea-autogrow-target": "input",
+"form-validation-target": "input",
+action: "input->character-counter#count input->textarea-autogrow#resize input->form-validation#validate" },
+title: t("brgen_marketplace.product_description_help") %>
     <%= tag.span data: { "character-counter-target": "count" } %>
     <%= tag.span class: "error-message" data: { "form-validation-target": "error", for: "product_description" } %>
   <% end %>
   <%= tag.fieldset do %>
     <%= form.label :photos, t("brgen_marketplace.product_photos") %>
-    <%= form.file_field :photos, multiple: true, accept: "image/*", data: { controller: "file-preview", "file-preview-target": "input" } %>
+    <%= form.file_field :photos,
+multiple: true,
+accept: "image/*",
+data: { controller: "file-preview",
+"file-preview-target": "input" } %>
     <% if product.photos.attached? %>
       <% product.photos.each do |photo| %>
         <%= image_tag photo, style: "max-width: 200px;", alt: t("brgen_marketplace.product_photo", name: product.name) %>
@@ -3011,7 +3215,8 @@ cat <<EOF > app/views/products/_form.html.erb
     <% end %>
     <%= tag.div data: { "file-preview-target": "preview" }, style: "display: none;" %>
   <% end %>
-  <%= form.submit t("brgen_marketplace.#{product.persisted? ? 'update' : 'create'}_product"), data: { turbo_submits_with: t("brgen_marketplace.#{product.persisted? ? 'updating' : 'creating'}_product") } %>
+  <%= form.submit t("brgen_marketplace.#{product.persisted? ? 'update' : 'create'}_product"),
+data: { turbo_submits_with: t("brgen_marketplace.#{product.persisted? ? 'updating' : 'creating'}_product") } %>
 <% end %>
 EOF
 
@@ -3173,10 +3378,17 @@ cat <<EOF > app/views/orders/_form.html.erb
   <% end %>
   <%= tag.fieldset do %>
     <%= form.label :status, t("brgen_marketplace.order_status"), "aria-required": true %>
-    <%= form.select :status, ["pending", "shipped", "delivered"], { prompt: t("brgen_marketplace.status_prompt"), selected: order.status }, required: true %>
+    <%= form.select :status,
+["pending",
+"shipped",
+"delivered"],
+{ prompt: t("brgen_marketplace.status_prompt"),
+selected: order.status },
+required: true %>
     <%= tag.span class: "error-message" data: { "form-validation-target": "error", for: "order_status" } %>
   <% end %>
-  <%= form.submit t("brgen_marketplace.#{order.persisted? ? 'update' : 'create'}_order"), data: { turbo_submits_with: t("brgen_marketplace.#{order.persisted? ? 'updating' : 'creating'}_order") } %>
+  <%= form.submit t("brgen_marketplace.#{order.persisted? ? 'update' : 'create'}_order"),
+data: { turbo_submits_with: t("brgen_marketplace.#{order.persisted? ? 'updating' : 'creating'}_order") } %>
 <% end %>
 EOF
 
@@ -3464,9 +3676,20 @@ EOF
 mkdir -p app/views/brgen_playlist_logo
 
 cat <<EOF > app/views/brgen_playlist_logo/_logo.html.erb
-<%= tag.svg xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 100 50", role: "img", class: "logo", "aria-label": t("brgen_playlist.logo_alt") do %>
+<%= tag.svg xmlns: "http://www.w3.org/2000/svg",
+viewBox: "0 0 100 50",
+role: "img",
+class: "logo",
+"aria-label": t("brgen_playlist.logo_alt") do %>
   <%= tag.title t("brgen_playlist.logo_title", default: "Brgen Playlist Logo") %>
-  <%= tag.text x: "50", y: "30", "text-anchor": "middle", "font-family": "Helvetica, Arial, sans-serif", "font-size": "16", fill: "#ff9800" do %>Playlist<% end %>
+  <%= tag.text x: "50",
+y: "30",
+"text-anchor": "middle",
+"font-family": "Helvetica,
+Arial,
+sans-serif",
+"font-size": "16",
+fill: "#ff9800" do %>Playlist<% end %>
 <% end %>
 EOF
 
@@ -3631,22 +3854,39 @@ cat <<EOF > app/views/playlists/_form.html.erb
   <% end %>
   <%= tag.fieldset do %>
     <%= form.label :name, t("brgen_playlist.playlist_name"), "aria-required": true %>
-    <%= form.text_field :name, required: true, data: { "form-validation-target": "input", action: "input->form-validation#validate" }, title: t("brgen_playlist.playlist_name_help") %>
+    <%= form.text_field :name,
+required: true,
+data: { "form-validation-target": "input",
+action: "input->form-validation#validate" },
+title: t("brgen_playlist.playlist_name_help") %>
     <%= tag.span class: "error-message" data: { "form-validation-target": "error", for: "playlist_name" } %>
   <% end %>
   <%= tag.fieldset do %>
     <%= form.label :description, t("brgen_playlist.playlist_description"), "aria-required": true %>
-    <%= form.text_area :description, required: true, data: { "character-counter-target": "input", "textarea-autogrow-target": "input", "form-validation-target": "input", action: "input->character-counter#count input->textarea-autogrow#resize input->form-validation#validate" }, title: t("brgen_playlist.playlist_description_help") %>
+    <%= form.text_area :description,
+required: true,
+data: { "character-counter-target": "input",
+"textarea-autogrow-target": "input",
+"form-validation-target": "input",
+action: "input->character-counter#count input->textarea-autogrow#resize input->form-validation#validate" },
+title: t("brgen_playlist.playlist_description_help") %>
     <%= tag.span data: { "character-counter-target": "count" } %>
     <%= tag.span class: "error-message" data: { "form-validation-target": "error", for: "playlist_description" } %>
   <% end %>
   <%= tag.fieldset do %>
     <%= form.label :tracks, t("brgen_playlist.playlist_tracks"), "aria-required": true %>
-    <%= form.text_area :tracks, required: true, data: { "character-counter-target": "input", "textarea-autogrow-target": "input", "form-validation-target": "input", action: "input->character-counter#count input->textarea-autogrow#resize input->form-validation#validate" }, title: t("brgen_playlist.playlist_tracks_help") %>
+    <%= form.text_area :tracks,
+required: true,
+data: { "character-counter-target": "input",
+"textarea-autogrow-target": "input",
+"form-validation-target": "input",
+action: "input->character-counter#count input->textarea-autogrow#resize input->form-validation#validate" },
+title: t("brgen_playlist.playlist_tracks_help") %>
     <%= tag.span data: { "character-counter-target": "count" } %>
     <%= tag.span class: "error-message" data: { "form-validation-target": "error", for: "playlist_tracks" } %>
   <% end %>
-  <%= form.submit t("brgen_playlist.#{playlist.persisted? ? 'update' : 'create'}_playlist"), data: { turbo_submits_with: t("brgen_playlist.#{playlist.persisted? ? 'updating' : 'creating'}_playlist") } %>
+  <%= form.submit t("brgen_playlist.#{playlist.persisted? ? 'update' : 'create'}_playlist"),
+data: { turbo_submits_with: t("brgen_playlist.#{playlist.persisted? ? 'updating' : 'creating'}_playlist") } %>
 <% end %>
 EOF
 
@@ -3803,11 +4043,18 @@ cat <<EOF > app/views/comments/_form.html.erb
   <% end %>
   <%= tag.fieldset do %>
     <%= form.label :content, t("brgen_playlist.comment_content"), "aria-required": true %>
-    <%= form.text_area :content, required: true, data: { "character-counter-target": "input", "textarea-autogrow-target": "input", "form-validation-target": "input", action: "input->character-counter#count input->textarea-autogrow#resize input->form-validation#validate" }, title: t("brgen_playlist.comment_content_help") %>
+    <%= form.text_area :content,
+required: true,
+data: { "character-counter-target": "input",
+"textarea-autogrow-target": "input",
+"form-validation-target": "input",
+action: "input->character-counter#count input->textarea-autogrow#resize input->form-validation#validate" },
+title: t("brgen_playlist.comment_content_help") %>
     <%= tag.span data: { "character-counter-target": "count" } %>
     <%= tag.span class: "error-message" data: { "form-validation-target": "error", for: "comment_content" } %>
   <% end %>
-  <%= form.submit t("brgen_playlist.#{comment.persisted? ? 'update' : 'create'}_comment"), data: { turbo_submits_with: t("brgen_playlist.#{comment.persisted? ? 'updating' : 'creating'}_comment") } %>
+  <%= form.submit t("brgen_playlist.#{comment.persisted? ? 'update' : 'create'}_comment"),
+data: { turbo_submits_with: t("brgen_playlist.#{comment.persisted? ? 'updating' : 'creating'}_comment") } %>
 <% end %>
 EOF
 
@@ -4163,7 +4410,12 @@ class Order < ApplicationRecord
   validates :total_amount, presence: true, numericality: { greater_than: 0 }
   validates :delivery_address, presence: true
 
-  enum status: { pending: 0, confirmed: 1, preparing: 2, out_for_delivery: 3, delivered: 4, cancelled: 5 }
+  enum status: { pending: 0,
+confirmed: 1,
+preparing: 2,
+out_for_delivery: 3,
+delivered: 4,
+cancelled: 5 }
 
   scope :recent, -> { where("created_at > ?", 1.week.ago) }
   scope :for_restaurant, ->(restaurant) { where(restaurant: restaurant) }
@@ -5759,9 +6011,20 @@ EOF
 mkdir -p app/views/amber_logo
 
 cat <<EOF > app/views/amber_logo/_logo.html.erb
-<%= tag.svg xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 100 50", role: "img", class: "logo", "aria-label": t("amber.logo_alt") do %>
+<%= tag.svg xmlns: "http://www.w3.org/2000/svg",
+viewBox: "0 0 100 50",
+role: "img",
+class: "logo",
+"aria-label": t("amber.logo_alt") do %>
   <%= tag.title t("amber.logo_title", default: "Amber Logo") %>
-  <%= tag.text x: "50", y: "30", "text-anchor": "middle", "font-family": "Helvetica, Arial, sans-serif", "font-size": "16", fill: "#f44336" do %>Amber<% end %>
+  <%= tag.text x: "50",
+y: "30",
+"text-anchor": "middle",
+"font-family": "Helvetica,
+Arial,
+sans-serif",
+"font-size": "16",
+fill: "#f44336" do %>Amber<% end %>
 <% end %>
 EOF
 
@@ -5939,23 +6202,42 @@ cat <<EOF > app/views/wardrobe_items/_form.html.erb
   <% end %>
   <%= tag.fieldset do %>
     <%= form.label :name, t("amber.wardrobe_item_name"), "aria-required": true %>
-    <%= form.text_field :name, required: true, data: { "form-validation-target": "input", action: "input->form-validation#validate" }, title: t("amber.wardrobe_item_name_help") %>
+    <%= form.text_field :name,
+required: true,
+data: { "form-validation-target": "input",
+action: "input->form-validation#validate" },
+title: t("amber.wardrobe_item_name_help") %>
     <%= tag.span class: "error-message" data: { "form-validation-target": "error", for: "wardrobe_item_name" } %>
   <% end %>
   <%= tag.fieldset do %>
     <%= form.label :description, t("amber.wardrobe_item_description"), "aria-required": true %>
-    <%= form.text_area :description, required: true, data: { "character-counter-target": "input", "textarea-autogrow-target": "input", "form-validation-target": "input", action: "input->character-counter#count input->textarea-autogrow#resize input->form-validation#validate" }, title: t("amber.wardrobe_item_description_help") %>
+    <%= form.text_area :description,
+required: true,
+data: { "character-counter-target": "input",
+"textarea-autogrow-target": "input",
+"form-validation-target": "input",
+action: "input->character-counter#count input->textarea-autogrow#resize input->form-validation#validate" },
+title: t("amber.wardrobe_item_description_help") %>
     <%= tag.span data: { "character-counter-target": "count" } %>
     <%= tag.span class: "error-message" data: { "form-validation-target": "error", for: "wardrobe_item_description" } %>
   <% end %>
   <%= tag.fieldset do %>
     <%= form.label :category, t("amber.wardrobe_item_category"), "aria-required": true %>
-    <%= form.text_field :category, required: true, data: { "form-validation-target": "input", action: "input->form-validation#validate" }, title: t("amber.wardrobe_item_category_help") %>
+    <%= form.text_field :category,
+required: true,
+data: { "form-validation-target": "input",
+action: "input->form-validation#validate" },
+title: t("amber.wardrobe_item_category_help") %>
     <%= tag.span class: "error-message" data: { "form-validation-target": "error", for: "wardrobe_item_category" } %>
   <% end %>
   <%= tag.fieldset do %>
     <%= form.label :photos, t("amber.wardrobe_item_photos"), "aria-required": true %>
-    <%= form.file_field :photos, multiple: true, accept: "image/*", required: !wardrobe_item.persisted?, data: { controller: "file-preview", "file-preview-target": "input" } %>
+    <%= form.file_field :photos,
+multiple: true,
+accept: "image/*",
+required: !wardrobe_item.persisted?,
+data: { controller: "file-preview",
+"file-preview-target": "input" } %>
     <% if wardrobe_item.photos.attached? %>
       <% wardrobe_item.photos.each do |photo| %>
         <%= image_tag photo, style: "max-width: 200px;", alt: t("amber.wardrobe_item_photo", name: wardrobe_item.name) %>
@@ -5963,7 +6245,8 @@ cat <<EOF > app/views/wardrobe_items/_form.html.erb
     <% end %>
     <%= tag.div data: { "file-preview-target": "preview" }, style: "display: none;" %>
   <% end %>
-  <%= form.submit t("amber.#{wardrobe_item.persisted? ? 'update' : 'create'}_wardrobe_item"), data: { turbo_submits_with: t("amber.#{wardrobe_item.persisted? ? 'updating' : 'creating'}_wardrobe_item") } %>
+  <%= form.submit t("amber.#{wardrobe_item.persisted? ? 'update' : 'create'}_wardrobe_item"),
+data: { turbo_submits_with: t("amber.#{wardrobe_item.persisted? ? 'updating' : 'creating'}_wardrobe_item") } %>
 <% end %>
 EOF
 
@@ -6121,11 +6404,18 @@ cat <<EOF > app/views/comments/_form.html.erb
   <% end %>
   <%= tag.fieldset do %>
     <%= form.label :content, t("amber.comment_content"), "aria-required": true %>
-    <%= form.text_area :content, required: true, data: { "character-counter-target": "input", "textarea-autogrow-target": "input", "form-validation-target": "input", action: "input->character-counter#count input->textarea-autogrow#resize input->form-validation#validate" }, title: t("amber.comment_content_help") %>
+    <%= form.text_area :content,
+required: true,
+data: { "character-counter-target": "input",
+"textarea-autogrow-target": "input",
+"form-validation-target": "input",
+action: "input->character-counter#count input->textarea-autogrow#resize input->form-validation#validate" },
+title: t("amber.comment_content_help") %>
     <%= tag.span data: { "character-counter-target": "count" } %>
     <%= tag.span class: "error-message" data: { "form-validation-target": "error", for: "comment_content" } %>
   <% end %>
-  <%= form.submit t("amber.#{comment.persisted? ? 'update' : 'create'}_comment"), data: { turbo_submits_with: t("amber.#{comment.persisted? ? 'updating' : 'creating'}_comment") } %>
+  <%= form.submit t("amber.#{comment.persisted? ? 'update' : 'create'}_comment"),
+data: { turbo_submits_with: t("amber.#{comment.persisted? ? 'updating' : 'creating'}_comment") } %>
 <% end %>
 EOF
 
@@ -6413,9 +6703,20 @@ EOF
 mkdir -p app/views/bsdports_logo
 
 cat <<EOF > app/views/bsdports_logo/_logo.html.erb
-<%= tag.svg xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 100 50", role: "img", class: "logo", "aria-label": t("bsdports.logo_alt") do %>
+<%= tag.svg xmlns: "http://www.w3.org/2000/svg",
+viewBox: "0 0 100 50",
+role: "img",
+class: "logo",
+"aria-label": t("bsdports.logo_alt") do %>
   <%= tag.title t("bsdports.logo_title", default: "BSDPorts Logo") %>
-  <%= tag.text x: "50", y: "30", "text-anchor": "middle", "font-family": "Helvetica, Arial, sans-serif", "font-size": "16", fill: "#2196f3" do %>BSDPorts<% end %>
+  <%= tag.text x: "50",
+y: "30",
+"text-anchor": "middle",
+"font-family": "Helvetica,
+Arial,
+sans-serif",
+"font-size": "16",
+fill: "#2196f3" do %>BSDPorts<% end %>
 <% end %>
 EOF
 
@@ -6584,17 +6885,31 @@ cat <<EOF > app/views/packages/_form.html.erb
   <% end %>
   <%= tag.fieldset do %>
     <%= form.label :name, t("bsdports.package_name"), "aria-required": true %>
-    <%= form.text_field :name, required: true, data: { "form-validation-target": "input", action: "input->form-validation#validate" }, title: t("bsdports.package_name_help") %>
+    <%= form.text_field :name,
+required: true,
+data: { "form-validation-target": "input",
+action: "input->form-validation#validate" },
+title: t("bsdports.package_name_help") %>
     <%= tag.span class: "error-message" data: { "form-validation-target": "error", for: "package_name" } %>
   <% end %>
   <%= tag.fieldset do %>
     <%= form.label :version, t("bsdports.package_version"), "aria-required": true %>
-    <%= form.text_field :version, required: true, data: { "form-validation-target": "input", action: "input->form-validation#validate" }, title: t("bsdports.package_version_help") %>
+    <%= form.text_field :version,
+required: true,
+data: { "form-validation-target": "input",
+action: "input->form-validation#validate" },
+title: t("bsdports.package_version_help") %>
     <%= tag.span class: "error-message" data: { "form-validation-target": "error", for: "package_version" } %>
   <% end %>
   <%= tag.fieldset do %>
     <%= form.label :description, t("bsdports.package_description"), "aria-required": true %>
-    <%= form.text_area :description, required: true, data: { "character-counter-target": "input", "textarea-autogrow-target": "input", "form-validation-target": "input", action: "input->character-counter#count input->textarea-autogrow#resize input->form-validation#validate" }, title: t("bsdports.package_description_help") %>
+    <%= form.text_area :description,
+required: true,
+data: { "character-counter-target": "input",
+"textarea-autogrow-target": "input",
+"form-validation-target": "input",
+action: "input->character-counter#count input->textarea-autogrow#resize input->form-validation#validate" },
+title: t("bsdports.package_description_help") %>
     <%= tag.span data: { "character-counter-target": "count" } %>
     <%= tag.span class: "error-message" data: { "form-validation-target": "error", for: "package_description" } %>
   <% end %>
@@ -6606,7 +6921,8 @@ cat <<EOF > app/views/packages/_form.html.erb
     <% end %>
     <%= tag.div data: { "file-preview-target": "preview" }, style: "display: none;" %>
   <% end %>
-  <%= form.submit t("bsdports.#{package.persisted? ? 'update' : 'create'}_package"), data: { turbo_submits_with: t("bsdports.#{package.persisted? ? 'updating' : 'creating'}_package") } %>
+  <%= form.submit t("bsdports.#{package.persisted? ? 'update' : 'create'}_package"),
+data: { turbo_submits_with: t("bsdports.#{package.persisted? ? 'updating' : 'creating'}_package") } %>
 <% end %>
 EOF
 
@@ -6764,11 +7080,18 @@ cat <<EOF > app/views/comments/_form.html.erb
   <% end %>
   <%= tag.fieldset do %>
     <%= form.label :content, t("bsdports.comment_content"), "aria-required": true %>
-    <%= form.text_area :content, required: true, data: { "character-counter-target": "input", "textarea-autogrow-target": "input", "form-validation-target": "input", action: "input->character-counter#count input->textarea-autogrow#resize input->form-validation#validate" }, title: t("bsdports.comment_content_help") %>
+    <%= form.text_area :content,
+required: true,
+data: { "character-counter-target": "input",
+"textarea-autogrow-target": "input",
+"form-validation-target": "input",
+action: "input->character-counter#count input->textarea-autogrow#resize input->form-validation#validate" },
+title: t("bsdports.comment_content_help") %>
     <%= tag.span data: { "character-counter-target": "count" } %>
     <%= tag.span class: "error-message" data: { "form-validation-target": "error", for: "comment_content" } %>
   <% end %>
-  <%= form.submit t("bsdports.#{comment.persisted? ? 'update' : 'create'}_comment"), data: { turbo_submits_with: t("bsdports.#{comment.persisted? ? 'updating' : 'creating'}_comment") } %>
+  <%= form.submit t("bsdports.#{comment.persisted? ? 'update' : 'create'}_comment"),
+data: { turbo_submits_with: t("bsdports.#{comment.persisted? ? 'updating' : 'creating'}_comment") } %>
 <% end %>
 EOF
 
@@ -7055,9 +7378,16 @@ EOF
 mkdir -p app/views/privcam_logo
 
 cat <<EOF > app/views/privcam_logo/_logo.html.erb
-<%= tag.svg xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 100 50", role: "img", class: "logo", "aria-label": t("privcam.logo_alt") do %>
+<%= tag.svg xmlns: "http://www.w3.org/2000/svg",
+viewBox: "0 0 100 50",
+role: "img",
+class: "logo",
+"aria-label": t("privcam.logo_alt") do %>
   <%= tag.title t("privcam.logo_title", default: "Privcam Logo") %>
-  <%= tag.path d: "M20 40 L40 10 H60 L80 40", fill: "none", stroke: "#9c27b0", "stroke-width": "4" %>
+  <%= tag.path d: "M20 40 L40 10 H60 L80 40",
+fill: "none",
+stroke: "#9c27b0",
+"stroke-width": "4" %>
 <% end %>
 EOF
 
@@ -7224,24 +7554,39 @@ cat <<EOF > app/views/videos/_form.html.erb
   <% end %>
   <%= tag.fieldset do %>
     <%= form.label :title, t("privcam.video_title"), "aria-required": true %>
-    <%= form.text_field :title, required: true, data: { "form-validation-target": "input", action: "input->form-validation#validate" }, title: t("privcam.video_title_help") %>
+    <%= form.text_field :title,
+required: true,
+data: { "form-validation-target": "input",
+action: "input->form-validation#validate" },
+title: t("privcam.video_title_help") %>
     <%= tag.span class: "error-message" data: { "form-validation-target": "error", for: "video_title" } %>
   <% end %>
   <%= tag.fieldset do %>
     <%= form.label :description, t("privcam.video_description"), "aria-required": true %>
-    <%= form.text_area :description, required: true, data: { "character-counter-target": "input", "textarea-autogrow-target": "input", "form-validation-target": "input", action: "input->character-counter#count input->textarea-autogrow#resize input->form-validation#validate" }, title: t("privcam.video_description_help") %>
+    <%= form.text_area :description,
+required: true,
+data: { "character-counter-target": "input",
+"textarea-autogrow-target": "input",
+"form-validation-target": "input",
+action: "input->character-counter#count input->textarea-autogrow#resize input->form-validation#validate" },
+title: t("privcam.video_description_help") %>
     <%= tag.span data: { "character-counter-target": "count" } %>
     <%= tag.span class: "error-message" data: { "form-validation-target": "error", for: "video_description" } %>
   <% end %>
   <%= tag.fieldset do %>
     <%= form.label :file, t("privcam.video_file"), "aria-required": true %>
-    <%= form.file_field :file, required: !video.persisted?, accept: "video/*", data: { controller: "file-preview", "file-preview-target": "input" } %>
+    <%= form.file_field :file,
+required: !video.persisted?,
+accept: "video/*",
+data: { controller: "file-preview",
+"file-preview-target": "input" } %>
     <% if video.file.attached? %>
       <%= video_tag url_for(video.file), controls: true, style: "max-width: 100%;", alt: t("privcam.video_alt", title: video.title) %>
     <% end %>
     <%= tag.div data: { "file-preview-target": "preview" }, style: "display: none;" %>
   <% end %>
-  <%= form.submit t("privcam.#{video.persisted? ? 'update' : 'create'}_video"), data: { turbo_submits_with: t("privcam.#{video.persisted? ? 'updating' : 'creating'}_video") } %>
+  <%= form.submit t("privcam.#{video.persisted? ? 'update' : 'create'}_video"),
+data: { turbo_submits_with: t("privcam.#{video.persisted? ? 'updating' : 'creating'}_video") } %>
 <% end %>
 EOF
 
@@ -7398,11 +7743,18 @@ cat <<EOF > app/views/comments/_form.html.erb
   <% end %>
   <%= tag.fieldset do %>
     <%= form.label :content, t("privcam.comment_content"), "aria-required": true %>
-    <%= form.text_area :content, required: true, data: { "character-counter-target": "input", "textarea-autogrow-target": "input", "form-validation-target": "input", action: "input->character-counter#count input->textarea-autogrow#resize input->form-validation#validate" }, title: t("privcam.comment_content_help") %>
+    <%= form.text_area :content,
+required: true,
+data: { "character-counter-target": "input",
+"textarea-autogrow-target": "input",
+"form-validation-target": "input",
+action: "input->character-counter#count input->textarea-autogrow#resize input->form-validation#validate" },
+title: t("privcam.comment_content_help") %>
     <%= tag.span data: { "character-counter-target": "count" } %>
     <%= tag.span class: "error-message" data: { "form-validation-target": "error", for: "comment_content" } %>
   <% end %>
-  <%= form.submit t("privcam.#{comment.persisted? ? 'update' : 'create'}_comment"), data: { turbo_submits_with: t("privcam.#{comment.persisted? ? 'updating' : 'creating'}_comment") } %>
+  <%= form.submit t("privcam.#{comment.persisted? ? 'update' : 'create'}_comment"),
+data: { turbo_submits_with: t("privcam.#{comment.persisted? ? 'updating' : 'creating'}_comment") } %>
 <% end %>
 EOF
 
@@ -7976,9 +8328,20 @@ EOF
 mkdir -p app/views/hjerterom_logo
 
 cat <<EOF > app/views/hjerterom_logo/_logo.html.erb
-<%= tag.svg xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 100 50", role: "img", class: "logo", "aria-label": t("hjerterom.logo_alt") do %>
+<%= tag.svg xmlns: "http://www.w3.org/2000/svg",
+viewBox: "0 0 100 50",
+role: "img",
+class: "logo",
+"aria-label": t("hjerterom.logo_alt") do %>
   <%= tag.title t("hjerterom.logo_title", default: "Hjerterom Logo") %>
-  <%= tag.path d: "M50 15 C70 5, 90 25, 50 45 C10 25, 30 5, 50 15", fill: "#e91e63", stroke: "#1a73e8", "stroke-width": "2" %>
+  <%= tag.path d: "M50 15 C70 5,
+90 25,
+50 45 C10 25,
+30 5,
+50 15",
+fill: "#e91e63",
+stroke: "#1a73e8",
+"stroke-width": "2" %>
 <% end %>
 EOF
 
@@ -8034,7 +8397,14 @@ cat <<EOF > app/views/home/index.html.erb
       <% end %>
       <%= tag.fieldset do %>
         <%= form.label :body, t("hjerterom.post_body"), "aria-required": true %>
-        <%= form.text_area :body, placeholder: t("hjerterom.whats_on_your_heart"), required: true, data: { "character-counter-target": "input", "textarea-autogrow-target": "input", "form-validation-target": "input", action: "input->character-counter#count input->textarea-autogrow#resize input->form-validation#validate" }, title: t("hjerterom.post_body_help") %>
+        <%= form.text_area :body,
+placeholder: t("hjerterom.whats_on_your_heart"),
+required: true,
+data: { "character-counter-target": "input",
+"textarea-autogrow-target": "input",
+"form-validation-target": "input",
+action: "input->character-counter#count input->textarea-autogrow#resize input->form-validation#validate" },
+title: t("hjerterom.post_body_help") %>
         <%= tag.span data: { "character-counter-target": "count" } %>
         <%= tag.span class: "error-message" data: { "form-validation-target": "error", for: "post_body" } %>
       <% end %>
@@ -8047,12 +8417,19 @@ cat <<EOF > app/views/home/index.html.erb
   <% end %>
   <%= tag.section aria-labelledby: "map-heading" do %>
     <%= tag.h2 t("hjerterom.map_title"), id: "map-heading" %>
-    <%= tag.div id: "map" data: { controller: "mapbox", "mapbox-api-key-value": ENV["MAPBOX_API_KEY"], "mapbox-distributions-value": @distributions.to_json, "mapbox-giveaways-value": @giveaways.to_json } %>
+    <%= tag.div id: "map" data: { controller: "mapbox",
+"mapbox-api-key-value": ENV["MAPBOX_API_KEY"],
+"mapbox-distributions-value": @distributions.to_json,
+"mapbox-giveaways-value": @giveaways.to_json } %>
   <% end %>
   <%= tag.section aria-labelledby: "search-heading" do %>
     <%= tag.h2 t("hjerterom.search_title"), id: "search-heading" %>
     <%= tag.div data: { controller: "search", model: "Post", field: "title" } do %>
-      <%= tag.input type: "text", placeholder: t("hjerterom.search_placeholder"), data: { "search-target": "input", action: "input->search#search" }, "aria-label": t("hjerterom.search_posts") %>
+      <%= tag.input type: "text",
+placeholder: t("hjerterom.search_placeholder"),
+data: { "search-target": "input",
+action: "input->search#search" },
+"aria-label": t("hjerterom.search_posts") %>
       <%= tag.div id: "search-results", data: { "search-target": "results" } %>
       <%= tag.div id: "reset-link" %>
     <% end %>
@@ -8090,7 +8467,11 @@ cat <<EOF > app/views/home/index.html.erb
     <%= form_with url: "#", method: :post, local: true, data: { controller: "chat", "chat-receiver-id": "global", "chat-anonymous": "true" } do |form| %>
       <%= tag.fieldset do %>
         <%= form.label :content, t("hjerterom.chat_placeholder"), class: "sr-only" %>
-        <%= form.text_field :content, placeholder: t("hjerterom.chat_placeholder"), data: { "chat-target": "input", action: "submit->chat#send" }, "aria-label": t("hjerterom.chat_placeholder") %>
+        <%= form.text_field :content,
+placeholder: t("hjerterom.chat_placeholder"),
+data: { "chat-target": "input",
+action: "submit->chat#send" },
+"aria-label": t("hjerterom.chat_placeholder") %>
       <% end %>
     <% end %>
   <% end %>
@@ -8282,7 +8663,11 @@ cat <<EOF > app/views/giveaways/index.html.erb
   <%= tag.section aria-labelledby: "search-heading" do %>
     <%= tag.h2 t("hjerterom.search_title"), id: "search-heading" %>
     <%= tag.div data: { controller: "search", model: "Giveaway", field: "title" } do %>
-      <%= tag.input type: "text", placeholder: t("hjerterom.search_placeholder"), data: { "search-target": "input", action: "input->search#search" }, "aria-label": t("hjerterom.search_giveaways") %>
+      <%= tag.input type: "text",
+placeholder: t("hjerterom.search_placeholder"),
+data: { "search-target": "input",
+action: "input->search#search" },
+"aria-label": t("hjerterom.search_giveaways") %>
       <%= tag.div id: "search-results", data: { "search-target": "results" } %>
       <%= tag.div id: "reset-link" %>
     <% end %>
@@ -8317,7 +8702,12 @@ cat <<EOF > app/views/giveaways/_giveaway.html.erb
     <%= tag.p class: "post-actions" do %>
       <%= link_to t("hjerterom.view_giveaway"), giveaway_path(giveaway), "aria-label": t("hjerterom.view_giveaway") %>
       <%= link_to t("hjerterom.edit_giveaway"), edit_giveaway_path(giveaway), "aria-label": t("hjerterom.edit_giveaway") if giveaway.user == current_user || current_user&.admin? %>
-      <%= button_to t("hjerterom.delete_giveaway"), giveaway_path(giveaway), method: :delete, data: { turbo_confirm: t("hjerterom.confirm_delete") }, form: { data: { turbo_frame: "_top" } }, "aria-label```
+      <%= button_to t("hjerterom.delete_giveaway"),
+giveaway_path(giveaway),
+method: :delete,
+data: { turbo_confirm: t("hjerterom.confirm_delete") },
+form: { data: { turbo_frame: "_top" } },
+"aria-label```
 
 ## Blognet - Blogging Network (`blognet.sh`)
 
@@ -8394,7 +8784,11 @@ main "$@"
 
 ## Deployment
 
-Apps are deployed using the existing `openbsd.sh`, which configures OpenBSD 7.7+ with DNSSEC, `relayd`, `httpd`, and `acme-client`. Each app is installed in `/home/<app>/app` and runs as a dedicated user with Falcon on a unique port (10000-60000).
+Apps are deployed using the existing `openbsd.sh`,
+which configures OpenBSD 7.7+ with DNSSEC,
+`relayd`,
+`httpd`,
+and `acme-client`. Each app is installed in `/home/<app>/app` and runs as a dedicated user with Falcon on a unique port (10000-60000).
 
 ### Steps
 1. Run `doas zsh openbsd.sh` to configure DNS and certificates (Stage 1).
@@ -8411,7 +8805,11 @@ Apps are deployed using the existing `openbsd.sh`, which configures OpenBSD 7.7+
 
 ## Summary
 
-All Rails applications are now complete with full shell script implementations ready for deployment on OpenBSD 7.7+. Each script contains comprehensive Ruby code, views, models, controllers, and styling embedded via cat+heredoc patterns.
+All Rails applications are now complete with full shell script implementations ready for deployment on OpenBSD 7.7+. Each script contains comprehensive Ruby code,
+views,
+models,
+controllers,
+and styling embedded via cat+heredoc patterns.
 
 # Total Lines Across All Scripts: 9387
 # Generated: 2025-07-07T09:04:54Z

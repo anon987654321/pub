@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # assistants/casual_assistant.rb
 #
 # CasualAssistant: Provides general conversation by delegating queries

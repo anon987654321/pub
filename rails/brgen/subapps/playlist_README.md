@@ -1,6 +1,14 @@
 # Brgen Playlist Service
 
-**Brgen Playlist** is a hyper-localized audio-sharing platform inspired by the concept of **Whyp.it**. It enables users to discover, share, and collaborate on audio recordings, podcasts, and music with people in their community. Unlike traditional music platforms, Brgen Playlist focuses on simplicity and community-driven content, encouraging users to record and share their thoughts, music, and stories directly.
+**Brgen Playlist** is a hyper-localized audio-sharing platform inspired by the concept of **Whyp.it**. It enables users to discover,
+share,
+and collaborate on audio recordings,
+podcasts,
+and music with people in their community. Unlike traditional music platforms,
+Brgen Playlist focuses on simplicity and community-driven content,
+encouraging users to record and share their thoughts,
+music,
+and stories directly.
 
 ### Key Features
 
@@ -30,9 +38,15 @@
 
 ### Summary
 
-Brgen Playlist is inspired by **Whyp.it** and aims to provide a hyper-localized audio-sharing experience that is simple and accessible. By focusing on community-driven content, high-quality audio streaming, and supporting grassroots creators, Brgen Playlist encourages authentic storytelling and the sharing of ideas within communities.
+Brgen Playlist is inspired by **Whyp.it** and aims to provide a hyper-localized audio-sharing experience that is simple and accessible. By focusing on community-driven content,
+high-quality audio streaming,
+and supporting grassroots creators,
+Brgen Playlist encourages authentic storytelling and the sharing of ideas within communities.
 
 ---
 
-This README has been updated to incorporate additional inspiration from **Whyp.it**, emphasizing features such as high-quality streaming, embeddable players, analytics, and flexible privacy settings. Let me know if there are further refinements you'd like to explore.
-
+This README has been updated to incorporate additional inspiration from **Whyp.it**,
+emphasizing features such as high-quality streaming,
+embeddable players,
+analytics,
+and flexible privacy settings. Let me know if there are further refinements you'd like to explore.

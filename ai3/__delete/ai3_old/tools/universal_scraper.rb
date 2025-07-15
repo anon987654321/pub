@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # lib/tools/universal_scraper.rb
 #
 # UniversalScraper: Fetches and refines web content using Ferrum and Nokogiri.

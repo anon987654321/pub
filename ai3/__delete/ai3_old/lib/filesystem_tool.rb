@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # filesystem_tool.rb - Enhanced Filesystem Tool
 
 class FilesystemTool

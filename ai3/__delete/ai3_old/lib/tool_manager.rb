@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # ToolManager: Manages  loading and usage of various tools for AI3
 class ToolManager
   require 'logger'

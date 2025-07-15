@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 
 # Material Repurposing Assistant
 # This assistant focuses on transforming waste materials into valuable resources through innovative, AI-driven methodologies.

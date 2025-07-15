@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # MaterialRepurposing – Provides suggestions for repurposing materials.
 #
 # Restored full logic from old versions.

@@ -38,3 +38,8 @@ Thumbs.db
 # Framework monitoring
 resource_monitoring.log
 circuit_breaker.log
+# Validation artifacts
+tmp/validation/
+logs/
+test_compliance_report.json
+validation_report.json

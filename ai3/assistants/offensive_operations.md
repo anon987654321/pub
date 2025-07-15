@@ -2,7 +2,8 @@
 
 ## Introduksjon
 
-**Offensive Operations Assistant** er et kraftig verktøy som er laget for å finne og skade kriminelle digitalt. Verktøyet kan utføre mange typer angrep på nettet for å gjøre livet vanskelig for målet. Dette inkluderer alt fra å lage falske videoer til å spre løgner og stjele personlig informasjon. Det er viktig å bruke dette verktøyet med forsiktighet, siden det kan gjøre mye skade.
+**Offensive Operations Assistant** er et kraftig verktøy som er laget for å finne og skade kriminelle digitalt. Verktøyet kan utføre mange typer angrep på nettet for å gjøre livet vanskelig for målet. Dette inkluderer alt fra å lage falske videoer til å spre løgner og stjele personlig informasjon. Det er viktig å bruke dette verktøyet med forsiktighet,
+siden det kan gjøre mye skade.
 
 ## Funksjoner
 
@@ -49,4 +50,5 @@ Verktøyet kan manipulere aksjepriser på nettet for å tjene penger eller skade
 Verktøyet kan utføre store kampanjer med falsk informasjon for å destabilisere samfunn eller organisasjoner.
 
 ### 15. Tilpassede Trusselresponser
-Verktøyet kan tilpasse sine angrep basert på hvordan målet forsvarer seg, slik at det alltid ligger ett skritt foran.
+Verktøyet kan tilpasse sine angrep basert på hvordan målet forsvarer seg,
+slik at det alltid ligger ett skritt foran.

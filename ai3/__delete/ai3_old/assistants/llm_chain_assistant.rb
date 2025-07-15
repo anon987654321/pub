@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # assistants/llm_chain_assistant.rb
 #
 # LLMChainAssistant: Processes a query through a chain of LLM providers.

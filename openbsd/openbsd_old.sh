@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #!/usr/bin/env zsh
 
 echo "OPENBSD SERVER SETUP FOR MULTIPLE RAILS APPS"

@@ -4,7 +4,11 @@ Welcome to the ultimate chatbot squad! 🚀 Here’s how each member of our squa
 
 ## Overview
 
-This repo contains code for automating tasks on Snapchat, Tinder, and Discord. Our chatbots are here to add friends, send messages, and even handle NSFW content with flair and humor.
+This repo contains code for automating tasks on Snapchat,
+Tinder,
+and Discord. Our chatbots are here to add friends,
+send messages,
+and even handle NSFW content with flair and humor.
 
 ## 🛠️ **Getting Set Up**
 
@@ -20,7 +24,12 @@ end
 
 ## 👀 **Stalking Profiles (Not Really!)**
 
-The code visits user profiles, gathers all the juicy details like likes, dislikes, age, and country, and prepares them for further action. 🍵
+The code visits user profiles,
+gathers all the juicy details like likes,
+dislikes,
+age,
+and country,
+and prepares them for further action. 🍵
 
 ```ruby
 def fetch_user_info(user_id, profile_url)
@@ -35,7 +44,9 @@ end
 
 ## 🌟 **Adding New Friends Like a Boss**
 
-It adds friends from a list of recommendations, waits a bit between actions to keep things cool, and then starts interacting. 😎
+It adds friends from a list of recommendations,
+waits a bit between actions to keep things cool,
+and then starts interacting. 😎
 
 ```ruby
 def add_new_friends
@@ -49,7 +60,9 @@ end
 
 ## 💬 **Sliding into DMs**
 
-The code sends messages to new friends, figuring out where to type and click, like a pro. 💬
+The code sends messages to new friends,
+figuring out where to type and click,
+like a pro. 💬
 
 ```ruby
 def send_message(user_id, message, message_type)
@@ -71,7 +84,8 @@ end
 
 ## 🚨 **Handling NSFW Stuff**
 
-If a user is into NSFW content, the code reports it and sends a positive message to keep things friendly. 🌟
+If a user is into NSFW content,
+the code reports it and sends a positive message to keep things friendly. 🌟
 
 ```ruby
 def handle_nsfw_content(user_id, content)
@@ -116,6 +130,8 @@ For all the Discord fans out there, this script’s got your back! 🎧👾
 5. **Customize Responses:** Adjust messages to fit the vibe.
 6. **NSFW Handling:** Report and send positive vibes for NSFW content.
 
-Boom! That’s how your Snapchat, Tinder, and Discord automation code works in Gen-Z style. Keep slaying! 🚀✨
+Boom! That’s how your Snapchat,
+Tinder,
+and Discord automation code works in Gen-Z style. Keep slaying! 🚀✨
 
 Got questions? Hit us up! 🤙

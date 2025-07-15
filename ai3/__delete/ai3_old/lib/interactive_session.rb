@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class InteractiveSession
   def initialize
     @active = true
