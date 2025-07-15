@@ -1,0 +1,110 @@
+{
+  "cognitive_framework": {
+    "version": "10.7.0",
+    "compliance_level": "master",
+    "formatting_standards": {
+      "indentation": "2_spaces",
+      "quotes": "double_quotes",
+      "line_length": 120,
+      "cognitive_headers": true
+    },
+    "cognitive_constraints": {
+      "max_concepts_per_section": 7,
+      "max_nesting_depth": 3,
+      "context_switching_threshold": 3,
+      "flow_state_protection": true
+    },
+    "implementation_patterns": {
+      "circuit_breaker_required": true,
+      "cognitive_load_monitoring": true,
+      "attention_restoration": true,
+      "working_memory_management": true
+    }
+  },
+  "system_integration": {
+    "rails_ecosystem": {
+      "request_complexity_analysis": "enabled",
+      "user_session_cognitive_tracking": "enabled",
+      "progressive_disclosure": "enabled",
+      "flow_state_preservation": "enabled",
+      "wcag_compliance": "AAA",
+      "performance_target": "95_plus_core_web_vitals"
+    },
+    "zsh_installers": {
+      "cognitive_load_chunking": "enabled",
+      "error_handling_comprehensive": "enabled",
+      "status_reporting_structured": "enabled",
+      "validation_zero_trust": "enabled"
+    }
+  },
+  "rails_applications": {
+    "amber": {
+      "domain": "ai_fashion_network",
+      "cognitive_complexity": "moderate",
+      "features": ["wardrobe_management", "ai_recommendations", "social_features"],
+      "security_level": "zero_trust",
+      "accessibility": "wcag_2_2_aaa"
+    },
+    "blognet": {
+      "domain": "blog_network_management",
+      "cognitive_complexity": "simple",
+      "features": ["multi_domain_blogs", "content_management", "community_features"],
+      "security_level": "zero_trust",
+      "accessibility": "wcag_2_2_aaa"
+    },
+    "hjerterom": {
+      "domain": "food_redistribution",
+      "cognitive_complexity": "moderate",
+      "features": ["location_services", "redistribution_tracking", "community_engagement"],
+      "security_level": "zero_trust",
+      "accessibility": "wcag_2_2_aaa"
+    },
+    "privcam": {
+      "domain": "privacy_focused_streaming",
+      "cognitive_complexity": "complex",
+      "features": ["secure_streaming", "privacy_controls", "anonymous_chat"],
+      "security_level": "zero_trust_enhanced",
+      "accessibility": "wcag_2_2_aaa"
+    },
+    "bsdports": {
+      "domain": "openbsd_package_management",
+      "cognitive_complexity": "moderate",
+      "features": ["package_tracking", "dependency_management", "build_automation"],
+      "security_level": "zero_trust",
+      "accessibility": "wcag_2_2_aaa"
+    },
+    "brgen": {
+      "domain": "multi_service_platform",
+      "cognitive_complexity": "complex",
+      "subapps": ["dating", "marketplace", "playlist", "takeaway", "tv"],
+      "security_level": "zero_trust",
+      "accessibility": "wcag_2_2_aaa"
+    }
+  },
+  "quality_standards": {
+    "test_coverage": {
+      "minimum_percentage": 90,
+      "critical_paths": 100,
+      "cognitive_load_tests": "required"
+    },
+    "performance_metrics": {
+      "core_web_vitals": "95_plus_percentile",
+      "response_time": "under_200ms",
+      "cognitive_load_score": "under_7"
+    },
+    "security_requirements": {
+      "authentication": "multi_factor",
+      "authorization": "rbac_with_zero_trust",
+      "input_validation": "comprehensive",
+      "output_sanitization": "mandatory"
+    }
+  },
+  "deployment_configuration": {
+    "platform": "openbsd_7_7_plus",
+    "web_server": "httpd_with_relayd",
+    "database": "postgresql_with_replication",
+    "cache": "redis_with_solid_cache",
+    "queue": "solid_queue",
+    "monitoring": "cognitive_load_aware"
+  }
+}

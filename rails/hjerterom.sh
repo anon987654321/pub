@@ -1,22 +1,473 @@
 #!/usr/bin/env zsh
+# Hjerterom: Food redistribution platform with cognitive framework implementation
+# Master.json v10.7.0 compliance with zero-trust security and location services
+
 set -e
+setopt extended_glob null_glob
 
-# Hjerterom setup: Food redistribution platform with Mapbox, Vipps, analytics, live search, infinite scroll, and anonymous features on OpenBSD 7.5, unprivileged user
-
+# === COGNITIVE FRAMEWORK CONFIGURATION ===
 APP_NAME="hjerterom"
 BASE_DIR="/home/dev/rails"
 BRGEN_IP="46.23.95.45"
 
-source "./__shared.sh"
+# Source enhanced shared functionality
+source "./__shared_enhanced.sh"
 
-log "Starting Hjerterom setup"
+# === HJERTEROM-SPECIFIC CONFIGURATION ===
+generate_application_code() {
+  phase_transition "hjerterom_code_generation" "Creating food redistribution platform features"
+  
+  # Generate models with cognitive constraints (7 concepts max)
+  bin/rails generate model Distribution location:string schedule:datetime capacity:integer lat:decimal lng:decimal
+  bin/rails generate model Giveaway title:string description:text quantity:integer pickup_time:datetime location:string lat:decimal lng:decimal user:references status:string anonymous:boolean
+  bin/rails generate model FoodDonation donor:references quantity:integer food_type:string expiry_date:date
+  bin/rails generate model VolunteerSignup user:references distribution:references role:string
+  bin/rails generate model FoodRequest requester:references quantity:integer food_type:string urgency:integer
+  bin/rails generate model CommunityFeedback user:references content:text rating:integer
+  bin/rails generate model SurplusAlert location:string food_type:string quantity:integer alert_time:datetime
+  
+  # Add Vipps and analytics support
+  bin/rails generate migration AddVippsToUsers vipps_id:string citizenship_status:string claim_count:integer
+  bin/rails generate migration AddAnalyticsToUsers last_activity:datetime location_data:text
+  
+  # Database migrations
+  bin/rails db:migrate
+  
+  # Install additional gems for Hjerterom
+  cat <<EOF >> Gemfile
 
-setup_full_app "$APP_NAME"
+# Hjerterom-specific gems
+gem "omniauth-vipps", "~> 1.0"
+gem "ahoy_matey", "~> 5.0"
+gem "blazer", "~> 3.0"
+gem "chartkick", "~> 5.0"
+gem "groupdate", "~> 6.0"
+gem "geocoder", "~> 1.8"
+gem "image_processing", "~> 1.2"
+EOF
+  
+  bundle install
+  
+  # Create cognitive-aware controllers
+  cat <<EOF > app/controllers/giveaways_controller.rb
+class GiveawaysController < ApplicationController
+  before_action :authenticate_user!, except: [:index, :show]
+  before_action :set_giveaway, only: [:show, :edit, :update, :destroy]
+  before_action :check_claim_limit, only: [:create]
+  
+  def index
+    @cognitive_load = CognitiveLoadMonitor.new
+    @complexity_assessment = @cognitive_load.assess_complexity(
+      "Food giveaway listings with location filtering and urgency management"
+    )
+    
+    # Cognitive load management: limit to 7 items
+    @pagy, @giveaways = pagy(filtered_giveaways.order(created_at: :desc), items: 7)
+    @urgent_giveaways = Giveaway.where(status: "active")
+                                .where("pickup_time < ?", 24.hours.from_now)
+                                .limit(3)
+    
+    # Track analytics
+    ahoy.track "view_giveaways", { count: @giveaways.count }
+  end
+  
+  def show
+    @cognitive_load = CognitiveLoadMonitor.new
+    @complexity_assessment = @cognitive_load.assess_complexity(
+      "Individual giveaway with location map and claim functionality"
+    )
+    
+    # Track analytics
+    ahoy.track "view_giveaway", { 
+      id: @giveaway.id, 
+      title: @giveaway.title,
+      location: @giveaway.location
+    }
+  end
+  
+  def new
+    @giveaway = Giveaway.new
+    @cognitive_load = CognitiveLoadMonitor.new
+    @complexity_assessment = @cognitive_load.assess_complexity(
+      "Giveaway creation with location picker and time scheduling"
+    )
+  end
+  
+  def create
+    @giveaway = Giveaway.new(giveaway_params)
+    @giveaway.user = current_user
+    @giveaway.status = "active"
+    
+    if @giveaway.save
+      # Increment user claim count
+      current_user.increment!(:claim_count)
+      
+      # Notify nearby users
+      NotifyNearbyUsersJob.perform_later(@giveaway)
+      
+      # Track analytics
+      ahoy.track "create_giveaway", {
+        id: @giveaway.id,
+        title: @giveaway.title,
+        location: @giveaway.location,
+        quantity: @giveaway.quantity
+      }
+      
+      respond_to do |format|
+        format.html { redirect_to giveaways_path, notice: "Food giveaway created successfully!" }
+        format.turbo_stream
+      end
+    else
+      render :new, status: :unprocessable_entity
+    end
+  end
+  
+  def edit
+    @cognitive_load = CognitiveLoadMonitor.new
+    @complexity_assessment = @cognitive_load.assess_complexity(
+      "Giveaway editing with location and time updates"
+    )
+  end
+  
+  def update
+    if @giveaway.update(giveaway_params)
+      respond_to do |format|
+        format.html { redirect_to giveaways_path, notice: "Food giveaway updated successfully!" }
+        format.turbo_stream
+      end
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+  
+  def destroy
+    @giveaway.destroy
+    
+    # Track analytics
+    ahoy.track "delete_giveaway", { id: @giveaway.id }
+    
+    respond_to do |format|
+      format.html { redirect_to giveaways_path, notice: "Food giveaway deleted successfully!" }
+      format.turbo_stream
+    end
+  end
+  
+  private
+  
+  def set_giveaway
+    @giveaway = Giveaway.find(params[:id])
+    unless @giveaway.user == current_user || current_user&.admin?
+      redirect_to giveaways_path, alert: "Access denied"
+    end
+  end
+  
+  def giveaway_params
+    params.require(:giveaway).permit(:title, :description, :quantity, :pickup_time, :location, :lat, :lng, :anonymous)
+  end
+  
+  def filtered_giveaways
+    giveaways = Giveaway.where(status: "active")
+    giveaways = giveaways.where("location ILIKE ?", "%#{params[:location]}%") if params[:location].present?
+    giveaways = giveaways.where("pickup_time >= ?", Time.current) if params[:upcoming] == "true"
+    giveaways
+  end
+  
+  def check_claim_limit
+    if current_user && current_user.claim_count >= 3
+      redirect_to giveaways_path, alert: "You have reached your maximum number of active giveaways"
+    end
+  end
+end
+EOF
+  
+  # Create food redistribution model
+  cat <<EOF > app/models/giveaway.rb
+class Giveaway < ApplicationRecord
+  belongs_to :user
+  has_many :food_donations, dependent: :destroy
+  has_many :volunteer_signups, dependent: :destroy
+  
+  validates :title, presence: true, length: { minimum: 5, maximum: 200 }
+  validates :description, presence: true, length: { minimum: 10, maximum: 1000 }
+  validates :quantity, presence: true, numericality: { greater_than: 0 }
+  validates :pickup_time, presence: true
+  validates :location, presence: true
+  validates :status, presence: true, inclusion: { in: %w[active completed cancelled] }
+  
+  scope :active, -> { where(status: "active") }
+  scope :urgent, -> { where("pickup_time < ?", 6.hours.from_now) }
+  scope :by_location, ->(location) { where("location ILIKE ?", "%#{location}%") }
+  scope :recent, -> { order(created_at: :desc) }
+  
+  def urgent?
+    pickup_time < 6.hours.from_now
+  end
+  
+  def time_remaining
+    return 0 if pickup_time < Time.current
+    ((pickup_time - Time.current) / 1.hour).round(1)
+  end
+  
+  def display_author
+    anonymous? ? "Anonymous" : user.email
+  end
+  
+  def nearby_users(radius = 5)
+    # Simple proximity calculation (in real implementation, use proper geocoding)
+    User.where.not(id: user.id).limit(10)
+  end
+end
+EOF
+  
+  # Create notification job
+  mkdir -p app/jobs
+  cat <<EOF > app/jobs/notify_nearby_users_job.rb
+class NotifyNearbyUsersJob < ApplicationJob
+  queue_as :default
+  
+  def perform(giveaway)
+    # Find users within reasonable distance
+    nearby_users = find_nearby_users(giveaway)
+    
+    nearby_users.each do |user|
+      # Send notification (in real implementation, use ActionMailer or push notifications)
+      NotificationService.send_food_alert(user, giveaway)
+    end
+    
+    # Create surplus alert
+    SurplusAlert.create!(
+      location: giveaway.location,
+      food_type: extract_food_type(giveaway.description),
+      quantity: giveaway.quantity,
+      alert_time: Time.current
+    )
+  end
+  
+  private
+  
+  def find_nearby_users(giveaway)
+    # Simplified user finding (in real implementation, use proper geospatial queries)
+    User.where.not(id: giveaway.user.id)
+        .where("last_activity > ?", 7.days.ago)
+        .limit(20)
+  end
+  
+  def extract_food_type(description)
+    food_types = %w[produce dairy meat bakery prepared frozen canned]
+    food_types.find { |type| description.downcase.include?(type) } || "general"
+  end
+end
+EOF
+  
+  # Create analytics dashboard controller
+  cat <<EOF > app/controllers/admin/dashboard_controller.rb
+class Admin::DashboardController < ApplicationController
+  before_action :ensure_admin
+  
+  def index
+    @cognitive_load = CognitiveLoadMonitor.new
+    @complexity_assessment = @cognitive_load.assess_complexity(
+      "Admin dashboard with food redistribution analytics and community metrics"
+    )
+    
+    # Cognitive load management: limit to 7 key metrics
+    @total_giveaways = Giveaway.count
+    @active_giveaways = Giveaway.active.count
+    @food_distributed = Giveaway.sum(:quantity)
+    @active_users = User.where("last_activity > ?", 7.days.ago).count
+    @volunteer_signups = VolunteerSignup.count
+    @community_feedback_avg = CommunityFeedback.average(:rating) || 0
+    @surplus_alerts = SurplusAlert.where("alert_time > ?", 24.hours.ago).count
+    
+    # Analytics data for charts
+    @giveaway_trends = Giveaway.group_by_day(:created_at, last: 7.days).count
+    @food_type_distribution = SurplusAlert.group(:food_type).count
+    @location_activity = Giveaway.group(:location).count.take(10)
+    
+    # Track analytics
+    ahoy.track "view_admin_dashboard"
+  end
+  
+  private
+  
+  def ensure_admin
+    redirect_to root_path, alert: "Access denied" unless current_user&.admin?
+  end
+end
+EOF
+  
+  # Create enhanced home controller
+  cat <<EOF > app/controllers/home_controller.rb
+class HomeController < ApplicationController
+  def index
+    @cognitive_load = CognitiveLoadMonitor.new
+    @complexity_assessment = @cognitive_load.assess_complexity(
+      "Hjerterom home page with map integration and urgent food alerts"
+    )
+    
+    # Cognitive load management: limit to 7 key elements
+    @urgent_giveaways = Giveaway.urgent.limit(5)
+    @recent_distributions = Distribution.order(schedule: :desc).limit(3)
+    @community_stats = {
+      total_giveaways: Giveaway.count,
+      food_distributed: Giveaway.sum(:quantity),
+      active_volunteers: VolunteerSignup.count
+    }
+    
+    # Location-based data for map
+    @map_data = {
+      distributions: Distribution.limit(10),
+      giveaways: Giveaway.active.limit(10)
+    }
+    
+    # Flow state tracking
+    @flow_tracker = FlowStateTracker.new
+    @flow_tracker.update({
+      "concentration" => 0.9,
+      "challenge_skill_balance" => 0.8,
+      "clear_goals" => 0.95,
+      "immediate_feedback" => 0.7
+    })
+    
+    # Track analytics
+    ahoy.track "view_home", {
+      urgent_giveaways: @urgent_giveaways.count,
+      user_location: request.location&.city
+    }
+  end
+end
+EOF
+  
+  # Create location-based initializer
+  cat <<EOF > config/initializers/geocoder.rb
+Geocoder.configure(
+  # Use a reliable geocoding service
+  lookup: :nominatim,
+  timeout: 3,
+  units: :km,
+  
+  # Cache geocoding results
+  cache: Rails.cache,
+  cache_options: { expires_in: 1.day }
+)
+EOF
+  
+  # Create analytics initializer
+  cat <<EOF > config/initializers/ahoy.rb
+class Ahoy::Store < Ahoy::DatabaseStore
+  def track_visit(data)
+    # Add cognitive load tracking to visits
+    data[:cognitive_load] = calculate_page_complexity(data[:landing_page])
+    super(data)
+  end
+  
+  private
+  
+  def calculate_page_complexity(page)
+    # Simple complexity calculation based on page type
+    case page
+    when /admin/
+      7.0
+    when /giveaways.*new/, /giveaways.*edit/
+      6.0
+    when /giveaways/
+      4.0
+    else
+      3.0
+    end
+  end
+end
 
-command_exists "ruby"
-command_exists "node"
-command_exists "psql"
-command_exists "redis-server"
+Ahoy.track_visits_immediately = true
+Ahoy.geocode = :ip_to_country_code
+EOF
+  
+  # Create seed data
+  cat <<EOF > db/seeds.rb
+# Create sample distributions
+distributions = [
+  {
+    location: "Åsane Community Center, Bergen",
+    schedule: 1.day.from_now,
+    capacity: 50,
+    lat: 60.4651,
+    lng: 5.2897
+  },
+  {
+    location: "Bergen Food Bank",
+    schedule: 2.days.from_now,
+    capacity: 100,
+    lat: 60.3913,
+    lng: 5.3221
+  },
+  {
+    location: "Flesland Distribution Point",
+    schedule: 3.days.from_now,
+    capacity: 75,
+    lat: 60.2934,
+    lng: 5.2181
+  }
+]
+
+distributions.each do |dist_attrs|
+  Distribution.find_or_create_by(location: dist_attrs[:location]) do |distribution|
+    distribution.schedule = dist_attrs[:schedule]
+    distribution.capacity = dist_attrs[:capacity]
+    distribution.lat = dist_attrs[:lat]
+    distribution.lng = dist_attrs[:lng]
+  end
+end
+
+# Create sample food types for categorization
+food_types = %w[produce dairy meat bakery prepared frozen canned]
+
+food_types.each do |type|
+  SurplusAlert.create!(
+    location: "Bergen City Center",
+    food_type: type,
+    quantity: rand(5..50),
+    alert_time: rand(1..48).hours.ago
+  )
+end
+
+puts "✅ Hjerterom seed data created successfully!"
+puts "🥕 #{Distribution.count} distributions created"
+puts "🍎 #{SurplusAlert.count} surplus alerts created"
+EOF
+  
+  # Run seeds
+  bin/rails db:seed
+  
+  log "Hjerterom application code generation completed" "INFO"
+}
+
+# Override main to use enhanced installation
+main() {
+  log "Starting Hjerterom installation with cognitive framework" "INFO"
+  
+  # Use enhanced shared installation
+  source "./__shared_enhanced.sh"
+  
+  # Run the main installation process
+  if command -v initialize_application > /dev/null 2>&1; then
+    # Run enhanced installation
+    initialize_application
+    setup_rails_application
+    setup_database
+    setup_cognitive_framework
+    setup_authentication
+    setup_security
+    generate_application_code  # This will use our Hjerterom-specific implementation
+    setup_testing
+    finalize_installation
+  else
+    # Fallback to original installation
+    log "Enhanced installation not available, using fallback" "WARN"
+    setup_rails_application
+    setup_database
+    generate_application_code
+  fi
+}
 
 install_gem "omniauth-vipps"
 install_gem "ahoy_matey"

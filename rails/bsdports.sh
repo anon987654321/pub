@@ -1,22 +1,577 @@
 #!/usr/bin/env zsh
+# BSDPorts: OpenBSD package management platform with cognitive framework implementation
+# Master.json v10.7.0 compliance with zero-trust security
+
 set -e
+setopt extended_glob null_glob
 
-# BSDPorts setup: Software package sharing platform with live search, infinite scroll, and anonymous features on OpenBSD 7.5, unprivileged user
-
+# === COGNITIVE FRAMEWORK CONFIGURATION ===
 APP_NAME="bsdports"
 BASE_DIR="/home/dev/rails"
 BRGEN_IP="46.23.95.45"
 
-source "./__shared.sh"
+# Source enhanced shared functionality
+source "./__shared_enhanced.sh"
 
-log "Starting BSDPorts setup"
+# === BSDPORTS-SPECIFIC CONFIGURATION ===
+generate_application_code() {
+  phase_transition "bsdports_code_generation" "Creating OpenBSD package management platform features"
+  
+  # Generate models with cognitive constraints (7 concepts max)
+  bin/rails generate model Package name:string version:string description:text user:references category:string maintainer:string
+  bin/rails generate model PackageDependency package:references depends_on:references dependency_type:string
+  bin/rails generate model BuildLog package:references build_status:string log_content:text build_time:integer
+  bin/rails generate model PackageReview user:references package:references rating:integer content:text
+  bin/rails generate model SecurityAlert package:references severity:string description:text fixed_in_version:string
+  bin/rails generate model PortsTree name:string description:text last_updated:datetime active:boolean
+  bin/rails generate model PackageStatistics package:references download_count:integer build_success_rate:decimal
+  
+  # Database migrations
+  bin/rails db:migrate
+  
+  # Install additional gems for BSDPorts
+  cat <<EOF >> Gemfile
 
-setup_full_app "$APP_NAME"
+# BSDPorts-specific gems
+gem "rugged", "~> 1.6"
+gem "semantic", "~> 1.6"
+gem "ruby-progressbar", "~> 1.13"
+gem "net-ssh", "~> 7.0"
+gem "net-scp", "~> 4.0"
+gem "nokogiri", "~> 1.15"
+gem "chronic", "~> 0.10"
+EOF
+  
+  bundle install
+  
+  # Create cognitive-aware controllers
+  cat <<EOF > app/controllers/packages_controller.rb
+class PackagesController < ApplicationController
+  before_action :authenticate_user!, except: [:index, :show]
+  before_action :set_package, only: [:show, :edit, :update, :destroy, :build, :dependencies]
+  before_action :check_maintainer_permissions, only: [:edit, :update, :destroy]
+  
+  def index
+    @cognitive_load = CognitiveLoadMonitor.new
+    @complexity_assessment = @cognitive_load.assess_complexity(
+      "Package listing with dependency tracking and build status management"
+    )
+    
+    # Cognitive load management: limit to 7 packages
+    @pagy, @packages = pagy(filtered_packages.order(updated_at: :desc), items: 7)
+    @categories = Package.distinct.pluck(:category).compact.sort
+    @recent_builds = BuildLog.order(created_at: :desc).limit(5)
+  end
+  
+  def show
+    @cognitive_load = CognitiveLoadMonitor.new
+    @complexity_assessment = @cognitive_load.assess_complexity(
+      "Package details with dependencies, build logs, and security alerts"
+    )
+    
+    @dependencies = @package.package_dependencies
+                            .includes(:depends_on)
+                            .order(:dependency_type)
+                            .limit(10)
+    
+    @build_logs = @package.build_logs
+                          .order(created_at: :desc)
+                          .limit(5)
+    
+    @security_alerts = @package.security_alerts
+                               .order(created_at: :desc)
+                               .limit(3)
+    
+    @reviews = @package.package_reviews
+                       .includes(:user)
+                       .order(created_at: :desc)
+                       .limit(5)
+    
+    @statistics = @package.package_statistics.first
+  end
+  
+  def new
+    @package = Package.new
+    @cognitive_load = CognitiveLoadMonitor.new
+    @complexity_assessment = @cognitive_load.assess_complexity(
+      "Package creation with dependency management and build configuration"
+    )
+    
+    @categories = Package.distinct.pluck(:category).compact.sort
+    @available_dependencies = Package.order(:name).limit(100)
+  end
+  
+  def create
+    @package = Package.new(package_params)
+    @package.user = current_user
+    @package.maintainer = current_user.email
+    
+    if @package.save
+      # Initialize package statistics
+      @package.create_package_statistics!(
+        download_count: 0,
+        build_success_rate: 0.0
+      )
+      
+      # Queue initial build
+      PackageBuildJob.perform_later(@package)
+      
+      respond_to do |format|
+        format.html { redirect_to @package, notice: "Package created successfully!" }
+        format.turbo_stream
+      end
+    else
+      @categories = Package.distinct.pluck(:category).compact.sort
+      @available_dependencies = Package.order(:name).limit(100)
+      render :new, status: :unprocessable_entity
+    end
+  end
+  
+  def edit
+    @cognitive_load = CognitiveLoadMonitor.new
+    @complexity_assessment = @cognitive_load.assess_complexity(
+      "Package editing with dependency updates and version management"
+    )
+    
+    @categories = Package.distinct.pluck(:category).compact.sort
+    @available_dependencies = Package.where.not(id: @package.id).order(:name).limit(100)
+  end
+  
+  def update
+    if @package.update(package_params)
+      # Queue rebuild if version changed
+      if @package.saved_change_to_version?
+        PackageBuildJob.perform_later(@package)
+      end
+      
+      respond_to do |format|
+        format.html { redirect_to @package, notice: "Package updated successfully!" }
+        format.turbo_stream
+      end
+    else
+      @categories = Package.distinct.pluck(:category).compact.sort
+      @available_dependencies = Package.where.not(id: @package.id).order(:name).limit(100)
+      render :edit, status: :unprocessable_entity
+    end
+  end
+  
+  def destroy
+    @package.destroy
+    respond_to do |format|
+      format.html { redirect_to packages_path, notice: "Package deleted successfully!" }
+      format.turbo_stream
+    end
+  end
+  
+  def build
+    # Manual build trigger
+    PackageBuildJob.perform_later(@package)
+    
+    respond_to do |format|
+      format.html { redirect_to @package, notice: "Build queued successfully!" }
+      format.json { render json: { status: "queued" } }
+    end
+  end
+  
+  def dependencies
+    @dependencies = @package.package_dependencies
+                            .includes(:depends_on)
+                            .order(:dependency_type)
+    
+    respond_to do |format|
+      format.html
+      format.json { render json: @dependencies }
+    end
+  end
+  
+  private
+  
+  def set_package
+    @package = Package.find(params[:id])
+  end
+  
+  def package_params
+    params.require(:package).permit(:name, :version, :description, :category, :maintainer)
+  end
+  
+  def filtered_packages
+    packages = Package.all
+    packages = packages.where(category: params[:category]) if params[:category].present?
+    packages = packages.where("name ILIKE ? OR description ILIKE ?", "%#{params[:search]}%", "%#{params[:search]}%") if params[:search].present?
+    packages = packages.where("version = ?", params[:version]) if params[:version].present?
+    packages
+  end
+  
+  def check_maintainer_permissions
+    unless @package.user == current_user || current_user&.admin?
+      redirect_to @package, alert: "Only package maintainers can edit this package"
+    end
+  end
+end
+EOF
+  
+  # Create package model with dependency management
+  cat <<EOF > app/models/package.rb
+class Package < ApplicationRecord
+  belongs_to :user
+  has_many :package_dependencies, dependent: :destroy
+  has_many :depends_on, through: :package_dependencies, source: :depends_on
+  has_many :reverse_dependencies, class_name: "PackageDependency", foreign_key: "depends_on_id"
+  has_many :build_logs, dependent: :destroy
+  has_many :package_reviews, dependent: :destroy
+  has_many :security_alerts, dependent: :destroy
+  has_one :package_statistics, dependent: :destroy
+  
+  validates :name, presence: true, uniqueness: { scope: :version }, length: { minimum: 2, maximum: 100 }
+  validates :version, presence: true, format: { with: /\A\d+\.\d+(\.\d+)?(-\w+)?\z/ }
+  validates :description, presence: true, length: { minimum: 10, maximum: 1000 }
+  validates :category, presence: true
+  validates :maintainer, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
+  
+  scope :by_category, ->(category) { where(category: category) }
+  scope :by_maintainer, ->(maintainer) { where(maintainer: maintainer) }
+  scope :recent, -> { order(updated_at: :desc) }
+  scope :popular, -> { joins(:package_statistics).order("package_statistics.download_count DESC") }
+  
+  def latest_build
+    build_logs.order(created_at: :desc).first
+  end
+  
+  def build_status
+    latest_build&.build_status || "unknown"
+  end
+  
+  def build_success_rate
+    return 0.0 if build_logs.empty?
+    
+    successful_builds = build_logs.where(build_status: "success").count
+    total_builds = build_logs.count
+    
+    (successful_builds.to_f / total_builds * 100).round(2)
+  end
+  
+  def has_security_alerts?
+    security_alerts.any?
+  end
+  
+  def critical_security_alerts
+    security_alerts.where(severity: "critical")
+  end
+  
+  def dependency_tree
+    # Build dependency tree (simplified)
+    dependencies = package_dependencies.includes(:depends_on)
+    dependencies.map do |dep|
+      {
+        name: dep.depends_on.name,
+        version: dep.depends_on.version,
+        type: dep.dependency_type,
+        recursive: dep.depends_on.dependency_tree
+      }
+    end
+  end
+  
+  def reverse_dependency_count
+    reverse_dependencies.count
+  end
+  
+  def average_rating
+    package_reviews.average(:rating) || 0.0
+  end
+  
+  def download_count
+    package_statistics&.download_count || 0
+  end
+  
+  def semantic_version
+    Semantic::Version.new(version)
+  rescue ArgumentError
+    nil
+  end
+  
+  def newer_version?(other_version)
+    return false unless semantic_version
+    
+    other_semantic = Semantic::Version.new(other_version)
+    semantic_version > other_semantic
+  rescue ArgumentError
+    false
+  end
+end
+EOF
+  
+  # Create package build job
+  mkdir -p app/jobs
+  cat <<EOF > app/jobs/package_build_job.rb
+class PackageBuildJob < ApplicationJob
+  queue_as :default
+  
+  def perform(package)
+    build_log = package.build_logs.create!(
+      build_status: "building",
+      log_content: "Build started at #{Time.current}",
+      build_time: 0
+    )
+    
+    start_time = Time.current
+    
+    begin
+      # Simulate package build process
+      result = simulate_build(package)
+      
+      build_time = ((Time.current - start_time) / 1.minute).round(2)
+      
+      build_log.update!(
+        build_status: result[:status],
+        log_content: result[:log],
+        build_time: build_time
+      )
+      
+      # Update package statistics
+      update_build_statistics(package, result[:status])
+      
+      # Check for security vulnerabilities
+      SecurityScanJob.perform_later(package) if result[:status] == "success"
+      
+    rescue => e
+      build_log.update!(
+        build_status: "failed",
+        log_content: "Build failed: #{e.message}",
+        build_time: ((Time.current - start_time) / 1.minute).round(2)
+      )
+    end
+  end
+  
+  private
+  
+  def simulate_build(package)
+    # Simplified build simulation
+    log_content = []
+    log_content << "Checking dependencies..."
+    log_content << "Resolving package dependencies for #{package.name} v#{package.version}"
+    
+    # Check dependencies
+    missing_deps = check_dependencies(package)
+    if missing_deps.any?
+      log_content << "Missing dependencies: #{missing_deps.join(', ')}"
+      return { status: "failed", log: log_content.join("\n") }
+    end
+    
+    log_content << "Dependencies satisfied"
+    log_content << "Compiling source code..."
+    
+    # Simulate compilation time
+    sleep(rand(1..3))
+    
+    # Random build success/failure
+    if rand < 0.85 # 85% success rate
+      log_content << "Compilation successful"
+      log_content << "Running tests..."
+      
+      # Simulate testing
+      sleep(rand(1..2))
+      
+      if rand < 0.9 # 90% test success rate
+        log_content << "All tests passed"
+        log_content << "Creating package..."
+        log_content << "Package #{package.name} v#{package.version} built successfully"
+        
+        { status: "success", log: log_content.join("\n") }
+      else
+        log_content << "Some tests failed"
+        { status: "failed", log: log_content.join("\n") }
+      end
+    else
+      log_content << "Compilation failed"
+      { status: "failed", log: log_content.join("\n") }
+    end
+  end
+  
+  def check_dependencies(package)
+    missing_deps = []
+    
+    package.package_dependencies.each do |dep|
+      unless dep.depends_on.build_logs.where(build_status: "success").exists?
+        missing_deps << dep.depends_on.name
+      end
+    end
+    
+    missing_deps
+  end
+  
+  def update_build_statistics(package, status)
+    stats = package.package_statistics || package.create_package_statistics!
+    
+    # Update build success rate
+    total_builds = package.build_logs.count
+    successful_builds = package.build_logs.where(build_status: "success").count
+    
+    stats.update!(
+      build_success_rate: (successful_builds.to_f / total_builds * 100).round(2)
+    )
+  end
+end
+EOF
+  
+  # Create enhanced home controller
+  cat <<EOF > app/controllers/home_controller.rb
+class HomeController < ApplicationController
+  def index
+    @cognitive_load = CognitiveLoadMonitor.new
+    @complexity_assessment = @cognitive_load.assess_complexity(
+      "BSDPorts home page with package statistics and build monitoring"
+    )
+    
+    # Cognitive load management: limit to 7 key metrics
+    @package_stats = {
+      total_packages: Package.count,
+      recent_builds: BuildLog.where("created_at > ?", 24.hours.ago).count,
+      successful_builds: BuildLog.where(build_status: "success").where("created_at > ?", 24.hours.ago).count,
+      security_alerts: SecurityAlert.count,
+      active_maintainers: Package.distinct.count(:maintainer),
+      total_downloads: PackageStatistics.sum(:download_count),
+      categories: Package.distinct.count(:category)
+    }
+    
+    @recent_packages = Package.recent.limit(5)
+    @popular_packages = Package.popular.limit(5)
+    @recent_builds = BuildLog.includes(:package).order(created_at: :desc).limit(10)
+    
+    # Flow state tracking
+    @flow_tracker = FlowStateTracker.new
+    @flow_tracker.update({
+      "concentration" => 0.8,
+      "challenge_skill_balance" => 0.7,
+      "clear_goals" => 0.9
+    })
+  end
+end
+EOF
+  
+  # Create seed data for OpenBSD packages
+  cat <<EOF > db/seeds.rb
+# Create sample OpenBSD packages
+packages = [
+  {
+    name: "nginx",
+    version: "1.24.0",
+    description: "High-performance HTTP server and reverse proxy",
+    category: "www",
+    maintainer: "maintainer@openbsd.org"
+  },
+  {
+    name: "postgresql",
+    version: "15.3",
+    description: "Advanced object-relational database system",
+    category: "databases",
+    maintainer: "db-maintainer@openbsd.org"
+  },
+  {
+    name: "ruby",
+    version: "3.2.0",
+    description: "Dynamic, open source programming language",
+    category: "lang",
+    maintainer: "ruby-maintainer@openbsd.org"
+  },
+  {
+    name: "git",
+    version: "2.41.0",
+    description: "Distributed version control system",
+    category: "devel",
+    maintainer: "git-maintainer@openbsd.org"
+  },
+  {
+    name: "vim",
+    version: "9.0.1572",
+    description: "Vi 'workalike' with many additional features",
+    category: "editors",
+    maintainer: "vim-maintainer@openbsd.org"
+  }
+]
 
-command_exists "ruby"
-command_exists "node"
-command_exists "psql"
-command_exists "redis-server"
+admin_user = User.create!(
+  email: "admin@bsdports.com",
+  password: "password",
+  password_confirmation: "password"
+)
+
+packages.each do |pkg_attrs|
+  package = Package.create!(
+    name: pkg_attrs[:name],
+    version: pkg_attrs[:version],
+    description: pkg_attrs[:description],
+    category: pkg_attrs[:category],
+    maintainer: pkg_attrs[:maintainer],
+    user: admin_user
+  )
+  
+  # Create statistics
+  PackageStatistics.create!(
+    package: package,
+    download_count: rand(100..10000),
+    build_success_rate: rand(80.0..99.9).round(2)
+  )
+  
+  # Create sample build log
+  BuildLog.create!(
+    package: package,
+    build_status: "success",
+    log_content: "Build completed successfully for #{package.name} v#{package.version}",
+    build_time: rand(1..30)
+  )
+end
+
+# Create dependencies
+nginx = Package.find_by(name: "nginx")
+postgresql = Package.find_by(name: "postgresql")
+
+if nginx && postgresql
+  PackageDependency.create!(
+    package: nginx,
+    depends_on: postgresql,
+    dependency_type: "runtime"
+  )
+end
+
+puts "✅ BSDPorts seed data created successfully!"
+puts "📦 #{Package.count} packages created"
+puts "🔧 #{BuildLog.count} build logs created"
+puts "📊 #{PackageStatistics.count} package statistics created"
+EOF
+  
+  # Run seeds
+  bin/rails db:seed
+  
+  log "BSDPorts application code generation completed" "INFO"
+}
+
+# Override main to use enhanced installation
+main() {
+  log "Starting BSDPorts installation with cognitive framework" "INFO"
+  
+  # Use enhanced shared installation
+  source "./__shared_enhanced.sh"
+  
+  # Run the main installation process
+  if command -v initialize_application > /dev/null 2>&1; then
+    # Run enhanced installation
+    initialize_application
+    setup_rails_application
+    setup_database
+    setup_cognitive_framework
+    setup_authentication
+    setup_security
+    generate_application_code  # This will use our BSDPorts-specific implementation
+    setup_testing
+    finalize_installation
+  else
+    # Fallback to original installation
+    log "Enhanced installation not available, using fallback" "WARN"
+    setup_rails_application
+    setup_database
+    generate_application_code
+  fi
+}
 
 bin/rails generate scaffold Package name:string version:string description:text user:references file:attachment
 bin/rails generate scaffold Comment package:references user:references content:text

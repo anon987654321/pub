@@ -1,22 +1,298 @@
 #!/usr/bin/env zsh
+# Amber: AI-enhanced fashion network with cognitive framework implementation
+# Master.json v10.7.0 compliance with zero-trust security
+
 set -e
+setopt extended_glob null_glob
 
-# Amber setup: AI-enhanced fashion network with live search, infinite scroll, and anonymous features on OpenBSD 7.5, unprivileged user
-
+# === COGNITIVE FRAMEWORK CONFIGURATION ===
 APP_NAME="amber"
 BASE_DIR="/home/dev/rails"
 BRGEN_IP="46.23.95.45"
 
-source "./__shared.sh"
+# Source enhanced shared functionality
+source "./__shared_enhanced.sh"
 
-log "Starting Amber setup"
+# === AMBER-SPECIFIC CONFIGURATION ===
+generate_application_code() {
+  phase_transition "amber_code_generation" "Creating AI-enhanced fashion network features"
+  
+  # Generate models with cognitive constraints (7 concepts max)
+  bin/rails generate scaffold WardrobeItem name:string description:text category:string photos:attachments user:references
+  bin/rails generate scaffold Comment wardrobe_item:references user:references content:text
+  bin/rails generate model StyleRecommendation user:references wardrobe_item:references ai_score:decimal
+  bin/rails generate model FashionTrend name:string description:text popularity_score:decimal
+  bin/rails generate model OutfitCombination title:string description:text user:references
+  bin/rails generate model UserPreference user:references style_type:string preference_value:decimal
+  bin/rails generate model AiAnalysis wardrobe_item:references analysis_data:text confidence_score:decimal
+  
+  # Database migrations
+  bin/rails db:migrate
+  
+  # Create cognitive-aware controllers
+  cat <<EOF > app/controllers/wardrobe_items_controller.rb
+class WardrobeItemsController < ApplicationController
+  before_action :authenticate_user!, except: [:index, :show]
+  before_action :set_wardrobe_item, only: [:show, :edit, :update, :destroy]
+  
+  def index
+    @cognitive_load = CognitiveLoadMonitor.new
+    @complexity_assessment = @cognitive_load.assess_complexity(
+      "Wardrobe items listing with filtering and search capabilities"
+    )
+    
+    @pagy, @wardrobe_items = pagy(WardrobeItem.all.order(created_at: :desc), items: 7)
+  end
+  
+  def show
+    @cognitive_load = CognitiveLoadMonitor.new
+    @complexity_assessment = @cognitive_load.assess_complexity(
+      "Individual wardrobe item with AI recommendations and styling suggestions"
+    )
+    
+    @ai_analysis = AiAnalysis.find_by(wardrobe_item: @wardrobe_item)
+    @recommendations = StyleRecommendation.where(wardrobe_item: @wardrobe_item).limit(5)
+  end
+  
+  def new
+    @wardrobe_item = WardrobeItem.new
+    @cognitive_load = CognitiveLoadMonitor.new
+    @complexity_assessment = @cognitive_load.assess_complexity(
+      "Wardrobe item creation form with photo upload and categorization"
+    )
+  end
+  
+  def create
+    @wardrobe_item = WardrobeItem.new(wardrobe_item_params)
+    @wardrobe_item.user = current_user
+    
+    if @wardrobe_item.save
+      # Trigger AI analysis in background
+      AiAnalysisJob.perform_later(@wardrobe_item)
+      
+      respond_to do |format|
+        format.html { redirect_to wardrobe_items_path, notice: "Wardrobe item created successfully!" }
+        format.turbo_stream
+      end
+    else
+      render :new, status: :unprocessable_entity
+    end
+  end
+  
+  def edit
+    @cognitive_load = CognitiveLoadMonitor.new
+    @complexity_assessment = @cognitive_load.assess_complexity(
+      "Wardrobe item editing with validation and photo management"
+    )
+  end
+  
+  def update
+    if @wardrobe_item.update(wardrobe_item_params)
+      respond_to do |format|
+        format.html { redirect_to wardrobe_items_path, notice: "Wardrobe item updated successfully!" }
+        format.turbo_stream
+      end
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+  
+  def destroy
+    @wardrobe_item.destroy
+    respond_to do |format|
+      format.html { redirect_to wardrobe_items_path, notice: "Wardrobe item deleted successfully!" }
+      format.turbo_stream
+    end
+  end
+  
+  private
+  
+  def set_wardrobe_item
+    @wardrobe_item = WardrobeItem.find(params[:id])
+    unless @wardrobe_item.user == current_user || current_user&.admin?
+      redirect_to wardrobe_items_path, alert: "Access denied"
+    end
+  end
+  
+  def wardrobe_item_params
+    params.require(:wardrobe_item).permit(:name, :description, :category, photos: [])
+  end
+end
+EOF
+  
+  # Create AI recommendation system
+  cat <<EOF > app/models/wardrobe_item.rb
+class WardrobeItem < ApplicationRecord
+  belongs_to :user
+  has_many :comments, dependent: :destroy
+  has_many :style_recommendations, dependent: :destroy
+  has_many :ai_analyses, dependent: :destroy
+  has_many_attached :photos
+  
+  validates :name, presence: true, length: { minimum: 3, maximum: 100 }
+  validates :description, presence: true, length: { minimum: 10, maximum: 500 }
+  validates :category, presence: true
+  
+  scope :by_category, ->(category) { where(category: category) }
+  scope :recent, -> { order(created_at: :desc) }
+  
+  def ai_recommendation_score
+    ai_analyses.last&.confidence_score || 0.0
+  end
+  
+  def compatible_items
+    # AI-based compatibility matching (simplified)
+    WardrobeItem.where(user: user)
+                .where(category: compatible_categories)
+                .where.not(id: id)
+                .limit(5)
+  end
+  
+  private
+  
+  def compatible_categories
+    case category.downcase
+    when "tops", "shirts"
+      ["pants", "skirts", "shorts"]
+    when "pants", "jeans"
+      ["tops", "shirts", "blouses"]
+    when "dresses"
+      ["shoes", "accessories"]
+    else
+      []
+    end
+  end
+end
+EOF
+  
+  # Create AI analysis job
+  mkdir -p app/jobs
+  cat <<EOF > app/jobs/ai_analysis_job.rb
+class AiAnalysisJob < ApplicationJob
+  queue_as :default
+  
+  def perform(wardrobe_item)
+    # Simulate AI analysis (in real implementation, this would call external AI service)
+    analysis_data = {
+      color_analysis: analyze_colors(wardrobe_item),
+      style_category: determine_style_category(wardrobe_item),
+      versatility_score: calculate_versatility(wardrobe_item),
+      season_compatibility: determine_seasons(wardrobe_item),
+      recommendations: generate_recommendations(wardrobe_item)
+    }
+    
+    AiAnalysis.create!(
+      wardrobe_item: wardrobe_item,
+      analysis_data: analysis_data.to_json,
+      confidence_score: rand(0.7..0.95) # Simulated confidence
+    )
+    
+    # Generate style recommendations
+    generate_style_recommendations(wardrobe_item, analysis_data)
+  end
+  
+  private
+  
+  def analyze_colors(wardrobe_item)
+    # Simplified color analysis
+    colors = %w[red blue green yellow black white gray navy burgundy]
+    colors.sample(rand(1..3))
+  end
+  
+  def determine_style_category(wardrobe_item)
+    styles = %w[casual formal business sporty vintage bohemian minimalist]
+    styles.sample
+  end
+  
+  def calculate_versatility(wardrobe_item)
+    # Basic versatility calculation
+    base_score = 0.5
+    base_score += 0.2 if wardrobe_item.category.downcase.in?(%w[jeans shirt])
+    base_score += 0.1 if wardrobe_item.description.downcase.include?("versatile")
+    base_score += 0.1 if wardrobe_item.description.downcase.include?("classic")
+    [base_score, 1.0].min
+  end
+  
+  def determine_seasons(wardrobe_item)
+    seasons = %w[spring summer fall winter]
+    seasons.sample(rand(1..4))
+  end
+  
+  def generate_recommendations(wardrobe_item)
+    [
+      "Pairs well with neutral colors",
+      "Great for layering",
+      "Suitable for both day and evening wear",
+      "Consider adding accessories",
+      "Perfect for business casual"
+    ].sample(rand(2..4))
+  end
+  
+  def generate_style_recommendations(wardrobe_item, analysis_data)
+    # Create style recommendations based on AI analysis
+    analysis_data[:recommendations].each do |recommendation|
+      StyleRecommendation.create!(
+        user: wardrobe_item.user,
+        wardrobe_item: wardrobe_item,
+        ai_score: rand(0.6..0.95)
+      )
+    end
+  end
+end
+EOF
+  
+  # Create enhanced home controller
+  cat <<EOF > app/controllers/home_controller.rb
+class HomeController < ApplicationController
+  def index
+    @cognitive_load = CognitiveLoadMonitor.new
+    @complexity_assessment = @cognitive_load.assess_complexity(
+      "Amber home page with AI recommendations, recent items, and fashion trends"
+    )
+    
+    # Limit to 7 items for cognitive load management
+    @recent_items = WardrobeItem.recent.limit(7)
+    @fashion_trends = FashionTrend.order(popularity_score: :desc).limit(5)
+    @ai_recommendations = current_user&.style_recommendations&.limit(3) || []
+    
+    # Flow state tracking
+    @flow_tracker = FlowStateTracker.new
+    @flow_tracker.update({
+      "concentration" => 0.8,
+      "challenge_skill_balance" => 0.7,
+      "clear_goals" => 0.9
+    })
+  end
+end
+EOF
+  
+  log "Amber application code generation completed" "INFO"
+}
 
-setup_full_app "$APP_NAME"
-
-command_exists "ruby"
-command_exists "node"
-command_exists "psql"
-command_exists "redis-server"
+# Override main to use enhanced installation
+main() {
+  log "Starting Amber installation with cognitive framework" "INFO"
+  
+  # Use enhanced shared installation
+  source "./__shared_enhanced.sh"
+  
+  # Run the main installation process
+  if command -v initialize_application > /dev/null 2>&1; then
+    # Run enhanced installation
+    initialize_application
+    setup_rails_application
+    setup_database
+    setup_cognitive_framework
+    setup_authentication
+    setup_security
+    generate_application_code  # This will use our Amber-specific implementation
+    setup_testing
+    finalize_installation
+  else
+    # Fallback to original installation
+    setup_full_app "$APP_NAME"
+  fi
+}
 
 bin/rails generate scaffold WardrobeItem name:string description:text user:references category:string photos:attachments
 bin/rails generate scaffold Comment wardrobe_item:references user:references content:text
