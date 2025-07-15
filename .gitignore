@@ -1,0 +1,40 @@
+# Framework compliance artifacts
+compliance_report.json
+final_compliance_report.json
+.rubocop.yml
+.eslintrc.json
+
+# Temporary files
+/tmp/*
+*.tmp
+*.log
+*.pid
+
+# Build artifacts
+.bundle/
+vendor/
+node_modules/
+dist/
+build/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Framework monitoring
+resource_monitoring.log
+circuit_breaker.log
