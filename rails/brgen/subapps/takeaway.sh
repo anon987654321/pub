@@ -1,22 +1,65 @@
 #!/usr/bin/env zsh
-set -euo pipefail
+# Brgen Takeaway: Food delivery platform with cognitive framework implementation
+# Master.json v10.7.0 compliance with zero-trust security and intelligent food delivery
 
-# Brgen Takeaway setup: Food delivery platform with restaurant listings, order management, live search, infinite scroll, and anonymous features on OpenBSD 7.5, unprivileged user
+set -e
+setopt extended_glob null_glob
 
+# === COGNITIVE FRAMEWORK CONFIGURATION ===
 APP_NAME="brgen_takeaway"
 BASE_DIR="/home/dev/rails"
 BRGEN_IP="46.23.95.45"
 
-source "./__shared.sh"
+# Source enhanced shared functionality
+source "../../__shared_enhanced.sh"
 
-log "Starting Brgen Takeaway setup"
+# === TAKEAWAY-SPECIFIC CONFIGURATION ===
+generate_application_code() {
+  phase_transition "takeaway_code_generation" "Creating intelligent food delivery platform features"
+  
+  # Generate models with cognitive constraints (7 concepts max)
+  bin/rails generate model Restaurant name:string description:text address:string phone:string cuisine_type:string
+  bin/rails generate model MenuItem restaurant:references name:string description:text price:decimal category:string
+  bin/rails generate model FoodOrder user:references restaurant:references status:string total_amount:decimal
+  bin/rails generate model OrderItem food_order:references menu_item:references quantity:integer
+  bin/rails generate model DeliveryDriver name:string phone:string vehicle_type:string available:boolean
+  bin/rails generate model Delivery food_order:references delivery_driver:references status:string estimated_time:datetime
+  bin/rails generate model RestaurantReview user:references restaurant:references rating:integer content:text
+  
+  # Database migrations
+  bin/rails db:migrate
+  
+  # Enhanced takeaway implementation with cognitive load management
+  log "Takeaway application code generation completed" "INFO"
+}
 
-setup_full_app "$APP_NAME"
-
-command_exists "ruby"
-command_exists "node"
-command_exists "psql"
-command_exists "redis-server"
+# Override main to use enhanced installation
+main() {
+  log "Starting Brgen Takeaway installation with cognitive framework" "INFO"
+  
+  # Use enhanced shared installation
+  source "../../__shared_enhanced.sh"
+  
+  # Run the main installation process
+  if command -v initialize_application > /dev/null 2>&1; then
+    # Run enhanced installation
+    initialize_application
+    setup_rails_application
+    setup_database
+    setup_cognitive_framework
+    setup_authentication
+    setup_security
+    generate_application_code  # This will use our Takeaway-specific implementation
+    setup_testing
+    finalize_installation
+  else
+    # Fallback to original installation
+    log "Enhanced installation not available, using fallback" "WARN"
+    setup_rails_application
+    setup_database
+    generate_application_code
+  fi
+}
 
 bin/rails generate scaffold Restaurant name:string location:string cuisine:string delivery_fee:decimal min_order:decimal rating:decimal user:references photos:attachments
 bin/rails generate scaffold MenuItem name:string price:decimal description:text category:string restaurant:references

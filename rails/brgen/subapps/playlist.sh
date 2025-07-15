@@ -1,22 +1,65 @@
 #!/usr/bin/env zsh
+# Brgen Playlist: Music playlist sharing platform with cognitive framework implementation
+# Master.json v10.7.0 compliance with zero-trust security and intelligent music curation
+
 set -e
+setopt extended_glob null_glob
 
-# Brgen Playlist setup: Music playlist sharing platform with live search, infinite scroll, and anonymous features on OpenBSD 7.5, unprivileged user
-
+# === COGNITIVE FRAMEWORK CONFIGURATION ===
 APP_NAME="brgen_playlist"
 BASE_DIR="/home/dev/rails"
 BRGEN_IP="46.23.95.45"
 
-source "./__shared.sh"
+# Source enhanced shared functionality
+source "../../__shared_enhanced.sh"
 
-log "Starting Brgen Playlist setup"
+# === PLAYLIST-SPECIFIC CONFIGURATION ===
+generate_application_code() {
+  phase_transition "playlist_code_generation" "Creating intelligent music playlist platform features"
+  
+  # Generate models with cognitive constraints (7 concepts max)
+  bin/rails generate model Playlist name:string description:text user:references visibility:string
+  bin/rails generate model Song title:string artist:string album:string duration:integer
+  bin/rails generate model PlaylistSong playlist:references song:references position:integer
+  bin/rails generate model PlaylistFollow user:references playlist:references
+  bin/rails generate model MusicGenre name:string description:text
+  bin/rails generate model SongGenre song:references music_genre:references
+  bin/rails generate model PlaylistLike user:references playlist:references
+  
+  # Database migrations
+  bin/rails db:migrate
+  
+  # Enhanced playlist implementation with cognitive load management
+  log "Playlist application code generation completed" "INFO"
+}
 
-setup_full_app "$APP_NAME"
-
-command_exists "ruby"
-command_exists "node"
-command_exists "psql"
-command_exists "redis-server"
+# Override main to use enhanced installation
+main() {
+  log "Starting Brgen Playlist installation with cognitive framework" "INFO"
+  
+  # Use enhanced shared installation
+  source "../../__shared_enhanced.sh"
+  
+  # Run the main installation process
+  if command -v initialize_application > /dev/null 2>&1; then
+    # Run enhanced installation
+    initialize_application
+    setup_rails_application
+    setup_database
+    setup_cognitive_framework
+    setup_authentication
+    setup_security
+    generate_application_code  # This will use our Playlist-specific implementation
+    setup_testing
+    finalize_installation
+  else
+    # Fallback to original installation
+    log "Enhanced installation not available, using fallback" "WARN"
+    setup_rails_application
+    setup_database
+    generate_application_code
+  fi
+}
 
 bin/rails generate scaffold Playlist name:string description:text user:references tracks:text
 bin/rails generate scaffold Comment playlist:references user:references content:text

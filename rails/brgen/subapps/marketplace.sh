@@ -1,22 +1,65 @@
 #!/usr/bin/env zsh
-set -euo pipefail
+# Brgen Marketplace: E-commerce platform with cognitive framework implementation
+# Master.json v10.7.0 compliance with zero-trust security and intelligent commerce
 
-# Brgen Marketplace setup: E-commerce platform with live search, infinite scroll, and anonymous features on OpenBSD 7.5, unprivileged user
+set -e
+setopt extended_glob null_glob
 
+# === COGNITIVE FRAMEWORK CONFIGURATION ===
 APP_NAME="brgen_marketplace"
 BASE_DIR="/home/dev/rails"
 BRGEN_IP="46.23.95.45"
 
-source "./__shared.sh"
+# Source enhanced shared functionality
+source "../../__shared_enhanced.sh"
 
-log "Starting Brgen Marketplace setup"
+# === MARKETPLACE-SPECIFIC CONFIGURATION ===
+generate_application_code() {
+  phase_transition "marketplace_code_generation" "Creating intelligent e-commerce platform features"
+  
+  # Generate models with cognitive constraints (7 concepts max)
+  bin/rails generate model Product name:string price:decimal description:text user:references category:string condition:string
+  bin/rails generate model Order product:references buyer:references seller:references status:string total_amount:decimal
+  bin/rails generate model ShoppingCart user:references
+  bin/rails generate model CartItem shopping_cart:references product:references quantity:integer
+  bin/rails generate model Review product:references user:references rating:integer content:text
+  bin/rails generate model ProductImage product:references image:attachment alt_text:string
+  bin/rails generate model PaymentTransaction order:references amount:decimal status:string payment_method:string
+  
+  # Database migrations
+  bin/rails db:migrate
+  
+  # Enhanced marketplace implementation with cognitive load management
+  log "Marketplace application code generation completed" "INFO"
+}
 
-setup_full_app "$APP_NAME"
-
-command_exists "ruby"
-command_exists "node"
-command_exists "psql"
-command_exists "redis-server"
+# Override main to use enhanced installation
+main() {
+  log "Starting Brgen Marketplace installation with cognitive framework" "INFO"
+  
+  # Use enhanced shared installation
+  source "../../__shared_enhanced.sh"
+  
+  # Run the main installation process
+  if command -v initialize_application > /dev/null 2>&1; then
+    # Run enhanced installation
+    initialize_application
+    setup_rails_application
+    setup_database
+    setup_cognitive_framework
+    setup_authentication
+    setup_security
+    generate_application_code  # This will use our Marketplace-specific implementation
+    setup_testing
+    finalize_installation
+  else
+    # Fallback to original installation
+    log "Enhanced installation not available, using fallback" "WARN"
+    setup_rails_application
+    setup_database
+    generate_application_code
+  fi
+}
 
 bin/rails generate scaffold Product name:string price:decimal description:text user:references photos:attachments
 bin/rails generate scaffold Order product:references buyer:references status:string

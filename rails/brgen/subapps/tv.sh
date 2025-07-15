@@ -1,22 +1,65 @@
 #!/usr/bin/env zsh
-set -euo pipefail
+# Brgen TV: AI-generated video content streaming platform with cognitive framework implementation
+# Master.json v10.7.0 compliance with zero-trust security and intelligent content curation
 
-# Brgen TV setup: AI-generated video content streaming platform with shows, episodes, live search, infinite scroll, and anonymous features on OpenBSD 7.5, unprivileged user
+set -e
+setopt extended_glob null_glob
 
+# === COGNITIVE FRAMEWORK CONFIGURATION ===
 APP_NAME="brgen_tv"
 BASE_DIR="/home/dev/rails"
 BRGEN_IP="46.23.95.45"
 
-source "./__shared.sh"
+# Source enhanced shared functionality
+source "../../__shared_enhanced.sh"
 
-log "Starting Brgen TV setup"
+# === TV-SPECIFIC CONFIGURATION ===
+generate_application_code() {
+  phase_transition "tv_code_generation" "Creating intelligent video streaming platform features"
+  
+  # Generate models with cognitive constraints (7 concepts max)
+  bin/rails generate model Show title:string description:text genre:string creator:references
+  bin/rails generate model Episode show:references title:string description:text duration:integer episode_number:integer
+  bin/rails generate model VideoContent episode:references file_path:string resolution:string file_size:integer
+  bin/rails generate model ViewingSession user:references episode:references watched_duration:integer completed:boolean
+  bin/rails generate model Subscription user:references show:references active:boolean
+  bin/rails generate model ContentRating user:references episode:references rating:integer
+  bin/rails generate model WatchLater user:references episode:references
+  
+  # Database migrations
+  bin/rails db:migrate
+  
+  # Enhanced TV implementation with cognitive load management
+  log "TV application code generation completed" "INFO"
+}
 
-setup_full_app "$APP_NAME"
-
-command_exists "ruby"
-command_exists "node"
-command_exists "psql"
-command_exists "redis-server"
+# Override main to use enhanced installation
+main() {
+  log "Starting Brgen TV installation with cognitive framework" "INFO"
+  
+  # Use enhanced shared installation
+  source "../../__shared_enhanced.sh"
+  
+  # Run the main installation process
+  if command -v initialize_application > /dev/null 2>&1; then
+    # Run enhanced installation
+    initialize_application
+    setup_rails_application
+    setup_database
+    setup_cognitive_framework
+    setup_authentication
+    setup_security
+    generate_application_code  # This will use our TV-specific implementation
+    setup_testing
+    finalize_installation
+  else
+    # Fallback to original installation
+    log "Enhanced installation not available, using fallback" "WARN"
+    setup_rails_application
+    setup_database
+    generate_application_code
+  fi
+}
 
 bin/rails generate scaffold Show title:string genre:string description:text release_date:date rating:decimal duration:integer user:references poster:attachment trailer_url:string
 bin/rails generate scaffold Episode title:string description:text duration:integer episode_number:integer season_number:integer show:references video_url:string
