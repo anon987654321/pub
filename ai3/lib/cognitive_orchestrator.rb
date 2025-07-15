@@ -37,40 +37,38 @@ class CognitiveOrchestrator
   def assess_complexity(content)
     concepts = extract_concepts(content)
     relationships = extract_relationships(content)
-    
+
     complexity_score = 0
     concepts.each do |concept|
       weight = determine_concept_weight(concept)
       complexity_score += weight
     end
-    
+
     # Add relationship complexity
     complexity_score += relationships.size * CONCEPT_WEIGHTS[:relationship]
-    
+
     complexity_score
   end
 
   # Check if system is experiencing cognitive overload
   def cognitive_overload?
-    @current_load > 7 || 
-    @concept_stack.length > 9 ||
-    @context_switches > 3 ||
-    @flow_state_indicators.distraction_level > 0.7
+    @current_load > 7 ||
+      @concept_stack.length > 9 ||
+      @context_switches > 3 ||
+      @flow_state_indicators.distraction_level > 0.7
   end
 
   # Add concept to working memory with overflow protection
   def add_concept(concept, weight = 1.0)
-    if (@current_load + weight) > 7
-      compress_working_memory
-    end
-    
+    compress_working_memory if (@current_load + weight) > 7
+
     @concept_stack << {
       concept: concept,
       weight: weight,
       timestamp: Time.now,
       access_count: 1
     }
-    
+
     @current_load += weight
     maintain_7_plus_minus_2_limit
   end
@@ -78,47 +76,45 @@ class CognitiveOrchestrator
   # Context switch with cognitive load tracking
   def context_switch(new_context)
     @context_switches += 1
-    
-    if @context_switches > 3
-      trigger_cognitive_break
-    end
-    
+
+    trigger_cognitive_break if @context_switches > 3
+
     # Preserve current state
     snapshot_id = preserve_flow_state
-    
+
     # Apply context compression
     compress_context(new_context)
-    
+
     snapshot_id
   end
 
   # Trigger cognitive circuit breaker
   def trigger_circuit_breaker(session_data = {})
-    puts "⚡ Cognitive overload detected. Triggering circuit breaker..."
-    
+    puts '⚡ Cognitive overload detected. Triggering circuit breaker...'
+
     # Save current state
     snapshot = preserve_flow_state(session_data)
-    
+
     # Reset cognitive load to manageable level
     @concept_stack = @concept_stack.last(3) # Keep only most recent concepts
     @current_load = 3
     @context_switches = 0
-    
+
     # Schedule attention restoration
     schedule_attention_restoration(snapshot)
-    
+
     snapshot[:id]
   end
 
   # Apply cognitive offloading strategies
   def apply_cognitive_offloading(snapshot)
-    offloading_strategies = [
-      :compress_similar_concepts,
-      :chunk_related_information,
-      :create_concept_hierarchies,
-      :preserve_attention_anchors
+    offloading_strategies = %i[
+      compress_similar_concepts
+      chunk_related_information
+      create_concept_hierarchies
+      preserve_attention_anchors
     ]
-    
+
     offloading_strategies.each do |strategy|
       send(strategy, snapshot)
     end
@@ -142,7 +138,7 @@ class CognitiveOrchestrator
   # Extract concepts from content (simplified implementation)
   def extract_concepts(content)
     return [] unless content.is_a?(String)
-    
+
     # Simple concept extraction - can be enhanced with NLP
     concepts = content.scan(/[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*/)
     concepts.uniq.map(&:strip)
@@ -151,17 +147,17 @@ class CognitiveOrchestrator
   # Extract relationships from content
   def extract_relationships(content)
     return [] unless content.is_a?(String)
-    
+
     # Look for relationship indicators
     relationship_indicators = ['relates to', 'connects with', 'depends on', 'includes', 'extends']
     relationships = []
-    
+
     relationship_indicators.each do |indicator|
       content.scan(/(\w+)\s+#{indicator}\s+(\w+)/i) do |match|
         relationships << { from: match[0], to: match[1], type: indicator }
       end
     end
-    
+
     relationships
   end
 
@@ -179,15 +175,13 @@ class CognitiveOrchestrator
 
   # Maintain 7±2 concept limit in working memory
   def maintain_7_plus_minus_2_limit
-    while @concept_stack.size > 9
-      remove_least_accessed_concept
-    end
+    remove_least_accessed_concept while @concept_stack.size > 9
   end
 
   # Remove concept with lowest access count
   def remove_least_accessed_concept
     return if @concept_stack.empty?
-    
+
     least_accessed = @concept_stack.min_by { |c| c[:access_count] }
     @concept_stack.delete(least_accessed)
     @current_load -= least_accessed[:weight]
@@ -198,11 +192,11 @@ class CognitiveOrchestrator
     # Group similar concepts
     compressed_concepts = []
     remaining_concepts = @concept_stack.dup
-    
+
     while remaining_concepts.any?
       concept = remaining_concepts.shift
       similar = remaining_concepts.select { |c| similar_concepts?(concept[:concept], c[:concept]) }
-      
+
       if similar.any?
         # Create compressed concept group
         compressed_weight = ([concept] + similar).sum { |c| c[:weight] } * 0.6 # 40% compression
@@ -213,14 +207,14 @@ class CognitiveOrchestrator
           access_count: 1,
           compressed: true
         }
-        
+
         # Remove similar concepts from remaining
         similar.each { |s| remaining_concepts.delete(s) }
       else
         compressed_concepts << concept
       end
     end
-    
+
     @concept_stack = compressed_concepts
     @current_load = @concept_stack.sum { |c| c[:weight] }
   end
@@ -228,15 +222,15 @@ class CognitiveOrchestrator
   # Check if two concepts are similar (simple implementation)
   def similar_concepts?(concept1, concept2)
     # Simple similarity check - can be enhanced with semantic analysis
-    concept1.downcase.include?(concept2.downcase) || 
-    concept2.downcase.include?(concept1.downcase) ||
-    concept1.split.any? { |word| concept2.split.include?(word) }
+    concept1.downcase.include?(concept2.downcase) ||
+      concept2.downcase.include?(concept1.downcase) ||
+      concept1.split.any? { |word| concept2.split.include?(word) }
   end
 
   # Preserve current flow state
   def preserve_flow_state(session_data = {})
     snapshot_id = SecureRandom.hex(8)
-    
+
     @session_snapshots[snapshot_id] = {
       id: snapshot_id,
       concepts: @concept_stack.dup,
@@ -246,7 +240,7 @@ class CognitiveOrchestrator
       session_data: session_data,
       timestamp: Time.now
     }
-    
+
     snapshot_id
   end
 
@@ -254,10 +248,10 @@ class CognitiveOrchestrator
   def compress_context(new_context)
     # Keep only essential concepts from new context
     essential_concepts = extract_essential_concepts(new_context)
-    
+
     @concept_stack.clear
     @current_load = 0
-    
+
     essential_concepts.each do |concept|
       add_concept(concept, CONCEPT_WEIGHTS[:basic_concept])
     end
@@ -272,7 +266,7 @@ class CognitiveOrchestrator
 
   # Trigger cognitive break
   def trigger_cognitive_break
-    puts "🧠 Cognitive break recommended. Context switching limit reached."
+    puts '🧠 Cognitive break recommended. Context switching limit reached.'
     @context_switches = 0
   end
 
@@ -280,7 +274,7 @@ class CognitiveOrchestrator
   def schedule_attention_restoration(snapshot)
     duration = calculate_break_duration
     restoration_type = determine_restoration_type
-    
+
     puts "🌱 Scheduling #{restoration_type} restoration for #{duration} seconds"
     puts "   Snapshot ID: #{snapshot[:id]} preserved for restoration"
   end
@@ -289,7 +283,7 @@ class CognitiveOrchestrator
   def calculate_break_duration
     base_duration = 30 # 30 seconds base
     load_multiplier = [@current_load / 7.0, 1.0].max
-    
+
     (base_duration * load_multiplier).round
   end
 
@@ -321,7 +315,7 @@ class CognitiveOrchestrator
 
   # Calculate overload risk percentage
   def overload_risk_percentage
-    ([@current_load / 7.0 * 100, 100].min).round(1)
+    [@current_load / 7.0 * 100, 100].min.round(1)
   end
 
   # Cognitive offloading strategies
@@ -356,13 +350,13 @@ class FlowStateTracker
     # Update based on various indicators
     @distraction_level = calculate_distraction(indicators)
     @current_state = determine_flow_state(@distraction_level)
-    
+
     @state_history << {
       state: @current_state,
       distraction: @distraction_level,
       timestamp: Time.now
     }
-    
+
     # Keep only recent history
     @state_history = @state_history.last(10)
   end
@@ -375,7 +369,7 @@ class FlowStateTracker
     distraction += indicators[:context_switches] * 0.2 if indicators[:context_switches]
     distraction += indicators[:error_rate] if indicators[:error_rate]
     distraction += indicators[:response_time_deviation] if indicators[:response_time_deviation]
-    
+
     [distraction, 1.0].min
   end
 

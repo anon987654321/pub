@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #!/usr/bin/env zsh
 #
 # AI3 Assistants Installation Script

@@ -1,5 +1,8 @@
 AI^3 CLI
-AI^3 is a modular command-line interface (CLI) built in Ruby, leveraging LangChain.rb for multi-LLM integration, retrieval-augmented generation (RAG), and role-specific assistants. It runs on OpenBSD with secure execution (pledge/unveil) and supports Ruby 3.2+.
+AI^3 is a modular command-line interface (CLI) built in Ruby,
+leveraging LangChain.rb for multi-LLM integration,
+retrieval-augmented generation (RAG),
+and role-specific assistants. It runs on OpenBSD with secure execution (pledge/unveil) and supports Ruby 3.2+.
 Features
 
 Interactive CLI: Launch with ruby ai3.rb for a TTY-based interface.

@@ -14,7 +14,7 @@ class CognitiveMonitor
   def monitor
     loop do
       current_load = calculate_current_load
-      
+
       case current_load
       when 0...@thresholds[:optimal]
         puts "✓ Cognitive load: #{current_load}% (Optimal)"
@@ -24,7 +24,7 @@ class CognitiveMonitor
         puts "🚨 Cognitive load: #{current_load}% (Critical - Circuit breaker activated)"
         activate_circuit_breaker
       end
-      
+
       sleep 5
     end
   end
@@ -35,16 +35,16 @@ class CognitiveMonitor
     # Simulate load calculation based on current processes
     base_load = 20
     branch_load = `git branch -r`.split("\n").count * 5
-    file_load = Dir.glob("**/*.rb").count * 0.5
-    
+    file_load = Dir.glob('**/*.rb').count * 0.5
+
     [base_load + branch_load + file_load, 100].min
   end
 
   def activate_circuit_breaker
-    puts "Activating circuit breaker protection..."
-    puts "- Pausing non-critical processes"
-    puts "- Reducing complexity to simple mode"
-    puts "- Requesting resource increase"
+    puts 'Activating circuit breaker protection...'
+    puts '- Pausing non-critical processes'
+    puts '- Reducing complexity to simple mode'
+    puts '- Requesting resource increase'
   end
 end
 

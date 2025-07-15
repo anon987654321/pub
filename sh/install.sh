@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #!/usr/bin/env zsh
 # Sets up utility scripts in ~/bin and adds them to PATH.
 # Usage: ./install.sh

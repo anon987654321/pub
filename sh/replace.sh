@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #!/usr/bin/env zsh
 # Swaps out words in files or renames them.
 # Usage: ./replace.sh [-b] <old> <new> [folder]

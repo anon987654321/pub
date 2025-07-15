@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #!/usr/bin/env zsh
 # Creates a Markdown list of text files and their contents.
 # Usage: ./showp.sh

@@ -22,23 +22,21 @@ class BaseAssistant
   def respond(input, context: {})
     # Cognitive load assessment
     complexity = @cognitive_profile.assess_input_complexity(input)
-    
-    if complexity > @cognitive_profile.max_cognitive_load
-      return simplify_and_respond(input, context)
-    end
-    
+
+    return simplify_and_respond(input, context) if complexity > @cognitive_profile.max_cognitive_load
+
     # Context-aware response generation
     enhanced_context = merge_contexts(context, @session_context)
     response = generate_response(input, enhanced_context)
-    
+
     # Update session context with new information
     update_session_context(input, response)
-    
+
     response
   end
 
   # Generate response (to be overridden by specific assistants)
-  def generate_response(input, context)
+  def generate_response(input, _context)
     "I'm #{@name}, a #{@role}. I received: #{input}"
   end
 
@@ -47,12 +45,12 @@ class BaseAssistant
     # Reduce complexity by focusing on key elements
     simplified_input = extract_key_intent(input)
     simplified_context = compress_context(context)
-    
+
     "🧠 Simplified response: #{generate_response(simplified_input, simplified_context)}"
   end
 
   # Check if assistant can handle the request
-  def can_handle?(input, context = {})
+  def can_handle?(input, _context = {})
     # Basic capability matching
     input_lower = input.to_s.downcase
     @capabilities.any? { |cap| input_lower.include?(cap.downcase) }
@@ -75,19 +73,13 @@ class BaseAssistant
   # Initialize available tools
   def initialize_tools
     tools = {}
-    
-    if @config['tools']&.include?('rag')
-      tools[:rag] = true
-    end
-    
-    if @config['tools']&.include?('web_scraping')
-      tools[:web_scraping] = true
-    end
-    
-    if @config['tools']&.include?('file_access')
-      tools[:file_access] = true
-    end
-    
+
+    tools[:rag] = true if @config['tools']&.include?('rag')
+
+    tools[:web_scraping] = true if @config['tools']&.include?('web_scraping')
+
+    tools[:file_access] = true if @config['tools']&.include?('file_access')
+
     tools
   end
 
@@ -103,7 +95,7 @@ class BaseAssistant
     @session_context[:last_input] = input
     @session_context[:last_response] = response
     @session_context[:updated_at] = Time.now
-    
+
     # Apply cognitive load to profile
     @cognitive_profile.add_interaction(input, response)
   end
@@ -119,15 +111,15 @@ class BaseAssistant
   # Compress context for cognitive load management
   def compress_context(context)
     return {} unless context.is_a?(Hash)
-    
+
     # Keep only essential keys
-    essential_keys = [:user_intent, :domain, :priority, :previous_action]
+    essential_keys = %i[user_intent domain priority previous_action]
     compressed = {}
-    
+
     essential_keys.each do |key|
       compressed[key] = context[key] if context.key?(key)
     end
-    
+
     compressed
   end
 end
@@ -149,39 +141,39 @@ class CognitiveProfile
   def assess_input_complexity(input)
     complexity = 0
     text = input.to_s
-    
+
     # Word count factor
     word_count = text.split.size
     complexity += (word_count / 50.0) * @complexity_weights[:word_count]
-    
+
     # Question complexity
     question_count = text.count('?')
     complexity += question_count * @complexity_weights[:questions]
-    
+
     # Technical terms
-    technical_patterns = ['implement', 'algorithm', 'architecture', 'framework', 'system']
+    technical_patterns = %w[implement algorithm architecture framework system]
     technical_count = technical_patterns.count { |pattern| text.downcase.include?(pattern) }
     complexity += technical_count * @complexity_weights[:technical_terms]
-    
+
     # Request complexity
-    request_patterns = ['analyze', 'compare', 'evaluate', 'design', 'create']
+    request_patterns = %w[analyze compare evaluate design create]
     request_count = request_patterns.count { |pattern| text.downcase.include?(pattern) }
     complexity += request_count * @complexity_weights[:complex_requests]
-    
+
     complexity
   end
 
   # Add interaction to profile
-  def add_interaction(input, response)
+  def add_interaction(input, _response)
     complexity = assess_input_complexity(input)
     @current_load += complexity * 0.1 # Gradual load increase
-    
+
     # Apply cognitive decay
     @current_load *= 0.95 if @current_load > 0
-    
+
     # Update flow state
     update_flow_state
-    
+
     # Record interaction
     @interaction_history << {
       input_complexity: complexity,
@@ -189,7 +181,7 @@ class CognitiveProfile
       flow_state: @flow_state,
       timestamp: Time.now
     }
-    
+
     # Keep history manageable
     @interaction_history = @interaction_history.last(20)
   end
@@ -204,11 +196,11 @@ class CognitiveProfile
   # Get cognitive insights
   def cognitive_insights
     return {} if @interaction_history.empty?
-    
+
     recent_interactions = @interaction_history.last(10)
     avg_complexity = recent_interactions.sum { |i| i[:input_complexity] } / recent_interactions.size
     avg_load = recent_interactions.sum { |i| i[:cognitive_load] } / recent_interactions.size
-    
+
     {
       average_complexity: avg_complexity.round(2),
       average_load: avg_load.round(2),
@@ -253,7 +245,7 @@ class AssistantRegistry
     @cognitive_orchestrator = cognitive_orchestrator
     @load_balancer = LoadBalancer.new
     @assistant_configs = load_assistant_configs
-    
+
     initialize_default_assistants
   end
 
@@ -272,11 +264,11 @@ class AssistantRegistry
   # Find best assistant for query
   def find_best_assistant(query, context = {})
     candidates = @assistants.values.select { |assistant| assistant.can_handle?(query, context) }
-    
+
     if candidates.empty?
       return @assistants[:general] # Fallback to general assistant
     end
-    
+
     # Use load balancer to select best assistant
     @load_balancer.select_best_assistant(candidates, query, context)
   end
@@ -297,10 +289,10 @@ class AssistantRegistry
   def statistics
     total_assistants = @assistants.size
     active_assistants = @assistants.count { |_, a| !a.session_context.empty? }
-    
+
     cognitive_loads = @assistants.values.map { |a| a.cognitive_profile.current_load }
     avg_cognitive_load = cognitive_loads.empty? ? 0 : cognitive_loads.sum / cognitive_loads.size
-    
+
     {
       total_assistants: total_assistants,
       active_assistants: active_assistants,
@@ -312,7 +304,7 @@ class AssistantRegistry
   # Reset all assistants
   def reset_all_assistants
     @assistants.each_value { |assistant| assistant.cognitive_profile.reset_cognitive_state }
-    puts "🔄 Reset all assistant cognitive states"
+    puts '🔄 Reset all assistant cognitive states'
   end
 
   private
@@ -321,7 +313,7 @@ class AssistantRegistry
   def load_assistant_configs
     config_file = 'config/assistants.yml'
     return {} unless File.exist?(config_file)
-    
+
     YAML.load_file(config_file) || {}
   rescue StandardError
     {}
@@ -331,20 +323,18 @@ class AssistantRegistry
   def initialize_default_assistants
     # General assistant (always available)
     register_assistant('general', BaseAssistant, {
-      'role' => 'General Purpose Assistant',
-      'capabilities' => ['general', 'help', 'information'],
-      'tools' => ['rag']
-    })
+                         'role' => 'General Purpose Assistant',
+                         'capabilities' => %w[general help information],
+                         'tools' => ['rag']
+                       })
 
     # Load additional assistants from config
     @assistant_configs.each do |name, config|
-      begin
-        assistant_class = Object.const_get("#{name.capitalize}Assistant")
-        register_assistant(name, assistant_class, config)
-      rescue NameError
-        puts "⚠️ Assistant class #{name.capitalize}Assistant not found, using BaseAssistant"
-        register_assistant(name, BaseAssistant, config)
-      end
+      assistant_class = Object.const_get("#{name.capitalize}Assistant")
+      register_assistant(name, assistant_class, config)
+    rescue NameError
+      puts "⚠️ Assistant class #{name.capitalize}Assistant not found, using BaseAssistant"
+      register_assistant(name, BaseAssistant, config)
     end
   end
 
@@ -371,16 +361,16 @@ class LoadBalancer
   # Select best assistant based on multiple factors
   def select_best_assistant(candidates, query, context)
     return candidates.first if candidates.size == 1
-    
+
     # Score each candidate
     scored_candidates = candidates.map do |assistant|
       score = calculate_assistant_score(assistant, query, context)
       { assistant: assistant, score: score }
     end
-    
+
     # Select highest scoring assistant
     best_candidate = scored_candidates.max_by { |c| c[:score] }
-    
+
     # Record selection
     @selection_history << {
       query: query[0..100],
@@ -388,10 +378,10 @@ class LoadBalancer
       score: best_candidate[:score],
       timestamp: Time.now
     }
-    
+
     # Keep history manageable
     @selection_history = @selection_history.last(50)
-    
+
     best_candidate[:assistant]
   end
 
@@ -399,23 +389,23 @@ class LoadBalancer
 
   def calculate_assistant_score(assistant, query, context)
     score = 0
-    
+
     # Capability matching (40% weight)
     capability_score = calculate_capability_score(assistant, query)
     score += capability_score * 0.4
-    
+
     # Cognitive load (30% weight) - prefer less loaded assistants
     cognitive_score = (7 - assistant.cognitive_profile.current_load) / 7.0
     score += cognitive_score * 0.3
-    
+
     # Recent usage (20% weight) - distribute load
     usage_score = calculate_usage_score(assistant)
     score += usage_score * 0.2
-    
+
     # Context relevance (10% weight)
     context_score = calculate_context_score(assistant, context)
     score += context_score * 0.1
-    
+
     score
   end
 
@@ -424,15 +414,16 @@ class LoadBalancer
     matching_capabilities = assistant.capabilities.count do |cap|
       query_lower.include?(cap.downcase)
     end
-    
+
     return 0 if assistant.capabilities.empty?
+
     matching_capabilities.to_f / assistant.capabilities.size
   end
 
   def calculate_usage_score(assistant)
     recent_selections = @selection_history.last(10)
     usage_count = recent_selections.count { |s| s[:selected] == assistant.name }
-    
+
     # Prefer less recently used assistants
     1.0 - (usage_count / 10.0)
   end
@@ -440,7 +431,7 @@ class LoadBalancer
   def calculate_context_score(assistant, context)
     # Simple context matching
     return 0.5 unless context.is_a?(Hash) && context[:domain]
-    
+
     domain = context[:domain].to_s.downcase
     assistant.capabilities.any? { |cap| cap.downcase.include?(domain) } ? 1.0 : 0.0
   end

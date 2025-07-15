@@ -3,7 +3,7 @@
 # Enhanced Filesystem Utilities - Migrated from ai3_old/lib/filesystem_tool.rb
 # Comprehensive file operations with OpenBSD security compliance
 
-require "fileutils"
+require 'fileutils'
 
 module FileSystemUtils
   class FilesystemTool
@@ -14,7 +14,7 @@ module FileSystemUtils
     # List all files and directories within the specified path
     def list_directory(path)
       validate_path_exists(path)
-      Dir.entries(path) - [".", ".."]
+      Dir.entries(path) - ['.', '..']
     end
 
     # Read the contents of a file
@@ -25,14 +25,12 @@ module FileSystemUtils
 
     # Write content to a file, create file if it does not exist
     def write_file(file_path, content)
-      File.open(file_path, "w") do |file|
-        file.write(content)
-      end
+      File.write(file_path, content)
     end
 
     # Append content to a file
     def append_to_file(file_path, content)
-      File.open(file_path, "a") do |file|
+      File.open(file_path, 'a') do |file|
         file.write(content)
       end
     end
@@ -100,13 +98,13 @@ module FileSystemUtils
       validate_path_exists(path)
       entries = []
       Dir.entries(path).each do |entry|
-        next if [".", ".."].include?(entry)
-        
+        next if ['.', '..'].include?(entry)
+
         full_path = File.join(path, entry)
         stat = File.stat(full_path)
         entries << {
           name: entry,
-          type: File.directory?(full_path) ? "directory" : "file",
+          type: File.directory?(full_path) ? 'directory' : 'file',
           size: stat.size,
           permissions: stat.mode.to_s(8),
           modified: stat.mtime

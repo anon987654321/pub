@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # session_manager.rb - Enhanced Version
 
 class SessionManager
@@ -52,4 +54,3 @@ class SessionManager
     remove_session(oldest_user_id)
   end
 end
-

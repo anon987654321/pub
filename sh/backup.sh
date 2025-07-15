@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #!/usr/bin/env zsh
 # Archives folders to dated .tgz files, skips unchanged ones.
 # Usage: ./backup.sh [directory]

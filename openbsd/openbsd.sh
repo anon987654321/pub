@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #!/usr/bin/env zsh
 
 # Configures OpenBSD 7.8 for 56 domains and 7 Rails apps with DNSSEC, relayd,
