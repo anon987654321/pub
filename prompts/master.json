@@ -7,6 +7,54 @@
     "cognitive_compliance": "self_applied_master_standards",
     "enhancement_note": "Applied own cognitive framework for improved structure and readability"
   },
+  "constants": {
+    "cognitive_header": "§ Shared Constants for DRY Compliance",
+    "formatting_standards": {
+      "indentation": "2_spaces",
+      "quotes": "double_quotes", 
+      "line_length": 120,
+      "cognitive_headers": true,
+      "spacing_type": "spaces",
+      "spacing_size": 2,
+      "quotes_consistent": "double_quotes_consistent",
+      "line_endings": "unix_lf",
+      "alignment": "optical_over_mathematical",
+      "newlines": "semantic_grouping",
+      "cognitive_headers_enabled": "enabled"
+    },
+    "temperature_values": {
+      "analysis": 0.2,
+      "creativity": 0.9,
+      "implementation": 0.1,
+      "business": 0.4,
+      "security_expert": 0.2,
+      "architect": 0.4,
+      "creative_innovator": 0.9,
+      "performance_engineer": 0.3,
+      "openbsd_specialist": 0.3,
+      "rails_expert": 0.4
+    },
+    "accessibility_standards": {
+      "wcag_compliance": "wcag_2_2_aaa_compliant",
+      "wcag_required": "2.2_aaa_required",
+      "contrast_ratio": "7:1",
+      "font_size_min": "16px"
+    },
+    "success_metrics": {
+      "core_web_vitals": "95_plus_core_web_vitals",
+      "world_class_standards": "world_class_standards",
+      "world_class_compliance": "world_class_compliance",
+      "lighthouse_score": "95_plus_lighthouse",
+      "completion_rate": "95_percent",
+      "satisfaction": "nps_70_plus"
+    },
+    "common_stack_patterns": {
+      "ruby_files": ["*.rb", "Gemfile", "Rakefile"],
+      "rails_files": ["Gemfile", "config/application.rb", "app/"],
+      "frontend_files": ["*.html", "*.css", "*.js", "package.json"],
+      "shell_files": ["*.sh", "*.zsh", "*.bash"]
+    }
+  },
   "workflow": {
     "cognitive_header": "§ Workflow Intelligence System",
     "mode_detection": {
@@ -55,10 +103,10 @@
       "version": "1.0.0",
       "compliance_level": "master",
       "formatting_standards": {
-        "indentation": "2_spaces",
-        "quotes": "double_quotes",
-        "line_length": 120,
-        "cognitive_headers": true
+        "indentation": {"$ref": "#/constants/formatting_standards/indentation"},
+        "quotes": {"$ref": "#/constants/formatting_standards/quotes"},
+        "line_length": {"$ref": "#/constants/formatting_standards/line_length"},
+        "cognitive_headers": {"$ref": "#/constants/formatting_standards/cognitive_headers"}
       },
       "cognitive_constraints": {
         "max_concepts_per_section": 7,
@@ -77,10 +125,10 @@
       "style": "strunk_white_accessibility_conscious",
       "format": "essential_only_no_truncation",
       "temperature": {
-        "analysis": 0.2,
-        "creativity": 0.9,
-        "implementation": 0.1,
-        "business": 0.4
+        "analysis": {"$ref": "#/constants/temperature_values/analysis"},
+        "creativity": {"$ref": "#/constants/temperature_values/creativity"},
+        "implementation": {"$ref": "#/constants/temperature_values/implementation"},
+        "business": {"$ref": "#/constants/temperature_values/business"}
       }
     },
     "limits": {
@@ -90,20 +138,20 @@
     },
     "principles": {
       "security": "zero_trust_defense_in_depth",
-      "quality": "world_class_standards",
-      "accessibility": "wcag_2_2_aaa_compliant",
-      "performance": "95_plus_core_web_vitals",
+      "quality": {"$ref": "#/constants/success_metrics/world_class_standards"},
+      "accessibility": {"$ref": "#/constants/accessibility_standards/wcag_compliance"},
+      "performance": {"$ref": "#/constants/success_metrics/core_web_vitals"},
       "formatting": "universal_consistency",
       "preservation": "never_truncate_preserve_logic"
     },
     "multi_perspective": {
       "roles": [
-        {"role": "security_expert", "temperature": 0.2, "weight": 0.25},
-        {"role": "architect", "temperature": 0.4, "weight": 0.20},
-        {"role": "creative_innovator", "temperature": 0.9, "weight": 0.15},
-        {"role": "performance_engineer", "temperature": 0.3, "weight": 0.15},
-        {"role": "openbsd_specialist", "temperature": 0.3, "weight": 0.15},
-        {"role": "rails_expert", "temperature": 0.4, "weight": 0.10}
+        {"role": "security_expert", "temperature": {"$ref": "#/constants/temperature_values/security_expert"}, "weight": 0.25},
+        {"role": "architect", "temperature": {"$ref": "#/constants/temperature_values/architect"}, "weight": 0.20},
+        {"role": "creative_innovator", "temperature": {"$ref": "#/constants/temperature_values/creative_innovator"}, "weight": 0.15},
+        {"role": "performance_engineer", "temperature": {"$ref": "#/constants/temperature_values/performance_engineer"}, "weight": 0.15},
+        {"role": "openbsd_specialist", "temperature": {"$ref": "#/constants/temperature_values/openbsd_specialist"}, "weight": 0.15},
+        {"role": "rails_expert", "temperature": {"$ref": "#/constants/temperature_values/rails_expert"}, "weight": 0.10}
       ],
       "consensus_threshold": 0.7
     },
@@ -134,10 +182,10 @@
   },
   "stacks": {
     "detection": {
-      "rails": ["Gemfile", "config/application.rb", "app/"],
-      "ruby": ["*.rb", "Gemfile", "Rakefile"],
-      "frontend": ["*.html", "*.css", "*.js", "package.json"],
-      "shell": ["*.sh", "*.zsh", "*.bash"],
+      "rails": {"$ref": "#/constants/common_stack_patterns/rails_files"},
+      "ruby": {"$ref": "#/constants/common_stack_patterns/ruby_files"},
+      "frontend": {"$ref": "#/constants/common_stack_patterns/frontend_files"},
+      "shell": {"$ref": "#/constants/common_stack_patterns/shell_files"},
       "business": ["business_plan", "canvas", "financial_model"],
       "animation": ["babylon.js", "three.js", "d3.js", "svg_animations"],
       "async": ["async", "concurrent", "parallel", "queue"],
@@ -171,19 +219,19 @@
   },
   "formatting": {
     "universal": {
-      "indentation": {"type": "spaces", "size": 2},
-      "quotes": "double_quotes_consistent",
-      "line_endings": "unix_lf",
-      "alignment": "optical_over_mathematical",
-      "newlines": "semantic_grouping",
-      "cognitive_headers": "enabled"
+      "indentation": {"type": {"$ref": "#/constants/formatting_standards/spacing_type"}, "size": {"$ref": "#/constants/formatting_standards/spacing_size"}},
+      "quotes": {"$ref": "#/constants/formatting_standards/quotes_consistent"},
+      "line_endings": {"$ref": "#/constants/formatting_standards/line_endings"},
+      "alignment": {"$ref": "#/constants/formatting_standards/alignment"},
+      "newlines": {"$ref": "#/constants/formatting_standards/newlines"},
+      "cognitive_headers": {"$ref": "#/constants/formatting_standards/cognitive_headers_enabled"}
     },
     "accessibility": {
       "alt_text": "descriptive_contextual",
       "aria_labels": "comprehensive_semantic",
       "heading_hierarchy": "logical_sequential",
       "focus_indicators": "high_contrast_visible",
-      "wcag_compliance": "2.2_aaa_required"
+      "wcag_compliance": {"$ref": "#/constants/accessibility_standards/wcag_required"}
     },
     "language_specific": {
       "ruby": {
@@ -226,7 +274,7 @@
         "structure": {
           "semantic_elements": "Use header, main, section, footer with ARIA roles",
           "heading_hierarchy": "h1 for title, h2 for sections, h3 for subsections",
-          "accessibility": "Follow wcag_2_2_aaa standards",
+          "accessibility": "Follow standards defined in constants/accessibility_standards",
           "separation": "Avoid inline styles, separate content and presentation",
           "localization": "Set lang attribute (e.g., 'nb' for Norwegian)"
         },
@@ -286,7 +334,7 @@
         "accessibility_system": {
           "focus_indicators": "outline: 2px solid (visible)",
           "motion_sensitivity": "Respect prefers-reduced-motion",
-          "contrast_ratio": "7:1 per wcag_2_2_aaa",
+          "contrast_ratio": "7:1 per constants/accessibility_standards",
           "theme_stability": "Avoid automatic switching for letters"
         },
         "print_system": {
@@ -328,14 +376,14 @@
         "monospace": "'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace"
       },
       "accessibility": {
-        "contrast_ratio": "7:1", 
-        "font_size_min": "16px"
+        "contrast_ratio": {"$ref": "#/constants/accessibility_standards/contrast_ratio"}, 
+        "font_size_min": {"$ref": "#/constants/accessibility_standards/font_size_min"}
       }
     },
     "color_system": {
       "cognitive_header": "§ Color System Methodology",
       "methodology": "semantic_hsl",
-      "accessibility": "wcag_2_2_aaa",
+      "accessibility": {"$ref": "#/constants/accessibility_standards/wcag_compliance"},
       "modes": [
         "light", 
         "dark", 
@@ -400,8 +448,8 @@
       "syntax": "no_errors",
       "tests": "90_percent_coverage",
       "security": "zero_trust_a_plus",
-      "performance": "95_plus_core_web_vitals",
-      "accessibility": "wcag_2_2_aaa",
+      "performance": {"$ref": "#/constants/success_metrics/core_web_vitals"},
+      "accessibility": {"$ref": "#/constants/accessibility_standards/wcag_compliance"},
       "formatting": "universal_consistency"
     },
     "tools": {
@@ -447,10 +495,10 @@
     "triggers": ["performance_degradation", "error_increase", "user_feedback"],
     "forbidden_removals": ["security", "accessibility", "never_truncate", "world_class_standards"],
     "success_metrics": {
-      "completion_rate": "95_percent",
-      "satisfaction": "nps_70_plus",
-      "quality": "world_class_compliance",
-      "performance": "95_plus_lighthouse"
+      "completion_rate": {"$ref": "#/constants/success_metrics/completion_rate"},
+      "satisfaction": {"$ref": "#/constants/success_metrics/satisfaction"},
+      "quality": {"$ref": "#/constants/success_metrics/world_class_compliance"},
+      "performance": {"$ref": "#/constants/success_metrics/lighthouse_score"}
     }
   }
 }
