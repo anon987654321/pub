@@ -1,0 +1,337 @@
+{
+  "timestamp": "2025-07-15 09:19:55",
+  "redundant_prs": [
+    {
+      "number": 16,
+      "title": "Enhanced master.json Configuration",
+      "superseded_by": 38
+    },
+    {
+      "number": 27,
+      "title": "Master.json v12.9.0 Framework",
+      "superseded_by": 38
+    },
+    {
+      "number": 34,
+      "title": "Complete Master.json v12.9.0 Framework",
+      "superseded_by": 38
+    },
+    {
+      "number": 22,
+      "title": "Multi-mode sacred geometry visualizer",
+      "superseded_by": 39
+    }
+  ],
+  "priority_prs": [
+    {
+      "number": 23,
+      "title": "Remove committed bundler dependencies",
+      "priority": "critical",
+      "reason": "79MB cleanup"
+    },
+    {
+      "number": 38,
+      "title": "Master.json v12.9.0 Extreme Scrutiny Framework",
+      "priority": "high",
+      "reason": "most comprehensive"
+    },
+    {
+      "number": 24,
+      "title": "Rails applications refinement",
+      "priority": "medium",
+      "reason": "standardization"
+    },
+    {
+      "number": 39,
+      "title": "Sacred Geometry J Dilla Audio Visualizer",
+      "priority": "high",
+      "reason": "most complete"
+    }
+  ],
+  "analysis": {
+    "ruby_files": 1383,
+    "master_json_files": [
+      "master.json",
+      "prompts/master.json"
+    ],
+    "visualizer_files": [
+      "bplans/norwegianhedge/www/index.html",
+      "index.html",
+      "ai3/__delete/ai3_old/assistants/data_visualizer_assistant.rb"
+    ],
+    "duplicate_files": [
+      [
+        "ai3/__delete/ai3_old/assistants/chatbots.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "ai3/__delete/ai3_old/assistants/general_assistant.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "ai3/__delete/ai3_old/lib/cognitive_architecture.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "ai3/__delete/ai3_old/lib/command_handler.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "ai3/__delete/ai3_old/lib/context_manager.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "ai3/__delete/ai3_old/lib/enhanced_model_architecture.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "ai3/__delete/ai3_old/lib/error_handling.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "ai3/__delete/ai3_old/lib/prompt_manager.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "ai3/__delete/ai3_old/lib/rag_system.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "ai3/__delete/ai3_old/lib/rate_limit_tracker.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "ai3/__delete/ai3_old/lib/schema_manager.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "ai3/__delete/ai3_old/lib/universal_scraper.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "ai3/__delete/ai3_old/lib/user_interaction.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "bplans/norwegianhedge/trader.rb",
+        "bplans/finance/swarm-trading-system.rb"
+      ],
+      [
+        "bplans/technology/lab-equipment-controller.rb",
+        "bplans/pubhealthcare/cube/druglab.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_x_m1_fuji_400h_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_x_m1_fuji_800z_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_x_m1_ilford_hp5_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_x_m1_kodak_portra_160_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_x_m1_kodak_portra_400_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_x_m1_kodak_portra_800_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_x_m1_kodak_t_max_3200_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_x_m1_kodak_tri_x_400_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_x_m1_kodak_tri_x_400_plus_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_x_pro1_fuji_160c_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_x_pro1_fuji_400h_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_x_pro1_fuji_800z_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_x_pro1_ilford_hp5_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_x_pro1_kodak_portra_160_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_x_pro1_kodak_portra_400_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_x_pro1_kodak_portra_800_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_x_pro1_kodak_t_max_3200_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_x_pro1_kodak_tri_x_400_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_x_pro1_kodak_tri_x_400_plus_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_x_t10_fuji_160c_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_x_t10_fuji_400h_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_x_t10_fuji_800z_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_x_t10_ilford_hp5_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_x_t10_kodak_portra_160_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_x_t10_kodak_portra_400_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_x_t10_kodak_portra_800_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_x_t10_kodak_t_max_3200_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_x_t10_kodak_tri_x_400_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_x_t10_kodak_tri_x_400_plus_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_x_t1_fuji_160c_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_x_t1_fuji_400h_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_x_t1_fuji_800z_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_x_t1_ilford_hp5_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_x_t1_kodak_portra_160_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_x_t1_kodak_portra_400_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_x_t1_kodak_portra_800_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_x_t1_kodak_t_max_3200_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_x_t1_kodak_tri_x_400_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_x_t1_kodak_tri_x_400_plus_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_xq1_fuji_160c_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_xq1_fuji_400h_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_xq1_fuji_800z_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_xq1_ilford_hp5_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_xq1_kodak_portra_160_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_xq1_kodak_portra_400_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_xq1_kodak_portra_800_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_xq1_kodak_t_max_3200_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_xq1_kodak_tri_x_400_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_xq1_kodak_tri_x_400_plus_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_xq2_fuji_160c_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/fujifilm_xq2_fuji_400h_f.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/__cameras/nikon_d3300_kodak_portra_800_2n.dcp.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ],
+      [
+        "postpro/postpro.rb",
+        "ai3/__delete/ai3_old/assistants/assistant_selector.rb"
+      ]
+    ]
+  }
+}
