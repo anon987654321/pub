@@ -138,13 +138,6 @@
       margin-top: 2px;
     }
 
-    .keyboard-hint {
-      font-size: 9px;
-      opacity: 0.4;
-      margin-top: 1px;
-      text-align: center;
-    }
-
     /* STARFIELD VISUALIZER STYLES (PRESERVED EXACTLY) */
     .starfield-slide {
       background: #000;
@@ -287,15 +280,8 @@
   <!-- AUTO-ROTATING CAROUSEL -->
   <div class="auto-carousel">
     
-    <!-- Slide 1: Distorted Warp Tunnel (DEFAULT/PRIMARY) -->
-    <div class="visualizer-slide active" id="warp-tunnel-slide">
-      <div class="warp-tunnel-slide" id="warp-tunnel-container">
-        <canvas id="warp-canvas" role="img" aria-label="Distorted warp tunnel visualization"></canvas>
-      </div>
-    </div>
-
-    <!-- Slide 2: Starfield Warp Tunnel (PRESERVED EXACTLY) -->
-    <div class="visualizer-slide" id="starfield-slide">
+    <!-- Slide 1: Starfield Warp Tunnel (PRESERVED EXACTLY) -->
+    <div class="visualizer-slide active" id="starfield-slide">
       <div class="starfield-slide" id="starfield-container">
         <div id="audio-controls">
           <button id="btStartAudioVisualization">Start Audio Visualization</button>
@@ -304,7 +290,7 @@
       </div>
     </div>
 
-    <!-- Slide 3: Ultimate J Dilla Experience (PRESERVED EXACTLY) -->
+    <!-- Slide 2: Ultimate J Dilla Experience (PRESERVED EXACTLY) -->
     <div class="visualizer-slide" id="ultimate-slide">
       <div class="placeholder-slide">
         <h1 class="placeholder-title">Ultimate J Dilla Experience</h1>
@@ -322,7 +308,7 @@
       </div>
     </div>
 
-    <!-- Slide 4: Master.json Compliant (PRESERVED EXACTLY) -->
+    <!-- Slide 3: Master.json Compliant (PRESERVED EXACTLY) -->
     <div class="visualizer-slide" id="master-slide">
       <div class="placeholder-slide">
         <h1 class="placeholder-title">Master.json Compliant Engine</h1>
@@ -341,6 +327,13 @@
       </div>
     </div>
 
+    <!-- Slide 4: Warp Tunnel from Gist -->
+    <div class="visualizer-slide" id="warp-tunnel-slide">
+      <div class="warp-tunnel-slide" id="warp-tunnel-container">
+        <canvas id="warp-canvas" role="img" aria-label="Warp tunnel visualization"></canvas>
+      </div>
+    </div>
+
   </div>
 
   <!-- MINIMAL TOUCH CONTROLS -->
@@ -349,8 +342,7 @@
     <div class="track-info">
       <div class="track-title" id="current-track-title">Microphone Master [Extended]</div>
       <div class="track-artist" id="current-track-artist">J Dilla</div>
-      <div class="visualizer-indicator" id="visualizer-indicator">Distorted Warp Tunnel</div>
-      <div class="keyboard-hint">Space: Play/Pause • ← → : Change Visualizer • ↑ ↓ : Change Track</div>
+      <div class="visualizer-indicator" id="visualizer-indicator">Starfield Warp Tunnel</div>
     </div>
   </div>
 
@@ -358,17 +350,17 @@
   <div id="youtube-player"></div>
 
   <script>
-    // Extended J Dilla Playlist (14 tracks) - EXACT REQUIREMENTS MATCH
+    // Extended J Dilla Playlist (14 tracks) - PRESERVED EXACTLY
     const tracks = [
-      { id: "9EGHwkDix78", title: "Microphone Master [Extended]", artist: "J Dilla", url: "https://www.youtube.com/watch?v=9EGHwkDix78" },
-      { id: "WC09qDzU9y4", title: "Due Time", artist: "AFTA-1", url: "https://www.youtube.com/watch?v=WC09qDzU9y4" },
-      { id: "9ycJsnzJ-hA", title: "In Space", artist: "J Dilla", url: "https://www.youtube.com/watch?v=9ycJsnzJ-hA" },
-      { id: "9OPypHXlJUQ", title: "Chinubian", artist: "Jneiro Jarel", url: "https://www.youtube.com/watch?v=9OPypHXlJUQ" },
-      { id: "_-17rzyBrKY", title: "Rhodes Ahead", artist: "Karriem Riggins", url: "https://www.youtube.com/watch?v=_-17rzyBrKY" },
-      { id: "RpDcz90_oWY", title: "Ooooaaa", artist: "Karriem Riggins", url: "https://www.youtube.com/watch?v=RpDcz90_oWY" },
-      { id: "B1ZvmzfUJv0", title: "Back In Brazil", artist: "Karriem Riggins", url: "https://www.youtube.com/watch?v=B1ZvmzfUJv0" },
-      { id: "JGUqRBJ4bIo", title: "Embryo", artist: "Baatin", url: "https://www.youtube.com/watch?v=JGUqRBJ4bIo" },
-      { id: "nelU7OMF7VY", title: "Orbitz", artist: "Karriem Riggins", url: "https://www.youtube.com/watch?v=nelU7OMF7VY" },
+      { id: "A_-KQF9tK4Y", title: "Microphone Master [Extended]", artist: "J Dilla", url: "https://www.youtube.com/watch?v=A_-KQF9tK4Y" },
+      { id: "lMh79wGQ23E", title: "Due Time", artist: "AFTA-1", url: "https://www.youtube.com/watch?v=lMh79wGQ23E" },
+      { id: "G6wkdSKAoJg", title: "In Space", artist: "J Dilla", url: "https://www.youtube.com/watch?v=G6wkdSKAoJg" },
+      { id: "fDW8AJcEjNg", title: "Chinubian", artist: "Jneiro Jarel", url: "https://www.youtube.com/watch?v=fDW8AJcEjNg" },
+      { id: "cKTBfqhHzrU", title: "Rhodes Ahead", artist: "Karriem Riggins", url: "https://www.youtube.com/watch?v=cKTBfqhHzrU" },
+      { id: "MKWjqJHT4II", title: "Ooooaaa", artist: "Karriem Riggins", url: "https://www.youtube.com/watch?v=MKWjqJHT4II" },
+      { id: "VcjxIIwJt6s", title: "Back in Brazil", artist: "Karriem Riggins", url: "https://www.youtube.com/watch?v=VcjxIIwJt6s" },
+      { id: "2fFU5PZXVJU", title: "Orbitz", artist: "Karriem Riggins", url: "https://www.youtube.com/watch?v=2fFU5PZXVJU" },
+      { id: "KGZnTcsJOqM", title: "Embryo", artist: "Baatin", url: "https://www.youtube.com/watch?v=KGZnTcsJOqM" },
       { id: "jnP3tRG-LZs", title: "Sounds Like Love (Extended)", artist: "J Dilla", url: "https://www.youtube.com/watch?v=jnP3tRG-LZs" },
       { id: "t6T-Q6HMbEo", title: "Get It Together (Instrumental)", artist: "J-88 (Slum Village)", url: "https://www.youtube.com/watch?v=t6T-Q6HMbEo" },
       { id: "zoGTC7uROZE", title: "Hustle (Instrumental Mix)", artist: "J Dilla", url: "https://www.youtube.com/watch?v=zoGTC7uROZE" },
@@ -393,17 +385,17 @@
     let visualizerInitialized = { starfield: false, warpTunnel: false };
     
     const slides = [
-      'warp-tunnel-slide',
       'starfield-slide',
       'ultimate-slide', 
-      'master-slide'
+      'master-slide',
+      'warp-tunnel-slide'
     ];
 
     const slideNames = [
-      'Distorted Warp Tunnel',
       'Starfield Warp Tunnel',
       'Ultimate J Dilla Experience',
-      'Master.json Compliant Engine'
+      'Master.json Compliant Engine',
+      'Warp Tunnel Visualization'
     ];
 
     // Starfield Visualizer Variables (PRESERVED EXACTLY)
@@ -425,7 +417,7 @@
     let warpParticles = [];
     let warpTime = 0;
 
-    // Enhanced YouTube Player Setup with Fallback Mechanisms
+    // YouTube Player Setup
     function onYouTubeIframeAPIReady() {
       youtubePlayer = new YT.Player('youtube-player', {
         height: '1',
@@ -438,14 +430,11 @@
           fs: 0,
           modestbranding: 1,
           playsinline: 1,
-          rel: 0,
-          enablejsapi: 1,
-          origin: window.location.origin
+          rel: 0
         },
         events: {
           onReady: onPlayerReady,
-          onStateChange: onPlayerStateChange,
-          onError: onPlayerError
+          onStateChange: onPlayerStateChange
         }
       });
     }
@@ -453,89 +442,18 @@
     function onPlayerReady(event) {
       console.log('YouTube player ready');
       updateTrackInfo();
-      
-      // Try to set up audio context for visualization
-      setupAudioVisualization();
     }
 
     function onPlayerStateChange(event) {
       if (event.data === YT.PlayerState.PLAYING) {
         isPlaying = true;
         document.getElementById('play-pause-btn').textContent = '⏸';
-        
-        // Start auto-rotation when playing
-        if (!isAutoRotating) {
-          startAutoRotation();
-        }
       } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
         isPlaying = false;
         document.getElementById('play-pause-btn').textContent = '▶';
-        
         if (event.data === YT.PlayerState.ENDED) {
           nextTrack();
         }
-      }
-    }
-
-    function onPlayerError(event) {
-      console.warn('YouTube player error:', event.data);
-      
-      // Handle different error types
-      switch(event.data) {
-        case 2:
-          console.log('Invalid video ID - trying next track');
-          nextTrack();
-          break;
-        case 5:
-          console.log('HTML5 player error - continuing with fallback');
-          break;
-        case 100:
-          console.log('Video not found - trying next track');
-          nextTrack();
-          break;
-        case 101:
-        case 150:
-          console.log('Embedding disabled - continuing with fallback visualization');
-          break;
-        default:
-          console.log('Unknown error - continuing with fallback');
-      }
-      
-      // Update status to show we're using fallback
-      const statusElement = document.getElementById('txtStatus');
-      if (statusElement) {
-        statusElement.innerHTML = 'Using fallback audio visualization - some tracks may be restricted';
-      }
-    }
-
-    // Enhanced audio setup with fallback mechanisms
-    function setupAudioVisualization() {
-      try {
-        if (!audioContext) {
-          audioContext = new (window.AudioContext || window.webkitAudioContext)();
-          analyser = audioContext.createAnalyser();
-          analyser.smoothingTimeConstant = 0.65;
-          analyser.fftSize = 512 * 32;
-          analyserBufferLength = analyser.frequencyBinCount;
-          dataArray = new Uint8Array(analyserBufferLength);
-          
-          // Try to connect to YouTube audio (will likely fail due to CORS)
-          try {
-            const audioElement = document.querySelector('audio');
-            if (audioElement) {
-              const source = audioContext.createMediaElementSource(audioElement);
-              source.connect(analyser);
-              analyser.connect(audioContext.destination);
-              console.log('Audio context connected successfully');
-            } else {
-              console.log('No audio element found - using fallback patterns');
-            }
-          } catch (corsError) {
-            console.log('CORS restriction detected - using synthetic audio patterns');
-          }
-        }
-      } catch (e) {
-        console.warn('Audio context setup failed:', e);
       }
     }
 
@@ -612,12 +530,12 @@
         currentSlideIndex = slideIndex;
         
         // Initialize visualizer if needed
-        if (slideIndex === 0 && !visualizerInitialized.warpTunnel) {
-          initWarpTunnel();
-          visualizerInitialized.warpTunnel = true;
-        } else if (slideIndex === 1 && !visualizerInitialized.starfield) {
+        if (slideIndex === 0 && !visualizerInitialized.starfield) {
           initStarfield();
           visualizerInitialized.starfield = true;
+        } else if (slideIndex === 3 && !visualizerInitialized.warpTunnel) {
+          initWarpTunnel();
+          visualizerInitialized.warpTunnel = true;
         }
       }, fadeTransitionTime / 2);
     }
@@ -665,7 +583,7 @@
     }
 
     function audioSetup() {
-      txtStatus.innerHTML = 'Setting up audio system...';
+      txtStatus.innerHTML = 'Audio System Ready - Use main controls to play music';
       
       if (!audioContext) {
         try {
@@ -676,14 +594,9 @@
           analyser.fftSize = 512 * 32;
           analyserBufferLength = analyser.frequencyBinCount;
           dataArray = new Uint8Array(analyserBufferLength);
-          
-          txtStatus.innerHTML = 'Audio system ready - Use main controls to play music';
         } catch (e) {
           console.warn('Audio context setup failed:', e);
-          txtStatus.innerHTML = 'Audio visualization using fallback patterns (YouTube audio blocked)';
         }
-      } else {
-        txtStatus.innerHTML = 'Audio system ready - Use main controls to play music';
       }
     }
 
@@ -963,7 +876,7 @@
       requestAnimationFrame(animate);
     }
 
-    // Enhanced Warp Tunnel Visualizer with Audio-Reactive Distortion
+    // Warp Tunnel Visualizer (from Gist)
     function initWarpTunnel() {
       const container = document.getElementById('warp-tunnel-container');
       if (!container) return;
@@ -981,18 +894,15 @@
       resizeWarpCanvas();
       window.addEventListener('resize', resizeWarpCanvas);
       
-      // Initialize enhanced warp particles with distortion
+      // Initialize warp particles
       warpParticles = [];
-      for (let i = 0; i < 300; i++) {
+      for (let i = 0; i < 200; i++) {
         warpParticles.push({
-          x: (Math.random() - 0.5) * 3000,
-          y: (Math.random() - 0.5) * 3000,
-          z: Math.random() * 1500,
+          x: (Math.random() - 0.5) * 2000,
+          y: (Math.random() - 0.5) * 2000,
+          z: Math.random() * 1000,
           prevX: 0,
-          prevY: 0,
-          speed: Math.random() * 3 + 2,
-          distortion: Math.random() * 0.5 + 0.5,
-          audioIndex: Math.floor(Math.random() * 1024)
+          prevY: 0
         });
       }
       
@@ -1002,145 +912,50 @@
     function animateWarpTunnel() {
       if (!warpContext || !warpCanvas) return;
       
-      // Enhanced trail effect with distortion
-      warpContext.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      warpContext.fillStyle = 'rgba(0, 0, 0, 0.1)';
       warpContext.fillRect(0, 0, warpCanvas.width, warpCanvas.height);
       
       const centerX = warpCanvas.width / 2;
       const centerY = warpCanvas.height / 2;
       
-      warpTime += 0.015;
+      warpTime += 0.01;
       
-      // Get audio data for reactivity
-      let audioData = null;
-      let avgFrequency = 0;
-      let bassLevel = 0;
-      let trebleLevel = 0;
-      
-      if (analyser && dataArray) {
-        analyser.getByteFrequencyData(dataArray);
-        audioData = dataArray;
-        
-        // Calculate audio levels for different frequency ranges
-        for (let i = 0; i < audioData.length; i++) {
-          avgFrequency += audioData[i];
-          if (i < audioData.length * 0.3) bassLevel += audioData[i];
-          if (i > audioData.length * 0.7) trebleLevel += audioData[i];
-        }
-        avgFrequency /= audioData.length;
-        bassLevel /= (audioData.length * 0.3);
-        trebleLevel /= (audioData.length * 0.3);
-      } else {
-        // Fallback synthetic audio pattern when YouTube is blocked
-        avgFrequency = 50 + Math.sin(warpTime * 2) * 30 + Math.sin(warpTime * 3.7) * 20;
-        bassLevel = 40 + Math.sin(warpTime * 1.5) * 25;
-        trebleLevel = 60 + Math.sin(warpTime * 4.2) * 35;
-      }
-      
-      // Audio-reactive parameters
-      const speedMultiplier = 1 + (avgFrequency / 255) * 2;
-      const distortionAmount = (bassLevel / 255) * 0.8 + 0.2;
-      const colorShift = (trebleLevel / 255) * 180;
-      
-      warpParticles.forEach((particle, index) => {
-        // Audio-reactive speed with distortion
-        const audioReactiveSpeed = particle.speed * speedMultiplier;
-        particle.z -= audioReactiveSpeed;
-        
+      warpParticles.forEach(particle => {
+        particle.z -= 5;
         if (particle.z <= 0) {
-          particle.z = 1500;
-          particle.x = (Math.random() - 0.5) * 3000;
-          particle.y = (Math.random() - 0.5) * 3000;
-          particle.distortion = Math.random() * 0.5 + 0.5;
+          particle.z = 1000;
+          particle.x = (Math.random() - 0.5) * 2000;
+          particle.y = (Math.random() - 0.5) * 2000;
         }
         
-        // Enhanced distortion calculations
-        const distortionFactor = distortionAmount * particle.distortion;
-        const warpX = particle.x + Math.sin(warpTime * 2 + particle.x * 0.001) * distortionFactor * 100;
-        const warpY = particle.y + Math.cos(warpTime * 1.8 + particle.y * 0.001) * distortionFactor * 100;
+        const x = (particle.x / particle.z) * 500 + centerX;
+        const y = (particle.y / particle.z) * 500 + centerY;
         
-        const x = (warpX / particle.z) * 600 + centerX;
-        const y = (warpY / particle.z) * 600 + centerY;
-        
-        // Enhanced size with audio reactivity
-        const baseSize = (1 - particle.z / 1500) * 4;
-        const audioReactiveSize = baseSize * (1 + (avgFrequency / 255) * 0.5);
-        
-        // Audio-reactive color with enhanced hue shifting
-        const hue = (particle.z * 0.1 + warpTime * 60 + colorShift + index * 2) % 360;
-        const saturation = 60 + (bassLevel / 255) * 40;
-        const lightness = 40 + (trebleLevel / 255) * 40;
-        
-        // Main particle with glow effect
-        warpContext.shadowColor = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
-        warpContext.shadowBlur = audioReactiveSize * 2;
+        const size = (1 - particle.z / 1000) * 3;
         
         warpContext.beginPath();
-        warpContext.arc(x, y, audioReactiveSize, 0, Math.PI * 2);
-        warpContext.fillStyle = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+        warpContext.arc(x, y, size, 0, Math.PI * 2);
+        warpContext.fillStyle = `hsl(${(particle.z * 0.1 + warpTime * 50) % 360}, 70%, 60%)`;
         warpContext.fill();
         
-        // Enhanced trail with distortion
         if (particle.prevX && particle.prevY) {
-          const trailIntensity = (avgFrequency / 255) * 0.8 + 0.2;
-          
           warpContext.beginPath();
           warpContext.moveTo(particle.prevX, particle.prevY);
           warpContext.lineTo(x, y);
-          warpContext.strokeStyle = `hsla(${hue}, ${saturation}%, ${lightness}%, ${trailIntensity})`;
-          warpContext.lineWidth = audioReactiveSize * 0.8;
+          warpContext.strokeStyle = `hsla(${(particle.z * 0.1 + warpTime * 50) % 360}, 70%, 60%, 0.5)`;
+          warpContext.lineWidth = size * 0.5;
           warpContext.stroke();
         }
-        
-        // Reset shadow for next particle
-        warpContext.shadowBlur = 0;
         
         particle.prevX = x;
         particle.prevY = y;
       });
-      
-      // Add screen distortion effect based on audio
-      if (avgFrequency > 100) {
-        const distortionLevel = (avgFrequency - 100) / 155;
-        warpContext.globalCompositeOperation = 'screen';
-        warpContext.fillStyle = `rgba(255, 255, 255, ${distortionLevel * 0.03})`;
-        warpContext.fillRect(0, 0, warpCanvas.width, warpCanvas.height);
-        warpContext.globalCompositeOperation = 'source-over';
-      }
       
       requestAnimationFrame(animateWarpTunnel);
     }
 
     // Event Listeners
     document.getElementById('play-pause-btn').addEventListener('click', togglePlayPause);
-
-    // Enhanced keyboard controls
-    document.addEventListener('keydown', (e) => {
-      switch(e.code) {
-        case 'Space':
-          e.preventDefault();
-          togglePlayPause();
-          break;
-        case 'ArrowRight':
-          e.preventDefault();
-          fadeToSlide((currentSlideIndex + 1) % slides.length);
-          break;
-        case 'ArrowLeft':
-          e.preventDefault();
-          fadeToSlide((currentSlideIndex - 1 + slides.length) % slides.length);
-          break;
-        case 'ArrowUp':
-          e.preventDefault();
-          nextTrack();
-          break;
-        case 'ArrowDown':
-          e.preventDefault();
-          // Previous track
-          currentTrackIndex = (currentTrackIndex - 1 + tracks.length) % tracks.length;
-          loadTrack();
-          break;
-      }
-    });
 
     // Touch gestures for mobile
     let touchStartX = 0;
@@ -1166,9 +981,8 @@
 
     // Initialize on page load
     window.addEventListener('load', () => {
-      // Initialize warp tunnel first (now the default)
-      initWarpTunnel();
-      visualizerInitialized.warpTunnel = true;
+      initStarfield();
+      visualizerInitialized.starfield = true;
       
       // Auto-start after a brief delay if user doesn't interact
       setTimeout(() => {
