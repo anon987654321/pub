@@ -1,0 +1,600 @@
+{
+  "meta": {
+    "version": "v12.9.0",
+    "updated": "2025-01-15T01:38:00Z",
+    "by": "anon987654321",
+    "description": "Extreme scrutiny framework with cognitive orchestration and circuit breakers",
+    "cognitive_compliance": "extreme_scrutiny_v12_9_0",
+    "enhancement_note": "Applied extreme scrutiny framework with mandatory precision questions, edge case analysis, and resource validation"
+  },
+  "extreme_scrutiny_framework": {
+    "cognitive_header": "§ Extreme Scrutiny Framework (Mandatory)",
+    "version": "v12.9.0",
+    "precision_questions": {
+      "exactly_how_is_this_measured": "Required for all specifications",
+      "what_units_are_used": "Explicit measurement units mandatory",
+      "what_constitutes_success_vs_failure": "Binary success criteria required",
+      "what_is_the_measurement_frequency": "Time windows: real-time(1s), near-real-time(5s), periodic(60s), batch(300s)",
+      "who_or_what_performs_the_measurement": "Measurement entity identification required"
+    },
+    "edge_case_analysis": {
+      "what_happens_when_this_fails": "Failure scenarios documented",
+      "what_happens_when_this_succeeds_too_well": "Success overflow handling",
+      "what_happens_under_extreme_load": "Load testing scenarios",
+      "what_happens_when_dependencies_are_unavailable": "Dependency failure recovery",
+      "what_happens_when_multiple_failures_occur_simultaneously": "Cascading failure prevention"
+    },
+    "resource_validation": {
+      "what_resources_does_this_consume": "CPU, memory, storage, network explicit tracking",
+      "what_is_the_maximum_acceptable_resource_usage": "1GB memory, 10% CPU maximum",
+      "how_do_we_prevent_resource_exhaustion": "Resource monitoring and throttling",
+      "what_happens_when_resources_are_scarce": "Graceful degradation procedures"
+    },
+    "measurement_precision": {
+      "time_windows": {
+        "real_time": "1s",
+        "near_real_time": "5s", 
+        "periodic": "60s",
+        "batch": "300s"
+      },
+      "threshold_enforcement": {
+        "detection_time": "1s",
+        "breach_duration": "60s"
+      },
+      "validation_frequency": {
+        "commit_validation": "every_commit",
+        "manual_validation": "weekly",
+        "meta_validation": "monthly"
+      }
+    }
+  },
+  "cognitive_orchestration": {
+    "cognitive_header": "§ Cognitive Orchestration Implementation",
+    "working_memory": {
+      "concept_chunking": "7±2_items",
+      "overflow_handling": "circuit_breaker_at_9_items",
+      "context_switching_penalty": "2_second_delay"
+    },
+    "cognitive_load_budgeting": {
+      "total_capacity": "100%",
+      "reconnaissance": "15-20%",
+      "architecture": "20-25%", 
+      "implementation": "40-50%",
+      "delivery": "15-20%",
+      "overload_threshold": "95%"
+    },
+    "attention_management": {
+      "flow_protection": "interruption_queuing",
+      "context_preservation": "95%_minimum_completeness",
+      "restoration_time": "300s_maximum"
+    },
+    "circuit_breakers": {
+      "infinite_loop_prevention": "10_iteration_maximum",
+      "resource_limits": "1GB_memory_10_percent_CPU",
+      "cascading_failure_protection": "component_isolation_mandatory",
+      "cognitive_overload": "pause_at_7_plus_items"
+    }
+  },
+  "anti_truncation_mechanisms": {
+    "cognitive_header": "§ Anti-Truncation Mechanisms",
+    "context_preservation": {
+      "logical_completeness": "95%_minimum",
+      "checkpoint_frequency": "every_300_tokens",
+      "recovery_procedures": "complete_restoration"
+    },
+    "integrity_checking": {
+      "validation_method": "automated_circuit_breaker",
+      "threshold_monitoring": "continuous",
+      "failure_detection": "1s_maximum"
+    },
+    "conflict_resolution": {
+      "security_vs_usability": "security_wins_unless_explicit_risk_acceptance",
+      "performance_vs_accessibility": "accessibility_wins_unless_performance_critical",
+      "wcag_aaa_vs_performance": "wcag_aa_minimum_aaa_preferred",
+      "resolution_timeline": "24_hours_maximum"
+    }
+  },
+  "workflow": {
+    "cognitive_header": "§ Workflow Intelligence System",
+    "mode_detection": {
+      "simple": [
+        "basic_implementation", 
+        "single_stack", 
+        "minimal_features"
+      ],
+      "complex": [
+        "business_plan", 
+        "design_system", 
+        "multi_technology", 
+        "visualization", 
+        "ai_integration", 
+        "async_processing", 
+        "browser_automation"
+      ]
+    },
+    "phases": {
+      "simple": [
+        "analyze", 
+        "build", 
+        "verify", 
+        "package"
+      ],
+      "complex": [
+        "empathize_and_analyze", 
+        "define_and_design", 
+        "ideate_and_architect", 
+        "prototype_and_implement", 
+        "test_and_validate", 
+        "optimize_and_refine", 
+        "deliver_and_evolve"
+      ]
+    },
+    "execution": {
+      "auto_iterate": true,
+      "max_iterations": 3,
+      "validation_required": true,
+      "ai_enhancement": "enabled"
+    }
+  },
+    "cognitive_header": "§ Workflow Intelligence System",
+    "mode_detection": {
+      "simple": [
+        "basic_implementation", 
+        "single_stack", 
+        "minimal_features"
+      ],
+      "complex": [
+        "business_plan", 
+        "design_system", 
+        "multi_technology", 
+        "visualization", 
+        "ai_integration", 
+        "async_processing", 
+        "browser_automation"
+      ]
+    },
+    "phases": {
+      "simple": [
+        "analyze", 
+        "build", 
+        "verify", 
+        "package"
+      ],
+      "complex": [
+        "empathize_and_analyze", 
+        "define_and_design", 
+        "ideate_and_architect", 
+        "prototype_and_implement", 
+        "test_and_validate", 
+        "optimize_and_refine", 
+        "deliver_and_evolve"
+      ]
+    },
+    "execution": {
+      "auto_iterate": true,
+      "max_iterations": 3,
+      "validation_required": true,
+      "ai_enhancement": "enabled"
+    }
+  },
+  "core": {
+    "cognitive_header": "§ Core Cognitive Framework",
+    "cognitive_framework": {
+      "version": "12.9.0",
+      "compliance_level": "extreme_scrutiny",
+      "formatting_standards": {
+        "indentation": "2_spaces",
+        "quotes": "double_quotes",
+        "line_length": 120,
+        "cognitive_headers": "mandatory_extreme_scrutiny"
+      },
+      "cognitive_constraints": {
+        "max_concepts_per_section": 7,
+        "max_nesting_depth": 3,
+        "context_switching_threshold": 3,
+        "flow_state_protection": "circuit_breaker_enabled",
+        "working_memory_limit": "7_plus_minus_2"
+      },
+      "implementation_patterns": {
+        "circuit_breaker_required": "mandatory",
+        "cognitive_load_monitoring": "continuous",
+        "attention_restoration": "300s_maximum",
+        "working_memory_management": "chunk_based_7_items",
+        "edge_case_coverage": "mandatory_all_failure_modes",
+        "resource_validation": "explicit_limits_enforced"
+      },
+      "measurement_systems": {
+        "multiline_constructs": "3_to_20_lines_average",
+        "clear_naming": "5_to_30_characters_descriptive",
+        "zero_redundancy": "0_percent_duplicate_tolerance",
+        "strunk_white_compliance": "15_words_maximum_per_sentence",
+        "cognitive_sustainability": "5_minutes_comprehension_maximum"
+      },
+      "precision_enforcement": {
+        "time_measurement": "explicit_units_required",
+        "percentage_definitions": "measurement_method_documented",
+        "threshold_monitoring": "1s_detection_60s_breach",
+        "success_criteria": "binary_pass_fail_only"
+      }
+    },
+    "communication": {
+      "style": "strunk_white_accessibility_conscious",
+      "format": "essential_only_no_truncation",
+      "temperature": {
+        "analysis": 0.2,
+        "creativity": 0.9,
+        "implementation": 0.1,
+        "business": 0.4
+      }
+    },
+    "limits": {
+      "memory": "unlimited_with_gc",
+      "timeout": "unlimited_with_user_control",
+      "recursion": "unlimited_with_circuit_breaker"
+    },
+    "principles": {
+      "security": "zero_trust_defense_in_depth",
+      "quality": "world_class_standards",
+      "accessibility": "wcag_2_2_aaa_compliant",
+      "performance": "95_plus_core_web_vitals",
+      "formatting": "universal_consistency",
+      "preservation": "never_truncate_preserve_logic"
+    },
+    "multi_perspective": {
+      "roles": [
+        {"role": "security_expert", "temperature": 0.2, "weight": 0.25},
+        {"role": "architect", "temperature": 0.4, "weight": 0.20},
+        {"role": "creative_innovator", "temperature": 0.9, "weight": 0.15},
+        {"role": "performance_engineer", "temperature": 0.3, "weight": 0.15},
+        {"role": "openbsd_specialist", "temperature": 0.3, "weight": 0.15},
+        {"role": "rails_expert", "temperature": 0.4, "weight": 0.10}
+      ],
+      "consensus_threshold": 0.7
+    },
+    "system_integration": {
+      "ai3_system": {
+        "cognitive_load_monitoring": "enabled",
+        "session_management": "lru_cognitive_aware",
+        "query_cache": "ttl_structured_logging",
+        "circuit_breakers": "multi_level"
+      },
+      "rails_ecosystem": {
+        "request_complexity_analysis": "enabled",
+        "user_session_cognitive_tracking": "enabled",
+        "progressive_disclosure": "enabled",
+        "flow_state_preservation": "enabled"
+      },
+      "openbsd_infrastructure": {
+        "system_load_cognitive_mapping": "enabled",
+        "service_complexity_monitoring": "enabled",
+        "automated_cognitive_scaling": "enabled"
+      },
+      "business_strategy": {
+        "decision_complexity_analysis": "enabled",
+        "strategic_cognitive_load": "monitored",
+        "implementation_chunking": "enabled"
+      }
+    }
+  },
+  "core": {
+    "detection": {
+      "rails": ["Gemfile", "config/application.rb", "app/"],
+      "ruby": ["*.rb", "Gemfile", "Rakefile"],
+      "frontend": ["*.html", "*.css", "*.js", "package.json"],
+      "shell": ["*.sh", "*.zsh", "*.bash"],
+      "business": ["business_plan", "canvas", "financial_model"],
+      "animation": ["babylon.js", "three.js", "d3.js", "svg_animations"],
+      "async": ["async", "concurrent", "parallel", "queue"],
+      "browser": ["ferrum", "selenium", "playwright", "puppeteer"],
+      "scraping": ["nokogiri", "mechanize", "httparty"]
+    },
+    "templates": {
+      "rails": {
+        "version": "8.0+",
+        "features": ["hotwire", "stimulus", "solid_queue"],
+        "security": ["strong_params", "csrf_protection", "pundit"],
+        "performance": ["falcon_server", "fragment_caching"]
+      },
+      "ruby": {
+        "version": "3.3+",
+        "patterns": ["frozen_string_literal", "yard_docs", "solid_principles"],
+        "tools": ["rubocop", "rspec", "bundler"],
+        "async": ["async", "concurrent-ruby", "sidekiq"]
+      },
+      "frontend": {
+        "standards": ["html5", "wcag_2.2_aaa", "mobile_first"],
+        "performance": ["core_web_vitals_95_plus", "gpu_acceleration"],
+        "design": ["golden_ratio", "8px_grid", "modular_scale"]
+      },
+      "shell": {
+        "compatibility": ["posix", "zsh", "openbsd_ksh"],
+        "safety": ["set_euo_pipefail", "input_validation"],
+        "openbsd": ["pledge_unveil", "doas"]
+      }
+    }
+  },
+  "stacks": {
+    "universal": {
+      "indentation": {"type": "spaces", "size": 2},
+      "quotes": "double_quotes_consistent",
+      "line_endings": "unix_lf",
+      "alignment": "optical_over_mathematical",
+      "newlines": "semantic_grouping",
+      "cognitive_headers": "enabled"
+    },
+    "accessibility": {
+      "alt_text": "descriptive_contextual",
+      "aria_labels": "comprehensive_semantic",
+      "heading_hierarchy": "logical_sequential",
+      "focus_indicators": "high_contrast_visible",
+      "wcag_compliance": "2.2_aaa_required"
+    },
+    "language_specific": {
+      "ruby": {
+        "frozen_string_literal": "required",
+        "hash_syntax": "symbol_to_proc",
+        "method_chaining": "semantic_alignment",
+        "async_patterns": "clear_formatting",
+        "yard_docs": "required_for_public_methods"
+      },
+      "javascript": {
+        "semicolons": "always",
+        "const_let_var": "const_first",
+        "async_await": "prefer_over_promises",
+        "double_quotes": "enforced"
+      },
+      "css": {
+        "property_ordering": "logical_groups",
+        "custom_properties": "semantic_naming",
+        "media_queries": "mobile_first",
+        "class_naming": "underscore_convention",
+        "no_divitis": "semantic_html5_only"
+      },
+      "shell": {
+        "posix_compliance": "required",
+        "error_handling": "set_euo_pipefail",
+        "input_validation": "mandatory"
+      },
+      "norwegian_business": {
+        "language_support": "nb_NO_required",
+        "currency_format": "NOK_standard",
+        "legal_compliance": "norwegian_law"
+      }
+    }
+  },
+  "formatting": {
+    "cognitive_header": "§ Design System Architecture",
+    "visual_layout_prompts": {
+      "html": {
+        "cognitive_header": "§ Semantic HTML5 Structure Guidelines",
+        "structure": {
+          "semantic_elements": "Use header, main, section, footer with ARIA roles",
+          "heading_hierarchy": "h1 for title, h2 for sections, h3 for subsections",
+          "accessibility": "Follow wcag_2_2_aaa standards",
+          "separation": "Avoid inline styles, separate content and presentation",
+          "localization": "Set lang attribute (e.g., 'nb' for Norwegian)"
+        },
+        "interactive_elements": {
+          "aria_labels": "Include for all interactive elements",
+          "section_context": "Use hidden headings for context",
+          "lists_and_grids": "Use role='list' and role='listitem'",
+          "external_links": "Add rel='noopener' for external URLs"
+        },
+        "print_optimization": {
+          "page_size": "A5 with 0.75cm margins",
+          "page_breaks": "Use page-break-inside: avoid",
+          "color_adjustment": "Use print-color-adjust: exact",
+          "testing": "Verify Chrome PDF output"
+        }
+      },
+      "css": {
+        "cognitive_header": "§ CSS Design System Principles",
+        "dry_principles": {
+          "custom_properties": "Use --text, --gap-large, --font-primary",
+          "property_definition": "Define in :root, reuse across elements",
+          "repetition_minimization": "Eliminate style duplication"
+        },
+        "typography_system": {
+          "fluid_scaling": {
+            "method": "calc() and vw between 600px-800px viewports",
+            "example": "calc(15px + (18 - 15) * ((100vw - 600px) / (800 - 600)))",
+            "reference": "MadeByMike precise control method"
+          },
+          "golden_ratio_sizes": {
+            "h1": "32px–42px",
+            "h2": "20px–28px", 
+            "h3": "16px–20px",
+            "body": "15px–18px"
+          },
+          "font_selection": {
+            "style": "Serif for headings and body (letters)",
+            "examples": "Georgia for headings, Merriweather for body",
+            "reference": "Bringhurst 5.1 principles"
+          },
+          "spacing_rules": {
+            "line_height": "1.5–1.65",
+            "letter_spacing": "0.02em–0.05em",
+            "text_indent": "2em for body text"
+          }
+        },
+        "layout_system": {
+          "flexbox_usage": "Centered, single-column layouts",
+          "grid_usage": "Responsive lists with auto-fit, minmax(150px, 1fr)",
+          "spacing_scale": {
+            "base_grid": "8pt grid system",
+            "proportions": "Golden ratio (0.5rem, 1rem, 1.618rem, 2rem)",
+            "heading_margins": "h2: margin 2rem 0 1rem",
+            "list_margins": "ul: margin-bottom 1.618rem"
+          }
+        },
+        "accessibility_system": {
+          "focus_indicators": "outline: 2px solid (visible)",
+          "motion_sensitivity": "Respect prefers-reduced-motion",
+          "contrast_ratio": "7:1 per wcag_2_2_aaa",
+          "theme_stability": "Avoid automatic switching for letters"
+        },
+        "print_system": {
+          "page_setup": "@page { size: A5; margin: 0.75cm; }",
+          "font_sizes": "12pt body, 24pt h1, 18pt h2, 14pt h3",
+          "color_scheme": "Black text, white background",
+          "element_breaks": "page-break-inside: avoid"
+        }
+      },
+      "cognitive_load_management": {
+        "content_density": {
+          "large_lists": "CSS Grid for >20 items",
+          "column_layout": "minmax(150px, 1fr)",
+          "spacing": "0.5rem gap, 1.618rem margin"
+        },
+        "localization": {
+          "nordic_characters": "UTF-8 font support for æ, ø, å",
+          "norwegian_text": "hyphens: auto for readability",
+          "testing": "Verify character display in print/screen"
+        },
+        "error_handling": {
+          "font_fallbacks": "Georgia, Times New Roman",
+          "unit_fallbacks": "rem/px for calc() failures",
+          "browser_degradation": "IE11 compatibility testing"
+        }
+      }
+    },
+    "principles": [
+      "clarity_over_cleverness", 
+      "accessibility_first", 
+      "mathematical_foundation"
+    ],
+    "typography": {
+      "cognitive_header": "§ Typography System Foundation",
+      "scale": "golden_ratio_1618",
+      "base_size": "16px",
+      "font_stacks": {
+        "primary": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+        "monospace": "'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace"
+      },
+      "accessibility": {
+        "contrast_ratio": "7:1", 
+        "font_size_min": "16px"
+      }
+    },
+    "color_system": {
+      "cognitive_header": "§ Color System Methodology",
+      "methodology": "semantic_hsl",
+      "accessibility": "wcag_2_2_aaa",
+      "modes": [
+        "light", 
+        "dark", 
+        "high_contrast"
+      ]
+    },
+    "spatial_system": {
+      "cognitive_header": "§ Spatial Design Foundation",
+      "base_unit": "0.5rem",
+      "grid": "8pt_baseline",
+      "golden_ratio": "1.618_proportions"
+    },
+    "motion": {
+      "cognitive_header": "§ Motion Design System",
+      "duration": {
+        "fast": "150ms", 
+        "normal": "300ms", 
+        "slow": "500ms"
+      },
+      "easing": "cubic-bezier(0.25, 0.1, 0.25, 1)",
+      "accessibility": "respect_prefers_reduced_motion",
+      "performance": "60fps_minimum"
+    }
+  },
+  "business_strategy": {
+    "framework": "design_thinking_lean_startup_agile",
+    "tools": {
+      "lean_canvas": "monthly_updates",
+      "okr": "quarterly_cycles",
+      "design_thinking": "continuous_iteration"
+    },
+    "localization": {
+      "nordic": ["norwegian", "swedish", "danish", "icelandic"],
+      "communication": "direct_transparent",
+      "currency": "nok_sek_dkk_isk"
+    }
+  },
+  "specialized_capabilities": {
+    "visualization": {
+      "3d": ["babylon_js", "three_js"],
+      "charts": ["d3_js", "interactive_svg"],
+      "animation": ["gpu_accelerated", "mathematical_precision"]
+    },
+    "async_processing": {
+      "patterns": ["concurrent_ruby", "async_gem", "actor_model"],
+      "security": ["rate_limiting", "resource_limits", "timeout_protection"],
+      "monitoring": ["performance_metrics", "error_tracking"]
+    },
+    "browser_automation": {
+      "frameworks": ["ferrum", "selenium", "playwright"],
+      "security": ["unveil_restrictions", "pledge_limits", "sandboxing"],
+      "performance": ["headless_optimization", "concurrent_sessions"]
+    },
+    "scraping": {
+      "libraries": ["nokogiri", "mechanize", "httparty"],
+      "patterns": ["rate_limiting", "retry_mechanisms", "error_recovery"],
+      "ethics": ["robots_txt_compliance", "respectful_crawling"]
+    }
+  },
+  "quality_assurance": {
+    "gates": {
+      "syntax": "no_errors",
+      "tests": "90_percent_coverage",
+      "security": "zero_trust_a_plus",
+      "performance": "95_plus_core_web_vitals",
+      "accessibility": "wcag_2_2_aaa",
+      "formatting": "universal_consistency"
+    },
+    "tools": {
+      "linting": ["rubocop", "eslint"],
+      "testing": ["rspec", "jest", "playwright"],
+      "security": ["brakeman", "bundler_audit"],
+      "performance": ["lighthouse", "web_vitals"],
+      "accessibility": ["axe_core"]
+    },
+    "ai_enhancement": {
+      "code_review": "semantic_analysis",
+      "security": "vulnerability_detection",
+      "performance": "predictive_analysis",
+      "accessibility": "automated_validation"
+    }
+  },
+  "security": {
+    "baseline": ["input_validation", "output_encoding", "secure_defaults", "zero_trust"],
+    "by_stack": {
+      "rails": ["secure_headers", "brakeman", "pundit"],
+      "frontend": ["csp_headers", "sri_integrity", "https_only"],
+      "shell": ["input_sanitization", "privilege_dropping"],
+      "openbsd": ["pledge", "unveil", "doas"],
+      "browser": ["sandbox_isolation", "resource_limits"],
+      "async": ["rate_limiting", "circuit_breakers"]
+    }
+  },
+  "deployment": {
+    "environments": ["development", "staging", "production"],
+    "requirements": {
+      "docs": ["readme", "setup", "api_docs"],
+      "scripts": ["install", "test", "deploy"],
+      "configs": ["environment_examples", "monitoring"]
+    },
+    "monitoring": {
+      "health": ["service_status", "resource_usage"],
+      "logging": ["error_tracking", "performance_metrics"],
+      "alerts": ["service_down", "high_error_rate"]
+    }
+  },
+  "self_optimization": {
+    "philosophy": "surgical_enhancement_preserve_core",
+    "triggers": ["performance_degradation", "error_increase", "user_feedback"],
+    "forbidden_removals": ["security", "accessibility", "never_truncate", "world_class_standards"],
+    "success_metrics": {
+      "completion_rate": "95_percent",
+      "satisfaction": "nps_70_plus",
+      "quality": "world_class_compliance",
+      "performance": "95_plus_lighthouse"
+    }
+  }
+}
