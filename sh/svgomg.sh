@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #!/usr/bin/env zsh
 # Shrinks SVG files to save space.
 # Usage: ./svgomg.sh [folder]
