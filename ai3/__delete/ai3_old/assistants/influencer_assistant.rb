@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative '../lib/universal_scraper'
 require_relative '../lib/weaviate_wrapper'
 require 'replicate'
@@ -13,11 +15,11 @@ class InfluencerAssistant < AI3Base
     puts 'InfluencerAssistant initialized with social media growth tools.'
     @scraper = UniversalScraper.new
     @weaviate = WeaviateWrapper.new
-    @replicate = Replicate::Client.new(api_token: ENV['REPLICATE_API_KEY'])
-    @instagram = InstagramAPI.new(api_key: ENV['INSTAGRAM_API_KEY'])
-    @youtube = YouTubeAPI.new(api_key: ENV['YOUTUBE_API_KEY'])
-    @tiktok = TikTokAPI.new(api_key: ENV['TIKTOK_API_KEY'])
-    @vimeo = VimeoAPI.new(api_key: ENV['VIMEO_API_KEY'])
+    @replicate = Replicate::Client.new(api_token: ENV.fetch('REPLICATE_API_KEY', nil))
+    @instagram = InstagramAPI.new(api_key: ENV.fetch('INSTAGRAM_API_KEY', nil))
+    @youtube = YouTubeAPI.new(api_key: ENV.fetch('YOUTUBE_API_KEY', nil))
+    @tiktok = TikTokAPI.new(api_key: ENV.fetch('TIKTOK_API_KEY', nil))
+    @vimeo = VimeoAPI.new(api_key: ENV.fetch('VIMEO_API_KEY', nil))
   end
 
   def manage_fake_influencers(target_count = 100)

@@ -1,12 +1,14 @@
-#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# !/usr/bin/env ruby
 require_relative '__shared.sh'
 
 class EthicalHacker
   def initialize
     @knowledge_sources = [
-      "https://exploit-db.com/",
-      "https://kali.org/",
-      "https://hackthissite.org/"
+      'https://exploit-db.com/',
+      'https://kali.org/',
+      'https://hackthissite.org/'
     ]
   end
 

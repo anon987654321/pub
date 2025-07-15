@@ -1,14 +1,11 @@
 require 'concurrent/collection/map/non_concurrent_map_backend'
 
 module Concurrent
-
   # @!visibility private
   module Collection
-
     # @!visibility private
     class SynchronizedMapBackend < NonConcurrentMapBackend
-
-      def initialize(*args, &block)
+      def initialize(*args, &)
         super
 
         # WARNING: Mutex is a non-reentrant lock, so the synchronized methods are
@@ -77,6 +74,7 @@ module Concurrent
       end
 
       private
+
       def dupped_backend
         @mutex.synchronize { super }
       end

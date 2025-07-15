@@ -10,7 +10,7 @@ require 'json'
 class MultiLLMManager
   PROVIDERS = {
     xai: 'X.AI/Grok',
-    anthropic: 'Anthropic/Claude', 
+    anthropic: 'Anthropic/Claude',
     openai: 'OpenAI/o3-mini',
     ollama: 'Ollama/DeepSeek-R1:1.5b'
   }.freeze
@@ -20,11 +20,11 @@ class MultiLLMManager
   def initialize(config = {})
     @config = config
     @providers = {}
-    @fallback_chain = [:xai, :anthropic, :openai, :ollama]
+    @fallback_chain = %i[xai anthropic openai ollama]
     @circuit_breakers = {}
     @current_provider = @fallback_chain.first
     @request_history = []
-    
+
     initialize_providers
   end
 
@@ -32,18 +32,18 @@ class MultiLLMManager
   def route_query(query, preferred_provider: nil, fallback: true, max_tokens: 1000)
     provider = preferred_provider || @current_provider
     providers_to_try = fallback ? @fallback_chain : [provider]
-    
+
     providers_to_try.each do |provider_name|
       next if circuit_breaker_open?(provider_name)
-      
+
       begin
         start_time = Time.now
         response = query_provider(provider_name, query, max_tokens)
         response_time = Time.now - start_time
-        
+
         record_success(provider_name, response_time)
         @current_provider = provider_name
-        
+
         return {
           response: response,
           provider: provider_name,
@@ -51,21 +51,22 @@ class MultiLLMManager
           response_time: response_time,
           timestamp: Time.now
         }
-      rescue => e
+      rescue StandardError => e
         record_failure(provider_name, e)
         puts "❌ #{PROVIDERS[provider_name]} failed: #{e.message}"
         next if fallback
+
         raise
       end
     end
-    
+
     raise "All LLM providers failed for query: #{query.truncate(100)}"
   end
 
   # Get provider status
   def provider_status
     status = {}
-    
+
     PROVIDERS.each do |provider_name, display_name|
       breaker = @circuit_breakers[provider_name] || {}
       status[provider_name] = {
@@ -77,7 +78,7 @@ class MultiLLMManager
         cooldown_remaining: calculate_cooldown_remaining(provider_name)
       }
     end
-    
+
     status
   end
 
@@ -86,12 +87,12 @@ class MultiLLMManager
     unless PROVIDERS.key?(provider_name)
       raise "Unknown provider: #{provider_name}. Available: #{PROVIDERS.keys.join(', ')}"
     end
-    
+
     if circuit_breaker_open?(provider_name)
       cooldown = calculate_cooldown_remaining(provider_name)
       raise "Provider #{provider_name} is in cooldown for #{cooldown} more seconds"
     end
-    
+
     @current_provider = provider_name
     puts "🔄 Switched to #{PROVIDERS[provider_name]}"
   end
@@ -109,7 +110,7 @@ class MultiLLMManager
   def request_stats
     total_requests = @request_history.size
     successful_requests = @request_history.count { |r| r[:success] }
-    
+
     {
       total_requests: total_requests,
       successful_requests: successful_requests,
@@ -135,7 +136,7 @@ class MultiLLMManager
   def query_provider(provider_name, query, max_tokens)
     provider = @providers[provider_name]
     raise "Provider #{provider_name} not initialized" unless provider
-    
+
     provider.query(query, max_tokens: max_tokens)
   end
 
@@ -143,12 +144,12 @@ class MultiLLMManager
   def circuit_breaker_open?(provider_name)
     breaker = @circuit_breakers[provider_name]
     return false unless breaker
-    
-    if breaker[:failure_count] >= 5 && 
+
+    if breaker[:failure_count] >= 5 &&
        (Time.now - breaker[:last_failure]) < 300 # 5 minute cooldown
       return true
     end
-    
+
     false
   end
 
@@ -158,14 +159,14 @@ class MultiLLMManager
       failure_count: 0,
       last_success: Time.now
     }
-    
+
     @request_history << {
       provider: provider_name,
       success: true,
       response_time: response_time,
       timestamp: Time.now
     }
-    
+
     cleanup_request_history
   end
 
@@ -175,14 +176,14 @@ class MultiLLMManager
     breaker[:failure_count] += 1
     breaker[:last_failure] = Time.now
     breaker[:last_error] = error.message
-    
+
     @request_history << {
       provider: provider_name,
       success: false,
       error: error.message,
       timestamp: Time.now
     }
-    
+
     cleanup_request_history
     puts "🔴 LLM_FAILURE: #{PROVIDERS[provider_name]} - #{error.message}"
   end
@@ -191,7 +192,7 @@ class MultiLLMManager
   def calculate_cooldown_remaining(provider_name)
     breaker = @circuit_breakers[provider_name]
     return 0 unless breaker && breaker[:last_failure]
-    
+
     elapsed = Time.now - breaker[:last_failure]
     remaining = 300 - elapsed # 5 minute cooldown
     [remaining, 0].max.round
@@ -201,7 +202,7 @@ class MultiLLMManager
   def calculate_average_response_time
     successful_requests = @request_history.select { |r| r[:success] && r[:response_time] }
     return 0 if successful_requests.empty?
-    
+
     total_time = successful_requests.sum { |r| r[:response_time] }
     (total_time / successful_requests.size).round(3)
   end
@@ -210,11 +211,11 @@ class MultiLLMManager
   def calculate_provider_usage
     usage = {}
     PROVIDERS.keys.each { |provider| usage[provider] = 0 }
-    
+
     @request_history.each do |request|
       usage[request[:provider]] += 1 if usage.key?(request[:provider])
     end
-    
+
     usage
   end
 
@@ -227,16 +228,14 @@ end
 # X.AI/Grok Provider
 class XAIProvider
   def initialize(config)
-    @api_key = config['xai_api_key'] || ENV['XAI_API_KEY']
+    @api_key = config['xai_api_key'] || ENV.fetch('XAI_API_KEY', nil)
     @base_url = 'https://api.x.ai/v1'
     @client = setup_client
   end
 
   def query(prompt, max_tokens: 1000)
-    unless @api_key
-      raise "X.AI API key not configured"
-    end
-    
+    raise 'X.AI API key not configured' unless @api_key
+
     response = @client.post('/chat/completions') do |req|
       req.headers['Authorization'] = "Bearer #{@api_key}"
       req.headers['Content-Type'] = 'application/json'
@@ -247,13 +246,11 @@ class XAIProvider
         temperature: 0.7
       }.to_json
     end
-    
-    if response.success?
-      result = JSON.parse(response.body)
-      result.dig('choices', 0, 'message', 'content')
-    else
-      raise "X.AI API error: #{response.status} - #{response.body}"
-    end
+
+    raise "X.AI API error: #{response.status} - #{response.body}" unless response.success?
+
+    result = JSON.parse(response.body)
+    result.dig('choices', 0, 'message', 'content')
   end
 
   private
@@ -270,21 +267,19 @@ end
 # Anthropic/Claude Provider
 class AnthropicProvider
   def initialize(config)
-    @api_key = config['anthropic_api_key'] || ENV['ANTHROPIC_API_KEY']
+    @api_key = config['anthropic_api_key'] || ENV.fetch('ANTHROPIC_API_KEY', nil)
     @client = @api_key ? Anthropic::Client.new(access_token: @api_key) : nil
   end
 
   def query(prompt, max_tokens: 1000)
-    unless @client
-      raise "Anthropic API key not configured"
-    end
-    
+    raise 'Anthropic API key not configured' unless @client
+
     response = @client.messages(
       model: 'claude-3-sonnet-20240229',
       max_tokens: max_tokens,
       messages: [{ role: 'user', content: prompt }]
     )
-    
+
     response.dig('content', 0, 'text')
   end
 end
@@ -292,24 +287,22 @@ end
 # OpenAI Provider
 class OpenAIProvider
   def initialize(config)
-    @api_key = config['openai_api_key'] || ENV['OPENAI_API_KEY']
+    @api_key = config['openai_api_key'] || ENV.fetch('OPENAI_API_KEY', nil)
     @client = @api_key ? OpenAI::Client.new(access_token: @api_key) : nil
   end
 
   def query(prompt, max_tokens: 1000)
-    unless @client
-      raise "OpenAI API key not configured"
-    end
-    
+    raise 'OpenAI API key not configured' unless @client
+
     response = @client.chat(
       parameters: {
-        model: 'gpt-3.5-turbo',  # Will upgrade to o3-mini when available
+        model: 'gpt-3.5-turbo', # Will upgrade to o3-mini when available
         messages: [{ role: 'user', content: prompt }],
         max_tokens: max_tokens,
         temperature: 0.7
       }
     )
-    
+
     response.dig('choices', 0, 'message', 'content')
   end
 end
@@ -335,13 +328,11 @@ class OllamaProvider
         stream: false
       }.to_json
     end
-    
-    if response.success?
-      result = JSON.parse(response.body)
-      result['response']
-    else
-      raise "Ollama error: #{response.status} - #{response.body}"
-    end
+
+    raise "Ollama error: #{response.status} - #{response.body}" unless response.success?
+
+    result = JSON.parse(response.body)
+    result['response']
   rescue Faraday::ConnectionFailed
     raise "Ollama not available at #{@base_url}. Is Ollama running?"
   end

@@ -2,7 +2,12 @@
 
 ## Vision
 
-To design and deploy a new fleet of multi-role Arctic super-vessels that surpass Russia's nuclear-powered icebreakers, enhancing NATO's operational capabilities, geopolitical influence, and Arctic dominance. These vessels will integrate cutting-edge AI, hybrid nuclear propulsion, and advanced modular systems to ensure NATO's strategic leadership in the Arctic.
+To design and deploy a new fleet of multi-role Arctic super-vessels that surpass Russia's nuclear-powered icebreakers,
+enhancing NATO's operational capabilities,
+geopolitical influence,
+and Arctic dominance. These vessels will integrate cutting-edge AI,
+hybrid nuclear propulsion,
+and advanced modular systems to ensure NATO's strategic leadership in the Arctic.
 
 ---
 
@@ -210,9 +215,13 @@ To design and deploy a new fleet of multi-role Arctic super-vessels that surpass
 
 ## Proposal Summary
 
-The Aurora-class Arctic dominance ships will redefine NATO's presence in the Arctic, surpassing existing Russian capabilities and positioning NATO as a leader in maritime defense and innovation. By leveraging Norway's expertise through M2 and fostering international collaboration, this project ensures sustainable, future-proof solutions for Arctic operations.
+The Aurora-class Arctic dominance ships will redefine NATO's presence in the Arctic,
+surpassing existing Russian capabilities and positioning NATO as a leader in maritime defense and innovation. By leveraging Norway's expertise through M2 and fostering international collaboration,
+this project ensures sustainable,
+future-proof solutions for Arctic operations.
 
-This ambitious project represents a strategic investment in NATO's future, combining military necessity with technological innovation and environmental responsibility. The Aurora-class vessels will not only secure NATO's Arctic interests but also demonstrate the alliance's commitment to sustainable defense solutions and technological leadership.
+This ambitious project represents a strategic investment in NATO's future,
+combining military necessity with technological innovation and environmental responsibility. The Aurora-class vessels will not only secure NATO's Arctic interests but also demonstrate the alliance's commitment to sustainable defense solutions and technological leadership.
 
 ---
 

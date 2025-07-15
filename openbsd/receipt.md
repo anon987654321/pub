@@ -43,10 +43,10 @@ Have fun!
 
 Mischa
 
-PS: When you are going to FDE your VM, keep in mind that we can not
+PS: When you are going to FDE your VM,
+keep in mind that we can not
 start your VM.
 
 PPS: You can follow us on https://bsd.network/@OpenBSDAms and
 https://twitter.com/OpenBSDAms and would be great if you can share
 your story there.
-

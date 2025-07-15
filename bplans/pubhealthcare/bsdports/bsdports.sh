@@ -1,4 +1,7 @@
+#!/bin/bash
+
 #!/usr/bin/env zsh
+set -euo pipefail
 
 # -- INITIAL SETUP --
 

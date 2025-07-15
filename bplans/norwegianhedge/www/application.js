@@ -2,9 +2,10 @@ $(document).ready(function() {
 
   // Kjør kode kun på forsiden
 
-  if($('#btc').length) {
-    var fiatCurrency = "NOK",
-      conversionObj;
+  if($("#btc").length) {
+    const fiatCurrency = "NOK";
+    let conversionObj;
+    let rate;
   
     function getConversionRate() {
       return $.ajax({
@@ -30,24 +31,24 @@ $(document).ready(function() {
     getConversionRate().then(bitcoinToFiat);
   
     function fiatToBitcoin() {
-      var number = Number($("#fiat").val());
+      const number = Number($("#fiat").val());
       $("#btc").val((number / rate).toFixed(4));
-    };
+    }
   
     function bitcoinToFiat() {
-      var number = Number($("#btc").val());
+      const number = Number($("#btc").val());
       $("#fiat").val((number * rate).toFixed(2));
     }
   
-    $('input').keyup(function() {
-      if ($(this).is('input#btc')) {
+    $("input").keyup(function() {
+      if ($(this).is("input#btc")) {
         bitcoinToFiat();
-      } else if ($(this).is('input#fiat')) {
+      } else if ($(this).is("input#fiat")) {
         fiatToBitcoin();
       }
     });
   
-    $('input').click(function() {
+    $("input").click(function() {
       $(this).select();
     });
   

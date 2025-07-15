@@ -12,7 +12,7 @@ concurrent-ruby-edge:
 
 ## Release v1.3.4 (10 August 2024)
 
-* (#1060) Fix bug with return value of `Concurrent.available_processor_count` when `cpu.cfs_quota_us` is -1.
+* (#1060) Fix bug with return value of `Concurrent.available_processor_count` when `cpu.cfs_quota_us` is -1..
 * (#1058) Add `Concurrent.cpu_shares` that is cgroups aware.
 
 ## Release v1.3.3 (9 June 2024)
@@ -40,7 +40,7 @@ concurrent-ruby-edge:
 
 ## Release v1.2.3 (16 Jan 2024)
 
-* See [the GitHub release](https://github.com/ruby-concurrency/concurrent-ruby/releases/tag/v1.2.3) for details.
+* See [the GitHub release](https://github.com/ruby-concurrency/concurrent-ruby/releases/tag/v1.2.3) for details..
 
 ## Release v1.2.2 (24 Feb 2023)
 
@@ -49,13 +49,13 @@ concurrent-ruby-edge:
 ## Release v1.2.1 (24 Feb 2023)
 
 * (#990) Add missing `require 'fiber'` for `FiberLocalVar`.
-* (#989) Optimize `Concurrent::Map#[]` on CRuby by letting the backing Hash handle the `default_proc`.
+* (#989) Optimize `Concurrent::Map#[]` on CRuby by letting the backing Hash handle the `default_proc`..
 
 ## Release v1.2.0 (23 Jan 2023)
 
-* (#962) Fix ReentrantReadWriteLock to use the same granularity for locals as for Mutex it uses.
+* (#962) Fix ReentrantReadWriteLock to use the same granularity for locals as for Mutex it uses..
 * (#983) Add FiberLocalVar
-* (#934) concurrent-ruby now supports requiring individual classes (public classes listed in the docs), e.g., `require 'concurrent/map'`
+* (#934) concurrent-ruby now supports requiring individual classes (public classes listed in the docs), e.g., `require 'concurrent/map'`.
 * (#976) Let `Promises.any_fulfilled_future` take an `Event`
 * Improve documentation of various classes
 * (#975) Set the Ruby compatibility version at 2.3
@@ -66,23 +66,23 @@ concurrent-ruby-edge:
 concurrent-ruby:
 
 * (#951) Set the Ruby compatibility version at 2.2
-* (#939, #933) The `caller_runs` fallback policy no longer blocks reads from the job queue by worker threads
-* (#938, #761, #652) You can now explicitly `prune_pool` a thread pool (Sylvain Joyeux)
-* (#937, #757, #670) We switched the Yahoo stock API for demos to Alpha Vantage (Gustavo Caso)
-* (#932, #931) We changed how `SafeTaskExecutor` handles local jump errors (Aaron Jensen)
-* (#927) You can use keyword arguments in your initialize when using `Async` (Matt Larraz)
-* (#926, #639) We removed timeout from `TimerTask` because it wasn't sound, and now it's a no-op with a warning (Jacob Atzen)
-* (#919) If you double-lock a re-entrant read-write lock, we promote to locked for writing (zp yuan)
-* (#915) `monotonic_time` now accepts an optional unit parameter, as Ruby's `clock_gettime` (Jean Boussier)
+* (#939, #933) The `caller_runs` fallback policy no longer blocks reads from the job queue by worker threads.
+* (#938, #761, #652) You can now explicitly `prune_pool` a thread pool (Sylvain Joyeux).
+* (#937, #757, #670) We switched the Yahoo stock API for demos to Alpha Vantage (Gustavo Caso).
+* (#932, #931) We changed how `SafeTaskExecutor` handles local jump errors (Aaron Jensen).
+* (#927) You can use keyword arguments in your initialize when using `Async` (Matt Larraz).
+* (#926, #639) We removed timeout from `TimerTask` because it wasn't sound, and now it's a no-op with a warning (Jacob Atzen).
+* (#919) If you double-lock a re-entrant read-write lock, we promote to locked for writing (zp yuan).
+* (#915) `monotonic_time` now accepts an optional unit parameter, as Ruby's `clock_gettime` (Jean Boussier).
 
 ## Release v1.1.9 (5 Jun 2021)
 
 concurrent-ruby:
 
-* (#866) Child promise state not set to :pending immediately after #execute when parent has completed 
+* (#866) Child promise state not set to :pending immediately after #execute when parent has completed.
 * (#905, #872) Fix RubyNonConcurrentPriorityQueue#delete method
-* (2df0337d) Make sure locks are not shared on shared when objects are dup/cloned
-* (#900, #906, #796, #847, #911) Fix Concurrent::Set tread-safety issues on CRuby
+* (2df0337d) Make sure locks are not shared on shared when objects are dup/cloned.
+* (#900, #906, #796, #847, #911) Fix Concurrent::Set tread-safety issues on CRuby.
 * (#907) Add new ConcurrentMap backend for TruffleRuby
 
 ## Release v1.1.8 (20 January 2021)
@@ -90,23 +90,23 @@ concurrent-ruby:
 concurrent-ruby:
 
 * (#885) Fix race condition in TVar for stale reads 
-* (#884) RubyThreadLocalVar: Do not iterate over hash which might conflict with new pair addition
+* (#884) RubyThreadLocalVar: Do not iterate over hash which might conflict with new pair addition.
 
 ## Release v1.1.7 (6 August 2020)
 
 concurrent-ruby:
 
-* (#879) Consider falsy value on `Concurrent::Map#compute_if_absent` for fast non-blocking path
+* (#879) Consider falsy value on `Concurrent::Map#compute_if_absent` for fast non-blocking path.
 * (#876) Reset Async queue on forking, makes Async fork-safe
-* (#856) Avoid running problematic code in RubyThreadLocalVar on MRI that occasionally results in segfault
+* (#856) Avoid running problematic code in RubyThreadLocalVar on MRI that occasionally results in segfault.
 * (#853) Introduce ThreadPoolExecutor without a Queue
 
 ## Release v1.1.6, edge v0.6.0 (10 Feb 2020)
 
 concurrent-ruby:
 
-* (#841) Concurrent.disable_at_exit_handlers! is no longer needed and was deprecated.
-* (#841) AbstractExecutorService#auto_terminate= was deprecated and has no effect. 
+* (#841) Concurrent.disable_at_exit_handlers! is no longer needed and was deprecated..
+* (#841) AbstractExecutorService#auto_terminate= was deprecated and has no effect.
   Set :auto_terminate option instead when executor is initialized.
 
 ## Release v1.1.6.pre1, edge v0.6.0.pre1 (26 Jan 2020)
@@ -140,8 +140,8 @@ concurrent-ruby-edge:
 
 ## Release v1.1.4 (14 Dec 2018)
 
-* (#780) Remove java_alias of 'submit' method of Runnable to let executor service work on java 11
-* (#776) Fix NameError on defining a struct with a name which is already taken in an ancestor
+* (#780) Remove java_alias of 'submit' method of Runnable to let executor service work on java 11.
+* (#776) Fix NameError on defining a struct with a name which is already taken in an ancestor.
 
 ## Release v1.1.3 (7 Nov 2018)
 
@@ -176,7 +176,7 @@ concurrent-ruby-edge:
 concurrent-ruby:
 
 * requires at least Ruby 2.0
-* [Promises](http://ruby-concurrency.github.io/concurrent-ruby/1.1.0/Concurrent/Promises.html)
+* [Promises](http://ruby-concurrency.github.io/concurrent-ruby/1.1.0/Concurrent/Promises.html).
   are moved from `concurrent-ruby-edge` to `concurrent-ruby`
 * Add support for TruffleRuby
   * (#734) Fix Array/Hash/Set construction broken on TruffleRuby
@@ -219,7 +219,7 @@ concurrent-ruby-edge:
 concurrent-ruby:
 
 * Documentation for Event and Semaphore
-* Use Unsafe#fullFence and #loadFence directly since the shortcuts were removed in JRuby
+* Use Unsafe#fullFence and #loadFence directly since the shortcuts were removed in JRuby.
 * Do not depend on org.jruby.util.unsafe.UnsafeHolder
 
 concurrent-ruby-edge:
@@ -305,14 +305,15 @@ concurrent-ruby-edge:
 * Brand new `Channel` implementation in Edge gem.
 * Simplification of `RubySingleThreadExecutor`
 * `Async` improvements
-  - Each object uses its own `SingleThreadExecutor` instead of the global thread pool.
+- Each object uses its own `SingleThreadExecutor` instead of the global thread pool..
   - No longer supports executor injection
   - Much better documentation
 * `Atom` updates
   - No longer `Dereferenceable`
   - Now `Observable`
   - Added a `#reset` method
-* Brand new `Agent` API and implementation. Now functionally equivalent to Clojure.
+* Brand new `Agent` API and implementation.
+Now functionally equivalent to Clojure..
 * Continued improvements to the synchronization layer
 * Merged in the `thread_safe` gem
   - `Concurrent::Array`
@@ -322,7 +323,7 @@ concurrent-ruby-edge:
 * Minor improvements to Concurrent::Map
 * Complete rewrite of `Exchanger`
 * Removed all deprecated code (classes, methods, constants, etc.)
-* Updated Agent, MutexAtomic, and BufferedChannel to inherit from Synchronization::Object.
+* Updated Agent, MutexAtomic, and BufferedChannel to inherit from Synchronization::Object..
 * Many improved tests
 * Some internal reorganization
 
@@ -333,7 +334,7 @@ concurrent-ruby-edge:
 * Fixed require statements when requiring `Atom` alone
 * Significantly improved `ThreadLocalVar` on non-JRuby platforms
 * Fixed error handling in Edge `Concurrent.zip`
-* `AtomicFixnum` methods `#increment` and `#decrement` now support optional delta
+* `AtomicFixnum` methods `#increment` and `#decrement` now support optional delta.
 * New `AtomicFixnum#update` method
 * Minor optimizations in `ReadWriteLock`
 * New `ReentrantReadWriteLock` class
@@ -357,7 +358,7 @@ concurrent-ruby-edge:
   - Use `Process.clock_gettime(Process::CLOCK_MONOTONIC)` when available
   - Fallback to `java.lang.System.nanoTime()` on unsupported JRuby versions
   - Pure Ruby implementation for everything else
-  - Effects `Concurrent.timer`, `Concurrent.timeout`, `TimerSet`, `TimerTask`, and `ScheduledTask`
+- Effects `Concurrent.timer`, `Concurrent.timeout`, `TimerSet`, `TimerTask`, and `ScheduledTask`.
 * Deprecated all clock-time based timer scheduling
   - Only support scheduling by delay
   - Effects `Concurrent.timer`, `TimerSet`, and `ScheduledTask`
@@ -365,10 +366,10 @@ concurrent-ruby-edge:
 * Consistent `at_exit` behavior for Java and Ruby thread pools.
 * Added `at_exit` handler to Ruby thread pools (already in Java thread pools)
   - Ruby handler stores the object id and retrieves from `ObjectSpace`
-  - JRuby disables `ObjectSpace` by default so that handler stores the object reference
-* Added a `:stop_on_exit` option to thread pools to enable/disable `at_exit` handler
+- JRuby disables `ObjectSpace` by default so that handler stores the object reference.
+* Added a `:stop_on_exit` option to thread pools to enable/disable `at_exit` handler.
 * Updated thread pool docs to better explain shutting down thread pools
-* Simpler `:executor` option syntax for all abstractions which support this option
+* Simpler `:executor` option syntax for all abstractions which support this option.
 * Added `Executor#auto_terminate?` predicate method (for thread pools)
 * Added `at_exit` handler to `TimerSet`
 * Simplified auto-termination of the global executors
@@ -380,15 +381,15 @@ concurrent-ruby-edge:
   - New terms are "io executor" and "fast executor"
   - New functions added with new names
   - Deprecation warnings added to functions referencing old names
-* Moved all thread pool related functions from `Concurrent::Configuration` to `Concurrent`
+* Moved all thread pool related functions from `Concurrent::Configuration` to `Concurrent`.
   - Old functions still exist with deprecation warnings
   - New functions have updated names as appropriate
 * All high-level abstractions default to the "io executor"
-* Fixed bug in `Actor` causing it to prematurely warm global thread pools on gem load
-  - This also fixed a `RejectedExecutionError` bug when running with minitest/autorun via JRuby
+* Fixed bug in `Actor` causing it to prematurely warm global thread pools on gem load.
+- This also fixed a `RejectedExecutionError` bug when running with minitest/autorun via JRuby.
 * Moved global logger up to the `Concurrent` namespace and refactored the code
 * Optimized the performance of `Delay`
-  - Fixed a bug in which no executor option on construction caused block execution on a global thread pool
+- Fixed a bug in which no executor option on construction caused block execution on a global thread pool.
 * Numerous improvements and bug fixes to `TimerSet`
 * Fixed deadlock of `Future` when the handler raises Exception
 * Added shared specs for more classes
@@ -404,29 +405,31 @@ concurrent-ruby-edge:
   - `Channel`
   - `Exchanger`
   - `LazyRegister`
-  - **new Future Framework** <http://ruby-concurrency.github.io/concurrent-ruby/Concurrent/Edge.html> - unified
-    implementation of Futures and Promises which combines Features of previous `Future`,
-    `Promise`, `IVar`, `Event`, `Probe`, `dataflow`, `Delay`, `TimerTask` into single framework. It uses extensively
-    new synchronization layer to make all the paths **lock-free** with exception of blocking threads on `#wait`.
+- **new Future Framework** <http://ruby-concurrency.github.io/concurrent-ruby/Concurrent/Edge.html> - unified.
+implementation of Futures and Promises which combines Features of previous `Future`,.
+`Promise`, `IVar`, `Event`, `Probe`, `dataflow`, `Delay`, `TimerTask` into single framework.
+It uses extensively.
+new synchronization layer to make all the paths **lock-free** with exception of blocking threads on `#wait`..
     It offers better performance and does not block threads when not required.
 * Actor framework changes:
   - fixed reset loop in Pool
-  - Pool can use any actor as a worker, abstract worker class is no longer needed.
-  - Actor events not have format `[:event_name, *payload]` instead of just the Symbol.
-  - Actor now uses new Future/Promise Framework instead of `IVar` for better interoperability
-  - Behaviour definition array was simplified to `[BehaviourClass1, [BehaviourClass2, *initialization_args]]`
-  - Linking behavior responds to :linked message by returning array of linked actors
+- Pool can use any actor as a worker, abstract worker class is no longer needed..
+- Actor events not have format `[:event_name, *payload]` instead of just the Symbol..
+- Actor now uses new Future/Promise Framework instead of `IVar` for better interoperability.
+- Behaviour definition array was simplified to `[BehaviourClass1, [BehaviourClass2, *initialization_args]]`.
+- Linking behavior responds to :linked message by returning array of linked actors.
   - Supervised behavior is removed in favour of just Linking
-  - RestartingContext is supervised by default now, `supervise: true` is not required any more
-  - Events can be private and public, so far only difference is that Linking will
+- RestartingContext is supervised by default now, `supervise: true` is not required any more.
+- Events can be private and public, so far only difference is that Linking will.
     pass to linked actors only public messages. Adding private :restarting and
-    :resetting events which are send before the actor restarts or resets allowing
+:resetting events which are send before the actor restarts or resets allowing.
     to add callbacks to cleanup current child actors.
   - Print also object_id in Reference to_s
-  - Add AbstractContext#default_executor to be able to override executor class wide
+- Add AbstractContext#default_executor to be able to override executor class wide.
   - Add basic IO example
   - Documentation somewhat improved
-  - All messages should have same priority. It's now possible to send `actor << job1 << job2 << :terminate!` and
+- All messages should have same priority.
+It's now possible to send `actor << job1 << job2 << :terminate!` and.
     be sure that both jobs are processed first.
 * Refactored `Channel` to use newer synchronization objects
 * Added `#reset` and `#cancel` methods to `TimerSet`
@@ -441,18 +444,18 @@ concurrent-ruby-edge:
 
 ## Release v0.8.0 (25 January 2015)
 
-* C extension for MRI have been extracted into the `concurrent-ruby-ext` companion gem.
+* C extension for MRI have been extracted into the `concurrent-ruby-ext` companion gem..
   Please see the README for more detail.
 * Better variable isolation in `Promise` and `Future` via an `:args` option
 * Continued to update intermittently failing tests
 
 ## Release v0.7.2 (24 January 2015)
 
-* New `Semaphore` class based on [java.util.concurrent.Semaphore](http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/Semaphore.html)
+* New `Semaphore` class based on [java.util.concurrent.Semaphore](http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/Semaphore.html).
 * New `Promise.all?` and `Promise.any?` class methods
 * Renamed `:overflow_policy` on thread pools to `:fallback_policy`
 * Thread pools still accept the `:overflow_policy` option but display a warning
-* Thread pools now implement `fallback_policy` behavior when not running (rather than universally rejecting tasks)
+* Thread pools now implement `fallback_policy` behavior when not running (rather than universally rejecting tasks).
 * Fixed minor `set_deref_options` constructor bug in `Promise` class
 * Fixed minor `require` bug in `ThreadLocalVar` class
 * Fixed race condition bug in `TimerSet` class
@@ -465,7 +468,7 @@ concurrent-ruby-edge:
 
 ## Release v0.7.1 (4 December 2014)
 
-Please see the [roadmap](https://github.com/ruby-concurrency/concurrent-ruby/issues/142) for more information on the next planned release.
+Please see the [roadmap](https://github.com/ruby-concurrency/concurrent-ruby/issues/142) for more information on the next planned release..
 
 * Added `flat_map` method to `Promise`
 * Added `zip` method to `Promise`
@@ -480,7 +483,7 @@ Please see the [roadmap](https://github.com/ruby-concurrency/concurrent-ruby/iss
 * Added missing synchronizations to `TimerSet`
 * Fixed bug with return value of `Concurrent::Actor::Utils::Pool#ask`
 * Fixed timing bug in `TimerTask`
-* Fixed bug when creating a `JavaThreadPoolExecutor` with minimum pool size of zero
+* Fixed bug when creating a `JavaThreadPoolExecutor` with minimum pool size of zero.
 * Removed confusing warning when not using native extensions
 * Improved documentation
 
@@ -488,32 +491,38 @@ Please see the [roadmap](https://github.com/ruby-concurrency/concurrent-ruby/iss
 
 * Merge the [atomic](https://github.com/ruby-concurrency/atomic) gem
   - Pure Ruby `MutexAtomic` atomic reference class
-  - Platform native atomic reference classes `CAtomic`, `JavaAtomic`, and `RbxAtomic`
-  - Automated [build process](https://github.com/ruby-concurrency/rake-compiler-dev-box)
-  - Fat binary releases for [multiple platforms](https://rubygems.org/gems/concurrent-ruby/versions) including Windows (32/64), Linux (32/64), OS X (64-bit), Solaris (64-bit), and JRuby
+- Platform native atomic reference classes `CAtomic`, `JavaAtomic`, and `RbxAtomic`.
+- Automated [build process](https://github.com/ruby-concurrency/rake-compiler-dev-box).
+- Fat binary releases for [multiple platforms](https://rubygems.org/gems/concurrent-ruby/versions) including Windows (32/64), Linux (32/64), OS X (64-bit), Solaris (64-bit), and JRuby.
 * C native `CAtomicBoolean`
 * C native `CAtomicFixnum`
 * Refactored intermittently failing tests
 * Added `dataflow!` and `dataflow_with!` methods to match `Future#value!` method
 * Better handling of timeout in `Agent`
 * Actor Improvements
-  - Fine-grained implementation using chain of behaviors. Each behavior is responsible for single aspect like: `Termination`, `Pausing`, `Linking`, `Supervising`, etc. Users can create custom Actors easily based on their needs.
-  - Supervision was added. `RestartingContext` will pause on error waiting on its supervisor to decide what to do next ( options are `:terminate!`, `:resume!`, `:reset!`, `:restart!`). Supervising behavior also supports strategies `:one_for_one` and `:one_for_all`.
-  - Linking was added to be able to monitor actor's events like: `:terminated`, `:paused`, `:restarted`, etc.
-  - Dead letter routing added. Rejected envelopes are collected in a configurable actor (default: `Concurrent::Actor.root.ask!(:dead_letter_routing)`)
-  - Old `Actor` class removed and replaced by new implementation previously called `Actress`. `Actress` was kept as an alias for `Actor` to keep compatibility.
+- Fine-grained implementation using chain of behaviors.
+Each behavior is responsible for single aspect like: `Termination`, `Pausing`, `Linking`, `Supervising`, etc.
+Users can create custom Actors easily based on their needs..
+- Supervision was added.
+`RestartingContext` will pause on error waiting on its supervisor to decide what to do next ( options are `:terminate!`, `:resume!`, `:reset!`, `:restart!`).
+Supervising behavior also supports strategies `:one_for_one` and `:one_for_all`..
+- Linking was added to be able to monitor actor's events like: `:terminated`, `:paused`, `:restarted`, etc..
+- Dead letter routing added.
+Rejected envelopes are collected in a configurable actor (default: `Concurrent::Actor.root.ask!(:dead_letter_routing)`).
+- Old `Actor` class removed and replaced by new implementation previously called `Actress`.
+`Actress` was kept as an alias for `Actor` to keep compatibility..
   - `Utils::Broadcast` actor which allows Publish–subscribe pattern.
 * More executors for managing serialized operations
   - `SerializedExecution` mixin module
   - `SerializedExecutionDelegator` for serializing *any* executor
 * Updated `Async` with serialized execution
-* Updated `ImmediateExecutor` and `PerThreadExecutor` with full executor service lifecycle
+* Updated `ImmediateExecutor` and `PerThreadExecutor` with full executor service lifecycle.
 * Added a `Delay` to root `Actress` initialization
 * Minor bug fixes to thread pools
 * Refactored many intermittently failing specs
-* Removed Java interop warning `executor.rb:148 warning: ambiguous Java methods found, using submit(java.lang.Runnable)`
+* Removed Java interop warning `executor.rb:148 warning: ambiguous Java methods found, using submit(java.lang.Runnable)`.
 * Fixed minor bug in `RubyCachedThreadPool` overflow policy
-* Updated tests to use [RSpec 3.0](http://myronmars.to/n/dev-blog/2014/05/notable-changes-in-rspec-3)
+* Updated tests to use [RSpec 3.0](http://myronmars.to/n/dev-blog/2014/05/notable-changes-in-rspec-3).
 * Removed deprecated `Actor` class
 * Better support for Rubinius
 
@@ -522,7 +531,7 @@ Please see the [roadmap](https://github.com/ruby-concurrency/concurrent-ruby/iss
 * Many improvements to `Concurrent::Actress`
 * Bug fixes to `Concurrent::RubyThreadPoolExecutor`
 * Fixed several brittle tests
-* Moved documentation to http://ruby-concurrency.github.io/concurrent-ruby/frames.html
+* Moved documentation to http://ruby-concurrency.github.io/concurrent-ruby/frames.html.
 
 ## Release v0.6.0 (25 May 2014)
 
@@ -541,37 +550,43 @@ Please see the [roadmap](https://github.com/ruby-concurrency/concurrent-ruby/iss
 * Minor API updates to `Event`
 * Rewritten `TimerTask` now an `Executor` instead of a `Runnable`
 * Fixed many brittle specs
-* Renamed `FixedThreadPool` and `CachedThreadPool` to `RubyFixedThreadPool` and `RubyCachedThreadPool`
+* Renamed `FixedThreadPool` and `CachedThreadPool` to `RubyFixedThreadPool` and `RubyCachedThreadPool`.
 * Created JRuby optimized `JavaFixedThreadPool` and `JavaCachedThreadPool`
-* Consolidated fixed thread pool tests into `spec/concurrent/fixed_thread_pool_shared.rb` and  `spec/concurrent/cached_thread_pool_shared.rb`
-* `FixedThreadPool` now subclasses `RubyFixedThreadPool` or `JavaFixedThreadPool` as appropriate
-* `CachedThreadPool` now subclasses `RubyCachedThreadPool` or `JavaCachedThreadPool` as appropriate
+* Consolidated fixed thread pool tests into `spec/concurrent/fixed_thread_pool_shared.rb` and  `spec/concurrent/cached_thread_pool_shared.rb`.
+* `FixedThreadPool` now subclasses `RubyFixedThreadPool` or `JavaFixedThreadPool` as appropriate.
+* `CachedThreadPool` now subclasses `RubyCachedThreadPool` or `JavaCachedThreadPool` as appropriate.
 * New `Delay` class
 * `Concurrent::processor_count` helper function
 * New `Async` module
 * Renamed `NullThreadPool` to `PerThreadExecutor`
-* Deprecated `Channel` (we are planning a new implementation based on [Go](http://golangtutorials.blogspot.com/2011/06/channels-in-go.html))
-* Added gem-level [configuration](http://robots.thoughtbot.com/mygem-configure-block)
+* Deprecated `Channel` (we are planning a new implementation based on [Go](http://golangtutorials.blogspot.com/2011/06/channels-in-go.html)).
+* Added gem-level [configuration](http://robots.thoughtbot.com/mygem-configure-block).
 * Deprecated `$GLOBAL_THREAD_POOL` in lieu of gem-level configuration
-* Removed support for Ruby [1.9.2](https://www.ruby-lang.org/en/news/2013/12/17/maintenance-of-1-8-7-and-1-9-2/)
+* Removed support for Ruby [1.9.2](https://www.ruby-lang.org/en/news/2013/12/17/maintenance-of-1-8-7-and-1-9-2/).
 * New `RubyThreadPoolExecutor` and `JavaThreadPoolExecutor` classes
 * All thread pools now extend the appropriate thread pool executor classes
-* All thread pools now support `:overflow_policy` (based on Java's [reject policies](http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ThreadPoolExecutor.html))
-* Deprecated `UsesGlobalThreadPool` in lieu of explicit `:executor` option (dependency injection) on `Future`, `Promise`, and `Agent`
-* Added `Concurrent::dataflow_with(executor, *inputs)` method to support executor dependency injection for dataflow
+* All thread pools now support `:overflow_policy` (based on Java's [reject policies](http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ThreadPoolExecutor.html)).
+* Deprecated `UsesGlobalThreadPool` in lieu of explicit `:executor` option (dependency injection) on `Future`, `Promise`, and `Agent`.
+* Added `Concurrent::dataflow_with(executor, *inputs)` method to support executor dependency injection for dataflow.
 * Software transactional memory with `TVar` and `Concurrent::atomically`
-* First implementation of [new, high-performance](https://github.com/ruby-concurrency/concurrent-ruby/pull/49) `Channel`
-* `Actor` is deprecated in favor of new experimental actor implementation [#73](https://github.com/ruby-concurrency/concurrent-ruby/pull/73). To avoid namespace collision it is living in `Actress` namespace until `Actor` is removed in next release.
+* First implementation of [new, high-performance](https://github.com/ruby-concurrency/concurrent-ruby/pull/49) `Channel`.
+* `Actor` is deprecated in favor of new experimental actor implementation [#73](https://github.com/ruby-concurrency/concurrent-ruby/pull/73).
+To avoid namespace collision it is living in `Actress` namespace until `Actor` is removed in next release..
 
 ## Release v0.5.0
 
-This is the most significant release of this gem since its inception. This release includes many improvements and optimizations. It also includes several bug fixes. The major areas of focus for this release were:
+This is the most significant release of this gem since its inception.
+This release includes many improvements and optimizations.
+It also includes several bug fixes.
+The major areas of focus for this release were:.
 
-* Stability improvements on Ruby versions with thread-level parallelism ([JRuby](http://jruby.org/) and [Rubinius](http://rubini.us/))
+* Stability improvements on Ruby versions with thread-level parallelism ([JRuby](http://jruby.org/) and [Rubinius](http://rubini.us/)).
 * Creation of new low-level concurrency abstractions
 * Internal refactoring to use the new low-level abstractions
 
-Most of these updates had no effect on the gem API. There are a few notable exceptions which were unavoidable. Please read the [release notes](API-Updates-in-v0.5.0) for more information.
+Most of these updates had no effect on the gem API.
+There are a few notable exceptions which were unavoidable.
+Please read the [release notes](API-Updates-in-v0.5.0) for more information..
 
 Specific changes include:
 

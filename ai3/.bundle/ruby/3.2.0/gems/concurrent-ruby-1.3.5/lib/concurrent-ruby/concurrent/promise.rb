@@ -1,4 +1,3 @@
-require 'thread'
 require 'concurrent/constants'
 require 'concurrent/errors'
 require 'concurrent/ivar'
@@ -7,7 +6,6 @@ require 'concurrent/executor/safe_task_executor'
 require 'concurrent/options'
 
 module Concurrent
-
   PromiseExecutionError = Class.new(StandardError)
 
   # Promises are inspired by the JavaScript [Promises/A](http://wiki.commonjs.org/wiki/Promises/A)
@@ -188,7 +186,6 @@ module Concurrent
   # - `rescue { |reason| ... }` is the same as `then(Proc.new { |reason| ... } )`
   # - `rescue` is aliased by `catch` and `on_error`
   class Promise < IVar
-
     # Initialize a new Promise with the provided options.
     #
     # @!macro executor_and_deref_options
@@ -208,7 +205,7 @@ module Concurrent
     # @see http://wiki.commonjs.org/wiki/Promises/A
     # @see http://promises-aplus.github.io/promises-spec/
     def initialize(opts = {}, &block)
-      opts.delete_if { |k, v| v.nil? }
+      opts.delete_if { |_k, v| v.nil? }
       super(NULL, opts.merge(__promise_body_from_block__: block), &nil)
     end
 
@@ -261,13 +258,12 @@ module Concurrent
     # @raise [Concurrent::PromiseExecutionError] if not the root promise
     def set(value = NULL, &block)
       raise PromiseExecutionError.new('supported only on root promise') unless root?
+
       check_for_block_or_value!(block_given?, value)
       synchronize do
-        if @state != :unscheduled
-          raise MultipleAssignmentError
-        else
-          @promise_body = block || Proc.new { |result| value }
-        end
+        raise MultipleAssignmentError if @state != :unscheduled
+
+        @promise_body = block || proc { |_result| value }
       end
       execute
     end
@@ -293,8 +289,8 @@ module Concurrent
     # @example
     #   promise = Concurrent::Promise.execute{ sleep(1); 42 }
     #   promise.state #=> :pending
-    def self.execute(opts = {}, &block)
-      new(opts, &block).execute
+    def self.execute(opts = {}, &)
+      new(opts, &).execute
     end
 
     # Chain a new promise off the current promise.
@@ -322,7 +318,8 @@ module Concurrent
       executor ||= @executor
 
       raise ArgumentError.new('rescuers and block are both missing') if rescuer.nil? && !block_given?
-      block = Proc.new { |result| result } unless block_given?
+
+      block = proc { |result| result } unless block_given?
       child = Promise.new(
         parent: self,
         executor: executor,
@@ -346,9 +343,10 @@ module Concurrent
     # @yield The block to execute
     #
     # @return [Promise] self
-    def on_success(&block)
+    def on_success(&)
       raise ArgumentError.new('no block given') unless block_given?
-      self.then(&block)
+
+      self.then(&)
     end
 
     # Chain onto this promise an action to be undertaken on failure
@@ -361,8 +359,8 @@ module Concurrent
       self.then(block)
     end
 
-    alias_method :catch, :rescue
-    alias_method :on_error, :rescue
+    alias catch rescue
+    alias on_error rescue
 
     # Yield the successful result to the block that returns a promise. If that
     # promise is also successful the result is the result of the yielded promise.
@@ -375,19 +373,17 @@ module Concurrent
     def flat_map(&block)
       child = Promise.new(
         parent: self,
-        executor: ImmediateExecutor.new,
+        executor: ImmediateExecutor.new
       )
 
       on_error { |e| child.on_reject(e) }
       on_success do |result1|
-        begin
-          inner = block.call(result1)
-          inner.execute
-          inner.on_success { |result2| child.on_fulfill(result2) }
-          inner.on_error { |e| child.on_reject(e) }
-        rescue => e
-          child.on_reject(e)
-        end
+        inner = block.call(result1)
+        inner.execute
+        inner.on_success { |result2| child.on_fulfill(result2) }
+        inner.on_error { |e| child.on_reject(e) }
+      rescue StandardError => e
+        child.on_reject(e)
       end
 
       child
@@ -410,10 +406,10 @@ module Concurrent
       opts = promises.last.is_a?(::Hash) ? promises.pop.dup : {}
       opts[:executor] ||= ImmediateExecutor.new
       zero = if !opts.key?(:execute) || opts.delete(:execute)
-        fulfill([], opts)
-      else
-        Promise.new(opts) { [] }
-      end
+               fulfill([], opts)
+             else
+               Promise.new(opts) { [] }
+             end
 
       promises.reduce(zero) do |p1, p2|
         p1.flat_map do |results|
@@ -485,10 +481,10 @@ module Concurrent
       @args = get_arguments_from(opts)
 
       @parent = opts.fetch(:parent) { nil }
-      @on_fulfill = opts.fetch(:on_fulfill) { Proc.new { |result| result } }
-      @on_reject = opts.fetch(:on_reject) { Proc.new { |reason| raise reason } }
+      @on_fulfill = opts.fetch(:on_fulfill) { proc { |result| result } }
+      @on_reject = opts.fetch(:on_reject) { proc { |reason| raise reason } }
 
-      @promise_body = opts[:__promise_body_from_block__] || Proc.new { |result| result }
+      @promise_body = opts[:__promise_body_from_block__] || proc { |result| result }
       @state = :unscheduled
       @children = []
     end
@@ -503,17 +499,14 @@ module Concurrent
     #
     # @!macro promise_self_aggregate
     def self.aggregate(method, *promises)
-      composite = Promise.new do
+      Promise.new do
         completed = promises.collect do |promise|
           promise.execute if promise.unscheduled?
           promise.wait
           promise
         end
-        unless completed.empty? || completed.send(method){|promise| promise.fulfilled? }
-          raise PromiseExecutionError
-        end
+        raise PromiseExecutionError unless completed.empty? || completed.send(method) { |promise| promise.fulfilled? }
       end
-      composite
     end
 
     # @!visibility private
@@ -531,13 +524,13 @@ module Concurrent
 
     # @!visibility private
     def on_fulfill(result)
-      realize Proc.new { @on_fulfill.call(result) }
+      realize proc { @on_fulfill.call(result) }
       nil
     end
 
     # @!visibility private
     def on_reject(reason)
-      realize Proc.new { @on_reject.call(reason) }
+      realize proc { @on_reject.call(reason) }
       nil
     end
 
@@ -555,7 +548,7 @@ module Concurrent
       end
 
       children_to_notify.each { |child| notify_child(child) }
-      observers.notify_and_delete_observers{ [Time.now, self.value, reason] }
+      observers.notify_and_delete_observers { [Time.now, self.value, reason] }
     end
 
     # @!visibility private

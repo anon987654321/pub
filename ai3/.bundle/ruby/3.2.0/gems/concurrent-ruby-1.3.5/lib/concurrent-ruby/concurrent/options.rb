@@ -1,10 +1,8 @@
 require 'concurrent/configuration'
 
 module Concurrent
-
   # @!visibility private
   module Options
-
     # Get the requested `Executor` based on the values set in the options hash.
     #
     # @param [Hash] opts the options defining the requested executor
@@ -17,11 +15,9 @@ module Concurrent
     #
     # @!visibility private
     def self.executor_from_options(opts = {}) # :nodoc:
-      if identifier = opts.fetch(:executor, nil)
-        executor(identifier)
-      else
-        nil
-      end
+      return unless identifier = opts.fetch(:executor, nil)
+
+      executor(identifier)
     end
 
     def self.executor(executor_identifier)

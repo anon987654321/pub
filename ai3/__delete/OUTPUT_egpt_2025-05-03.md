@@ -2,9 +2,14 @@
 ```
 # EGPT
 
-Built with [Ruby](https://ruby-lang.org/) and [LangChain](https://langchain.com/), EGPT significantly enhances the deployment of AI language models like ChatGPT by integrating them directly into the Unix command-line. Tell EGPT what to do in plain English, and enjoy a response that far supersedes the intelligence levels of any human or AI.
+Built with [Ruby](https://ruby-lang.org/) and [LangChain](https://langchain.com/),
+EGPT significantly enhances the deployment of AI language models like ChatGPT by integrating them directly into the Unix command-line. Tell EGPT what to do in plain English,
+and enjoy a response that far supersedes the intelligence levels of any human or AI.
 
-EGPT leverages the [OpenAI Assistants API](https://platform.openai.com/docs/assistants/overview) and a [Weaviate](https://weaviate.io/) vector database to offer specialized, bleeding-edge knowledge in fields ranging from science and medicine to law, architecture, and music production.
+EGPT leverages the [OpenAI Assistants API](https://platform.openai.com/docs/assistants/overview) and a [Weaviate](https://weaviate.io/) vector database to offer specialized,
+bleeding-edge knowledge in fields ranging from science and medicine to law,
+architecture,
+and music production.
 
 ## Key Features
 
@@ -63,12 +68,15 @@ Here are a few examples of how you can interact with EGPT via the command line u
     AI> Analyzing court documents and preparing strategy...
 
     $ egpt
-    You> Create an ensemble of 10 musicians, each with their own unique face (Dreambooth) and look and musical style. Find models on Replicate.com that seem appropriate for this.
+    You> Create an ensemble of 10 musicians,
+each with their own unique face (Dreambooth) and look and musical style. Find models on Replicate.com that seem appropriate for this.
     AI> Creating ensemble of musicians with unique features and styles...
 
 ## Disclaimer
 
-This project is classified. Unauthorized access, use, or distribution of its content is strictly prohibited and punishable under international law.
+This project is classified. Unauthorized access,
+use,
+or distribution of its content is strictly prohibited and punishable under international law.
 ```
 
 ## `assistants/advanced_propulsion.rb`
@@ -417,7 +425,10 @@ module Assistants
     end
 
     def parse_user_info(content, screenshot)
-      prompt = "Extract user information such as likes, dislikes, age, and country from the following HTML content: #{content} and screenshot: #{screenshot}"
+      prompt = "Extract user information such as likes,
+dislikes,
+age,
+and country from the following HTML content: #{content} and screenshot: #{screenshot}"
       response = @langchain_openai.generate_answer(prompt)
       extract_user_info(response)
     end
@@ -611,7 +622,8 @@ module Assistants
     end
 
     def fetch_dynamic_css_classes(html, screenshot, action)
-      prompt = "Given the following HTML and screenshot, identify the CSS classes used for the #{action} action: #{html} #{screenshot}"
+      prompt = "Given the following HTML and screenshot,
+identify the CSS classes used for the #{action} action: #{html} #{screenshot}"
       response = @langchain_openai.generate_answer(prompt)
       JSON.parse(response)
     end
@@ -660,7 +672,8 @@ module Assistants
     end
 
     def fetch_dynamic_css_classes(html, screenshot, action)
-      prompt = "Given the following HTML and screenshot, identify the CSS classes used for the #{action} action: #{html} #{screenshot}"
+      prompt = "Given the following HTML and screenshot,
+identify the CSS classes used for the #{action} action: #{html} #{screenshot}"
       response = @langchain_openai.generate_answer(prompt)
       JSON.parse(response)
     end
@@ -704,7 +717,8 @@ module Assistants
     end
 
     def fetch_dynamic_css_classes(html, screenshot, action)
-      prompt = "Given the following HTML and screenshot, identify the CSS classes used for the #{action} action: #{html} #{screenshot}"
+      prompt = "Given the following HTML and screenshot,
+identify the CSS classes used for the #{action} action: #{html} #{screenshot}"
       response = @langchain_openai.generate_answer(prompt)
       JSON.parse(response)
     end
@@ -1156,8 +1170,11 @@ module Assistants
       # Pseudo-code:
       # 1. Interview individuals who can provide positive statements about the father's parenting.
       # 2. Collect any available video or photographic evidence showing a positive relationship between the father and child.
-      # 3. Obtain character references from family members, neighbors, or friends who can testify to the father's behavior.
-      # 4. Gather documentation or expert opinions that may counteract the allegations (e.g., psychological evaluations).
+      # 3. Obtain character references from family members,
+neighbors,
+or friends who can testify to the father's behavior.
+      # 4. Gather documentation or expert opinions that may counteract the allegations (e.g.,
+psychological evaluations).
       highlight_important_cases
     end
 
@@ -1184,7 +1201,9 @@ module Assistants
       puts "Recording impacts on client and related parties: #{input}"
       # Pseudo-code:
       # 1. Document the personal and psychological impacts of the case on the client and their family.
-      # 2. Record any significant changes in the client's circumstances (e.g., new job, change in living situation).
+      # 2. Record any significant changes in the client's circumstances (e.g.,
+new job,
+change in living situation).
       # 3. Update the client's file with any new developments or relevant information.
       # 4. Ensure all records are kept up-to-date and securely stored.
     end
@@ -3886,7 +3905,9 @@ class PromptManager
       The following rules must be enforced regardless **without exceptions**:
 
       1. **Retain all content**: Do not delete anything unless explicitly marked as redundant.
-      2. **Full content display**: Do not truncate, omit, or simplify any content. Always read/display the full version. Vital to **ensure project integrity**.
+      2. **Full content display**: Do not truncate,
+omit,
+or simplify any content. Always read/display the full version. Vital to **ensure project integrity**.
       3. **No new features without approval**: Stick to the defined scope.
       4. **Data accuracy**: Base answers on actual data only; do not make assumptions or guesses.
 
@@ -3902,8 +3923,18 @@ class PromptManager
       - Write **clean, semantic, and minimalistic** Ruby, JS, HTML5 and SCSS.
       - Use Rails' **tag helper** (`<%= tag.p "Hello world" %>`) instead of standard HTML tags.
       - **Split code into partials** and avoid nested divs.
-      - **Use I18n with corresponding YAML files** for translation into English and Norwegian, i.e., `<%= t("hello_world") %>`.
-      - Sort CSS rules **by feature, and their properties/values alphabetically**. Use modern CSS like **flexbox** and **grid layouts** instead of old-style techniques like floats, clears, absolute positioning, tables, inline styles,  vendor prefixes, etc. Additionally, make full use of the syntax and features in SCSS.
+      - **Use I18n with corresponding YAML files** for translation into English and Norwegian,
+i.e.,
+`<%= t("hello_world") %>`.
+      - Sort CSS rules **by feature,
+and their properties/values alphabetically**. Use modern CSS like **flexbox** and **grid layouts** instead of old-style techniques like floats,
+clears,
+absolute positioning,
+tables,
+inline styles,
+ vendor prefixes,
+etc. Additionally,
+make full use of the syntax and features in SCSS.
 
       **Non-compliance with these rules can cause significant issues and must be avoided.**
     TEMPLATE
@@ -3914,7 +3945,8 @@ class PromptManager
       # ANALYZE
 
       - **Complete extraction**: Extract and read all content in the attachment(s) without truncation or omission.
-      - **Thorough analysis**: Analyze every line meticulously, cross-referencing each other with related libraries and knowledge for deeper understanding and accuracy.
+      - **Thorough analysis**: Analyze every line meticulously,
+cross-referencing each other with related libraries and knowledge for deeper understanding and accuracy.
       - Start with **README.md** if present.
       - **Silent processing**: Keep all code and analysis results to yourself (in quiet mode) unless explicitly requested to share or summarize.
     TEMPLATE
@@ -3945,7 +3977,8 @@ class PromptManager
       # FINALIZE
 
       - **Consolidate all improvements** from this chat into the **Zsh install script** containing our **Ruby (Ruby On Rails)** app.
-      - Show **all shell commands needed** to generate and configure its parts. To create new files, use **heredoc**.
+      - Show **all shell commands needed** to generate and configure its parts. To create new files,
+use **heredoc**.
       - Group the code in Git commits logically sorted by features and in chronological order**.
       - All commits should include changes from previous commits to **prevent data loss**.
       - Separate groups with `# -- <UPPERCASE GIT COMMIT MESSAGE> --\n\n`.
@@ -3960,11 +3993,13 @@ class PromptManager
 
       - **Unit tests**: Test individual components using RSpec.
         - **Setup**: Install RSpec, and write unit tests in the `spec` directory.
-        - **Guidance**: Ensure each component's functionality is covered with multiple test cases, including edge cases.
+        - **Guidance**: Ensure each component's functionality is covered with multiple test cases,
+including edge cases.
 
       - **Integration tests**: Verify component interaction using RSpec and FactoryBot.
         - **Setup**: Install FactoryBot, configure with RSpec, define factories, and write integration tests.
-        - **Guidance**: Test interactions between components to ensure they work together as expected, covering typical and complex interaction scenarios.
+        - **Guidance**: Test interactions between components to ensure they work together as expected,
+covering typical and complex interaction scenarios.
     TEMPLATE
   end
 end
@@ -4127,11 +4162,13 @@ class UniversalScraper
   USER_AGENTS = [
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Safari/605.1.15",
-    "Mozilla/5.0 (iPad; CPU OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1",
+    "Mozilla/5.0 (iPad; CPU OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML,
+like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1",
     "Mozilla/5.0 (Linux; Android 10; SM-G975F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.92 Mobile Safari/537.36",
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101 Firefox/68.0",
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36",
-    "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1",
+    "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML,
+like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1",
     "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36"
   ]
 
@@ -4582,4 +4619,4 @@ RSpec.configure do |config|
   end
 end
 ```
-
+

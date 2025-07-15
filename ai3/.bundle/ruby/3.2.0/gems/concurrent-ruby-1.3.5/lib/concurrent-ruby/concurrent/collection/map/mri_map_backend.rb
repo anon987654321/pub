@@ -1,16 +1,12 @@
-require 'thread'
 require 'concurrent/collection/map/non_concurrent_map_backend'
 
 module Concurrent
-
   # @!visibility private
   module Collection
-
     # @!visibility private
     class MriMapBackend < NonConcurrentMapBackend
-
-      def initialize(options = nil, &default_proc)
-        super(options, &default_proc)
+      def initialize(options = nil, &)
+        super
         @write_lock = Mutex.new
       end
 
@@ -19,10 +15,10 @@ module Concurrent
       end
 
       def compute_if_absent(key)
-        if NULL != (stored_value = @backend.fetch(key, NULL)) # fast non-blocking path for the most likely case
-          stored_value
-        else
+        if NULL == (stored_value = @backend.fetch(key, NULL))
           @write_lock.synchronize { super }
+        else # fast non-blocking path for the most likely case
+          stored_value
         end
       end
 

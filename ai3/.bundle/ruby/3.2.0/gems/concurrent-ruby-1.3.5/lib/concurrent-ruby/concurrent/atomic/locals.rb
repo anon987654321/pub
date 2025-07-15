@@ -1,4 +1,3 @@
-require 'fiber'
 require 'concurrent/utility/engine'
 require 'concurrent/constants'
 
@@ -40,8 +39,8 @@ module Concurrent
       @next = 0
     end
 
-    def synchronize
-      @lock.synchronize { yield }
+    def synchronize(&)
+      @lock.synchronize(&)
     end
 
     if Concurrent.on_cruby?
@@ -49,7 +48,7 @@ module Concurrent
         yield
       end
     else
-      alias_method :weak_synchronize, :synchronize
+      alias weak_synchronize synchronize
     end
 
     def next_index(local)
@@ -100,7 +99,7 @@ module Concurrent
     end
 
     def set(index, value)
-      locals = self.locals!
+      locals = locals!
       locals[index] = (nil == value ? NULL : value)
 
       value

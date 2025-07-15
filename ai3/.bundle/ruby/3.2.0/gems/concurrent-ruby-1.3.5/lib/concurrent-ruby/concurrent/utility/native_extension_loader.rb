@@ -7,7 +7,6 @@ module Concurrent
   module Utility
     # @!visibility private
     module NativeExtensionLoader
-
       def allow_c_extensions?
         Concurrent.on_cruby?
       end
@@ -19,17 +18,16 @@ module Concurrent
       def load_native_extensions
         if Concurrent.on_cruby? && !c_extensions_loaded?
           ['concurrent/concurrent_ruby_ext',
-           "concurrent/#{RUBY_VERSION[0..2]}/concurrent_ruby_ext"
-          ].each { |p| try_load_c_extension p }
+           "concurrent/#{RUBY_VERSION[0..2]}/concurrent_ruby_ext"].each { |p| try_load_c_extension p }
         end
 
-        if Concurrent.on_jruby? && !java_extensions_loaded?
-          begin
-            require 'concurrent/concurrent_ruby.jar'
-            set_java_extensions_loaded
-          rescue LoadError => e
-            raise e, "Java extensions are required for JRuby.\n" + e.message, e.backtrace
-          end
+        return unless Concurrent.on_jruby? && !java_extensions_loaded?
+
+        begin
+          require 'concurrent/concurrent_ruby.jar'
+          set_java_extensions_loaded
+        rescue LoadError => e
+          raise e, "Java extensions are required for JRuby.\n" + e.message, e.backtrace
         end
       end
 
@@ -59,14 +57,10 @@ module Concurrent
         require path
         set_c_extensions_loaded
       rescue LoadError => e
-        if load_error_path(e) == path
-          # move on with pure-Ruby implementations
-          # TODO (pitr-ch 12-Jul-2018): warning on verbose?
-        else
-          raise e
-        end
+        raise e unless load_error_path(e) == path
+        # move on with pure-Ruby implementations
+        # TODO (pitr-ch 12-Jul-2018): warning on verbose?
       end
-
     end
   end
 

@@ -1,4 +1,6 @@
-#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# !/usr/bin/env ruby
 # norwegian_pension_fund.rb
 #
 # ENHANCED HEDGE FUND IMPLEMENTATION WITH ROBOT SWARM TRADERS,
@@ -31,12 +33,10 @@ class NorwegianPensionFund
 
   def run
     loop do
-      begin
-        @robot_swarm.execute_trading_cycle
-        sleep(60) # Wait for 60 seconds before the next cycle
-      rescue => e
-        handle_error(e)
-      end
+      @robot_swarm.execute_trading_cycle
+      sleep(60) # Wait for 60 seconds before the next cycle
+    rescue StandardError => e
+      handle_error(e)
     end
   end
 
@@ -147,7 +147,7 @@ class TradingRobot
   private
 
   def select_strategy
-    strategies = [:mean_reversion_strategy, :momentum_strategy, :arbitrage_strategy]
+    strategies = %i[mean_reversion_strategy momentum_strategy arbitrage_strategy]
     strategies.sample
   end
 
@@ -158,17 +158,17 @@ class TradingRobot
     {}
   end
 
-  def mean_reversion_strategy(data)
+  def mean_reversion_strategy(_data)
     # Implement mean reversion logic
     'BUY' # Placeholder signal
   end
 
-  def momentum_strategy(data)
+  def momentum_strategy(_data)
     # Implement momentum trading logic
     'SELL' # Placeholder signal
   end
 
-  def arbitrage_strategy(data)
+  def arbitrage_strategy(_data)
     # Implement arbitrage logic using multiple exchanges
     'HOLD' # Placeholder signal
   end

@@ -2,13 +2,12 @@ require 'concurrent/executor/abstract_executor_service'
 require 'concurrent/atomic/event'
 
 module Concurrent
-
   # @!macro abstract_executor_service_public_api
   # @!visibility private
   class RubyExecutorService < AbstractExecutorService
     safe_initialization!
 
-    def initialize(*args, &block)
+    def initialize(*args, &)
       super
       @StopEvent    = Event.new
       @StoppedEvent = Event.new
@@ -16,13 +15,14 @@ module Concurrent
 
     def post(*args, &task)
       raise ArgumentError.new('no block given') unless block_given?
-      deferred_action = synchronize {
+
+      deferred_action = synchronize do
         if running?
           ns_execute(*args, &task)
         else
           fallback_action(*args, &task)
         end
-      }
+      end
       if deferred_action
         deferred_action.call
       else
@@ -33,6 +33,7 @@ module Concurrent
     def shutdown
       synchronize do
         break unless running?
+
         stop_event.set
         ns_shutdown_execution
       end
@@ -42,6 +43,7 @@ module Concurrent
     def kill
       synchronize do
         break if shutdown?
+
         stop_event.set
         ns_kill_execution
         stopped_event.set

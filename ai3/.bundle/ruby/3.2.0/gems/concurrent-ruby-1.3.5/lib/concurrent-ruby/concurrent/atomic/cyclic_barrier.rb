@@ -2,7 +2,6 @@ require 'concurrent/synchronization/lockable_object'
 require 'concurrent/utility/native_integer'
 
 module Concurrent
-
   # A synchronization aid that allows a set of threads to all wait for each
   # other to reach a common barrier point.
   # @example
@@ -25,7 +24,6 @@ module Concurrent
   #
   #   # here we can be sure that all jobs are processed
   class CyclicBarrier < Synchronization::LockableObject
-
     # @!visibility private
     Generation = Struct.new(:status)
     private_constant :Generation
@@ -65,7 +63,6 @@ module Concurrent
     #  `timeout` or on `reset` or if the barrier is broken
     def wait(timeout = nil)
       synchronize do
-
         return false unless @generation.status == :waiting
 
         @number_waiting += 1

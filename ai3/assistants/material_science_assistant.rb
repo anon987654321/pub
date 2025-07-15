@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # MaterialScienceAssistant: Provides material science assistance capabilities
 
 require 'openai'
@@ -5,7 +7,7 @@ require_relative 'weaviate_helper'
 
 class MaterialScienceAssistant
   def initialize
-    @client = OpenAI::Client.new(api_key: ENV['OPENAI_API_KEY'])
+    @client = OpenAI::Client.new(api_key: ENV.fetch('OPENAI_API_KEY', nil))
     @weaviate_helper = WeaviateHelper.new
   end
 
@@ -16,14 +18,12 @@ class MaterialScienceAssistant
 
     # Generate a response using OpenAI API with context augmentation
     prompt = build_prompt(query, context)
-    response = generate_response(prompt)
-
-    response
+    generate_response(prompt)
   end
 
   private
 
-  def embed_query(query)
+  def embed_query(_query)
     # Embed the query to generate vector (placeholder)
     [0.1, 0.2, 0.3] # Replace with actual embedding logic if available
   end
@@ -38,14 +38,13 @@ class MaterialScienceAssistant
 
   def generate_response(prompt)
     response = @client.completions(parameters: {
-      model: "text-davinci-003",
-      prompt: prompt,
-      max_tokens: 150
-    })
+                                     model: 'text-davinci-003',
+                                     prompt: prompt,
+                                     max_tokens: 150
+                                   })
 
     response['choices'][0]['text'].strip
   rescue StandardError => e
     "An error occurred while generating the response: #{e.message}"
   end
 end
-

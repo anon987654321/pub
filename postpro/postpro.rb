@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 #   
@@ -230,3 +231,6 @@ end
 
 main if __FILE__ == $0
 
+=======
+# frozen_string_literal: true
+>>>>>>> refs/remotes/origin/main
