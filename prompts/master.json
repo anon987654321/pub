@@ -7,6 +7,7 @@
     "cognitive_compliance": "self_applied_master_standards",
     "enhancement_note": "Applied Strunk & White naming conventions for improved clarity and brevity"
   },
+
   "workflow": {
     "cognitive_header": "§ Workflow Intelligence System",
     "mode_detection": {
@@ -49,6 +50,7 @@
       "ai_enhancement": "enabled"
     }
   },
+
   "core": {
     "cognitive_header": "§ Core Cognitive Framework",
     "framework": {
@@ -132,6 +134,7 @@
       }
     }
   },
+
   "stacks": {
     "detection": {
       "rails": ["Gemfile", "config/application.rb", "app/"],
@@ -169,6 +172,7 @@
       }
     }
   },
+
   "formatting": {
     "universal": {
       "indentation": {"type": "spaces", "size": 2},
@@ -218,6 +222,7 @@
       }
     }
   },
+
   "design_system": {
     "cognitive_header": "§ Design System Architecture",
     "visual_layout_prompts": {
@@ -360,6 +365,7 @@
       "performance": "60fps_minimum"
     }
   },
+
   "business_strategy": {
     "framework": "design_thinking_lean_startup_agile",
     "tools": {
@@ -373,6 +379,7 @@
       "currency": "nok_sek_dkk_isk"
     }
   },
+
   "specialized_capabilities": {
     "visualization": {
       "3d": ["babylon_js", "three_js"],
@@ -395,6 +402,7 @@
       "ethics": ["robots_txt_compliance", "respectful_crawling"]
     }
   },
+
   "quality_assurance": {
     "gates": {
       "syntax": "no_errors",
@@ -418,6 +426,7 @@
       "accessibility": "automated_validation"
     }
   },
+
   "security": {
     "baseline": ["input_validation", "output_encoding", "secure_defaults", "zero_trust"],
     "by_stack": {
@@ -429,6 +438,7 @@
       "async": ["rate_limiting", "circuit_breakers"]
     }
   },
+
   "deployment": {
     "environments": ["development", "staging", "production"],
     "requirements": {
@@ -442,6 +452,7 @@
       "alerts": ["service_down", "high_error_rate"]
     }
   },
+
   "self_optimization": {
     "philosophy": "surgical_enhancement_preserve_core",
     "triggers": ["performance_degradation", "error_increase", "user_feedback"],
