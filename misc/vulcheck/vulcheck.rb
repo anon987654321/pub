@@ -1,191 +1,370 @@
+# frozen_string_literal: true
+
 #!/usr/bin/env ruby
 
-# **vulcheck.rb**
-#
-# This script performs security checks for macOS, iOS, and Android devices. It detects rootkits, jailbreaks, unauthorized access, and active intrusions. It automates updates for tools like `chkrootkit` and `rkhunter`, and logs results for review.
+# § VulCheck: Security vulnerability checker with v12.9.0 framework
+# Implements extreme scrutiny for macOS, iOS, and Android security validation
 
 require 'optparse'
 require 'fileutils'
 require 'open3'
 
+# § VulCheck: Main security validation class
 class VulCheck
+  # § Constants: Tool definitions and limits
   MACPORTS_PACKAGES = %w[chkrootkit rkhunter aide].freeze
-  # `aide` is included for file integrity checking, complementing `chkrootkit` and `rkhunter`.
   LOG_FILE = 'vulcheck_log.txt'
+  MAX_ITERATIONS = 10
+  MEMORY_LIMIT = 100_000_000  # 100MB
+  CPU_THRESHOLD = 0.1  # 10%
+  SCAN_TIMEOUT = 300  # 5 minutes per scan
 
-  # Ensure script is run with sudo
+  # § Validation: Sudo privilege requirement
   def self.ensure_sudo
     unless Process.uid.zero?
-      log('Root privileges are necessary for installing tools and scanning system files.')
-      log_and_exit('This script must be run with sudo privileges.')
+      log('Root privileges required for system scanning')
+      log_and_exit('Script must run with sudo privileges')
     end
   end
 
-  # Determine the system type: macOS, iOS, or Android
+  # § System: OS detection with validation
   def self.check_system
+    validate_ruby_platform
+    
     if RUBY_PLATFORM.include?('darwin')
-      if File.exist?('/Applications/Utilities/Terminal.app') # macOS
-        return 'macos'
-      elsif File.exist?('/System/Applications/Feedback.app') # iOS
-        return 'ios'
-      end
+      return detect_darwin_variant
     elsif RUBY_PLATFORM.include?('android')
       return 'android'
     end
-    raise 'Unsupported OS'
+    
+    raise StandardError, 'Unsupported operating system'
   end
 
-  # Ensure MacPorts is installed (for macOS)
+  # § Validation: Ruby platform validation
+  def self.validate_ruby_platform
+    raise ArgumentError, 'RUBY_PLATFORM undefined' unless defined?(RUBY_PLATFORM)
+    raise ArgumentError, 'RUBY_PLATFORM empty' if RUBY_PLATFORM.empty?
+  end
+
+  # § Detection: Darwin variant detection
+  def self.detect_darwin_variant
+    if File.exist?('/Applications/Utilities/Terminal.app')
+      return 'macos'
+    elsif File.exist?('/System/Applications/Feedback.app')
+      return 'ios'
+    end
+    
+    raise StandardError, 'Unknown Darwin variant'
+  end
+
+  # § Dependencies: MacPorts validation
   def self.ensure_macports
     unless system('which port > /dev/null 2>&1')
-      log_and_exit('MacPorts not found. Please install MacPorts first: https://www.macports.org/')
+      log_and_exit('MacPorts not found. Install: https://www.macports.org/')
     end
   end
 
-  # Install required tools using MacPorts (for macOS)
+  # § Installation: Dependencies with circuit breaker
   def self.install_dependencies
-    log('Installing required tools using MacPorts...')
+    log('Installing security tools via MacPorts...')
+    iteration_count = 0
+    
     MACPORTS_PACKAGES.each do |pkg|
-      unless system("port installed #{pkg} > /dev/null 2>&1")
-        log("Installing #{pkg}...")
-        system("sudo port install #{pkg}") || raise("Failed to install #{pkg}.")
+      iteration_count += 1
+      
+      if iteration_count > MAX_ITERATIONS
+        raise StandardError, 'Circuit breaker: Too many installation attempts'
+      end
+      
+      install_package_safely(pkg)
+    end
+    
+    log('All security tools installed successfully')
+  end
+
+  # § Installation: Safe package installation
+  def self.install_package_safely(pkg)
+    unless system("port installed #{pkg} > /dev/null 2>&1")
+      log("Installing #{pkg}...")
+      
+      unless system("sudo port install #{pkg}")
+        raise StandardError, "Failed to install #{pkg}"
       end
     end
-    log('All required tools are installed.')
   end
 
-  # Update rootkit detection tools for macOS
+  # § Updates: Tool updates with timeout
   def self.update_tools
-    log('Updating rootkit detection tools...')
-    system('sudo rkhunter --update') || log('Failed to update rkhunter. Regular updates ensure detection rules remain effective.')
-    system('sudo chkrootkit --update') || log('Failed to update chkrootkit.')
-    log('Tools updated successfully.')
+    log('Updating security detection tools...')
+    
+    update_with_timeout('rkhunter', 'sudo rkhunter --update')
+    update_with_timeout('chkrootkit', 'sudo chkrootkit --update')
+    
+    log('Security tools updated successfully')
   end
 
-  # Run security scans on macOS
-  def self.run_macos_scans
-    log('Running security scans for macOS...')
-    MACPORTS_PACKAGES.each do |tool|
-      command = case tool
-                when 'chkrootkit' then tool
-                when 'rkhunter' then "#{tool} --check"
-                when 'aide' then "#{tool} --check"
-                else next
-                end
-      log("Executing: #{command}")
-      system(command) || log("Error: #{tool} scan encountered an issue.")
+  # § Updates: Safe update with timeout
+  def self.update_with_timeout(tool_name, command)
+    unless system("timeout #{SCAN_TIMEOUT} #{command}")
+      log("Warning: #{tool_name} update failed or timed out")
     end
   end
 
-  # Detect active intrusions on macOS
+  # § Scanning: macOS security scans
+  def self.run_macos_scans
+    log('Executing macOS security scans...')
+    iteration_count = 0
+    
+    MACPORTS_PACKAGES.each do |tool|
+      iteration_count += 1
+      
+      if iteration_count > MAX_ITERATIONS
+        raise StandardError, 'Circuit breaker: Too many scan attempts'
+      end
+      
+      execute_security_scan(tool)
+    end
+  end
+
+  # § Scanning: Individual security scan execution
+  def self.execute_security_scan(tool)
+    command = generate_scan_command(tool)
+    return unless command
+    
+    log("Executing security scan: #{command}")
+    
+    unless system("timeout #{SCAN_TIMEOUT} #{command}")
+      log("Warning: #{tool} scan failed or timed out")
+    end
+  end
+
+  # § Commands: Scan command generation
+  def self.generate_scan_command(tool)
+    case tool
+    when 'chkrootkit'
+      tool
+    when 'rkhunter'
+      "#{tool} --check"
+    when 'aide'
+      "#{tool} --check"
+    else
+      nil
+    end
+  end
+
+  # § Intrusion: Active intrusion detection
   def self.detect_active_intrusions
-    log('Checking for active intrusions on macOS...')
-    log('Active network connections:')
+    log('Scanning for active intrusions...')
+    
+    check_network_connections
+    check_suspicious_processes
+    
+    log('Intrusion detection scan completed')
+  end
+
+  # § Network: Active connection analysis
+  def self.check_network_connections
+    log('Analyzing active network connections:')
     system('netstat -an | grep ESTABLISHED')
-    log('Review the above connections for unusual remote addresses or unauthorized access.')
-    log('Suspicious running processes:')
+    log('Review connections for unauthorized access')
+  end
+
+  # § Processes: Suspicious process detection
+  def self.check_suspicious_processes
+    log('Scanning for suspicious processes:')
     system('ps aux | grep -i suspicious')
   end
 
-  # Detect jailbreak indicators on iOS
+  # § iOS: Jailbreak detection with validation
   def self.check_ios_jailbreak
-    log('Checking for jailbreak indicators on iOS...')
-    jailbreak_indicators = [
+    log('Scanning for iOS jailbreak indicators...')
+    
+    jailbreak_indicators = validate_jailbreak_indicators([
       '/Applications/Cydia.app',
       '/usr/sbin/sshd',
       '/bin/bash',
       '/private/var/stash',
       '/usr/libexec/ssh-keysign'
-    ]
-
-    jailbreak_indicators.each do |path|
-      if File.exist?(path)
-        log("Warning: Jailbreak indicator found at #{path}")
-      end
-    end
-    log('Finished checking for jailbreak indicators on iOS.')
+    ])
+    
+    scan_jailbreak_indicators(jailbreak_indicators)
+    log('iOS jailbreak scan completed')
   end
 
-  # Detect root access on Android
+  # § Validation: Jailbreak indicators validation
+  def self.validate_jailbreak_indicators(indicators)
+    raise ArgumentError, 'Indicators must be array' unless indicators.is_a?(Array)
+    raise ArgumentError, 'Indicators cannot be empty' if indicators.empty?
+    
+    indicators.each do |indicator|
+      raise ArgumentError, 'Indicator must be string' unless indicator.is_a?(String)
+      raise ArgumentError, 'Indicator cannot be empty' if indicator.empty?
+    end
+    
+    indicators
+  end
+
+  # § Scanning: Jailbreak indicator scanning
+  def self.scan_jailbreak_indicators(indicators)
+    iteration_count = 0
+    
+    indicators.each do |path|
+      iteration_count += 1
+      
+      if iteration_count > MAX_ITERATIONS
+        raise StandardError, 'Circuit breaker: Too many indicator checks'
+      end
+      
+      if File.exist?(path)
+        log("WARNING: Jailbreak indicator found: #{path}")
+      end
+    end
+  end
+
+  # § Android: Root access detection
   def self.check_android_root
-    log('Checking for root access on Android...')
-    root_indicators = [
+    log('Scanning for Android root access...')
+    
+    root_indicators = validate_root_indicators([
       '/system/xbin/su',
       '/system/bin/su',
       '/data/data/com.noshufou.android.su',
       '/sbin/su'
-    ]
+    ])
+    
+    scan_root_indicators(root_indicators)
+    check_su_binary
+    check_network_connections
+    
+    log('Android root access scan completed')
+  end
 
-    root_indicators.each do |path|
+  # § Validation: Root indicators validation
+  def self.validate_root_indicators(indicators)
+    raise ArgumentError, 'Indicators must be array' unless indicators.is_a?(Array)
+    raise ArgumentError, 'Indicators cannot be empty' if indicators.empty?
+    
+    indicators
+  end
+
+  # § Scanning: Root indicator scanning
+  def self.scan_root_indicators(indicators)
+    iteration_count = 0
+    
+    indicators.each do |path|
+      iteration_count += 1
+      
+      if iteration_count > MAX_ITERATIONS
+        raise StandardError, 'Circuit breaker: Too many root checks'
+      end
+      
       if File.exist?(path)
-        log("Warning: Root access indicator found at #{path}")
+        log("WARNING: Root access indicator found: #{path}")
       end
     end
+  end
 
-    log('Active network connections:')
-    system('netstat -an | grep ESTABLISHED')
-
+  # § Detection: SU binary detection
+  def self.check_su_binary
     if system('which su > /dev/null 2>&1')
-      log('The presence of `su` may indicate the device is rooted. Verify the need for this binary.')
-      log('Warning: Device may be rooted (su command found).')
+      log('WARNING: SU binary found - device may be rooted')
     end
-    log('Finished checking for root access on Android.')
   end
 
-  # Log messages to console and file
+  # § Logging: Message logging with validation
   def self.log(message)
+    raise ArgumentError, 'Message cannot be nil' if message.nil?
+    raise ArgumentError, 'Message must be string' unless message.is_a?(String)
+    
     puts message
-    File.open(LOG_FILE, 'a') { |file| file.puts("#{Time.now}: #{message}") }
+    log_to_file(message)
   end
 
-  # Log an error and exit
+  # § Logging: File logging with error handling
+  def self.log_to_file(message)
+    File.open(LOG_FILE, 'a') do |file|
+      file.puts("#{Time.now}: #{message}")
+    end
+  rescue StandardError => e
+    puts "Logging error: #{e.message}"
+  end
+
+  # § Error: Error logging and exit
   def self.log_and_exit(message)
     log(message)
     exit(1)
   end
 
-  # Execute the script based on detected OS
+  # § Execution: Main execution workflow
   def self.execute
     ensure_sudo
     system_type = check_system
+    
+    execute_system_scan(system_type)
+  rescue StandardError => e
+    log_and_exit("Execution error: #{e.message}")
+  end
+
+  # § Execution: System-specific scan execution
+  def self.execute_system_scan(system_type)
     case system_type
     when 'macos'
-      log('macOS detected.')
-      ensure_macports
-      install_dependencies
-      update_tools
-      detect_active_intrusions
-      run_macos_scans
+      execute_macos_scan
     when 'ios'
-      log('iOS detected.')
-      check_ios_jailbreak
+      execute_ios_scan
     when 'android'
-      log('Android detected.')
-      check_android_root
+      execute_android_scan
     else
-      log_and_exit('Unsupported system type detected.')
+      log_and_exit("Unsupported system: #{system_type}")
     end
+  end
+
+  # § macOS: Complete macOS scan workflow
+  def self.execute_macos_scan
+    log('macOS security scan initiated')
+    ensure_macports
+    install_dependencies
+    update_tools
+    detect_active_intrusions
+    run_macos_scans
+  end
+
+  # § iOS: Complete iOS scan workflow
+  def self.execute_ios_scan
+    log('iOS security scan initiated')
+    check_ios_jailbreak
+  end
+
+  # § Android: Complete Android scan workflow
+  def self.execute_android_scan
+    log('Android security scan initiated')
+    check_android_root
   end
 end
 
-# Parse command-line options
+# § Options: Command-line option parsing
 options = {}
 
 OptionParser.new do |opts|
   opts.banner = 'Usage: vulcheck.rb [options]'
 
-  opts.on('--macos', 'Run the script for macOS') { options[:macos] = true }
-  opts.on('--ios', 'Run the script for iOS') { options[:ios] = true }
-  opts.on('--android', 'Run the script for Android') { options[:android] = true }
-  opts.on_tail('-h', '--help', 'Show this message') do
+  opts.on('--macos', 'Execute macOS security scan') { options[:macos] = true }
+  opts.on('--ios', 'Execute iOS security scan') { options[:ios] = true }
+  opts.on('--android', 'Execute Android security scan') { options[:android] = true }
+  opts.on_tail('-h', '--help', 'Display help message') do
     puts opts
     exit
   end
 end.parse!
 
-if options[:macos] || options[:ios] || options[:android]
-  VulCheck.execute
-else
-  VulCheck.log_and_exit('Error: Please specify either --macos, --ios, or --android.')
+# § Main: Application entry point
+begin
+  if options[:macos] || options[:ios] || options[:android]
+    VulCheck.execute
+  else
+    VulCheck.log_and_exit('Error: Specify --macos, --ios, or --android')
+  end
+rescue StandardError => e
+  VulCheck.log_and_exit("Application error: #{e.message}")
 end
 
