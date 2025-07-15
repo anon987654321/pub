@@ -3,7 +3,6 @@ require 'concurrent/utility/native_extension_loader' # load native parts first
 require 'concurrent/atomic/mutex_atomic_fixnum'
 
 module Concurrent
-
   ###################################################################
 
   # @!macro atomic_fixnum_method_initialize
@@ -96,10 +95,9 @@ module Concurrent
 
   # @!visibility private
   # @!macro internal_implementation_note
-  AtomicFixnumImplementation = case
-                               when Concurrent.on_cruby? && Concurrent.c_extensions_loaded?
+  AtomicFixnumImplementation = if Concurrent.on_cruby? && Concurrent.c_extensions_loaded?
                                  CAtomicFixnum
-                               when Concurrent.on_jruby?
+                               elsif Concurrent.on_jruby?
                                  JavaAtomicFixnum
                                else
                                  MutexAtomicFixnum
@@ -139,6 +137,6 @@ module Concurrent
       format '%s value:%s>', super[0..-2], value
     end
 
-    alias_method :inspect, :to_s
+    alias inspect to_s
   end
 end

@@ -25,16 +25,14 @@ module Concurrent
 
     # @!macro executor_service_method_post
     def post(*args, &task)
-      raise ArgumentError.new("no block given") unless block_given?
+      raise ArgumentError.new('no block given') unless block_given?
       return false unless running?
 
       event = Concurrent::Event.new
       @internal_executor.post do
-        begin
-          task.call(*args)
-        ensure
-          event.set
-        end
+        task.call(*args)
+      ensure
+        event.set
       end
       event.wait
 

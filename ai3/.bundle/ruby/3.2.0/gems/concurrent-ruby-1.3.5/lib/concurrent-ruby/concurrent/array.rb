@@ -2,7 +2,6 @@ require 'concurrent/utility/engine'
 require 'concurrent/thread_safe/util'
 
 module Concurrent
-
   # @!macro concurrent_array
   #
   #   A thread-safe subclass of Array. This version locks against the object
@@ -19,14 +18,13 @@ module Concurrent
   #   @see http://ruby-doc.org/core/Array.html Ruby standard library `Array`
 
   # @!macro internal_implementation_note
-  ArrayImplementation = case
-                        when Concurrent.on_cruby?
+  ArrayImplementation = if Concurrent.on_cruby?
                           # Array is not fully thread-safe on CRuby, see
                           # https://github.com/ruby-concurrency/concurrent-ruby/issues/929
                           # So we will need to add synchronization here
                           ::Array
 
-                        when Concurrent.on_jruby?
+                        elsif Concurrent.on_jruby?
                           require 'jruby/synchronized'
 
                           class JRubyArray < ::Array
@@ -34,7 +32,7 @@ module Concurrent
                           end
                           JRubyArray
 
-                        when Concurrent.on_truffleruby?
+                        elsif Concurrent.on_truffleruby?
                           require 'concurrent/thread_safe/util/data_structures'
 
                           class TruffleRubyArray < ::Array
@@ -52,5 +50,4 @@ module Concurrent
   # @!macro concurrent_array
   class Array < ArrayImplementation
   end
-
 end

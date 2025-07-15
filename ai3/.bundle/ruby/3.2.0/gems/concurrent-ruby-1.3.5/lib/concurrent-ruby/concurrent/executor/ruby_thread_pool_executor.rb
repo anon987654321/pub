@@ -1,16 +1,13 @@
-require 'thread'
 require 'concurrent/atomic/event'
 require 'concurrent/concern/logging'
 require 'concurrent/executor/ruby_executor_service'
 require 'concurrent/utility/monotonic_time'
 
 module Concurrent
-
   # @!macro thread_pool_executor
   # @!macro thread_pool_options
   # @!visibility private
   class RubyThreadPoolExecutor < RubyExecutorService
-
     # @!macro thread_pool_executor_constant_default_max_pool_size
     DEFAULT_MAX_POOL_SIZE      = 2_147_483_647 # java.lang.Integer::MAX_VALUE
 
@@ -43,7 +40,7 @@ module Concurrent
 
     # @!macro thread_pool_executor_method_initialize
     def initialize(opts = {})
-      super(opts)
+      super
     end
 
     # @!macro thread_pool_executor_attr_reader_largest_length
@@ -130,12 +127,20 @@ module Concurrent
       @synchronous     = opts.fetch(:synchronous, DEFAULT_SYNCHRONOUS)
       @fallback_policy = opts.fetch(:fallback_policy, :abort)
 
-      raise ArgumentError.new("`synchronous` cannot be set unless `max_queue` is 0") if @synchronous && @max_queue > 0
-      raise ArgumentError.new("#{@fallback_policy} is not a valid fallback policy") unless FALLBACK_POLICIES.include?(@fallback_policy)
-      raise ArgumentError.new("`max_threads` cannot be less than #{DEFAULT_MIN_POOL_SIZE}") if @max_length < DEFAULT_MIN_POOL_SIZE
-      raise ArgumentError.new("`max_threads` cannot be greater than #{DEFAULT_MAX_POOL_SIZE}") if @max_length > DEFAULT_MAX_POOL_SIZE
-      raise ArgumentError.new("`min_threads` cannot be less than #{DEFAULT_MIN_POOL_SIZE}") if @min_length < DEFAULT_MIN_POOL_SIZE
-      raise ArgumentError.new("`min_threads` cannot be more than `max_threads`") if min_length > max_length
+      raise ArgumentError.new('`synchronous` cannot be set unless `max_queue` is 0') if @synchronous && @max_queue > 0
+      unless FALLBACK_POLICIES.include?(@fallback_policy)
+        raise ArgumentError.new("#{@fallback_policy} is not a valid fallback policy")
+      end
+      if @max_length < DEFAULT_MIN_POOL_SIZE
+        raise ArgumentError.new("`max_threads` cannot be less than #{DEFAULT_MIN_POOL_SIZE}")
+      end
+      if @max_length > DEFAULT_MAX_POOL_SIZE
+        raise ArgumentError.new("`max_threads` cannot be greater than #{DEFAULT_MAX_POOL_SIZE}")
+      end
+      if @min_length < DEFAULT_MIN_POOL_SIZE
+        raise ArgumentError.new("`min_threads` cannot be less than #{DEFAULT_MIN_POOL_SIZE}")
+      end
+      raise ArgumentError.new('`min_threads` cannot be more than `max_threads`') if min_length > max_length
 
       @pool                 = [] # all workers
       @ready                = [] # used as a stash (most idle worker is at the start)
@@ -157,14 +162,12 @@ module Concurrent
     end
 
     # @!visibility private
-    def ns_execute(*args, &task)
+    def ns_execute(*, &)
       ns_reset_if_forked
 
-      if ns_assign_worker(*args, &task) || ns_enqueue(*args, &task)
-        @scheduled_task_count += 1
-      else
-        return fallback_action(*args, &task)
-      end
+      return fallback_action(*, &) unless ns_assign_worker(*, &) || ns_enqueue(*, &)
+
+      @scheduled_task_count += 1
 
       ns_prune_pool if @next_gc_time < Concurrent.monotonic_time
       nil
@@ -179,15 +182,15 @@ module Concurrent
         stopped_event.set
       end
 
-      if @queue.empty?
-        # no more tasks will be accepted, just stop all workers
-        @pool.each(&:stop)
-      end
+      return unless @queue.empty?
+
+      # no more tasks will be accepted, just stop all workers
+      @pool.each(&:stop)
     end
 
     # @!visibility private
     def ns_kill_execution
-      # TODO log out unprocessed tasks in queue
+      # TODO: log out unprocessed tasks in queue
       # TODO try to shutdown first?
       @pool.each(&:kill)
       @pool.clear
@@ -200,7 +203,7 @@ module Concurrent
     # @!visibility private
     def ns_assign_worker(*args, &task)
       # keep growing if the pool is not at the minimum yet
-      worker, _ = (@ready.pop if @pool.size >= @min_length) || ns_add_busy_worker
+      worker, = (@ready.pop if @pool.size >= @min_length) || ns_add_busy_worker
       if worker
         worker << [task, args]
         true
@@ -209,7 +212,7 @@ module Concurrent
       end
     rescue ThreadError
       # Raised when the operating system refuses to create the new thread
-      return false
+      false
     end
 
     # tries to enqueue task
@@ -218,7 +221,7 @@ module Concurrent
     # @!visibility private
     def ns_enqueue(*args, &task)
       return false if @synchronous
-      
+
       if !ns_limited_queue? || @queue.size < @max_queue
         @queue << [task, args]
         true
@@ -250,18 +253,17 @@ module Concurrent
     # handle ready worker, giving it new job or assigning back to @ready
     #
     # @!visibility private
-    def ns_ready_worker(worker, last_message, success = true)
+    def ns_ready_worker(worker, last_message, _success = true)
       task_and_args = @queue.shift
       if task_and_args
         worker << task_and_args
-      else
+      elsif running?
         # stop workers when !running?, do not return them to @ready
-        if running?
-          raise unless last_message
-          @ready.push([worker, last_message])
-        else
-          worker.stop
-        end
+        raise unless last_message
+
+        @ready.push([worker, last_message])
+      else
+        worker.stop
       end
     end
 
@@ -282,28 +284,28 @@ module Concurrent
       stopped_workers = 0
       while !@ready.empty? && (@pool.size - stopped_workers > @min_length)
         worker, last_message = @ready.first
-        if now - last_message > self.idletime
-          stopped_workers += 1
-          @ready.shift
-          worker << :stop
-        else break
-        end
+        break unless now - last_message > idletime
+
+        stopped_workers += 1
+        @ready.shift
+        worker << :stop
+
       end
 
       @next_gc_time = Concurrent.monotonic_time + @gc_interval
     end
 
     def ns_reset_if_forked
-      if $$ != @ruby_pid
-        @queue.clear
-        @ready.clear
-        @pool.clear
-        @scheduled_task_count = 0
-        @completed_task_count = 0
-        @largest_length       = 0
-        @workers_counter      = 0
-        @ruby_pid             = $$
-      end
+      return unless $$ != @ruby_pid
+
+      @queue.clear
+      @ready.clear
+      @pool.clear
+      @scheduled_task_count = 0
+      @completed_task_count = 0
+      @largest_length       = 0
+      @workers_counter      = 0
+      @ruby_pid             = $$
     end
 
     # @!visibility private
@@ -316,9 +318,7 @@ module Concurrent
         @pool   = pool
         @thread = create_worker @queue, pool, pool.idletime
 
-        if @thread.respond_to?(:name=)
-          @thread.name = [pool.name, 'worker', id].compact.join('-')
-        end
+        @thread.name = [pool.name, 'worker', id].compact.join('-') if @thread.respond_to?(:name=)
       end
 
       def <<(message)
@@ -336,10 +336,9 @@ module Concurrent
       private
 
       def create_worker(queue, pool, idletime)
-        Thread.new(queue, pool, idletime) do |my_queue, my_pool, my_idletime|
+        Thread.new(queue, pool, idletime) do |my_queue, my_pool, _my_idletime|
           catch(:stop) do
             loop do
-
               case message = my_queue.pop
               when :stop
                 my_pool.remove_busy_worker(self)
@@ -358,11 +357,11 @@ module Concurrent
       def run_task(pool, task, args)
         task.call(*args)
         pool.worker_task_completed
-      rescue => ex
+      rescue StandardError => e
         # let it fail
-        log DEBUG, ex
-      rescue Exception => ex
-        log ERROR, ex
+        log DEBUG, e
+      rescue Exception => e
+        log ERROR, e
         pool.worker_died(self)
         throw :stop
       end

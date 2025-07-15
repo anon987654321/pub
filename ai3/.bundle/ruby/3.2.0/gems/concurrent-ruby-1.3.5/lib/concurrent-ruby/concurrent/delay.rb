@@ -1,10 +1,8 @@
-require 'thread'
 require 'concurrent/concern/obligation'
 require 'concurrent/executor/immediate_executor'
 require 'concurrent/synchronization/lockable_object'
 
 module Concurrent
-
   # This file has circular require issues. It must be autoloaded here.
   autoload :Options, 'concurrent/options'
 
@@ -61,6 +59,7 @@ module Concurrent
     # @raise [ArgumentError] if no block is given
     def initialize(opts = {}, &block)
       raise ArgumentError.new('no block given') unless block_given?
+
       super(&nil)
       synchronize { ns_initialize(opts, &block) }
     end
@@ -75,7 +74,7 @@ module Concurrent
     #
     # @!macro delay_note_regarding_blocking
     def value(timeout = nil)
-      if @executor # TODO (pitr 12-Sep-2015): broken unsafe read?
+      if @executor # TODO: (pitr 12-Sep-2015): broken unsafe read?
         super
       else
         # this function has been optimized for performance and
@@ -85,8 +84,8 @@ module Concurrent
           if execute
             begin
               set_state(true, @task.call, nil)
-            rescue => ex
-              set_state(false, nil, ex)
+            rescue StandardError => e
+              set_state(false, nil, e)
             end
           elsif incomplete?
             raise IllegalOperationError, 'Recursive call to #value during evaluation of the Delay'
@@ -116,6 +115,7 @@ module Concurrent
       else
         result = value
         raise @reason if @reason
+
         result
       end
     end
@@ -132,7 +132,7 @@ module Concurrent
     def wait(timeout = nil)
       if @executor
         execute_task_once
-        super(timeout)
+        super
       else
         value
       end
@@ -146,11 +146,12 @@ module Concurrent
     def reconfigure(&block)
       synchronize do
         raise ArgumentError.new('no block given') unless block_given?
-        unless @evaluation_started
+
+        if @evaluation_started
+          false
+        else
           @task = block
           true
-        else
-          false
         end
       end
     end
@@ -179,19 +180,19 @@ module Concurrent
         task    = @task
       end
 
-      if execute
-        executor = Options.executor_from_options(executor: @executor)
-        executor.post do
-          begin
-            result  = task.call
-            success = true
-          rescue => ex
-            reason = ex
-          end
-          synchronize do
-            set_state(success, result, reason)
-            event.set
-          end
+      return unless execute
+
+      executor = Options.executor_from_options(executor: @executor)
+      executor.post do
+        begin
+          result  = task.call
+          success = true
+        rescue StandardError => e
+          reason = e
+        end
+        synchronize do
+          set_state(success, result, reason)
+          event.set
         end
       end
     end

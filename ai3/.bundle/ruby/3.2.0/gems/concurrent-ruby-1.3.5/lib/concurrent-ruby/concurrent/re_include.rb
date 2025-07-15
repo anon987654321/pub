@@ -1,5 +1,4 @@
 module Concurrent
-
   # Methods form module A included to a module B, which is already included into class C,
   # will not be visible in the C class. If this module is extended to B then A's methods
   # are correctly made visible to C.
@@ -37,18 +36,18 @@ module Concurrent
     # @!visibility private
     def included(base)
       (@re_include_to_bases ||= []) << [:include, base]
-      super(base)
+      super
     end
 
     # @!visibility private
     def extended(base)
       (@re_include_to_bases ||= []) << [:extend, base]
-      super(base)
+      super
     end
 
     # @!visibility private
     def include(*modules)
-      result = super(*modules)
+      result = super
       modules.reverse.each do |module_being_included|
         (@re_include_to_bases ||= []).each do |method, mod|
           mod.send method, module_being_included

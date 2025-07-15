@@ -1,19 +1,16 @@
 require 'concurrent/constants'
 
 module Concurrent
-
   # @!visibility private
   module Collection
-
     # @!visibility private
     class NonConcurrentMapBackend
-
       # WARNING: all public methods of the class must operate on the @backend
       # directly without calling each other. This is important because of the
       # SynchronizedMapBackend which uses a non-reentrant mutex for performance
       # reasons.
       def initialize(options = nil, &default_proc)
-        validate_options_hash!(options) if options.kind_of?(::Hash)
+        validate_options_hash!(options) if options.is_a?(::Hash)
         set_backend(default_proc)
         @default_proc = default_proc
       end
@@ -27,10 +24,10 @@ module Concurrent
       end
 
       def compute_if_absent(key)
-        if NULL != (stored_value = @backend.fetch(key, NULL))
-          stored_value
-        else
+        if NULL == (stored_value = @backend.fetch(key, NULL))
           @backend[key] = yield
+        else
+          stored_value
         end
       end
 
@@ -96,10 +93,8 @@ module Concurrent
         self
       end
 
-      def each_pair
-        dupped_backend.each_pair do |k, v|
-          yield k, v
-        end
+      def each_pair(&)
+        dupped_backend.each_pair(&)
         self
       end
 
@@ -114,11 +109,11 @@ module Concurrent
       private
 
       def set_backend(default_proc)
-        if default_proc
-          @backend = ::Hash.new { |_h, key| default_proc.call(self, key) }
-        else
-          @backend = {}
-        end
+        @backend = if default_proc
+                     ::Hash.new { |_h, key| default_proc.call(self, key) }
+                   else
+                     {}
+                   end
       end
 
       def initialize_copy(other)

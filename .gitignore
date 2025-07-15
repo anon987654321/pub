@@ -43,3 +43,4 @@ tmp/validation/
 logs/
 test_compliance_report.json
 validation_report.json
+# Framework validation artifacts

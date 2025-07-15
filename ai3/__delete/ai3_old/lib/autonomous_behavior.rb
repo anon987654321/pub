@@ -7,7 +7,7 @@ class AutonomousBehavior
 
   # Prioritize tasks based on feedback and urgency
   def prioritize_tasks
-    puts "Prioritizing tasks based on feedback and urgency..."
+    puts 'Prioritizing tasks based on feedback and urgency...'
     @tasks.sort_by! { |task| task[:priority] }
     execute_tasks
   end
@@ -20,7 +20,7 @@ class AutonomousBehavior
 
   # Execute tasks based on prioritization
   def execute_tasks
-    puts "Executing prioritized tasks..."
+    puts 'Executing prioritized tasks...'
     @tasks.each do |task|
       puts "Executing task: #{task[:description]}"
       perform_task(task)
@@ -30,11 +30,11 @@ class AutonomousBehavior
   # Perform a specific task
   def perform_task(task)
     case task[:description]
-    when "Optimize performance"
+    when 'Optimize performance'
       optimize_performance
-    when "Improve accuracy"
+    when 'Improve accuracy'
       improve_accuracy
-    when "Update LLMs"
+    when 'Update LLMs'
       update_llm_interface
     else
       puts "Performing general task: #{task[:description]}"

@@ -3,7 +3,7 @@
 ## Executive Summary
 
 This document provides comprehensive,
-production-ready OpenBSD infrastructure documentation for deploying and maintaining a secure,
+production-ready OpenBSD infrastructure documentation for deploying and maintaining a secure,.
 scalable system architecture supporting AI³,
 Rails applications,
 and business platforms. The infrastructure implements defense-in-depth security,
@@ -320,7 +320,7 @@ monitor_key_expiration() {
                 days_until_expiry=$(( (expiry - current_time) / 86400 ))
                 
                 if [ "$days_until_expiry" -lt 30 ]; then
-                    log "WARNING: Key $key_file expires in $days_until_expiry days"
+log "WARNING: Key $key_file expires in $days_until_expiry days".
                 fi
             fi
         fi
@@ -389,7 +389,7 @@ http protocol "http_acme" {
     
     # Redirect all other HTTP to HTTPS
     match request header "Host" tag "redirect"
-    match request tagged "redirect" header set "Location" value "https://$HTTP_HOST$REQUEST_URI"
+match request tagged "redirect" header set "Location" value "https://$HTTP_HOST$REQUEST_URI".
     match request tagged "redirect" return code 301
     
     # Security: Prevent HTTP request smuggling
@@ -405,13 +405,13 @@ http protocol "https_production" {
     match request header set "X-Real-IP" value "$REMOTE_ADDR"
     
     # Security headers for all responses
-    match response header set "Strict-Transport-Security" value "max-age=31536000; includeSubDomains; preload"
+match response header set "Strict-Transport-Security" value "max-age=31536000; includeSubDomains; preload".
     match response header set "X-Frame-Options" value "DENY"
     match response header set "X-Content-Type-Options" value "nosniff"
     match response header set "X-XSS-Protection" value "1; mode=block"
-    match response header set "Referrer-Policy" value "strict-origin-when-cross-origin"
-    match response header set "Content-Security-Policy" value "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'"
-    match response header set "Permissions-Policy" value "camera=(), microphone=(), geolocation=()"
+match response header set "Referrer-Policy" value "strict-origin-when-cross-origin".
+match response header set "Content-Security-Policy" value "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'".
+match response header set "Permissions-Policy" value "camera=(), microphone=(), geolocation=()".
     
     # Cache control for static assets
     match request path "*.css" tag "static"
@@ -419,7 +419,7 @@ http protocol "https_production" {
     match request path "*.png" tag "static"
     match request path "*.jpg" tag "static"
     match request path "*.svg" tag "static"
-    match response tagged "static" header set "Cache-Control" value "public, max-age=31536000"
+match response tagged "static" header set "Cache-Control" value "public, max-age=31536000".
     
     # Compression for text content
     match response header "Content-Type" value "text/*" tag "compress"
@@ -430,7 +430,7 @@ http protocol "https_production" {
     tcp { nodelay, sack, socket buffer 65536 }
     
     # Health checks
-    return error style "body { background: #2c3e50; color: #ecf0f1; font-family: monospace; padding: 2rem; } h1 { color: #e74c3c; }"
+return error style "body { background: #2c3e50; color: #ecf0f1; font-family: monospace; padding: 2rem; } h1 { color: #e74c3c; }".
 }
 
 # HTTP to HTTPS redirection relay
@@ -457,14 +457,14 @@ relay "https" {
     protocol "https_production"
     
     # Domain-based routing with health checks
-    match request header "Host" value "brgen.no" forward to <brgen_backend> check http "/" code 200
-    match request header "Host" value "oshlo.no" forward to <brgen_backend> check http "/" code 200
-    match request header "Host" value "amber.brgen.no" forward to <amber_backend> check http "/" code 200
-    match request header "Host" value "pubattorney.brgen.no" forward to <pubattorney_backend> check http "/" code 200
-    match request header "Host" value "bsdports.brgen.no" forward to <bsdports_backend> check http "/" code 200
-    match request header "Host" value "hjerterom.brgen.no" forward to <hjerterom_backend> check http "/" code 200
-    match request header "Host" value "privcam.brgen.no" forward to <privcam_backend> check http "/" code 200
-    match request header "Host" value "blognet.brgen.no" forward to <blognet_backend> check http "/" code 200
+match request header "Host" value "brgen.no" forward to <brgen_backend> check http "/" code 200.
+match request header "Host" value "oshlo.no" forward to <brgen_backend> check http "/" code 200.
+match request header "Host" value "amber.brgen.no" forward to <amber_backend> check http "/" code 200.
+match request header "Host" value "pubattorney.brgen.no" forward to <pubattorney_backend> check http "/" code 200.
+match request header "Host" value "bsdports.brgen.no" forward to <bsdports_backend> check http "/" code 200.
+match request header "Host" value "hjerterom.brgen.no" forward to <hjerterom_backend> check http "/" code 200.
+match request header "Host" value "privcam.brgen.no" forward to <privcam_backend> check http "/" code 200.
+match request header "Host" value "blognet.brgen.no" forward to <blognet_backend> check http "/" code 200.
 }
 
 # Advanced session persistence
@@ -474,7 +474,7 @@ relay "https_sticky" {
     session cookie "rails_session_id"
     
     # Sticky sessions for stateful applications
-    match request header "Host" value "brgen.no" forward to <brgen_backend> check http "/" code 200
+match request header "Host" value "brgen.no" forward to <brgen_backend> check http "/" code 200.
 }
 ```
 
@@ -600,7 +600,7 @@ check_certificate_expiry() {
     log "Certificate $domain expires in $days_until_expiry days"
     
     if [ "$days_until_expiry" -lt "$days_threshold" ]; then
-        log "Certificate $domain needs renewal (expires in $days_until_expiry days)"
+log "Certificate $domain needs renewal (expires in $days_until_expiry days)".
         return 0
     fi
     
@@ -652,7 +652,7 @@ backup_certificates() {
     cp -r "$CERT_DIR"/private/*.key "$backup_dir/" 2>/dev/null || true
     
     # Compress backup
-    tar -czf "${backup_dir}.tar.gz" -C /var/backups/ssl "$(basename "$backup_dir")"
+tar -czf "${backup_dir}.tar.gz" -C /var/backups/ssl "$(basename "$backup_dir")".
     rm -rf "$backup_dir"
     
     # Keep only last 30 days of backups
@@ -678,7 +678,7 @@ monitor_certificate_health() {
     fi
     
     # Test HTTPS connectivity
-    if ! timeout 10 openssl s_client -connect "${domain}:443" -servername "$domain" < /dev/null; then
+if ! timeout 10 openssl s_client -connect "${domain}:443" -servername "$domain" < /dev/null; then.
         log "ERROR: HTTPS connection test failed for $domain"
         return 1
     fi
@@ -694,7 +694,7 @@ main() {
     
     case "$action" in
         "check")
-            if check_certificate_expiry "${CERT_DIR}/${domain}.fullchain.pem" "$domain"; then
+if check_certificate_expiry "${CERT_DIR}/${domain}.fullchain.pem" "$domain"; then.
                 renew_certificate "$domain"
             fi
             ;;
@@ -891,15 +891,15 @@ check_alerts() {
     local disk="$3"
     
     if [ "$cpu" -gt "$ALERT_THRESHOLD_CPU" ]; then
-        send_alert "High CPU Usage" "CPU usage is at ${cpu}% (threshold: ${ALERT_THRESHOLD_CPU}%)"
+send_alert "High CPU Usage" "CPU usage is at ${cpu}% (threshold: ${ALERT_THRESHOLD_CPU}%)".
     fi
     
     if [ "$memory" -gt "$ALERT_THRESHOLD_MEMORY" ]; then
-        send_alert "High Memory Usage" "Memory usage is at ${memory}% (threshold: ${ALERT_THRESHOLD_MEMORY}%)"
+send_alert "High Memory Usage" "Memory usage is at ${memory}% (threshold: ${ALERT_THRESHOLD_MEMORY}%)".
     fi
     
     if [ "$disk" -gt "$ALERT_THRESHOLD_DISK" ]; then
-        send_alert "High Disk Usage" "Disk usage is at ${disk}% (threshold: ${ALERT_THRESHOLD_DISK}%)"
+send_alert "High Disk Usage" "Disk usage is at ${disk}% (threshold: ${ALERT_THRESHOLD_DISK}%)".
     fi
 }
 
@@ -938,9 +938,9 @@ monitor_services() {
             
             # Attempt to restart service
             if rcctl start "$service"; then
-                send_alert "Service Recovered" "Service $service has been restarted successfully"
+send_alert "Service Recovered" "Service $service has been restarted successfully".
             else
-                send_alert "Service Restart Failed" "Failed to restart service $service"
+send_alert "Service Restart Failed" "Failed to restart service $service".
             fi
         fi
     done
@@ -956,7 +956,7 @@ check_certificate_expiry() {
         local days_until_expiry=$(( (expiry_epoch - current_epoch) / 86400 ))
         
         if [ "$days_until_expiry" -lt 14 ]; then
-            send_alert "Certificate Expiring Soon" "SSL certificate expires in $days_until_expiry days"
+send_alert "Certificate Expiring Soon" "SSL certificate expires in $days_until_expiry days".
         fi
     fi
 }
@@ -1240,7 +1240,7 @@ cleanup_old_backups() {
     log "Cleaning up old backups"
     
     # Remove local backups older than retention period
-    find "$BACKUP_ROOT" -type d -name "20*" -mtime +$RETENTION_DAYS -exec rm -rf {} \;
+find "$BACKUP_ROOT" -type d -name "20*" -mtime +$RETENTION_DAYS -exec rm -rf {} \;.
     
     # Clean up compressed logs
     find /var/log -name "*.gz" -mtime +$RETENTION_DAYS -delete
@@ -1265,7 +1265,7 @@ verify_backups() {
     
     # Test database backup integrity
     if [ -f "${BACKUP_ROOT}/databases/${date_dir}/postgresql-all.sql.gz" ]; then
-        if ! gzip -t "${BACKUP_ROOT}/databases/${date_dir}/postgresql-all.sql.gz"; then
+if ! gzip -t "${BACKUP_ROOT}/databases/${date_dir}/postgresql-all.sql.gz"; then.
             log "ERROR: PostgreSQL backup file is corrupted"
             error_count=$((error_count + 1))
         fi
@@ -1483,7 +1483,7 @@ deploy_applications() {
     
     # Deploy AI³ system
     if [ ! -d "/home/ai3/ai3" ]; then
-        doas -u ai3 git clone https://github.com/ai3-system/ai3.git /home/ai3/ai3
+doas -u ai3 git clone https://github.com/ai3-system/ai3.git /home/ai3/ai3.
         cd /home/ai3/ai3
         doas -u ai3 bundle install --deployment
         log "AI³ system deployed"
@@ -1492,7 +1492,7 @@ deploy_applications() {
     # Deploy Rails applications
     for app in brgen amber pubattorney bsdports hjerterom privcam blognet; do
         if [ ! -d "/home/${app}/app" ]; then
-            doas -u "$app" rails new "/home/${app}/app" -d postgresql --skip-test
+doas -u "$app" rails new "/home/${app}/app" -d postgresql --skip-test.
             log "Rails app created: $app"
         fi
     done
@@ -1570,7 +1570,8 @@ main "$@"
 This FINAL_OPENBSD_INFRASTRUCTURE.md document provides a comprehensive,
 production-ready OpenBSD infrastructure framework designed for security,
 performance,
-and reliability. The architecture incorporates defense-in-depth security principles,
+and reliability.
+The architecture incorporates defense-in-depth security principles,.
 automated certificate management,
 sophisticated monitoring,
 and robust disaster recovery capabilities.
@@ -1609,6 +1610,6 @@ and robust disaster recovery capabilities.
 7. Perform security audits and penetration testing
 8. Implement performance monitoring dashboards
 
-This infrastructure is designed to scale horizontally and support the complete AI³ system,
+This infrastructure is designed to scale horizontally and support the complete AI³ system,.
 Rails applications,
 and business platforms with enterprise-grade reliability and security.

@@ -2,19 +2,17 @@ require 'concurrent/future'
 require 'concurrent/atomic/atomic_fixnum'
 
 module Concurrent
-
   # @!visibility private
   class DependencyCounter # :nodoc:
-
     def initialize(count, &block)
       @counter = AtomicFixnum.new(count)
       @block = block
     end
 
-    def update(time, value, reason)
-      if @counter.decrement == 0
-        @block.call
-      end
+    def update(_time, _value, _reason)
+      return unless @counter.decrement == 0
+
+      @block.call
     end
   end
 
@@ -31,23 +29,23 @@ module Concurrent
   #
   # @raise [ArgumentError] if no block is given
   # @raise [ArgumentError] if any of the inputs are not `IVar`s
-  def dataflow(*inputs, &block)
-    dataflow_with(Concurrent.global_io_executor, *inputs, &block)
+  def dataflow(*inputs, &)
+    dataflow_with(Concurrent.global_io_executor, *inputs, &)
   end
   module_function :dataflow
 
-  def dataflow_with(executor, *inputs, &block)
-    call_dataflow(:value, executor, *inputs, &block)
+  def dataflow_with(executor, *inputs, &)
+    call_dataflow(:value, executor, *inputs, &)
   end
   module_function :dataflow_with
 
-  def dataflow!(*inputs, &block)
-    dataflow_with!(Concurrent.global_io_executor, *inputs, &block)
+  def dataflow!(*inputs, &)
+    dataflow_with!(Concurrent.global_io_executor, *inputs, &)
   end
   module_function :dataflow!
 
-  def dataflow_with!(executor, *inputs, &block)
-    call_dataflow(:value!, executor, *inputs, &block)
+  def dataflow_with!(executor, *inputs, &)
+    call_dataflow(:value!, executor, *inputs, &)
   end
   module_function :dataflow_with!
 
@@ -57,7 +55,7 @@ module Concurrent
     raise ArgumentError.new('an executor must be provided') if executor.nil?
     raise ArgumentError.new('no block given') unless block_given?
     unless inputs.all? { |input| input.is_a? IVar }
-      raise ArgumentError.new("Not all dependencies are IVars.\nDependencies: #{ inputs.inspect }")
+      raise ArgumentError.new("Not all dependencies are IVars.\nDependencies: #{inputs.inspect}")
     end
 
     result = Future.new(executor: executor) do

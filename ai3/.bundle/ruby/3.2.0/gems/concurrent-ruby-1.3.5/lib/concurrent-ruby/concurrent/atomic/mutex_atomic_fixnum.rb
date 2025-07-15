@@ -2,7 +2,6 @@ require 'concurrent/synchronization/safe_initialization'
 require 'concurrent/utility/native_integer'
 
 module Concurrent
-
   # @!macro atomic_fixnum
   # @!visibility private
   # @!macro internal_implementation_note
@@ -31,14 +30,14 @@ module Concurrent
       synchronize { ns_set(@value + delta.to_i) }
     end
 
-    alias_method :up, :increment
+    alias up increment
 
     # @!macro atomic_fixnum_method_decrement
     def decrement(delta = 1)
       synchronize { ns_set(@value - delta.to_i) }
     end
 
-    alias_method :down, :decrement
+    alias down decrement
 
     # @!macro atomic_fixnum_method_compare_and_set
     def compare_and_set(expect, update)
@@ -62,11 +61,11 @@ module Concurrent
     protected
 
     # @!visibility private
-    def synchronize
+    def synchronize(&)
       if @Lock.owned?
         yield
       else
-        @Lock.synchronize { yield }
+        @Lock.synchronize(&)
       end
     end
 

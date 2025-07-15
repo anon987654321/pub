@@ -51,4 +51,3 @@ class QueryCache
     end
   end
 end
-

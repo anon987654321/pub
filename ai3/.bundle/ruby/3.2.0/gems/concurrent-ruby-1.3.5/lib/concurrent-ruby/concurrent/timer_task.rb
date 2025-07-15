@@ -8,7 +8,6 @@ require 'concurrent/executor/safe_task_executor'
 require 'concurrent/scheduled_task'
 
 module Concurrent
-
   # A very common concurrency pattern is to run a thread that performs a task at
   # regular intervals. The thread that performs the task sleeps for the given
   # interval then wakes up and performs the task. Lather, rinse, repeat... This
@@ -206,8 +205,9 @@ module Concurrent
     #     `TimerTask`.
     #
     #   @return [TimerTask] the new `TimerTask`
-    def initialize(opts = {}, &task)
+    def initialize(opts = {}, &)
       raise ArgumentError.new('no block given') unless block_given?
+
       super
       set_deref_options opts
     end
@@ -249,8 +249,8 @@ module Concurrent
     # @example
     #   task = Concurrent::TimerTask.execute(execution_interval: 10){ print "Hello World\n" }
     #   task.running? #=> true
-    def self.execute(opts = {}, &task)
-      TimerTask.new(opts, &task).execute
+    def self.execute(opts = {}, &)
+      TimerTask.new(opts, &).execute
     end
 
     # @!attribute [rw] execution_interval
@@ -264,11 +264,9 @@ module Concurrent
     # @return [Fixnum] Number of seconds after the task completes before the
     #   task is performed again.
     def execution_interval=(value)
-      if (value = value.to_f) <= 0.0
-        raise ArgumentError.new('must be greater than zero')
-      else
-        synchronize { @execution_interval = value }
-      end
+      raise ArgumentError.new('must be greater than zero') if (value = value.to_f) <= 0.0
+
+      synchronize { @execution_interval = value }
     end
 
     # @!attribute [r] interval_type
@@ -285,7 +283,7 @@ module Concurrent
     # @!attribute [rw] timeout_interval
     # @return [Fixnum] Number of seconds the task can run before it is
     #   considered to have failed.
-    def timeout_interval=(value)
+    def timeout_interval=(_value)
       warn 'TimerTask timeouts are now ignored as these were not able to be implemented correctly'
     end
 
@@ -300,6 +298,7 @@ module Concurrent
       if opts[:interval_type] && ![FIXED_DELAY, FIXED_RATE].include?(opts[:interval_type])
         raise ArgumentError.new('interval_type must be either :fixed_delay or :fixed_rate')
       end
+
       if opts[:timeout] || opts[:timeout_interval]
         warn 'TimeTask timeouts are now ignored as these were not able to be implemented correctly'
       end
@@ -335,6 +334,7 @@ module Concurrent
     # @!visibility private
     def execute_task(completion)
       return nil unless @running.true?
+
       start_time = Concurrent.monotonic_time
       _success, value, reason = @task.execute(self)
       if completion.try?

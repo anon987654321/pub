@@ -3,9 +3,9 @@
 # Assistant Orchestrator - Unified request processing framework
 # Migrated and enhanced from ai3_old/assistants/assistant_api.rb
 
-require_relative "universal_scraper"
-require_relative "query_cache"
-require_relative "filesystem_utils"
+require_relative 'universal_scraper'
+require_relative 'query_cache'
+require_relative 'filesystem_utils'
 
 class AssistantOrchestrator
   attr_reader :llm_wrapper, :scraper, :file_system_tool, :query_cache
@@ -20,17 +20,17 @@ class AssistantOrchestrator
   # Unified request processing framework
   def process_request(request)
     validate_request(request)
-    
+
     case request[:action]
-    when "scrape_data"
+    when 'scrape_data'
       scrape_data(request[:urls])
-    when "query_llm"
+    when 'query_llm'
       query_llm(request[:prompt])
-    when "create_file"
+    when 'create_file'
       create_file(request[:file_path], request[:content])
-    when "cached_query"
+    when 'cached_query'
       cached_query_llm(request[:prompt])
-    when "batch_process"
+    when 'batch_process'
       batch_process(request[:requests])
     else
       "Unknown action: #{request[:action]}"
@@ -41,15 +41,15 @@ class AssistantOrchestrator
 
   # Action routing: scrape_data
   def scrape_data(urls)
-    return "No URLs provided" unless urls && !urls.empty?
-    
+    return 'No URLs provided' unless urls && !urls.empty?
+
     @scraper.scrape(urls)
   end
 
   # Action routing: query_llm
   def query_llm(prompt)
-    return "No prompt provided" unless prompt && !prompt.empty?
-    
+    return 'No prompt provided' unless prompt && !prompt.empty?
+
     response = @llm_wrapper.query_openai(prompt)
     puts "Assistant Response: #{response}"
     response
@@ -57,21 +57,21 @@ class AssistantOrchestrator
 
   # Action routing: create_file with enhanced validation
   def create_file(file_path, content)
-    return "No file path provided" unless file_path && !file_path.empty?
-    return "No content provided" unless content
-    
+    return 'No file path provided' unless file_path && !file_path.empty?
+    return 'No content provided' unless content
+
     @file_system_tool.write_file(file_path, content)
     "File created successfully: #{file_path}"
   end
 
   # Enhanced action: cached query for cognitive efficiency
   def cached_query_llm(prompt)
-    return "No prompt provided" unless prompt && !prompt.empty?
-    
+    return 'No prompt provided' unless prompt && !prompt.empty?
+
     # Check cache first
     cached_response = @query_cache.retrieve(prompt)
     if cached_response
-      puts "Cache hit! Returning cached response."
+      puts 'Cache hit! Returning cached response.'
       return cached_response
     end
 
@@ -83,16 +83,14 @@ class AssistantOrchestrator
 
   # Batch processing for cognitive load management
   def batch_process(requests)
-    return "No requests provided" unless requests && requests.is_a?(Array)
-    
+    return 'No requests provided' unless requests && requests.is_a?(Array)
+
     results = []
     requests.each_with_index do |request, index|
-      begin
-        result = process_request(request)
-        results << { index: index, status: "success", result: result }
-      rescue StandardError => e
-        results << { index: index, status: "error", error: e.message }
-      end
+      result = process_request(request)
+      results << { index: index, status: 'success', result: result }
+    rescue StandardError => e
+      results << { index: index, status: 'error', error: e.message }
     end
     results
   end
@@ -123,8 +121,8 @@ class AssistantOrchestrator
   end
 
   def validate_request(request)
-    raise ArgumentError, "Request must be a hash" unless request.is_a?(Hash)
-    raise ArgumentError, "Request must include :action" unless request.key?(:action)
+    raise ArgumentError, 'Request must be a hash' unless request.is_a?(Hash)
+    raise ArgumentError, 'Request must include :action' unless request.key?(:action)
   end
 
   def handle_error(error, request)

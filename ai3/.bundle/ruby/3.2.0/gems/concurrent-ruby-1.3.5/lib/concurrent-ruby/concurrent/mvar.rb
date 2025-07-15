@@ -2,7 +2,6 @@ require 'concurrent/concern/dereferenceable'
 require 'concurrent/synchronization/object'
 
 module Concurrent
-
   # An `MVar` is a synchronized single element container. They are empty or
   # contain one item. Taking a value from an empty `MVar` blocks, as does
   # putting a value into a full one. You can either think of them as blocking
@@ -203,8 +202,8 @@ module Concurrent
 
     protected
 
-    def synchronize(&block)
-      @mutex.synchronize(&block)
+    def synchronize(&)
+      @mutex.synchronize(&)
     end
 
     private
@@ -214,7 +213,7 @@ module Concurrent
     end
 
     def unlocked_full?
-      ! unlocked_empty?
+      !unlocked_empty?
     end
 
     def wait_for_full(timeout)
@@ -227,9 +226,7 @@ module Concurrent
 
     def wait_while(condition, timeout)
       if timeout.nil?
-        while yield
-          condition.wait(@mutex)
-        end
+        condition.wait(@mutex) while yield
       else
         stop = Concurrent.monotonic_time + timeout
         while yield && timeout > 0.0

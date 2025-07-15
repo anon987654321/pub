@@ -3,7 +3,6 @@ require 'concurrent/utility/native_extension_loader' # load native parts first
 require 'concurrent/atomic/mutex_atomic_boolean'
 
 module Concurrent
-
   ###################################################################
 
   # @!macro atomic_boolean_method_initialize
@@ -79,10 +78,9 @@ module Concurrent
 
   # @!visibility private
   # @!macro internal_implementation_note
-  AtomicBooleanImplementation = case
-                                when Concurrent.on_cruby? && Concurrent.c_extensions_loaded?
+  AtomicBooleanImplementation = if Concurrent.on_cruby? && Concurrent.c_extensions_loaded?
                                   CAtomicBoolean
-                                when Concurrent.on_jruby?
+                                elsif Concurrent.on_jruby?
                                   JavaAtomicBoolean
                                 else
                                   MutexAtomicBoolean
@@ -122,6 +120,6 @@ module Concurrent
       format '%s value:%s>', super[0..-2], value
     end
 
-    alias_method :inspect, :to_s
+    alias inspect to_s
   end
 end

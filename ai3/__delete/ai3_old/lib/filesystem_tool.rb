@@ -3,8 +3,7 @@
 # filesystem_tool.rb - Enhanced Filesystem Tool
 
 class FilesystemTool
-  def initialize
-  end
+  def initialize; end
 
   # List all files and directories within the specified path
   def list_directory(path)
@@ -20,9 +19,7 @@ class FilesystemTool
 
   # Write content to a file, create file if it does not exist
   def write_file(file_path, content)
-    File.open(file_path, 'w') do |file|
-      file.write(content)
-    end
+    File.write(file_path, content)
   end
 
   # Append content to a file
@@ -82,4 +79,3 @@ class FilesystemTool
     raise "Directory does not exist: #{path}" unless Dir.exist?(path)
   end
 end
-

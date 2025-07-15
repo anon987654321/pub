@@ -28,8 +28,6 @@ class LawyerAssistant
       { comm_id: comm[:id], emotion: :anger }
     when /fear|worried|scared/
       { comm_id: comm[:id], emotion: :fear }
-    else
-      nil
     end
   end
 
@@ -64,32 +62,32 @@ class LawyerAssistant
   end
 
   # Reassurance strategy for anxious clients, ensuring they feel heard and understood
-  def apply_reassurance(comm)
-    strategy = "Send reassurance: The client is showing anxiety. Deploy calming responses, acknowledge their concerns, and provide stability."
+  def apply_reassurance(_comm)
+    strategy = 'Send reassurance: The client is showing anxiety. Deploy calming responses, acknowledge their concerns, and provide stability.'
     negotiation_strategies.push(strategy)
   end
 
   # Incentive strategy for clients showing joy or excitement, use positive reinforcement
-  def apply_incentive(comm)
-    strategy = "Send incentive: The client is in a positive emotional state. Use this moment to introduce favorable terms or rewards to reinforce good behavior."
+  def apply_incentive(_comm)
+    strategy = 'Send incentive: The client is in a positive emotional state. Use this moment to introduce favorable terms or rewards to reinforce good behavior.'
     negotiation_strategies.push(strategy)
   end
 
   # Safety assurance strategy when fear or uncertainty is detected in communication
-  def apply_safety_assurance(comm)
-    strategy = "Send safety assurance: The client expresses fear. Reassure them that their safety and interests are a priority, and explain protective measures."
+  def apply_safety_assurance(_comm)
+    strategy = 'Send safety assurance: The client expresses fear. Reassure them that their safety and interests are a priority, and explain protective measures.'
     negotiation_strategies.push(strategy)
   end
 
   # Calming strategy for angry clients, de-escalate emotional responses
-  def apply_calm_down(comm)
-    strategy = "Send calming strategy: The client is showing signs of anger. Apply empathy, acknowledge their frustration, and focus on solutions."
+  def apply_calm_down(_comm)
+    strategy = 'Send calming strategy: The client is showing signs of anger. Apply empathy, acknowledge their frustration, and focus on solutions.'
     negotiation_strategies.push(strategy)
   end
 
   # Default strategy for neutral or unclassified emotional responses
-  def apply_default_strategy(comm)
-    strategy = "Send neutral strategy: The client’s emotional state is unclear. Provide a standard response focused on clarity and next steps."
+  def apply_default_strategy(_comm)
+    strategy = 'Send neutral strategy: The client’s emotional state is unclear. Provide a standard response focused on clarity and next steps.'
     negotiation_strategies.push(strategy)
   end
 
@@ -128,49 +126,49 @@ class LawyerAssistant
     when :anchoring
       anchoring(point)
     else
-      "Unknown negotiation trick."
+      'Unknown negotiation trick.'
     end
   end
 
   # Foot-in-the-door technique in legal negotiations: Start with a small ask to build trust
-  def foot_in_the_door(point)
-    strategy = "Initiate negotiations with a minor request that the opposing party is likely to accept, creating a pathway for larger agreements."
+  def foot_in_the_door(_point)
+    strategy = 'Initiate negotiations with a minor request that the opposing party is likely to accept, creating a pathway for larger agreements.'
     negotiation_strategies.push(strategy)
   end
 
   # Scarcity technique in legal strategy: Create urgency or exclusivity
-  def scarcity(point)
-    strategy = "Emphasize limited time offers, exclusive deals, or scarce resources to compel quicker action from the opposing party."
+  def scarcity(_point)
+    strategy = 'Emphasize limited time offers, exclusive deals, or scarce resources to compel quicker action from the opposing party.'
     negotiation_strategies.push(strategy)
   end
 
   # Reverse psychology in legal discussions: Suggest the opposite to provoke action
-  def reverse_psychology(point)
-    strategy = "Suggest that the opposing party may not want a deal or offer them something they might reject, provoking them into pursuing what you actually want."
+  def reverse_psychology(_point)
+    strategy = 'Suggest that the opposing party may not want a deal or offer them something they might reject, provoking them into pursuing what you actually want.'
     negotiation_strategies.push(strategy)
   end
 
   # Cognitive dissonance in legal strategy: Introduce contradictions to encourage agreement
-  def cognitive_dissonance(point)
-    strategy = "Present conflicting information that creates discomfort, pushing the opposing party to reconcile it by agreeing to your terms."
+  def cognitive_dissonance(_point)
+    strategy = 'Present conflicting information that creates discomfort, pushing the opposing party to reconcile it by agreeing to your terms.'
     negotiation_strategies.push(strategy)
   end
 
   # Social proof: Leverage others' behavior or public opinion to influence the target's decisions
-  def social_proof(point)
-    strategy = "Provide examples of similar cases or offer testimonials from respected individuals to influence decision-making."
+  def social_proof(_point)
+    strategy = 'Provide examples of similar cases or offer testimonials from respected individuals to influence decision-making.'
     negotiation_strategies.push(strategy)
   end
 
   # Guilt-trip technique in legal context: Leverage moral responsibility
-  def guilt_trip(point)
-    strategy = "Highlight the potential negative outcomes for others if an agreement is not reached, invoking moral responsibility."
+  def guilt_trip(_point)
+    strategy = 'Highlight the potential negative outcomes for others if an agreement is not reached, invoking moral responsibility.'
     negotiation_strategies.push(strategy)
   end
 
   # Anchoring in legal negotiation: Set a reference point to influence the negotiation range
-  def anchoring(point)
-    strategy = "Begin with an initial high offer to set a high reference point, making subsequent offers seem more reasonable."
+  def anchoring(_point)
+    strategy = 'Begin with an initial high offer to set a high reference point, making subsequent offers seem more reasonable.'
     negotiation_strategies.push(strategy)
   end
 
@@ -180,7 +178,9 @@ class LawyerAssistant
     report += "Case Overview:\n"
     report += "Type: #{case_data[:case_type]}\n"
     report += "Key Facts: #{case_data[:key_facts].join(', ')}\n"
-    report += "Emotional State Insights: #{emotional_state.map { |state| state[:emotion].to_s.capitalize }.join(', ')}\n"
+    report += "Emotional State Insights: #{emotional_state.map do |state|
+      state[:emotion].to_s.capitalize
+    end.join(', ')}\n"
     report += "Negotiation Strategies Applied: #{negotiation_strategies.join(', ')}"
     report
   end
@@ -197,4 +197,3 @@ end
 # - Implement a client onboarding system that builds case data and emotional profiles automatically.
 # - Enhance client communication by providing dynamic feedback based on ongoing case developments.
 # - Investigate potential AI tools for automating the generation of complex legal documents.
-

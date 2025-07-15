@@ -7,7 +7,6 @@ require 'concurrent/concern/observable'
 require 'concurrent/synchronization/lockable_object'
 
 module Concurrent
-
   # `Agent` is inspired by Clojure's [agent](http://clojure.org/agents)
   # function. An agent is a shared, mutable variable providing independent,
   # uncoordinated, *asynchronous* change of individual values. Best used when
@@ -145,19 +144,22 @@ module Concurrent
   class Agent < Synchronization::LockableObject
     include Concern::Observable
 
-    ERROR_MODES = [:continue, :fail].freeze
+    ERROR_MODES = %i[continue fail].freeze
     private_constant :ERROR_MODES
 
     AWAIT_FLAG = ::Object.new
     private_constant :AWAIT_FLAG
 
-    AWAIT_ACTION = ->(value, latch) { latch.count_down; AWAIT_FLAG }
+    AWAIT_ACTION = lambda { |_value, latch|
+      latch.count_down
+      AWAIT_FLAG
+    }
     private_constant :AWAIT_ACTION
 
-    DEFAULT_ERROR_HANDLER = ->(agent, error) { nil }
+    DEFAULT_ERROR_HANDLER = ->(_agent, _error) {}
     private_constant :DEFAULT_ERROR_HANDLER
 
-    DEFAULT_VALIDATOR = ->(value) { true }
+    DEFAULT_VALIDATOR = ->(_value) { true }
     private_constant :DEFAULT_VALIDATOR
 
     Job = Struct.new(:action, :args, :executor, :caller)
@@ -167,7 +169,7 @@ module Concurrent
     class Error < StandardError
       def initialize(message = nil)
         message ||= 'agent must be restarted before jobs can post'
-        super(message)
+        super
       end
     end
 
@@ -176,7 +178,7 @@ module Concurrent
     class ValidationError < Error
       def initialize(message = nil)
         message ||= 'invalid value'
-        super(message)
+        super
       end
     end
 
@@ -227,10 +229,10 @@ module Concurrent
     #
     # @return [Object] the current value
     def value
-      @current.value # TODO (pitr 12-Sep-2015): broken unsafe read?
+      @current.value # TODO: (pitr 12-Sep-2015): broken unsafe read?
     end
 
-    alias_method :deref, :value
+    alias deref value
 
     # When {#failed?} and {#error_mode} is `:fail`, returns the error object
     # which caused the failure, else `nil`. When {#error_mode} is `:continue`
@@ -241,7 +243,7 @@ module Concurrent
       @error.value
     end
 
-    alias_method :reason, :error
+    alias reason error
 
     # @!macro agent_send
     #
@@ -284,8 +286,9 @@ module Concurrent
     # @!macro send_bang_return_and_raise
     #   @return [Boolean] true if the action is successfully enqueued
     #   @raise [Concurrent::Agent::Error] if the Agent is {#failed?}
-    def send!(*args, &action)
-      raise Error.new unless send(*args, &action)
+    def send!(*, &)
+      raise Error.new unless send(*, &)
+
       true
     end
 
@@ -295,12 +298,13 @@ module Concurrent
       enqueue_action_job(action, args, Concurrent.global_io_executor)
     end
 
-    alias_method :post, :send_off
+    alias post send_off
 
     # @!macro agent_send
     # @!macro send_bang_return_and_raise
-    def send_off!(*args, &action)
-      raise Error.new unless send_off(*args, &action)
+    def send_off!(*, &)
+      raise Error.new unless send_off(*, &)
+
       true
     end
 
@@ -316,8 +320,9 @@ module Concurrent
     # @!macro send_bang_return_and_raise
     # @param [Concurrent::ExecutorService] executor the executor on which the
     #   action is to be dispatched
-    def send_via!(executor, *args, &action)
-      raise Error.new unless send_via(executor, *args, &action)
+    def send_via!(executor, *, &)
+      raise Error.new unless send_via(executor, *, &)
+
       true
     end
 
@@ -376,6 +381,7 @@ module Concurrent
     # @!macro agent_await_warning
     def await_for!(timeout)
       raise Concurrent::TimeoutError unless wait(timeout.to_f)
+
       true
     end
 
@@ -403,7 +409,7 @@ module Concurrent
       !@error.value.nil?
     end
 
-    alias_method :stopped?, :failed?
+    alias stopped? failed?
 
     # When an Agent is {#failed?}, changes the Agent {#value} to `new_value`
     # then un-fails the Agent so that action dispatches are allowed again. If
@@ -426,6 +432,7 @@ module Concurrent
       synchronize do
         raise Error.new('agent is not failed') unless failed?
         raise ValidationError unless ns_validate(new_value)
+
         @current.value = new_value
         @error.value   = nil
         @queue.clear if clear_actions
@@ -435,7 +442,6 @@ module Concurrent
     end
 
     class << self
-
       # Blocks the current thread (indefinitely!) until all actions dispatched
       # thus far to all the given Agents, from this thread or nested by the
       # given Agents, have occurred. Will block when any of the agents are
@@ -481,6 +487,7 @@ module Concurrent
       # @!macro agent_await_warning
       def await_for!(timeout, *agents)
         raise Concurrent::TimeoutError unless await_for(timeout, *agents)
+
         true
       end
     end
@@ -509,6 +516,7 @@ module Concurrent
 
     def enqueue_action_job(action, args, executor)
       raise ArgumentError.new('no action given') unless action
+
       job = Job.new(action, args, executor, @caller.value || Thread.current.object_id)
       synchronize { ns_enqueue_job(job) }
     end
@@ -518,7 +526,7 @@ module Concurrent
         if (index = ns_find_last_job_for_thread)
           job = Job.new(AWAIT_ACTION, [latch], Concurrent.global_immediate_executor,
                         Thread.current.object_id)
-          ns_enqueue_job(job, index+1)
+          ns_enqueue_job(job, index + 1)
         else
           latch.count_down
           true
@@ -529,6 +537,7 @@ module Concurrent
     def ns_enqueue_job(job, index = nil)
       # a non-nil index means this is an await job
       return false if index.nil? && failed?
+
       index ||= @queue.length
       @queue.insert(index, job)
       # if this is the only job, post to executor
@@ -556,20 +565,18 @@ module Concurrent
       else
         handle_error(ValidationError.new)
       end
-    rescue => error
-      handle_error(error)
+    rescue StandardError => e
+      handle_error(e)
     ensure
       synchronize do
         @queue.shift
-        unless failed? || @queue.empty?
-          ns_post_next_job
-        end
+        ns_post_next_job unless failed? || @queue.empty?
       end
     end
 
     def ns_validate(value)
       @validator.call(value)
-    rescue
+    rescue StandardError
       false
     end
 
@@ -577,7 +584,7 @@ module Concurrent
       # stop new jobs from posting
       @error.value = error if @error_mode == :fail
       @error_handler.call(self, error)
-    rescue
+    rescue StandardError
       # do nothing
     end
 
