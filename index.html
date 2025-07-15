@@ -1,41 +1,53 @@
 <!DOCTYPE html>
 <!--
-  J Dilla Sacred Geometry Visualizer
-  
-  A transcendent audio-visual experience combining J Dilla's rhythmic genius 
-  with sacred geometry patterns. Features 5 distinct visualization modes that 
-  automatically cycle with each track, creating a continuous flow of mathematical 
-  beauty synchronized to the beats.
-  
-  Sacred Geometry Modes:
-  1. Warp Tunnel - Particle-based tunnel with smooth movement
-  2. Sacred Mandala - Golden ratio spirals with layered patterns  
-  3. Flower of Life - Fractal circles with recursive depth
-  4. Lissajous Mesh - Parametric curves creating geometric nets
-  5. DMT Polygon Tunnel - Polygonal tunnel with fractal harmonics
+  Sacred Geometry J Dilla Audio Visualizer
   
   Features:
-  - 14 J Dilla tracks with YouTube integration
-  - Auto-mode switching (new geometry per song)
-  - Audio reactivity (bass/mid/high frequency control)
-  - Mobile-first responsive design
-  - Accessibility compliance with ARIA labels
-  - Performance optimized canvas rendering
-  - Custom cursor on desktop
-  - One-click start overlay
-  - Continuous playback with smooth transitions
+  - 5 Sacred Geometry Modes: Warp Tunnel, Sacred Mandala, Flower of Life, Lissajous Mesh, DMT Polygon Tunnel
+  - 14-track J Dilla playlist with YouTube iframe integration
+  - Auto-mode switching - Each new song triggers a random geometry mode
+  - Audio-reactive visualization with bass/mid/high frequency response
+  - Mobile-first responsive design with accessibility features
+  - Sacred geometry mathematics including golden ratio calculations
+  - Smooth transitions between visualization modes
+  - Custom cursor effects on desktop
+  - Real-time track display with seamless song progression
+  - One-click start overlay with accessibility compliance
+  - Performance optimization for smooth 60fps rendering
+  
+  Sacred Geometry Mathematics:
+  - Golden Ratio (φ = 1.618033988749895)
+  - Fibonacci sequence integration
+  - Mandala sacred circle calculations
+  - Flower of Life geometric patterns
+  - Lissajous curve harmonics
+  - DMT-inspired kaleidoscopic transformations
 -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>J Dilla Sacred Geometry Visualizer</title>
+  <title>Sacred Geometry J Dilla Audio Visualizer</title>
+  <meta name="description" content="Transcendent sacred geometry visualizer synchronized with J Dilla's timeless beats">
   <script src="https://www.youtube.com/iframe_api"></script>
   <style>
-    * {
+    /* SACRED GEOMETRY RESET & FOUNDATION */
+    *, *::before, *::after {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+    }
+
+    :root {
+      --golden-ratio: 1.618033988749895;
+      --inverse-golden: 0.618033988749895;
+      --sacred-purple: #8a2be2;
+      --sacred-cyan: #00ffff;
+      --sacred-gold: #ffd700;
+      --sacred-pink: #ff69b4;
+      --sacred-green: #00ff7f;
+      --transition-sacred: 2s ease-in-out;
+      --radius-sacred: calc(1rem * var(--golden-ratio));
     }
 
     body {
@@ -49,178 +61,239 @@
       user-select: none;
       -webkit-user-select: none;
       -webkit-tap-highlight-color: transparent;
-      cursor: none; /* Custom cursor will be added */
+      cursor: none; /* Custom cursor will be implemented */
     }
 
-    /* Custom cursor for desktop */
-    .custom-cursor {
+    /* CUSTOM CURSOR */
+    .sacred-cursor {
       position: fixed;
-      top: 0;
-      left: 0;
       width: 20px;
       height: 20px;
-      background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.4) 50%, transparent 100%);
+      background: radial-gradient(circle, var(--sacred-purple) 0%, transparent 70%);
       border-radius: 50%;
       pointer-events: none;
-      z-index: 9999;
-      mix-blend-mode: difference;
+      z-index: 10000;
+      mix-blend-mode: screen;
       transition: transform 0.1s ease-out;
     }
 
-    /* Start overlay */
+    /* START OVERLAY */
     .start-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.9);
+      background: linear-gradient(135deg, #000 0%, #1a1a1a 50%, #2d2d2d 100%);
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      z-index: 1000;
-      backdrop-filter: blur(10px);
+      z-index: 9999;
+      opacity: 1;
+      transition: opacity var(--transition-sacred);
     }
 
-    .start-button {
-      background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-      border: none;
-      color: white;
-      padding: 20px 40px;
-      font-size: 24px;
-      font-weight: bold;
-      border-radius: 50px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-      text-transform: uppercase;
-      letter-spacing: 2px;
+    .start-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
     }
 
-    .start-button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4);
+    .sacred-mandala-logo {
+      width: 200px;
+      height: 200px;
+      margin-bottom: 2rem;
+      animation: rotate-sacred 20s linear infinite;
+    }
+
+    @keyframes rotate-sacred {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
     }
 
     .start-title {
-      font-size: 48px;
-      font-weight: 100;
-      margin-bottom: 20px;
-      text-align: center;
-      background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: linear-gradient(45deg, var(--sacred-purple), var(--sacred-cyan), var(--sacred-gold));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      text-align: center;
     }
 
     .start-subtitle {
-      font-size: 18px;
-      opacity: 0.7;
-      margin-bottom: 40px;
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      opacity: 0.8;
       text-align: center;
       max-width: 600px;
       line-height: 1.6;
     }
 
-    /* Main visualizer container */
-    .visualizer-container {
+    .start-button {
+      background: linear-gradient(45deg, var(--sacred-purple), var(--sacred-cyan));
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      font-size: 1.1rem;
+      border-radius: var(--radius-sacred);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-weight: 600;
       position: relative;
-      width: 100vw;
-      height: 100vh;
       overflow: hidden;
     }
 
-    /* Canvas for geometry rendering */
-    .geometry-canvas {
+    .start-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 30px rgba(138, 43, 226, 0.3);
+    }
+
+    .start-button:focus {
+      outline: 2px solid var(--sacred-cyan);
+      outline-offset: 2px;
+    }
+
+    /* SACRED GEOMETRY CAROUSEL */
+    .sacred-carousel {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .geometry-slide {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
+      opacity: 0;
+      transition: opacity var(--transition-sacred);
       z-index: 1;
     }
 
-    /* YouTube player (hidden but functional) */
-    #youtube-player {
+    .geometry-slide.active {
+      opacity: 1;
+      z-index: 2;
+    }
+
+    .geometry-slide canvas {
       position: absolute;
-      top: -200px;
-      left: -200px;
-      width: 1px;
-      height: 1px;
-      opacity: 0;
-      pointer-events: none;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      touch-action: none;
     }
 
-    /* Track info display */
-    .track-info {
+    /* SACRED CONTROLS */
+    .sacred-controls {
       position: fixed;
-      bottom: 30px;
-      left: 30px;
-      right: 30px;
-      background: rgba(0, 0, 0, 0.7);
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 8888;
+      background: rgba(0, 0, 0, 0.9);
+      padding: 1rem 1.5rem;
+      border-radius: var(--radius-sacred);
+      border: 1px solid rgba(138, 43, 226, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
       backdrop-filter: blur(10px);
-      padding: 20px;
-      border-radius: 15px;
-      z-index: 100;
-      text-align: center;
-      transition: all 0.3s ease;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     }
 
-    .track-title {
-      font-size: 22px;
-      font-weight: bold;
-      margin-bottom: 5px;
+    .play-pause-sacred {
+      background: linear-gradient(45deg, var(--sacred-purple), var(--sacred-cyan));
+      border: none;
       color: #fff;
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 0.75rem;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
     }
 
-    .track-artist {
-      font-size: 16px;
+    .play-pause-sacred:hover {
+      transform: scale(1.1);
+      box-shadow: 0 5px 20px rgba(138, 43, 226, 0.5);
+    }
+
+    .play-pause-sacred:focus {
+      outline: 2px solid var(--sacred-cyan);
+      outline-offset: 2px;
+    }
+
+    .track-info-sacred {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .track-title-sacred {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--sacred-cyan);
+    }
+
+    .track-artist-sacred {
+      font-size: 0.875rem;
       opacity: 0.8;
-      color: #4ecdc4;
+      margin-bottom: 0.25rem;
     }
 
-    .track-mode {
-      font-size: 14px;
-      margin-top: 8px;
+    .geometry-indicator {
+      font-size: 0.75rem;
       opacity: 0.6;
       font-style: italic;
+      color: var(--sacred-gold);
     }
 
-    /* Mobile responsive */
-    @media (max-width: 768px) {
-      .start-title {
-        font-size: 36px;
-      }
-      
-      .start-subtitle {
-        font-size: 16px;
-        padding: 0 20px;
-      }
-      
-      .start-button {
-        padding: 15px 30px;
-        font-size: 18px;
-      }
-      
-      .track-info {
-        bottom: 20px;
-        left: 20px;
-        right: 20px;
-        padding: 15px;
-      }
-      
-      .track-title {
-        font-size: 18px;
-      }
-      
-      .track-artist {
-        font-size: 14px;
-      }
+    /* FREQUENCY ANALYZER DISPLAY */
+    .frequency-display {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 8888;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 1rem;
+      border-radius: var(--radius-sacred);
+      border: 1px solid rgba(138, 43, 226, 0.3);
+      backdrop-filter: blur(10px);
+      min-width: 200px;
     }
 
-    /* Accessibility */
+    .frequency-bar {
+      height: 4px;
+      margin: 0.5rem 0;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .frequency-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--sacred-purple), var(--sacred-cyan));
+      width: 0%;
+      transition: width 0.1s ease;
+    }
+
+    /* ACCESSIBILITY FEATURES */
     .sr-only {
       position: absolute;
       width: 1px;
@@ -233,65 +306,227 @@
       border: 0;
     }
 
-    /* Hidden on mobile */
+    /* REDUCED MOTION SUPPORT */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      
+      .sacred-mandala-logo {
+        animation: none;
+      }
+    }
+
+    /* MOBILE RESPONSIVENESS */
     @media (max-width: 768px) {
-      .custom-cursor {
-        display: none;
+      .start-title {
+        font-size: 2rem;
+      }
+      
+      .start-subtitle {
+        font-size: 1rem;
+        padding: 0 1rem;
+      }
+      
+      .sacred-controls {
+        bottom: 15px;
+        padding: 0.75rem 1rem;
+        gap: 0.75rem;
+      }
+      
+      .play-pause-sacred {
+        width: 50px;
+        height: 50px;
+        font-size: 1.25rem;
+      }
+      
+      .track-title-sacred {
+        font-size: 0.875rem;
+      }
+      
+      .track-artist-sacred {
+        font-size: 0.75rem;
+      }
+      
+      .frequency-display {
+        top: 15px;
+        right: 15px;
+        padding: 0.75rem;
+        min-width: 150px;
       }
       
       body {
-        cursor: default;
+        cursor: default; /* Show cursor on mobile */
       }
+      
+      .sacred-cursor {
+        display: none;
+      }
+    }
+
+    /* HIGH CONTRAST MODE */
+    @media (prefers-contrast: high) {
+      .sacred-controls {
+        background: rgba(0, 0, 0, 0.95);
+        border: 2px solid #fff;
+      }
+      
+      .frequency-display {
+        background: rgba(0, 0, 0, 0.95);
+        border: 2px solid #fff;
+      }
+    }
+
+    /* HIDDEN YOUTUBE PLAYER */
+    #youtube-player {
+      position: absolute;
+      top: -1000px;
+      left: -1000px;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
     }
   </style>
 </head>
 <body>
-  <!-- Custom cursor for desktop -->
-  <div class="custom-cursor" id="customCursor"></div>
+  <!-- CUSTOM CURSOR -->
+  <div class="sacred-cursor" id="sacred-cursor" aria-hidden="true"></div>
 
-  <!-- Start overlay -->
-  <div class="start-overlay" id="startOverlay">
-    <h1 class="start-title">J Dilla Sacred Geometry</h1>
-    <p class="start-subtitle">
-      Experience the rhythmic genius of J Dilla through transcendent sacred geometry patterns. 
-      Each track transforms into a unique visual meditation combining mathematics and music.
+  <!-- START OVERLAY -->
+  <div class="start-overlay" id="start-overlay" role="dialog" aria-labelledby="start-title" aria-describedby="start-subtitle">
+    <svg class="sacred-mandala-logo" viewBox="0 0 200 200" aria-hidden="true">
+      <defs>
+        <linearGradient id="mandala-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#8a2be2;stop-opacity:1" />
+          <stop offset="50%" style="stop-color:#00ffff;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#ffd700;stop-opacity:1" />
+        </linearGradient>
+      </defs>
+      <g transform="translate(100,100)">
+        <circle r="80" fill="none" stroke="url(#mandala-gradient)" stroke-width="2" opacity="0.7"/>
+        <circle r="60" fill="none" stroke="url(#mandala-gradient)" stroke-width="1.5" opacity="0.6"/>
+        <circle r="40" fill="none" stroke="url(#mandala-gradient)" stroke-width="1" opacity="0.5"/>
+        <circle r="20" fill="none" stroke="url(#mandala-gradient)" stroke-width="0.5" opacity="0.4"/>
+        <g id="petals">
+          <path d="M 0,-80 Q 20,-40 0,-20 Q -20,-40 0,-80" fill="url(#mandala-gradient)" opacity="0.3"/>
+          <path d="M 0,-80 Q 20,-40 0,-20 Q -20,-40 0,-80" fill="url(#mandala-gradient)" opacity="0.3" transform="rotate(45)"/>
+          <path d="M 0,-80 Q 20,-40 0,-20 Q -20,-40 0,-80" fill="url(#mandala-gradient)" opacity="0.3" transform="rotate(90)"/>
+          <path d="M 0,-80 Q 20,-40 0,-20 Q -20,-40 0,-80" fill="url(#mandala-gradient)" opacity="0.3" transform="rotate(135)"/>
+          <path d="M 0,-80 Q 20,-40 0,-20 Q -20,-40 0,-80" fill="url(#mandala-gradient)" opacity="0.3" transform="rotate(180)"/>
+          <path d="M 0,-80 Q 20,-40 0,-20 Q -20,-40 0,-80" fill="url(#mandala-gradient)" opacity="0.3" transform="rotate(225)"/>
+          <path d="M 0,-80 Q 20,-40 0,-20 Q -20,-40 0,-80" fill="url(#mandala-gradient)" opacity="0.3" transform="rotate(270)"/>
+          <path d="M 0,-80 Q 20,-40 0,-20 Q -20,-40 0,-80" fill="url(#mandala-gradient)" opacity="0.3" transform="rotate(315)"/>
+        </g>
+      </g>
+    </svg>
+    <h1 class="start-title" id="start-title">Sacred Geometry</h1>
+    <p class="start-subtitle" id="start-subtitle">
+      Experience J Dilla's timeless beats through the lens of sacred mathematics. 
+      Five transcendent visualizations await your journey into geometric consciousness.
     </p>
-    <button class="start-button" id="startButton" aria-label="Start the sacred geometry visualizer">
-      Begin Journey
+    <button class="start-button" id="start-button" aria-describedby="start-subtitle">
+      Begin Sacred Journey
     </button>
   </div>
 
-  <!-- Main visualizer -->
-  <div class="visualizer-container" id="visualizerContainer">
-    <canvas class="geometry-canvas" id="geometryCanvas" aria-label="Sacred geometry visualization"></canvas>
-    <div id="youtube-player"></div>
+  <!-- SACRED GEOMETRY CAROUSEL -->
+  <div class="sacred-carousel" id="sacred-carousel" aria-live="polite" aria-label="Sacred geometry visualizations">
     
-    <!-- Track info display -->
-    <div class="track-info" id="trackInfo">
-      <div class="track-title" id="trackTitle">J Dilla Sacred Geometry</div>
-      <div class="track-artist" id="trackArtist">Loading...</div>
-      <div class="track-mode" id="trackMode">Preparing visualization...</div>
+    <!-- Slide 1: Warp Tunnel -->
+    <div class="geometry-slide active" id="warp-tunnel-slide" data-geometry="Warp Tunnel">
+      <canvas id="warp-tunnel-canvas" role="img" aria-label="Warp tunnel visualization with particles flowing through space"></canvas>
+    </div>
+
+    <!-- Slide 2: Sacred Mandala -->
+    <div class="geometry-slide" id="sacred-mandala-slide" data-geometry="Sacred Mandala">
+      <canvas id="sacred-mandala-canvas" role="img" aria-label="Sacred mandala visualization with golden ratio geometry"></canvas>
+    </div>
+
+    <!-- Slide 3: Flower of Life -->
+    <div class="geometry-slide" id="flower-of-life-slide" data-geometry="Flower of Life">
+      <canvas id="flower-of-life-canvas" role="img" aria-label="Flower of life visualization with interconnected sacred circles"></canvas>
+    </div>
+
+    <!-- Slide 4: Lissajous Mesh -->
+    <div class="geometry-slide" id="lissajous-mesh-slide" data-geometry="Lissajous Mesh">
+      <canvas id="lissajous-mesh-canvas" role="img" aria-label="Lissajous mesh visualization with harmonic frequency patterns"></canvas>
+    </div>
+
+    <!-- Slide 5: DMT Polygon Tunnel -->
+    <div class="geometry-slide" id="dmt-polygon-slide" data-geometry="DMT Polygon Tunnel">
+      <canvas id="dmt-polygon-canvas" role="img" aria-label="DMT polygon tunnel visualization with kaleidoscopic patterns"></canvas>
+    </div>
+
+  </div>
+
+  <!-- SACRED CONTROLS -->
+  <div class="sacred-controls" role="region" aria-label="Audio controls and track information">
+    <button class="play-pause-sacred" id="play-pause-btn" aria-label="Play or pause audio">
+      <span aria-hidden="true">▶</span>
+    </button>
+    <div class="track-info-sacred">
+      <div class="track-title-sacred" id="track-title">Microphone Master [Extended]</div>
+      <div class="track-artist-sacred" id="track-artist">J Dilla</div>
+      <div class="geometry-indicator" id="geometry-indicator">Warp Tunnel</div>
     </div>
   </div>
 
-  <!-- Screen reader accessibility -->
-  <div class="sr-only" aria-live="polite" id="visualizerStatus"></div>
+  <!-- FREQUENCY ANALYZER DISPLAY -->
+  <div class="frequency-display" role="region" aria-label="Audio frequency analysis">
+    <div style="font-size: 0.75rem; margin-bottom: 0.5rem; opacity: 0.7;">Frequency Analysis</div>
+    <div>
+      <div style="font-size: 0.625rem; opacity: 0.6;">Bass</div>
+      <div class="frequency-bar">
+        <div class="frequency-fill" id="bass-fill"></div>
+      </div>
+    </div>
+    <div>
+      <div style="font-size: 0.625rem; opacity: 0.6;">Mid</div>
+      <div class="frequency-bar">
+        <div class="frequency-fill" id="mid-fill"></div>
+      </div>
+    </div>
+    <div>
+      <div style="font-size: 0.625rem; opacity: 0.6;">High</div>
+      <div class="frequency-bar">
+        <div class="frequency-fill" id="high-fill"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN READER ANNOUNCEMENTS -->
+  <div class="sr-only" aria-live="polite" id="sr-announcements"></div>
+
+  <!-- YOUTUBE PLAYER (HIDDEN) -->
+  <div id="youtube-player" aria-hidden="true"></div>
 
   <script>
-    // Sacred Geometry Visualizer Configuration
-    const CONFIG = {
-      GOLDEN_RATIO: (1 + Math.sqrt(5)) / 2,
-      MODES: ['warp-tunnel', 'sacred-mandala', 'flower-of-life', 'lissajous-mesh', 'dmt-polygon'],
-      MODE_NAMES: {
-        'warp-tunnel': 'Warp Tunnel',
-        'sacred-mandala': 'Sacred Mandala', 
-        'flower-of-life': 'Flower of Life',
-        'lissajous-mesh': 'Lissajous Mesh',
-        'dmt-polygon': 'DMT Polygon Tunnel'
-      }
+    // SACRED GEOMETRY CONSTANTS
+    const GOLDEN_RATIO = 1.618033988749895;
+    const INVERSE_GOLDEN = 0.618033988749895;
+    const PHI = GOLDEN_RATIO;
+    const PI = Math.PI;
+    const TAU = 2 * PI;
+    
+    // FIBONACCI SEQUENCE FOR SACRED PROPORTIONS
+    const FIBONACCI = [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597];
+    
+    // SACRED COLOR PALETTE
+    const SACRED_COLORS = {
+      purple: '#8a2be2',
+      cyan: '#00ffff',
+      gold: '#ffd700',
+      pink: '#ff69b4',
+      green: '#00ff7f',
+      indigo: '#4b0082',
+      violet: '#ee82ee',
+      orange: '#ff8c00'
     };
 
-    // J Dilla Playlist (14 tracks)
+    // EXTENDED J DILLA PLAYLIST (14 tracks) - PRESERVED EXACTLY
     const tracks = [
       { id: "A_-KQF9tK4Y", title: "Microphone Master [Extended]", artist: "J Dilla", url: "https://www.youtube.com/watch?v=A_-KQF9tK4Y" },
       { id: "lMh79wGQ23E", title: "Due Time", artist: "AFTA-1", url: "https://www.youtube.com/watch?v=lMh79wGQ23E" },
@@ -309,500 +544,889 @@
       { id: "j0z_-7TfPeM", title: "Fantastic (Instrumental)", artist: "J Dilla", url: "https://www.youtube.com/watch?v=j0z_-7TfPeM" }
     ];
 
-    // Global state
+    // GLOBAL VARIABLES
     let youtubePlayer;
     let currentTrackIndex = 0;
-    let currentMode = 0;
     let isPlaying = false;
-    let canvas, ctx;
-    let animationId;
-    let audioContext, analyser, dataArray;
-    let startTime = Date.now();
-    let trackStartTime = Date.now();
-    let trackDuration = 180000; // 3 minutes default per track
-
-    // Audio reactivity variables
+    let audioContext;
+    let analyser;
+    let dataArray;
     let bassLevel = 0;
     let midLevel = 0;
     let highLevel = 0;
 
-    // Initialize on page load
-    document.addEventListener('DOMContentLoaded', function() {
-      initializeVisualizer();
-      setupCustomCursor();
-      setupStartButton();
-    });
+    // VISUALIZATION VARIABLES
+    let currentSlideIndex = 0;
+    let autoRotateInterval;
+    let isAutoRotating = false;
+    let visualizationTime = 0;
+    let isStarted = false;
+    
+    const geometrySlides = [
+      'warp-tunnel-slide',
+      'sacred-mandala-slide',
+      'flower-of-life-slide',
+      'lissajous-mesh-slide',
+      'dmt-polygon-slide'
+    ];
 
-    // YouTube API ready callback
-    let youtubeApiReady = false;
-    function onYouTubeIframeAPIReady() {
-      console.log('YouTube API ready');
-      youtubeApiReady = true;
+    const geometryNames = [
+      'Warp Tunnel',
+      'Sacred Mandala',
+      'Flower of Life',
+      'Lissajous Mesh',
+      'DMT Polygon Tunnel'
+    ];
+
+    // CANVAS CONTEXTS
+    const canvases = {};
+    const contexts = {};
+
+    // PARTICLE SYSTEMS
+    const particleSystems = {
+      warpTunnel: [],
+      sacredMandala: [],
+      flowerOfLife: [],
+      lissajousMesh: [],
+      dmtPolygon: []
+    };
+
+    // UTILITY FUNCTIONS
+    function initializeCanvases() {
+      geometrySlides.forEach(slideId => {
+        const slide = document.getElementById(slideId);
+        const canvas = slide.querySelector('canvas');
+        const context = canvas.getContext('2d');
+        
+        canvases[slideId] = canvas;
+        contexts[slideId] = context;
+        
+        // Set initial canvas size
+        resizeCanvas(canvas);
+      });
     }
 
-    function initializeVisualizer() {
-      canvas = document.getElementById('geometryCanvas');
-      ctx = canvas.getContext('2d');
-      resizeCanvas();
-      
-      window.addEventListener('resize', resizeCanvas);
-      
-      // Initialize with first mode
-      updateTrackInfo();
-      updateVisualizerStatus();
-    }
-
-    function resizeCanvas() {
+    function resizeCanvas(canvas) {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
     }
 
-    function setupCustomCursor() {
-      const cursor = document.getElementById('customCursor');
+    function resizeAllCanvases() {
+      Object.values(canvases).forEach(resizeCanvas);
+    }
+
+    // AUDIO ANALYSIS
+    function initializeAudioAnalysis() {
+      if (audioContext) return;
       
-      // Only on desktop
-      if (window.innerWidth > 768) {
-        document.addEventListener('mousemove', (e) => {
-          cursor.style.left = e.clientX - 10 + 'px';
-          cursor.style.top = e.clientY - 10 + 'px';
-        });
+      try {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        analyser = audioContext.createAnalyser();
+        analyser.fftSize = 2048;
+        analyser.smoothingTimeConstant = 0.8;
         
-        document.addEventListener('mousedown', () => {
-          cursor.style.transform = 'scale(0.8)';
-        });
+        const bufferLength = analyser.frequencyBinCount;
+        dataArray = new Uint8Array(bufferLength);
         
-        document.addEventListener('mouseup', () => {
-          cursor.style.transform = 'scale(1)';
-        });
-      } else {
-        cursor.style.display = 'none';
+        // Connect to destination to ensure audio processing
+        analyser.connect(audioContext.destination);
+        
+        console.log('Audio analysis initialized');
+      } catch (error) {
+        console.warn('Audio analysis failed to initialize:', error);
       }
     }
 
-    function setupStartButton() {
-      const startButton = document.getElementById('startButton');
-      const startOverlay = document.getElementById('startOverlay');
+    function updateAudioAnalysis() {
+      if (!analyser || !dataArray) return;
       
-      startButton.addEventListener('click', async () => {
-        try {
-          // Initialize audio context
-          audioContext = new (window.AudioContext || window.webkitAudioContext)();
-          
-          // Create YouTube player (with fallback)
-          await createYouTubePlayer();
-          
-          // Hide overlay
-          startOverlay.style.opacity = '0';
-          setTimeout(() => {
-            startOverlay.style.display = 'none';
-          }, 300);
-          
-          // Start visualization
-          startVisualization();
-          
-        } catch (error) {
-          console.error('Error starting visualizer:', error);
-          // Continue without audio if YouTube fails
-          startOverlay.style.opacity = '0';
-          setTimeout(() => {
-            startOverlay.style.display = 'none';
-          }, 300);
-          startVisualization();
+      analyser.getByteFrequencyData(dataArray);
+      
+      // Calculate frequency bands
+      const bassEnd = Math.floor(dataArray.length * 0.1);
+      const midEnd = Math.floor(dataArray.length * 0.5);
+      
+      // Bass (0-10%)
+      let bassSum = 0;
+      for (let i = 0; i < bassEnd; i++) {
+        bassSum += dataArray[i];
+      }
+      bassLevel = bassSum / bassEnd / 255;
+      
+      // Mid (10-50%)
+      let midSum = 0;
+      for (let i = bassEnd; i < midEnd; i++) {
+        midSum += dataArray[i];
+      }
+      midLevel = midSum / (midEnd - bassEnd) / 255;
+      
+      // High (50-100%)
+      let highSum = 0;
+      for (let i = midEnd; i < dataArray.length; i++) {
+        highSum += dataArray[i];
+      }
+      highLevel = highSum / (dataArray.length - midEnd) / 255;
+      
+      // Update frequency display
+      document.getElementById('bass-fill').style.width = `${bassLevel * 100}%`;
+      document.getElementById('mid-fill').style.width = `${midLevel * 100}%`;
+      document.getElementById('high-fill').style.width = `${highLevel * 100}%`;
+    }
+
+    // YOUTUBE PLAYER SETUP
+    function onYouTubeIframeAPIReady() {
+      youtubePlayer = new YT.Player('youtube-player', {
+        height: '1',
+        width: '1',
+        videoId: tracks[currentTrackIndex].id,
+        playerVars: {
+          autoplay: 0,
+          controls: 0,
+          disablekb: 1,
+          fs: 0,
+          modestbranding: 1,
+          playsinline: 1,
+          rel: 0,
+          loop: 0
+        },
+        events: {
+          onReady: onPlayerReady,
+          onStateChange: onPlayerStateChange
         }
       });
     }
 
-    function createYouTubePlayer() {
-      return new Promise((resolve, reject) => {
-        // Check if YouTube API is available
-        if (typeof YT === 'undefined' || !YT.Player) {
-          console.warn('YouTube API not available, starting without audio');
-          resolve(null);
-          return;
-        }
-        
-        try {
-          youtubePlayer = new YT.Player('youtube-player', {
-            height: '1',
-            width: '1',
-            videoId: tracks[currentTrackIndex].id,
-            playerVars: {
-              autoplay: 1,
-              controls: 0,
-              showinfo: 0,
-              modestbranding: 1,
-              loop: 0,
-              fs: 0,
-              cc_load_policy: 0,
-              iv_load_policy: 3,
-              autohide: 0
-            },
-            events: {
-              onReady: (event) => {
-                console.log('YouTube player ready');
-                resolve(event);
-              },
-              onStateChange: onPlayerStateChange,
-              onError: (error) => {
-                console.error('YouTube player error:', error);
-                // Don't reject, just continue without audio
-                resolve(null);
-              }
-            }
-          });
-        } catch (error) {
-          console.error('Error creating YouTube player:', error);
-          resolve(null);
-        }
-      });
+    function onPlayerReady(event) {
+      console.log('YouTube player ready');
+      updateTrackInfo();
     }
 
     function onPlayerStateChange(event) {
-      if (event.data === YT.PlayerState.ENDED) {
-        nextTrack();
-      } else if (event.data === YT.PlayerState.PLAYING) {
+      if (event.data === YT.PlayerState.PLAYING) {
         isPlaying = true;
-        updateVisualizerStatus();
+        document.getElementById('play-pause-btn').innerHTML = '<span aria-hidden="true">⏸</span>';
+        startAutoRotation();
       } else if (event.data === YT.PlayerState.PAUSED) {
         isPlaying = false;
-        updateVisualizerStatus();
+        document.getElementById('play-pause-btn').innerHTML = '<span aria-hidden="true">▶</span>';
+        stopAutoRotation();
+      } else if (event.data === YT.PlayerState.ENDED) {
+        isPlaying = false;
+        document.getElementById('play-pause-btn').innerHTML = '<span aria-hidden="true">▶</span>';
+        nextTrack();
+      }
+    }
+
+    // AUDIO CONTROL FUNCTIONS
+    function togglePlayPause() {
+      if (!youtubePlayer || !isStarted) return;
+      
+      if (isPlaying) {
+        youtubePlayer.pauseVideo();
+        announceToScreenReader('Audio paused');
+      } else {
+        youtubePlayer.playVideo();
+        announceToScreenReader('Audio playing');
       }
     }
 
     function nextTrack() {
       currentTrackIndex = (currentTrackIndex + 1) % tracks.length;
-      currentMode = currentTrackIndex % CONFIG.MODES.length;
-      trackStartTime = Date.now();
+      loadTrack();
+      switchToRandomGeometry();
+    }
+
+    function loadTrack() {
+      if (!youtubePlayer) return;
       
-      if (youtubePlayer) {
-        youtubePlayer.loadVideoById(tracks[currentTrackIndex].id);
-      }
-      
+      const track = tracks[currentTrackIndex];
+      youtubePlayer.loadVideoById({
+        videoId: track.id,
+        startSeconds: 0
+      });
       updateTrackInfo();
-      updateVisualizerStatus();
     }
 
     function updateTrackInfo() {
       const track = tracks[currentTrackIndex];
-      const modeName = CONFIG.MODE_NAMES[CONFIG.MODES[currentMode]];
+      document.getElementById('track-title').textContent = track.title;
+      document.getElementById('track-artist').textContent = track.artist;
       
-      document.getElementById('trackTitle').textContent = track.title;
-      document.getElementById('trackArtist').textContent = track.artist;
-      document.getElementById('trackMode').textContent = `Mode: ${modeName}`;
+      announceToScreenReader(`Now playing: ${track.title} by ${track.artist}`);
     }
 
-    function updateVisualizerStatus() {
-      const status = document.getElementById('visualizerStatus');
-      const track = tracks[currentTrackIndex];
-      const modeName = CONFIG.MODE_NAMES[CONFIG.MODES[currentMode]];
+    // AUTO-ROTATION SYSTEM
+    function startAutoRotation() {
+      if (isAutoRotating) return;
       
-      status.textContent = `${isPlaying ? 'Playing' : 'Paused'}: ${track.title} by ${track.artist}. Visual mode: ${modeName}`;
+      isAutoRotating = true;
+      // Switch geometry every 30 seconds
+      autoRotateInterval = setInterval(switchToRandomGeometry, 30000);
     }
 
-    function startVisualization() {
-      startTime = Date.now();
-      trackStartTime = Date.now();
-      isPlaying = true;
-      animate();
-    }
-
-    function animate() {
-      const currentTime = Date.now();
-      const elapsed = (currentTime - startTime) / 1000;
-      
-      // Auto-advance tracks if no YouTube player or after track duration
-      if (!youtubePlayer && currentTime - trackStartTime > trackDuration) {
-        nextTrack();
+    function stopAutoRotation() {
+      if (autoRotateInterval) {
+        clearInterval(autoRotateInterval);
+        autoRotateInterval = null;
       }
+      isAutoRotating = false;
+    }
+
+    function switchToRandomGeometry() {
+      let nextIndex;
+      do {
+        nextIndex = Math.floor(Math.random() * geometrySlides.length);
+      } while (nextIndex === currentSlideIndex && geometrySlides.length > 1);
+      
+      switchToGeometry(nextIndex);
+    }
+
+    function switchToGeometry(slideIndex) {
+      const currentSlide = document.getElementById(geometrySlides[currentSlideIndex]);
+      const nextSlide = document.getElementById(geometrySlides[slideIndex]);
+      
+      // Update indicators
+      document.getElementById('geometry-indicator').textContent = geometryNames[slideIndex];
+      
+      // Announce to screen reader
+      announceToScreenReader(`Switched to ${geometryNames[slideIndex]} visualization`);
+      
+      // Fade transition
+      currentSlide.classList.remove('active');
+      
+      setTimeout(() => {
+        nextSlide.classList.add('active');
+        currentSlideIndex = slideIndex;
+      }, 1000);
+    }
+
+    // ACCESSIBILITY FUNCTIONS
+    function announceToScreenReader(message) {
+      const announcer = document.getElementById('sr-announcements');
+      announcer.textContent = message;
+      setTimeout(() => {
+        announcer.textContent = '';
+      }, 1000);
+    }
+
+    // CUSTOM CURSOR
+    function initializeCustomCursor() {
+      const cursor = document.getElementById('sacred-cursor');
+      let mouseX = 0;
+      let mouseY = 0;
+      
+      document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      });
+      
+      function updateCursor() {
+        cursor.style.left = mouseX - 10 + 'px';
+        cursor.style.top = mouseY - 10 + 'px';
+        
+        // Pulse effect based on audio
+        const scale = 1 + (bassLevel * 0.5);
+        cursor.style.transform = `scale(${scale})`;
+        
+        requestAnimationFrame(updateCursor);
+      }
+      
+      updateCursor();
+    }
+
+    // WARP TUNNEL VISUALIZATION
+    function initializeWarpTunnel() {
+      const particles = [];
+      
+      for (let i = 0; i < 300; i++) {
+        particles.push({
+          x: (Math.random() - 0.5) * 2000,
+          y: (Math.random() - 0.5) * 2000,
+          z: Math.random() * 2000,
+          prevX: 0,
+          prevY: 0,
+          color: Math.random() * 360
+        });
+      }
+      
+      particleSystems.warpTunnel = particles;
+    }
+
+    function renderWarpTunnel() {
+      const canvas = canvases['warp-tunnel-slide'];
+      const ctx = contexts['warp-tunnel-slide'];
+      
+      if (!canvas || !ctx) return;
+      
+      // Clear with fade effect
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      
+      particleSystems.warpTunnel.forEach(particle => {
+        // Move particle based on audio
+        const speed = 3 + (bassLevel * 15);
+        particle.z -= speed;
+        
+        // Reset particle if it goes too far
+        if (particle.z <= 0) {
+          particle.z = 2000;
+          particle.x = (Math.random() - 0.5) * 2000;
+          particle.y = (Math.random() - 0.5) * 2000;
+        }
+        
+        // Project 3D to 2D
+        const x = (particle.x / particle.z) * 800 + centerX;
+        const y = (particle.y / particle.z) * 800 + centerY;
+        
+        // Calculate size based on distance
+        const size = Math.max(0.1, (1 - particle.z / 2000) * 5 * (1 + midLevel));
+        
+        // Draw particle
+        ctx.beginPath();
+        ctx.arc(x, y, size, 0, TAU);
+        
+        // Color based on audio and position
+        const hue = (particle.color + visualizationTime * 0.5 + highLevel * 180) % 360;
+        const saturation = 70 + (midLevel * 30);
+        const lightness = 50 + (bassLevel * 40);
+        
+        ctx.fillStyle = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+        ctx.fill();
+        
+        // Draw trail
+        if (particle.prevX && particle.prevY) {
+          ctx.beginPath();
+          ctx.moveTo(particle.prevX, particle.prevY);
+          ctx.lineTo(x, y);
+          ctx.strokeStyle = `hsla(${hue}, ${saturation}%, ${lightness}%, 0.3)`;
+          ctx.lineWidth = size * 0.3;
+          ctx.stroke();
+        }
+        
+        particle.prevX = x;
+        particle.prevY = y;
+      });
+    }
+
+    // SACRED MANDALA VISUALIZATION
+    function initializeSacredMandala() {
+      // Initialize mandala parameters
+      particleSystems.sacredMandala = {
+        layers: 12,
+        petals: 8,
+        initialized: true
+      };
+    }
+
+    function renderSacredMandala() {
+      const canvas = canvases['sacred-mandala-slide'];
+      const ctx = contexts['sacred-mandala-slide'];
+      
+      if (!canvas || !ctx) return;
+      
+      // Clear canvas
+      ctx.fillStyle = '#000';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      const maxRadius = Math.min(canvas.width, canvas.height) / 2 * 0.8;
+      
+      // Draw mandala layers
+      for (let layer = 0; layer < 12; layer++) {
+        const radius = (maxRadius / 12) * (layer + 1);
+        const adjustedRadius = radius * (1 + bassLevel * 0.3);
+        
+        // Golden ratio progression
+        const goldenRadius = radius * Math.pow(INVERSE_GOLDEN, layer * 0.1);
+        
+        // Draw main circle
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, adjustedRadius, 0, TAU);
+        ctx.strokeStyle = `hsla(${(layer * 30 + visualizationTime * 20) % 360}, 70%, 60%, ${0.3 + midLevel * 0.4})`;
+        ctx.lineWidth = 1 + highLevel * 2;
+        ctx.stroke();
+        
+        // Draw petals
+        const petals = 6 + layer;
+        for (let petal = 0; petal < petals; petal++) {
+          const angle = (petal / petals) * TAU + visualizationTime * 0.01;
+          const petalRadius = adjustedRadius * 0.5 * (1 + bassLevel * 0.2);
+          
+          const x1 = centerX + Math.cos(angle) * adjustedRadius;
+          const y1 = centerY + Math.sin(angle) * adjustedRadius;
+          
+          const x2 = centerX + Math.cos(angle + PI / petals) * petalRadius;
+          const y2 = centerY + Math.sin(angle + PI / petals) * petalRadius;
+          
+          const x3 = centerX + Math.cos(angle - PI / petals) * petalRadius;
+          const y3 = centerY + Math.sin(angle - PI / petals) * petalRadius;
+          
+          // Draw petal
+          ctx.beginPath();
+          ctx.moveTo(centerX, centerY);
+          ctx.quadraticCurveTo(x2, y2, x1, y1);
+          ctx.quadraticCurveTo(x3, y3, centerX, centerY);
+          
+          const hue = (layer * 30 + petal * 10 + visualizationTime * 50) % 360;
+          ctx.fillStyle = `hsla(${hue}, 80%, 65%, ${0.1 + highLevel * 0.3})`;
+          ctx.fill();
+          
+          ctx.strokeStyle = `hsla(${hue}, 90%, 70%, ${0.4 + midLevel * 0.4})`;
+          ctx.lineWidth = 0.5 + bassLevel;
+          ctx.stroke();
+        }
+      }
+      
+      // Draw center sacred symbol
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, 20 * (1 + bassLevel * 0.5), 0, TAU);
+      ctx.fillStyle = `hsla(${(visualizationTime * 100) % 360}, 100%, 80%, 0.8)`;
+      ctx.fill();
+    }
+
+    // FLOWER OF LIFE VISUALIZATION
+    function initializeFlowerOfLife() {
+      particleSystems.flowerOfLife = {
+        circles: [],
+        initialized: true
+      };
+      
+      // Generate flower of life pattern
+      const hexRadius = 100;
+      const circles = [];
+      
+      // Center circle
+      circles.push({ x: 0, y: 0, radius: hexRadius });
+      
+      // First ring (6 circles)
+      for (let i = 0; i < 6; i++) {
+        const angle = (i / 6) * TAU;
+        const x = Math.cos(angle) * hexRadius;
+        const y = Math.sin(angle) * hexRadius;
+        circles.push({ x, y, radius: hexRadius });
+      }
+      
+      // Second ring (12 circles)
+      for (let i = 0; i < 12; i++) {
+        const angle = (i / 12) * TAU;
+        const distance = hexRadius * Math.sqrt(3);
+        const x = Math.cos(angle) * distance;
+        const y = Math.sin(angle) * distance;
+        circles.push({ x, y, radius: hexRadius });
+      }
+      
+      particleSystems.flowerOfLife.circles = circles;
+    }
+
+    function renderFlowerOfLife() {
+      const canvas = canvases['flower-of-life-slide'];
+      const ctx = contexts['flower-of-life-slide'];
+      
+      if (!canvas || !ctx) return;
+      
+      // Clear canvas
+      ctx.fillStyle = '#000';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      const scale = Math.min(canvas.width, canvas.height) / 600;
+      
+      // Draw flower of life pattern
+      particleSystems.flowerOfLife.circles.forEach((circle, index) => {
+        const x = centerX + circle.x * scale;
+        const y = centerY + circle.y * scale;
+        const radius = circle.radius * scale * (1 + bassLevel * 0.2);
+        
+        // Draw circle
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, TAU);
+        
+        const hue = (index * 20 + visualizationTime * 30) % 360;
+        const intensity = 0.3 + midLevel * 0.5;
+        
+        ctx.strokeStyle = `hsla(${hue}, 70%, 60%, ${intensity})`;
+        ctx.lineWidth = 1 + highLevel * 2;
+        ctx.stroke();
+        
+        // Fill with subtle color
+        ctx.fillStyle = `hsla(${hue}, 50%, 30%, ${0.05 + bassLevel * 0.1})`;
+        ctx.fill();
+        
+        // Draw inner details
+        const innerRadius = radius * 0.5;
+        ctx.beginPath();
+        ctx.arc(x, y, innerRadius, 0, TAU);
+        ctx.strokeStyle = `hsla(${hue + 60}, 80%, 70%, ${0.2 + highLevel * 0.3})`;
+        ctx.lineWidth = 0.5 + bassLevel;
+        ctx.stroke();
+      });
+      
+      // Draw connecting lines based on sacred geometry
+      const mainCircles = particleSystems.flowerOfLife.circles.slice(0, 7);
+      for (let i = 0; i < mainCircles.length; i++) {
+        for (let j = i + 1; j < mainCircles.length; j++) {
+          const circle1 = mainCircles[i];
+          const circle2 = mainCircles[j];
+          
+          const x1 = centerX + circle1.x * scale;
+          const y1 = centerY + circle1.y * scale;
+          const x2 = centerX + circle2.x * scale;
+          const y2 = centerY + circle2.y * scale;
+          
+          const distance = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
+          const expectedDistance = circle1.radius * scale * 2;
+          
+          if (Math.abs(distance - expectedDistance) < 10) {
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.strokeStyle = `hsla(${(visualizationTime * 50) % 360}, 60%, 50%, ${0.1 + midLevel * 0.2})`;
+            ctx.lineWidth = 0.5 + bassLevel * 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+    }
+
+    // LISSAJOUS MESH VISUALIZATION
+    function initializeLissajousMesh() {
+      particleSystems.lissajousMesh = {
+        points: [],
+        initialized: true
+      };
+    }
+
+    function renderLissajousMesh() {
+      const canvas = canvases['lissajous-mesh-slide'];
+      const ctx = contexts['lissajous-mesh-slide'];
+      
+      if (!canvas || !ctx) return;
       
       // Clear canvas
       ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       
-      // Get audio data for reactivity
-      updateAudioData();
-      
-      // Render current geometry mode
-      const mode = CONFIG.MODES[currentMode];
-      switch (mode) {
-        case 'warp-tunnel':
-          renderWarpTunnel(elapsed);
-          break;
-        case 'sacred-mandala':
-          renderSacredMandala(elapsed);
-          break;
-        case 'flower-of-life':
-          renderFlowerOfLife(elapsed);
-          break;
-        case 'lissajous-mesh':
-          renderLissajousMesh(elapsed);
-          break;
-        case 'dmt-polygon':
-          renderDMTPolygon(elapsed);
-          break;
-      }
-      
-      animationId = requestAnimationFrame(animate);
-    }
-
-    function updateAudioData() {
-      // Simulate audio reactivity (in a real implementation, this would use Web Audio API)
-      const time = Date.now() * 0.001;
-      bassLevel = 0.5 + 0.5 * Math.sin(time * 2);
-      midLevel = 0.5 + 0.5 * Math.sin(time * 3);
-      highLevel = 0.5 + 0.5 * Math.sin(time * 5);
-    }
-
-    // Sacred Geometry Rendering Functions
-
-    function renderWarpTunnel(time) {
       const centerX = canvas.width / 2;
       const centerY = canvas.height / 2;
-      const numRings = 20;
-      const numParticles = 100;
+      const scale = Math.min(canvas.width, canvas.height) / 4;
       
-      ctx.strokeStyle = `hsla(${180 + bassLevel * 60}, 70%, 60%, 0.8)`;
-      ctx.lineWidth = 2;
+      // Generate Lissajous curves
+      const points = [];
+      const numPoints = 1000;
       
-      // Draw tunnel rings
-      for (let i = 0; i < numRings; i++) {
-        const z = i / numRings;
-        const radius = (1 - z) * Math.min(canvas.width, canvas.height) * 0.4;
-        const alpha = 1 - z;
+      // Multiple frequency ratios for complex patterns
+      const freqRatios = [
+        { a: 1, b: 2, phase: 0 },
+        { a: 3, b: 4, phase: PI / 4 },
+        { a: 5, b: 3, phase: PI / 2 },
+        { a: 2, b: 5, phase: PI / 3 }
+      ];
+      
+      freqRatios.forEach((ratio, curveIndex) => {
+        const curvePoints = [];
         
+        for (let i = 0; i < numPoints; i++) {
+          const t = (i / numPoints) * TAU * 4 + visualizationTime * 0.02;
+          
+          // Apply audio reactivity
+          const audioMod = 1 + bassLevel * 0.3;
+          const freqModA = ratio.a * (1 + midLevel * 0.2);
+          const freqModB = ratio.b * (1 + highLevel * 0.2);
+          
+          const x = centerX + Math.sin(freqModA * t + ratio.phase) * scale * audioMod;
+          const y = centerY + Math.sin(freqModB * t) * scale * audioMod;
+          
+          curvePoints.push({ x, y, t });
+        }
+        
+        // Draw curve
         ctx.beginPath();
-        ctx.strokeStyle = `hsla(${180 + bassLevel * 60}, 70%, 60%, ${alpha * 0.5})`;
-        ctx.arc(centerX, centerY, radius + bassLevel * 50, 0, Math.PI * 2);
+        ctx.moveTo(curvePoints[0].x, curvePoints[0].y);
+        
+        for (let i = 1; i < curvePoints.length; i++) {
+          ctx.lineTo(curvePoints[i].x, curvePoints[i].y);
+        }
+        
+        const hue = (curveIndex * 90 + visualizationTime * 20) % 360;
+        ctx.strokeStyle = `hsla(${hue}, 70%, 60%, ${0.3 + midLevel * 0.4})`;
+        ctx.lineWidth = 1 + highLevel * 2;
         ctx.stroke();
+        
+        // Draw connecting mesh
+        if (curveIndex > 0) {
+          const prevCurve = points[curveIndex - 1];
+          for (let i = 0; i < Math.min(curvePoints.length, prevCurve.length); i += 10) {
+            ctx.beginPath();
+            ctx.moveTo(curvePoints[i].x, curvePoints[i].y);
+            ctx.lineTo(prevCurve[i].x, prevCurve[i].y);
+            ctx.strokeStyle = `hsla(${hue + 30}, 50%, 40%, ${0.1 + bassLevel * 0.2})`;
+            ctx.lineWidth = 0.5 + bassLevel;
+            ctx.stroke();
+          }
+        }
+        
+        points.push(curvePoints);
+      });
+    }
+
+    // DMT POLYGON TUNNEL VISUALIZATION
+    function initializeDmtPolygon() {
+      const polygons = [];
+      
+      for (let i = 0; i < 50; i++) {
+        polygons.push({
+          z: i * 50,
+          rotation: Math.random() * TAU,
+          sides: 3 + Math.floor(Math.random() * 8),
+          color: Math.random() * 360,
+          scale: 1 + Math.random() * 2
+        });
       }
       
-      // Draw particles
-      for (let i = 0; i < numParticles; i++) {
-        const angle = (i / numParticles) * Math.PI * 2;
-        const radius = 100 + midLevel * 200;
-        const x = centerX + Math.cos(angle + time) * radius;
-        const y = centerY + Math.sin(angle + time) * radius;
+      particleSystems.dmtPolygon = polygons;
+    }
+
+    function renderDmtPolygon() {
+      const canvas = canvases['dmt-polygon-slide'];
+      const ctx = contexts['dmt-polygon-slide'];
+      
+      if (!canvas || !ctx) return;
+      
+      // Clear canvas
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      
+      particleSystems.dmtPolygon.forEach(polygon => {
+        // Move polygon forward
+        const speed = 2 + bassLevel * 8;
+        polygon.z -= speed;
+        
+        // Reset if too close
+        if (polygon.z <= 0) {
+          polygon.z = 2500;
+          polygon.rotation = Math.random() * TAU;
+          polygon.sides = 3 + Math.floor(Math.random() * 8);
+          polygon.color = Math.random() * 360;
+          polygon.scale = 1 + Math.random() * 2;
+        }
+        
+        // Calculate perspective
+        const scale = (2500 - polygon.z) / 2500;
+        const size = scale * 100 * polygon.scale * (1 + midLevel * 0.5);
+        
+        if (size < 1) return;
+        
+        // Apply audio-reactive rotation
+        const rotation = polygon.rotation + visualizationTime * 0.01 + highLevel * 0.1;
+        
+        // Draw polygon
+        ctx.save();
+        ctx.translate(centerX, centerY);
+        ctx.rotate(rotation);
         
         ctx.beginPath();
-        ctx.fillStyle = `hsla(${(i * 10 + time * 50) % 360}, 70%, 60%, 0.8)`;
-        ctx.arc(x, y, 3 + highLevel * 5, 0, Math.PI * 2);
+        for (let i = 0; i < polygon.sides; i++) {
+          const angle = (i / polygon.sides) * TAU;
+          const x = Math.cos(angle) * size;
+          const y = Math.sin(angle) * size;
+          
+          if (i === 0) {
+            ctx.moveTo(x, y);
+          } else {
+            ctx.lineTo(x, y);
+          }
+        }
+        ctx.closePath();
+        
+        // Color based on depth and audio
+        const hue = (polygon.color + visualizationTime * 50 + bassLevel * 120) % 360;
+        const saturation = 70 + midLevel * 30;
+        const lightness = 30 + scale * 40 + highLevel * 30;
+        const alpha = scale * 0.8;
+        
+        ctx.fillStyle = `hsla(${hue}, ${saturation}%, ${lightness}%, ${alpha * 0.3})`;
         ctx.fill();
-      }
-    }
-
-    function renderSacredMandala(time) {
-      const centerX = canvas.width / 2;
-      const centerY = canvas.height / 2;
-      const numSpirals = 8;
-      const goldenAngle = Math.PI * 2 / (CONFIG.GOLDEN_RATIO * CONFIG.GOLDEN_RATIO);
-      
-      ctx.strokeStyle = `hsla(${45 + bassLevel * 60}, 80%, 70%, 0.6)`;
-      ctx.lineWidth = 1;
-      
-      // Draw golden ratio spirals
-      for (let spiral = 0; spiral < numSpirals; spiral++) {
-        const spiralOffset = (spiral / numSpirals) * Math.PI * 2;
         
-        ctx.beginPath();
-        for (let i = 0; i < 200; i++) {
-          const t = i * 0.05;
-          const angle = spiralOffset + t * goldenAngle + time * 0.5;
-          const radius = t * 2 + bassLevel * 20;
-          
-          const x = centerX + Math.cos(angle) * radius;
-          const y = centerY + Math.sin(angle) * radius;
-          
-          if (i === 0) {
-            ctx.moveTo(x, y);
-          } else {
-            ctx.lineTo(x, y);
-          }
-        }
+        ctx.strokeStyle = `hsla(${hue}, ${saturation}%, ${lightness}%, ${alpha})`;
+        ctx.lineWidth = 1 + scale * 3;
         ctx.stroke();
-      }
-      
-      // Draw mandala circles
-      for (let ring = 1; ring <= 5; ring++) {
-        const ringRadius = ring * 60 + midLevel * 30;
-        const numCircles = ring * 6;
         
-        for (let i = 0; i < numCircles; i++) {
-          const angle = (i / numCircles) * Math.PI * 2 + time * 0.3;
-          const x = centerX + Math.cos(angle) * ringRadius;
-          const y = centerY + Math.sin(angle) * ringRadius;
-          
+        // Draw inner pattern
+        if (size > 20) {
           ctx.beginPath();
-          ctx.strokeStyle = `hsla(${(ring * 60 + time * 30) % 360}, 80%, 70%, 0.4)`;
-          ctx.arc(x, y, 5 + highLevel * 10, 0, Math.PI * 2);
+          for (let i = 0; i < polygon.sides; i++) {
+            const angle = (i / polygon.sides) * TAU;
+            const innerSize = size * 0.5;
+            const x = Math.cos(angle) * innerSize;
+            const y = Math.sin(angle) * innerSize;
+            
+            if (i === 0) {
+              ctx.moveTo(x, y);
+            } else {
+              ctx.lineTo(x, y);
+            }
+          }
+          ctx.closePath();
+          
+          ctx.strokeStyle = `hsla(${hue + 60}, ${saturation}%, ${lightness + 20}%, ${alpha * 0.6})`;
+          ctx.lineWidth = 0.5 + scale;
           ctx.stroke();
         }
-      }
+        
+        ctx.restore();
+      });
     }
 
-    function renderFlowerOfLife(time) {
-      const centerX = canvas.width / 2;
-      const centerY = canvas.height / 2;
-      const baseRadius = 50 + bassLevel * 30;
-      const numLayers = 5;
-      
-      ctx.strokeStyle = `hsla(${270 + bassLevel * 60}, 70%, 60%, 0.6)`;
-      ctx.lineWidth = 2;
-      
-      // Draw concentric flower patterns
-      for (let layer = 0; layer < numLayers; layer++) {
-        const layerRadius = baseRadius * (layer + 1);
-        const numCircles = 6 * (layer + 1);
-        
-        for (let i = 0; i < numCircles; i++) {
-          const angle = (i / numCircles) * Math.PI * 2 + time * 0.2;
-          const x = centerX + Math.cos(angle) * layerRadius;
-          const y = centerY + Math.sin(angle) * layerRadius;
-          
-          ctx.beginPath();
-          ctx.strokeStyle = `hsla(${(270 + layer * 30 + time * 50) % 360}, 70%, 60%, ${0.8 - layer * 0.1})`;
-          ctx.arc(x, y, baseRadius * 0.8 + midLevel * 20, 0, Math.PI * 2);
-          ctx.stroke();
-        }
+    // MAIN ANIMATION LOOP
+    function animate() {
+      if (!isStarted) {
+        requestAnimationFrame(animate);
+        return;
       }
       
-      // Draw connecting lines
-      ctx.strokeStyle = `hsla(${270 + highLevel * 60}, 70%, 80%, 0.3)`;
-      ctx.lineWidth = 1;
+      visualizationTime += 0.02;
       
-      for (let i = 0; i < 6; i++) {
-        const angle = (i / 6) * Math.PI * 2 + time * 0.1;
-        const x1 = centerX + Math.cos(angle) * baseRadius;
-        const y1 = centerY + Math.sin(angle) * baseRadius;
-        const x2 = centerX + Math.cos(angle + Math.PI) * baseRadius;
-        const y2 = centerY + Math.sin(angle + Math.PI) * baseRadius;
-        
-        ctx.beginPath();
-        ctx.moveTo(x1, y1);
-        ctx.lineTo(x2, y2);
-        ctx.stroke();
+      // Update audio analysis
+      updateAudioAnalysis();
+      
+      // Render current visualization
+      switch (currentSlideIndex) {
+        case 0:
+          renderWarpTunnel();
+          break;
+        case 1:
+          renderSacredMandala();
+          break;
+        case 2:
+          renderFlowerOfLife();
+          break;
+        case 3:
+          renderLissajousMesh();
+          break;
+        case 4:
+          renderDmtPolygon();
+          break;
       }
+      
+      requestAnimationFrame(animate);
     }
 
-    function renderLissajousMesh(time) {
-      const centerX = canvas.width / 2;
-      const centerY = canvas.height / 2;
-      const scale = Math.min(canvas.width, canvas.height) * 0.3;
+    // INITIALIZATION
+    function initializeApp() {
+      // Initialize canvases
+      initializeCanvases();
       
-      ctx.strokeStyle = `hsla(${120 + bassLevel * 60}, 70%, 60%, 0.6)`;
-      ctx.lineWidth = 1;
+      // Initialize particle systems
+      initializeWarpTunnel();
+      initializeSacredMandala();
+      initializeFlowerOfLife();
+      initializeLissajousMesh();
+      initializeDmtPolygon();
       
-      // Draw Lissajous curves
-      for (let curve = 0; curve < 5; curve++) {
-        const a = curve + 1;
-        const b = curve + 2;
-        const delta = time * 0.5 + curve * 0.3;
-        
-        ctx.beginPath();
-        ctx.strokeStyle = `hsla(${(120 + curve * 40 + time * 30) % 360}, 70%, 60%, 0.6)`;
-        
-        for (let t = 0; t < Math.PI * 2; t += 0.01) {
-          const x = centerX + Math.sin(a * t + delta) * scale * (0.5 + midLevel * 0.5);
-          const y = centerY + Math.sin(b * t + delta) * scale * (0.5 + bassLevel * 0.5);
-          
-          if (t === 0) {
-            ctx.moveTo(x, y);
-          } else {
-            ctx.lineTo(x, y);
-          }
-        }
-        ctx.stroke();
+      // Initialize custom cursor (desktop only)
+      if (window.innerWidth > 768) {
+        initializeCustomCursor();
       }
       
-      // Draw parametric mesh
-      const gridSize = 20;
-      ctx.strokeStyle = `hsla(${120 + highLevel * 60}, 70%, 80%, 0.2)`;
-      
-      for (let i = 0; i <= gridSize; i++) {
-        const t = (i / gridSize) * Math.PI * 2;
-        
-        ctx.beginPath();
-        for (let j = 0; j <= gridSize; j++) {
-          const s = (j / gridSize) * Math.PI * 2;
-          const x = centerX + Math.cos(t + time * 0.3) * Math.sin(s) * scale * 0.6;
-          const y = centerY + Math.sin(t + time * 0.3) * Math.cos(s) * scale * 0.6;
-          
-          if (j === 0) {
-            ctx.moveTo(x, y);
-          } else {
-            ctx.lineTo(x, y);
-          }
-        }
-        ctx.stroke();
-      }
+      // Start animation loop
+      animate();
     }
 
-    function renderDMTPolygon(time) {
-      const centerX = canvas.width / 2;
-      const centerY = canvas.height / 2;
-      const numSides = 6;
-      const numLayers = 8;
+    // EVENT LISTENERS
+    document.getElementById('start-button').addEventListener('click', () => {
+      const overlay = document.getElementById('start-overlay');
+      overlay.classList.add('hidden');
       
-      ctx.strokeStyle = `hsla(${300 + bassLevel * 60}, 80%, 70%, 0.7)`;
-      ctx.lineWidth = 2;
+      // Initialize audio
+      initializeAudioAnalysis();
       
-      // Draw polygonal tunnel
-      for (let layer = 0; layer < numLayers; layer++) {
-        const z = layer / numLayers;
-        const radius = (1 - z) * Math.min(canvas.width, canvas.height) * 0.4;
-        const rotation = time * 0.5 + layer * 0.3;
-        const sides = numSides + Math.floor(layer / 2);
-        
-        ctx.beginPath();
-        ctx.strokeStyle = `hsla(${(300 + layer * 30 + time * 40) % 360}, 80%, 70%, ${0.8 - z * 0.5})`;
-        
-        for (let i = 0; i <= sides; i++) {
-          const angle = (i / sides) * Math.PI * 2 + rotation;
-          const x = centerX + Math.cos(angle) * (radius + bassLevel * 30);
-          const y = centerY + Math.sin(angle) * (radius + bassLevel * 30);
-          
-          if (i === 0) {
-            ctx.moveTo(x, y);
-          } else {
-            ctx.lineTo(x, y);
-          }
-        }
-        ctx.stroke();
+      // Start first track
+      if (youtubePlayer) {
+        youtubePlayer.playVideo();
       }
       
-      // Draw fractal harmonics
-      for (let harmonic = 0; harmonic < 3; harmonic++) {
-        const frequency = harmonic + 1;
-        const amplitude = 100 / (frequency + 1);
-        
-        ctx.strokeStyle = `hsla(${(300 + harmonic * 60 + time * 60) % 360}, 80%, 60%, 0.4)`;
-        ctx.lineWidth = 1;
-        
-        ctx.beginPath();
-        for (let angle = 0; angle < Math.PI * 2; angle += 0.01) {
-          const radius = amplitude + midLevel * 50;
-          const x = centerX + Math.cos(angle * frequency + time) * radius;
-          const y = centerY + Math.sin(angle * frequency + time) * radius;
-          
-          if (angle === 0) {
-            ctx.moveTo(x, y);
-          } else {
-            ctx.lineTo(x, y);
-          }
-        }
-        ctx.stroke();
-      }
-    }
+      isStarted = true;
+      announceToScreenReader('Sacred geometry visualizer started');
+    });
 
-    // Keyboard controls for testing
-    document.addEventListener('keydown', (e) => {
-      if (e.code === 'Space') {
-        e.preventDefault();
-        if (isPlaying) {
-          nextTrack();
+    document.getElementById('play-pause-btn').addEventListener('click', togglePlayPause);
+
+    // Touch gestures
+    let touchStartX = 0;
+    let touchStartY = 0;
+    
+    document.addEventListener('touchstart', (e) => {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    });
+
+    document.addEventListener('touchend', (e) => {
+      const touchEndX = e.changedTouches[0].clientX;
+      const touchEndY = e.changedTouches[0].clientY;
+      const diffX = touchStartX - touchEndX;
+      const diffY = touchStartY - touchEndY;
+      
+      // Horizontal swipe for geometry change
+      if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+        if (diffX > 0) {
+          // Swipe left - next geometry
+          switchToGeometry((currentSlideIndex + 1) % geometrySlides.length);
+        } else {
+          // Swipe right - previous geometry
+          switchToGeometry((currentSlideIndex - 1 + geometrySlides.length) % geometrySlides.length);
         }
       }
     });
 
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (!isStarted) return;
+      
+      switch (e.key) {
+        case ' ':
+          e.preventDefault();
+          togglePlayPause();
+          break;
+        case 'ArrowLeft':
+          e.preventDefault();
+          switchToGeometry((currentSlideIndex - 1 + geometrySlides.length) % geometrySlides.length);
+          break;
+        case 'ArrowRight':
+          e.preventDefault();
+          switchToGeometry((currentSlideIndex + 1) % geometrySlides.length);
+          break;
+        case 'n':
+          e.preventDefault();
+          nextTrack();
+          break;
+      }
+    });
+
+    // Window resize
+    window.addEventListener('resize', () => {
+      resizeAllCanvases();
+    });
+
+    // Initialize when page loads
+    window.addEventListener('load', initializeApp);
+
+    // Export for debugging
+    window.sacredGeometry = {
+      switchToGeometry,
+      nextTrack,
+      togglePlayPause,
+      GOLDEN_RATIO,
+      FIBONACCI,
+      particleSystems
+    };
   </script>
 </body>
 </html>
