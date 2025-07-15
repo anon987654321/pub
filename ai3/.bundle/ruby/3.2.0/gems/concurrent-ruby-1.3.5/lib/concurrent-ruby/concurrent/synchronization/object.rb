@@ -6,7 +6,6 @@ require 'concurrent/atomic/atomic_reference'
 
 module Concurrent
   module Synchronization
-
     # Abstract object providing final, volatile, ans CAS extensions to build other concurrent abstractions.
     # - final instance variables see {Object.safe_initialization!}
     # - volatile instance variables see {Object.attr_volatile}
@@ -15,7 +14,7 @@ module Concurrent
     class Object < AbstractObject
       include Volatile
 
-      # TODO make it a module if possible
+      # TODO: make it a module if possible
 
       # @!method self.attr_volatile(*names)
       #   Creates methods for reading and writing (as `attr_accessor` does) to a instance variable with
@@ -35,7 +34,7 @@ module Concurrent
       end
 
       def self.safe_initialization?
-        self.singleton_class < SafeInitialization
+        singleton_class < SafeInitialization
       end
 
       # For testing purposes, quite slow. Injects assert code to new method which will raise if class instance contains
@@ -44,8 +43,8 @@ module Concurrent
       # @return [true]
       def self.ensure_safe_initialization_when_final_fields_are_present
         Object.class_eval do
-          def self.new(*args, &block)
-            object = super(*args, &block)
+          def self.new(*args, &)
+            object = super
           ensure
             has_final_field = object.instance_variables.any? { |v| v.to_s =~ /^@[A-Z]/ }
             if has_final_field && !safe_initialization?
@@ -88,7 +87,7 @@ module Concurrent
         define_initialize_atomic_fields
 
         names.each do |name|
-          ivar = :"@Atomic#{name.to_s.gsub(/(?:^|_)(.)/) { $1.upcase }}"
+          ivar = :"@Atomic#{name.to_s.gsub(/(?:^|_)(.)/) { ::Regexp.last_match(1).upcase }}"
           class_eval <<-RUBY, __FILE__, __LINE__ + 1
             def #{name}
               #{ivar}.get
@@ -118,7 +117,9 @@ module Concurrent
       # @return [::Array<Symbol>] Returns defined volatile with CAS fields on this class.
       def self.atomic_attributes(inherited = true)
         @__atomic_fields__ ||= []
-        ((superclass.atomic_attributes if superclass.respond_to?(:atomic_attributes) && inherited) || []) + @__atomic_fields__
+        ((if superclass.respond_to?(:atomic_attributes) && inherited
+            superclass.atomic_attributes
+          end) || []) + @__atomic_fields__
       end
 
       # @return [true, false] is the attribute with name atomic?
@@ -130,7 +131,7 @@ module Concurrent
 
       def self.define_initialize_atomic_fields
         assignments = @__atomic_fields__.map do |name|
-          "@Atomic#{name.to_s.gsub(/(?:^|_)(.)/) { $1.upcase }} = Concurrent::AtomicReference.new(nil)"
+          "@Atomic#{name.to_s.gsub(/(?:^|_)(.)/) { ::Regexp.last_match(1).upcase }} = Concurrent::AtomicReference.new(nil)"
         end.join("\n")
 
         class_eval <<-RUBY, __FILE__, __LINE__ + 1
@@ -143,9 +144,7 @@ module Concurrent
 
       private_class_method :define_initialize_atomic_fields
 
-      def __initialize_atomic_fields__
-      end
-
+      def __initialize_atomic_fields__; end
     end
   end
 end

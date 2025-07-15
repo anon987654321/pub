@@ -16,8 +16,7 @@
 #    limitations under the License.
 #++
 
-
-require "idn"
+require 'idn'
 
 module Addressable
   module IDNA
@@ -25,9 +24,9 @@ module Addressable
       IDN::Punycode.encode(value.to_s)
     end
 
-     def self.punycode_decode(value)
-       IDN::Punycode.decode(value.to_s)
-     end
+    def self.punycode_decode(value)
+      IDN::Punycode.decode(value.to_s)
+    end
 
     class << self
       # @deprecated Use {String#unicode_normalize(:nfkc)} instead
@@ -36,7 +35,7 @@ module Addressable
       end
 
       extend Gem::Deprecate
-      deprecate :unicode_normalize_kc, "String#unicode_normalize(:nfkc)", 2023, 4
+      deprecate :unicode_normalize_kc, 'String#unicode_normalize(:nfkc)', 2023, 4
     end
 
     def self.to_ascii(value)

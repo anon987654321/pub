@@ -5,10 +5,10 @@ class ArchitectAssistant
   def initialize
     @memory = Langchain::Memory.new
     @knowledge_sources = [
-      "https://archdaily.com/",
-      "https://designboom.com/architecture/",
-      "https://dezeen.com/",
-      "https://archinect.com/"
+      'https://archdaily.com/',
+      'https://designboom.com/architecture/',
+      'https://dezeen.com/',
+      'https://archinect.com/'
     ]
   end
 
@@ -19,7 +19,7 @@ class ArchitectAssistant
   end
 
   def create_design
-    prompt = "Generate a concept design inspired by modern architecture trends."
+    prompt = 'Generate a concept design inspired by modern architecture trends.'
     puts format_prompt(create_prompt(prompt, []), {})
   end
 end

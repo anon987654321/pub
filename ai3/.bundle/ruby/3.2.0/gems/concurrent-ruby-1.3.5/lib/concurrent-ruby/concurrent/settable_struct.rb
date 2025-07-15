@@ -3,7 +3,6 @@ require 'concurrent/synchronization/abstract_struct'
 require 'concurrent/synchronization/lockable_object'
 
 module Concurrent
-
   # An thread-safe, write-once variation of Ruby's standard `Struct`.
   # Each member can have its value set at most once, either at construction
   # or any time thereafter. Attempting to assign a value to a member
@@ -18,7 +17,7 @@ module Concurrent
     def values
       synchronize { ns_values }
     end
-    alias_method :to_a, :values
+    alias to_a values
 
     # @!macro struct_values_at
     def values_at(*indexes)
@@ -29,7 +28,7 @@ module Concurrent
     def inspect
       synchronize { ns_inspect }
     end
-    alias_method :to_s, :inspect
+    alias to_s inspect
 
     # @!macro struct_merge
     def merge(other, &block)
@@ -54,18 +53,21 @@ module Concurrent
     # @!macro struct_each
     def each(&block)
       return enum_for(:each) unless block_given?
+
       synchronize { ns_each(&block) }
     end
 
     # @!macro struct_each_pair
     def each_pair(&block)
       return enum_for(:each_pair) unless block_given?
+
       synchronize { ns_each_pair(&block) }
     end
 
     # @!macro struct_select
     def select(&block)
       return enum_for(:select) unless block_given?
+
       synchronize { ns_select(&block) }
     end
 
@@ -75,13 +77,11 @@ module Concurrent
     def []=(member, value)
       if member.is_a? Integer
         length = synchronize { @values.length }
-        if member >= length
-          raise IndexError.new("offset #{member} too large for struct(size:#{length})")
-        end
+        raise IndexError.new("offset #{member} too large for struct(size:#{length})") if member >= length
+
         synchronize do
-          unless @values[member].nil?
-            raise Concurrent::ImmutabilityError.new('struct member has already been set')
-          end
+          raise Concurrent::ImmutabilityError.new('struct member has already been set') unless @values[member].nil?
+
           @values[member] = value
         end
       else
@@ -102,20 +102,22 @@ module Concurrent
     end
 
     # @!macro struct_new
-    def self.new(*args, &block)
+    def self.new(*args, &)
       clazz_name = nil
       if args.length == 0
         raise ArgumentError.new('wrong number of arguments (0 for 1+)')
       elsif args.length > 0 && args.first.is_a?(String)
         clazz_name = args.shift
       end
-      FACTORY.define_struct(clazz_name, args, &block)
+
+      FACTORY.define_struct(clazz_name, args, &)
     end
 
     FACTORY = Class.new(Synchronization::LockableObject) do
       def define_struct(name, members, &block)
         synchronize do
-          clazz = Synchronization::AbstractStruct.define_struct_class(SettableStruct, Synchronization::LockableObject, name, members, &block)
+          clazz = Synchronization::AbstractStruct.define_struct_class(SettableStruct, Synchronization::LockableObject,
+                                                                      name, members, &block)
           members.each_with_index do |member, index|
             clazz.send :remove_method, member if clazz.instance_methods.include? member
             clazz.send(:define_method, member) do
@@ -123,9 +125,8 @@ module Concurrent
             end
             clazz.send(:define_method, "#{member}=") do |value|
               synchronize do
-                unless @values[index].nil?
-                  raise Concurrent::ImmutabilityError.new('struct member has already been set')
-                end
+                raise Concurrent::ImmutabilityError.new('struct member has already been set') unless @values[index].nil?
+
                 @values[index] = value
               end
             end

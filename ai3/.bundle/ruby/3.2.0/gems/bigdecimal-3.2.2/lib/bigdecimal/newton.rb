@@ -1,6 +1,7 @@
 # frozen_string_literal: false
-require "bigdecimal/ludcmp"
-require "bigdecimal/jacobian"
+
+require 'bigdecimal/ludcmp'
+require 'bigdecimal/jacobian'
 
 #
 # newton.rb
@@ -29,19 +30,20 @@ require "bigdecimal/jacobian"
 module Newton
   include LUSolve
   include Jacobian
+
   module_function
 
-  def norm(fv,zero=0.0) # :nodoc:
+  def norm(fv, zero = 0.0) # :nodoc:
     s = zero
     n = fv.size
     for i in 0...n do
-      s += fv[i]*fv[i]
+      s += fv[i] * fv[i]
     end
     s
   end
 
   # See also Newton
-  def nlsolve(f,x)
+  def nlsolve(f, x)
     nRetry = 0
     n = x.size
 
@@ -49,30 +51,29 @@ module Newton
     zero = f.zero
     one  = f.one
     two  = f.two
-    p5 = one/two
-    d  = norm(f0,zero)
-    minfact = f.ten*f.ten*f.ten
-    minfact = one/minfact
+    p5 = one / two
+    d  = norm(f0, zero)
+    minfact = f.ten * f.ten * f.ten
+    minfact = one / minfact
     e = f.eps
-    while d >= e do
+    while d >= e
       nRetry += 1
       # Not yet converged. => Compute Jacobian matrix
-      dfdx = jacobian(f,f0,x)
+      dfdx = jacobian(f, f0, x)
       # Solve dfdx*dx = -f0 to estimate dx
-      dx = lusolve(dfdx,f0,ludecomp(dfdx,n,zero,one),zero)
+      dx = lusolve(dfdx, f0, ludecomp(dfdx, n, zero, one), zero)
       fact = two
       xs = x.dup
       begin
         fact *= p5
-        if fact < minfact then
-          raise "Failed to reduce function values."
-        end
+        raise 'Failed to reduce function values.' if fact < minfact
+
         for i in 0...n do
-          x[i] = xs[i] - dx[i]*fact
+          x[i] = xs[i] - (dx[i] * fact)
         end
         f0 = f.values(x)
-        dn = norm(f0,zero)
-      end while(dn>=d)
+        dn = norm(f0, zero)
+      end while(dn >= d)
       d = dn
     end
     nRetry

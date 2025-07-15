@@ -1,8 +1,6 @@
-require 'set'
 require 'concurrent/synchronization/object'
 
 module Concurrent
-
   # A `TVar` is a transactional variable - a single-element container that
   # is used as part of a transaction - see `Concurrent::atomically`.
   #
@@ -20,15 +18,15 @@ module Concurrent
 
     # Get the value of a `TVar`.
     def value
-      Concurrent::atomically do
-        Transaction::current.read(self)
+      Concurrent.atomically do
+        Transaction.current.read(self)
       end
     end
 
     # Set the value of a `TVar`.
     def value=(value)
-      Concurrent::atomically do
-        Transaction::current.write(self, value)
+      Concurrent.atomically do
+        Transaction.current.write(self, value)
       end
     end
 
@@ -46,7 +44,6 @@ module Concurrent
     def unsafe_lock # :nodoc:
       @lock
     end
-
   end
 
   # Run a block that reads and writes `TVar`s as a single atomic transaction.
@@ -84,7 +81,7 @@ module Concurrent
 
     # Get the current transaction
 
-    transaction = Transaction::current
+    transaction = Transaction.current
 
     # Are we not already in a transaction (not nested)?
 
@@ -95,38 +92,34 @@ module Concurrent
         # Retry loop
 
         loop do
-
           # Create a new transaction
 
           transaction = Transaction.new
-          Transaction::current = transaction
+          Transaction.current = transaction
 
           # Run the block, aborting on exceptions
 
           begin
             result = yield
-          rescue Transaction::AbortError => e
+          rescue Transaction::AbortError
             transaction.abort
             result = Transaction::ABORTED
-          rescue Transaction::LeaveError => e
+          rescue Transaction::LeaveError
             transaction.abort
             break result
-          rescue => e
+          rescue StandardError => e
             transaction.abort
             raise e
           end
           # If we can commit, break out of the loop
 
-          if result != Transaction::ABORTED
-            if transaction.commit
-              break result
-            end
-          end
+          next unless result != Transaction::ABORTED
+          break result if transaction.commit
         end
       ensure
         # Clear the current transaction
 
-        Transaction::current = nil
+        Transaction.current = nil
       end
     else
       # Nested transaction - flatten it and just run the block
@@ -147,11 +140,8 @@ module Concurrent
 
   module_function :atomically, :abort_transaction, :leave_transaction
 
-  private
-
   # @!visibility private
   class Transaction
-
     ABORTED = ::Object.new
 
     OpenEntry = Struct.new(:value, :modified)
@@ -178,9 +168,7 @@ module Concurrent
       entry = @open_tvars[tvar]
 
       unless entry
-        unless tvar.unsafe_lock.try_lock
-          Concurrent::abort_transaction
-        end
+        Concurrent.abort_transaction unless tvar.unsafe_lock.try_lock
 
         entry = OpenEntry.new(tvar.unsafe_value, false)
         @open_tvars[tvar] = entry
@@ -195,9 +183,7 @@ module Concurrent
 
     def commit
       @open_tvars.each do |tvar, entry|
-        if entry.modified
-          tvar.unsafe_value = entry.value
-        end
+        tvar.unsafe_value = entry.value if entry.modified
       end
 
       unlock
@@ -216,7 +202,5 @@ module Concurrent
     def self.current=(transaction)
       Thread.current[:current_tvar_transaction] = transaction
     end
-
   end
-
 end

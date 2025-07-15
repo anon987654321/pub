@@ -2,7 +2,20 @@
 `````
 # Rails Apps
 
-This document outlines the setup and deployment of Rails 8 applications (`brgen`, `amber`, `privcam`, `bsdports`, `hjerterom`) on OpenBSD 7.7+, leveraging Hotwire, StimulusReflex, Stimulus Components, and Devise for authentication. Each app is configured as a Progressive Web App (PWA) with minimalistic views, SCSS targeting direct elements, and anonymous access via `devise-guests`. Deployment uses the existing `openbsd.sh` for DNSSEC, `relayd`, `httpd`, and `acme-client`.
+This document outlines the setup and deployment of Rails 8 applications (`brgen`,
+`amber`,
+`privcam`,
+`bsdports`,
+`hjerterom`) on OpenBSD 7.7+,
+leveraging Hotwire,
+StimulusReflex,
+Stimulus Components,
+and Devise for authentication. Each app is configured as a Progressive Web App (PWA) with minimalistic views,
+SCSS targeting direct elements,
+and anonymous access via `devise-guests`. Deployment uses the existing `openbsd.sh` for DNSSEC,
+`relayd`,
+`httpd`,
+and `acme-client`.
 
 ## Overview
 
@@ -32,8 +45,24 @@ CHECKSUM: sha256:4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5
    setup_redis() {     log "Setting up Redis"     doas rcctl enable redis >> "$LOG_FILE" 2>&1 || { log "Error: Failed to enable redis"; exit 1; }     doas rcctl start redis >> "$LOG_FILE" 2>&1 || { log "Error: Failed to start redis"; exit 1; }     commit_to_git "Setup Redis"   }
    setup_yarn() {     log "Setting up Yarn"     npm install -g yarn >> "$LOG_FILE" 2>&1 || { log "Error: Failed to install yarn"; exit 1; }     yarn install >> "$LOG_FILE" 2>&1 || { log "Error: Yarn install failed"; exit 1; }     commit_to_git "Setup Yarn"   }
    setup_rails() {     log "Creating Rails app"     doas useradd -m -s "/bin/ksh" -L rails "$APP_NAME" >> "$LOG_FILE" 2>&1 || true     doas mkdir -p "$APP_DIR"     doas chown -R "$APP_NAME:$APP_NAME" "/home/$APP_NAME"     su - "$APP_NAME" -c "cd /home/$APP_NAME && rails new app -d postgresql --skip-test --skip-bundle --css=scss --asset-pipeline=propshaft" >> "$LOG_FILE" 2>&1 || { log "Error: Failed to create Rails app"; exit 1; }     cd "$APP_DIR"     echo "gem 'falcon'" >> Gemfile     bundle install >> "$LOG_FILE" 2>&1 || { log "Error: Bundle install failed"; exit 1; }     commit_to_git "Created Rails app"   }
-   setup_authentication() {     log "Setting up Devise, devise-guests, omniauth-vipps"     echo "gem 'devise', 'devise-guests', 'omniauth-openid-connect'" >> Gemfile     bundle install >> "$LOG_FILE" 2>&1     bin/rails generate devise:install >> "$LOG_FILE" 2>&1     bin/rails generate devise User >> "$LOG_FILE" 2>&1     echo "config.guest_user = true" >> config/initializers/devise.rb     mkdir -p lib/omniauth/strategies     cat > lib/omniauth/strategies/vipps.rb <<EOFrequire 'omniauth-openid-connect'module OmniAuth  module Strategies    class Vipps < OmniAuth::Strategies::OpenIDConnect      option :name, 'vipps'      option :client_options, {        identifier: ENV['VIPPS_CLIENT_ID'],        secret: ENV['VIPPS_CLIENT_SECRET'],        authorization_endpoint: 'https://api.vipps.no/oauth/authorize',        token_endpoint: 'https://api.vipps.no/oauth/token',        userinfo_endpoint: 'https://api.vipps.no/userinfo'      }      uid { raw_info['sub'] }      info { { email: raw_info['email'], name: raw_info['name'] } }    end  endendEOF     echo "Rails.application.config.middleware.use OmniAuth::Builder do  provider :vipps, ENV['VIPPS_CLIENT_ID'], ENV['VIPPS_CLIENT_SECRET']end" >> config/initializers/omniauth.rb     commit_to_git "Setup authentication"   }
-   setup_realtime_features() {     log "Setting up Falcon, ActionCable, streaming"     echo "gem 'stimulus_reflex', 'actioncable'" >> Gemfile     bundle install >> "$LOG_FILE" 2>&1     bin/rails stimulus_reflex:install >> "$LOG_FILE" 2>&1     yarn add @hotwired/turbo-rails @hotwired/stimulus stimulus_reflex stimulus-components >> "$LOG_FILE" 2>&1     commit_to_git "Setup realtime features"   }
+   setup_authentication() {     log "Setting up Devise,
+devise-guests,
+omniauth-vipps"     echo "gem 'devise',
+'devise-guests',
+'omniauth-openid-connect'" >> Gemfile     bundle install >> "$LOG_FILE" 2>&1     bin/rails generate devise:install >> "$LOG_FILE" 2>&1     bin/rails generate devise User >> "$LOG_FILE" 2>&1     echo "config.guest_user = true" >> config/initializers/devise.rb     mkdir -p lib/omniauth/strategies     cat > lib/omniauth/strategies/vipps.rb <<EOFrequire 'omniauth-openid-connect'module OmniAuth  module Strategies    class Vipps < OmniAuth::Strategies::OpenIDConnect      option :name,
+'vipps'      option :client_options,
+{        identifier: ENV['VIPPS_CLIENT_ID'],
+       secret: ENV['VIPPS_CLIENT_SECRET'],
+       authorization_endpoint: 'https://api.vipps.no/oauth/authorize',
+       token_endpoint: 'https://api.vipps.no/oauth/token',
+       userinfo_endpoint: 'https://api.vipps.no/userinfo'      }      uid { raw_info['sub'] }      info { { email: raw_info['email'],
+name: raw_info['name'] } }    end  endendEOF     echo "Rails.application.config.middleware.use OmniAuth::Builder do  provider :vipps,
+ENV['VIPPS_CLIENT_ID'],
+ENV['VIPPS_CLIENT_SECRET']end" >> config/initializers/omniauth.rb     commit_to_git "Setup authentication"   }
+   setup_realtime_features() {     log "Setting up Falcon,
+ActionCable,
+streaming"     echo "gem 'stimulus_reflex',
+'actioncable'" >> Gemfile     bundle install >> "$LOG_FILE" 2>&1     bin/rails stimulus_reflex:install >> "$LOG_FILE" 2>&1     yarn add @hotwired/turbo-rails @hotwired/stimulus stimulus_reflex stimulus-components >> "$LOG_FILE" 2>&1     commit_to_git "Setup realtime features"   }
    setup_active_storage() {     log "Setting up Active Storage"     bin/rails active_storage:install >> "$LOG_FILE" 2>&1     commit_to_git "Setup Active Storage"   }
    setup_social_features() {     log "Setting up social features"     bin/rails generate model Community name:string description:text >> "$LOG_FILE" 2>&1     bin/rails generate model Post title:string content:text user:references community:references karma:integer >> "$LOG_FILE" 2>&1     bin/rails generate model Comment content:text user:references post:references >> "$LOG_FILE" 2>&1     bin/rails generate model Reaction kind:string user:references post:references >> "$LOG_FILE" 2>&1     bin/rails generate model Stream content_type:string url:string user:references post:references >> "$LOG_FILE" 2>&1     bin/rails db:migrate >> "$LOG_FILE" 2>&1     commit_to_git "Setup social features"   }
    setup_pwa() {     log "Setting up PWA"     mkdir -p app/javascript     cat > app/javascript/service-worker.js <<EOFself.addEventListener('install', (event) => { console.log('Service Worker installed'); });self.addEventListener('fetch', (event) => {  event.respondWith(    caches.match(event.request).then((response) => response || fetch(event.request))  );});EOF     cat > app/views/layouts/manifest.json.erb <<EOF{  "name": "<%= t('app_name') %>",  "short_name": "<%= @app_name %>",  "start_url": "/",  "display": "standalone",  "background_color": "#ffffff",  "theme_color": "#000000",  "icons": [{ "src": "/icon.png", "sizes": "192x192", "type": "image/png" }]}EOF     cat > app/views/layouts/application.html.erb <<EOF
@@ -73,7 +102,16 @@ CHECKSUM: sha256:4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5
 
 ## Brgen (`brgen.sh`)
 
-A hyper-local social network inspired by Reddit, X.com, TikTok, Snapchat, and Jodel, with subapps for marketplace, playlist, dating, takeaway, and TV.
+A hyper-local social network inspired by Reddit,
+X.com,
+TikTok,
+Snapchat,
+and Jodel,
+with subapps for marketplace,
+playlist,
+dating,
+takeaway,
+and TV.
 
    #!/usr/bin/env zsh
 Setup script for Brgen social network
@@ -163,7 +201,11 @@ CHECKSUM: sha256:9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0
 
 ## Deployment
 
-Apps are deployed using the existing `openbsd.sh`, which configures OpenBSD 7.7+ with DNSSEC, `relayd`, `httpd`, and `acme-client`. Each app is installed in `/home/<app>/app` and runs as a dedicated user with Falcon on a unique port (10000-60000).
+Apps are deployed using the existing `openbsd.sh`,
+which configures OpenBSD 7.7+ with DNSSEC,
+`relayd`,
+`httpd`,
+and `acme-client`. Each app is installed in `/home/<app>/app` and runs as a dedicated user with Falcon on a unique port (10000-60000).
 
 ### Steps
 1. Run `doas zsh openbsd.sh` to configure DNS and certificates (Stage 1).
@@ -190,7 +232,22 @@ Apps are deployed using the existing `openbsd.sh`, which configures OpenBSD 7.7+
 ```html
 # Rails Apps
 
-This document outlines the setup and deployment of Rails 8 applications (`brgen`, `amber`, `privcam`, `bsdports`, `hjerterom`, `pubattorney`, `blognet`) on OpenBSD 7.7+, leveraging Hotwire, StimulusReflex, Stimulus Components, and Devise for authentication. Each app is configured as a Progressive Web App (PWA) with minimalistic views, SCSS targeting direct elements, and anonymous access via `devise-guests`. Deployment uses `openbsd.sh` for DNSSEC, `relayd`, `httpd`, and `acme-client`. Configurations align with `master.json` for gem versions and environment variables.
+This document outlines the setup and deployment of Rails 8 applications (`brgen`,
+`amber`,
+`privcam`,
+`bsdports`,
+`hjerterom`,
+`pubattorney`,
+`blognet`) on OpenBSD 7.7+,
+leveraging Hotwire,
+StimulusReflex,
+Stimulus Components,
+and Devise for authentication. Each app is configured as a Progressive Web App (PWA) with minimalistic views,
+SCSS targeting direct elements,
+and anonymous access via `devise-guests`. Deployment uses `openbsd.sh` for DNSSEC,
+`relayd`,
+`httpd`,
+and `acme-client`. Configurations align with `master.json` for gem versions and environment variables.
 
 ## Overview
 
@@ -1238,7 +1295,8 @@ Copy layout from https://llmstxt.org/.
         font-family: var(--font-headline);
       }
       
-      /* HERO SECTION - fullscreen black with deboss title (using minimal text-shadow per web.dev guidelines, no additional shadows) */
+      /* HERO SECTION - fullscreen black with deboss title (using minimal text-shadow per web.dev guidelines,
+no additional shadows) */
       .hero {
         background: var(--bg-dark);
         color: var(--bg-light);
@@ -1529,7 +1587,9 @@ Copy layout from https://llmstxt.org/.
       <span class="string"><<~PROMPT
         You are an expert biblical translator with deep knowledge of ancient languages.
         Translate the following text from its original language (e.g., Aramaic) into clear, modern English.
-        Ensure that all cultural, historical, and theological nuances are preserved and explained briefly if necessary.
+        Ensure that all cultural,
+historical,
+and theological nuances are preserved and explained briefly if necessary.
         Source Text:
         #{text}
         Translation:
@@ -1561,7 +1621,8 @@ Copy layout from https://llmstxt.org/.
             <div class="verse" data-verse="2">
               <span class="verse-number">2</span>
               <p class="aramaic">V'ha'aretz haytah tohu vavohu, v'choshech al-p'nei t'hom; v'ruach Elaha m'rachefet al-p'nei hamayim.</p>
-              <p><strong>KJV (Norsk):</strong> Og jorden var øde og tom, og mørket lå over det dype hav.</p>
+              <p><strong>KJV (Norsk):</strong> Og jorden var øde og tom,
+og mørket lå over det dype hav.</p>
               <p><strong>ARTEX:</strong> Jorden var øde og tom, mørket dekte dypet. Guds ånd svevde over vannene.</p>
               <div class="verse-notes">
                 <p>Translitterasjon: haytah tohu vavohu ...</p>
@@ -1591,7 +1652,9 @@ Copy layout from https://llmstxt.org/.
             <div class="verse" data-verse="5">
               <span class="verse-number">5</span>
               <p class="aramaic">Va'yiqra Elaha la'or yom, v'lachoshech qara layla. Va'yehi erev va'yehi voqer, yom echad.</p>
-              <p><strong>KJV (Norsk):</strong> Og Gud kalte lyset dag, og mørket kalte han natt. Det ble kveld og morgen, den første dag.</p>
+              <p><strong>KJV (Norsk):</strong> Og Gud kalte lyset dag,
+og mørket kalte han natt. Det ble kveld og morgen,
+den første dag.</p>
               <p><strong>ARTEX:</strong> Lyset ble kalt dag og mørket natt – den første dagen var fullendt.</p>
               <div class="verse-notes">
                 <p>Translitterasjon: la'or yom ...</p>
@@ -1601,7 +1664,8 @@ Copy layout from https://llmstxt.org/.
             <div class="verse" data-verse="6">
               <span class="verse-number">6</span>
               <p class="aramaic">Va'yomar Elaha: Nehvei raqia b'metza'ei mayya, vihei mavdil bein mayya l'mayya.</p>
-              <p><strong>KJV (Norsk):</strong> Og Gud sa: "La det bli en hvelving midt i vannet, som skiller vann fra vann."</p>
+              <p><strong>KJV (Norsk):</strong> Og Gud sa: "La det bli en hvelving midt i vannet,
+som skiller vann fra vann."</p>
               <p><strong>ARTEX:</strong> En hvelving ble skapt for å skille vannmasser.</p>
               <div class="verse-notes">
                 <p>Translitterasjon: nehvei raqia ...</p>
@@ -1610,7 +1674,8 @@ Copy layout from https://llmstxt.org/.
             <!-- Verse 7 -->
             <div class="verse" data-verse="7">
               <span class="verse-number">7</span>
-              <p class="aramaic">Va'ya'as Elaha et-haraqia, va'yavdel bein hamayim asher mitakhat laraqia u'vein hamayim asher me'al laraqia. Va'yehi ken.</p>
+              <p class="aramaic">Va'ya'as Elaha et-haraqia,
+va'yavdel bein hamayim asher mitakhat laraqia u'vein hamayim asher me'al laraqia. Va'yehi ken.</p>
               <p><strong>KJV (Norsk):</strong> Og Gud skapte hvelvingen og skilte vannet under hvelvingen fra vannet over hvelvingen. Det ble slik.</p>
               <p><strong>ARTEX:</strong> Hvelvingen organiserte vannmassene – slik ble universet formet.</p>
               <div class="verse-notes">
@@ -1621,7 +1686,8 @@ Copy layout from https://llmstxt.org/.
             <div class="verse" data-verse="8">
               <span class="verse-number">8</span>
               <p class="aramaic">Va'yiqra Elaha laraqia shamayim. Va'yehi erev va'yehi voqer, yom sheni.</p>
-              <p><strong>KJV (Norsk):</strong> Og Gud kalte hvelvingen himmel. Det ble kveld og morgen, den andre dag.</p>
+              <p><strong>KJV (Norsk):</strong> Og Gud kalte hvelvingen himmel. Det ble kveld og morgen,
+den andre dag.</p>
               <p><strong>ARTEX:</strong> Himmelen ble kunngjort – en ny skapelsesdag ble innledet.</p>
               <div class="verse-notes">
                 <p>Translitterasjon: laraqia shamayim ...</p>
@@ -1631,7 +1697,8 @@ Copy layout from https://llmstxt.org/.
             <div class="verse" data-verse="9">
               <span class="verse-number">9</span>
               <p class="aramaic">Va'yomer Elaha: Yiqavu hamayim mitakhat hashamayim el-maqom ekhad, v'tera'eh hayabasha. Va'yehi ken.</p>
-              <p><strong>KJV (Norsk):</strong> Og Gud sa: "La vannet samle seg til ett sted, og la det tørre land komme til syne."</p>
+              <p><strong>KJV (Norsk):</strong> Og Gud sa: "La vannet samle seg til ett sted,
+og la det tørre land komme til syne."</p>
               <p><strong>ARTEX:</strong> Vassamlingene ble etablert, og landet trådte frem – naturens orden ble fastslått.</p>
               <div class="verse-notes">
                 <p>Translitterasjon: yiqavu hamayim ...</p>
@@ -1641,7 +1708,8 @@ Copy layout from https://llmstxt.org/.
             <div class="verse" data-verse="10">
               <span class="verse-number">10</span>
               <p class="aramaic">Va'yiqra Elaha layabasha eretz, ul'miqveh hamayim qara yammim. Va'yar Elaha ki-tov.</p>
-              <p><strong>KJV (Norsk):</strong> Og Gud kalte det tørre land jord, og vannsamlingen kalte han hav. Og Gud så at det var godt.</p>
+              <p><strong>KJV (Norsk):</strong> Og Gud kalte det tørre land jord,
+og vannsamlingen kalte han hav. Og Gud så at det var godt.</p>
               <p><strong>ARTEX:</strong> Jorden og havet ble til, og alt ble erklært i harmoni.</p>
               <div class="verse-notes">
                 <p>Translitterasjon: layabasha eretz ...</p>
@@ -1655,7 +1723,9 @@ Copy layout from https://llmstxt.org/.
       <section id="collaborate" class="collaborate">
         <div class="content">
           <h1>Samarbeid med oss</h1>
-          <p>ARTEX er et åpent forskningsprosjekt. Har du ekspertise i arameisk, filologi, programmering eller kjønnsstudier? Vi vil gjerne høre fra deg!</p>
+          <p>ARTEX er et åpent forskningsprosjekt. Har du ekspertise i arameisk,
+filologi,
+programmering eller kjønnsstudier? Vi vil gjerne høre fra deg!</p>
           <h2>Hvordan bidra</h2>
           <ul>
             <li>Delta i oversettelsesarbeid</li>
@@ -1947,7 +2017,9 @@ Copy layout from https://llmstxt.org/.
         </div>
       </div>
       <div class="vision-statement">
-        <p>Ved å forene eldgammel visdom med banebrytende KI-teknologi, avdekker vi de hellige tekstenes sanne essens. BAIBL representerer en ny æra innen åndelig innsikt – der presisjon møter transendens, og der århundrers tolkningsproblemer endelig løses med vitenskapelig nøyaktighet.</p>
+        <p>Ved å forene eldgammel visdom med banebrytende KI-teknologi,
+avdekker vi de hellige tekstenes sanne essens. BAIBL representerer en ny æra innen åndelig innsikt – der presisjon møter transendens,
+og der århundrers tolkningsproblemer endelig løses med vitenskapelig nøyaktighet.</p>
       </div>
     </header>
     <main>
@@ -1963,7 +2035,8 @@ Copy layout from https://llmstxt.org/.
             Breishit bara Elohim et hashamayim ve'et ha'aretz. Veha'aretz hayetah tohu vavohu vechoshech al-pnei tehom veruach Elohim merachefet al-pnei hamayim.
           </div>
           <div class="kjv">
-            I begynnelsen skapte Gud himmelen og jorden. Og jorden var øde og tom, og mørke var over avgrunnen. Og Guds Ånd svevde over vannene.
+            I begynnelsen skapte Gud himmelen og jorden. Og jorden var øde og tom,
+og mørke var over avgrunnen. Og Guds Ånd svevde over vannene.
           </div>
           <div class="baibl">
             Gud skapte kosmos ved tidens begynnelse. Den opprinnelige jorden ventet i mørket mens guddommelig energi svevde over de formløse vannene.
@@ -2126,7 +2199,8 @@ Copy layout from https://llmstxt.org/.
       <section id="manifest">
         <h2>Manifest</h2>
         <p>
-          Sannhet er innebygd i eldgamle tekster. Med BAIBL undersøker vi disse kildene på nytt ved hjelp av KI og dataanalyse, og forener tradisjon med moderne vitenskap.
+          Sannhet er innebygd i eldgamle tekster. Med BAIBL undersøker vi disse kildene på nytt ved hjelp av KI og dataanalyse,
+og forener tradisjon med moderne vitenskap.
         </p>
         
         <div class="verse-container">
@@ -2134,10 +2208,13 @@ Copy layout from https://llmstxt.org/.
             Va'yomer Elohim yehi-or vayehi-or. Vayar Elohim et-ha'or ki-tov vayavdel Elohim bein ha'or uvein hachoshech.
           </div>
           <div class="kjv">
-            Og Gud sa: Det blive lys! Og det blev lys. Og Gud så at lyset var godt, og Gud skilte lyset fra mørket.
+            Og Gud sa: Det blive lys! Og det blev lys. Og Gud så at lyset var godt,
+og Gud skilte lyset fra mørket.
           </div>
           <div class="baibl">
-            Gud befalte lyset å eksistere, og det oppsto. Da han så dets verdi, etablerte Gud et skille mellom lys og mørke.
+            Gud befalte lyset å eksistere,
+og det oppsto. Da han så dets verdi,
+etablerte Gud et skille mellom lys og mørke.
           </div>
           <div class="verse-reference">
             1. Mosebok 1:3-4
@@ -2162,10 +2239,15 @@ Copy layout from https://llmstxt.org/.
             Shema Yisrael Adonai Eloheinu Adonai Echad. Ve'ahavta et Adonai Elohecha bechol levavcha uvechol nafshecha uvechol me'odecha.
           </div>
           <div class="kjv">
-            Hør, Israel! Herren vår Gud, Herren er én. Og du skal elske Herren din Gud av hele ditt hjerte og av hele din sjel og av all din makt.
+            Hør,
+Israel! Herren vår Gud,
+Herren er én. Og du skal elske Herren din Gud av hele ditt hjerte og av hele din sjel og av all din makt.
           </div>
           <div class="baibl">
-            Hør, Israel: Herren er vår Gud, Herren alene. Elsk Herren din Gud med hele ditt hjerte, hele din sjel og all din kraft.
+            Hør,
+Israel: Herren er vår Gud,
+Herren alene. Elsk Herren din Gud med hele ditt hjerte,
+hele din sjel og all din kraft.
           </div>
           <div class="verse-reference">
             5. Mosebok 6:4-5
@@ -2177,7 +2259,8 @@ Copy layout from https://llmstxt.org/.
       <section id="marked">
         <h2>Markedsinnsikt & Målgruppe</h2>
         <p>
-          Forskere, teologer og troende søker pålitelige kilder for dyp åndelig innsikt. BAIBL møter dette behovet med uovertruffen presisjon.
+          Forskere,
+teologer og troende søker pålitelige kilder for dyp åndelig innsikt. BAIBL møter dette behovet med uovertruffen presisjon.
         </p>
       </section>
       
@@ -2375,7 +2458,21 @@ main
 
 # PounceKeys
 
-The script is designed to be user-friendly, secure, and compliant with `master.json` requirements, including DRY, KISS, YAGNI, POLA, and SOLID principles, as well as communication standards (Strunk & White, structured logging) and technology specifications (ZSH, minimal permissions). It prompts for email configuration, verifies permissions (e.g., accessibility services), and guides manual steps, ensuring a reliable setup process.
+The script is designed to be user-friendly,
+secure,
+and compliant with `master.json` requirements,
+including DRY,
+KISS,
+YAGNI,
+POLA,
+and SOLID principles,
+as well as communication standards (Strunk & White,
+structured logging) and technology specifications (ZSH,
+minimal permissions). It prompts for email configuration,
+verifies permissions (e.g.,
+accessibility services),
+and guides manual steps,
+ensuring a reliable setup process.
 
 ```x-shellscript
 #!/data/data/com.termux/files/usr/bin/zsh
@@ -2579,4 +2676,4 @@ echo "Log file: $LOG_FILE"
 echo "EOF: pouncekeys_setup.zsh completed successfully"
 # Line count: 110 (excluding comments)
 # Checksum: sha256sum pouncekeys_setup.zsh
-```
+```

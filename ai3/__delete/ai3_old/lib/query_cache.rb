@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # QueryCache: Manages caching of user queries and their responses
 class QueryCache
   require 'lru_redux'
@@ -49,4 +51,3 @@ class QueryCache
     end
   end
 end
-

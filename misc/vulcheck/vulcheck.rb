@@ -15,10 +15,10 @@ class VulCheck
 
   # Ensure script is run with sudo
   def self.ensure_sudo
-    unless Process.uid.zero?
-      log('Root privileges are necessary for installing tools and scanning system files.')
-      log_and_exit('This script must be run with sudo privileges.')
-    end
+    return if Process.uid.zero?
+
+    log('Root privileges are necessary for installing tools and scanning system files.')
+    log_and_exit('This script must be run with sudo privileges.')
   end
 
   # Determine the system type: macOS, iOS, or Android
@@ -37,9 +37,9 @@ class VulCheck
 
   # Ensure MacPorts is installed (for macOS)
   def self.ensure_macports
-    unless system('which port > /dev/null 2>&1')
-      log_and_exit('MacPorts not found. Please install MacPorts first: https://www.macports.org/')
-    end
+    return if system('which port > /dev/null 2>&1')
+
+    log_and_exit('MacPorts not found. Please install MacPorts first: https://www.macports.org/')
   end
 
   # Install required tools using MacPorts (for macOS)
@@ -99,9 +99,7 @@ class VulCheck
     ]
 
     jailbreak_indicators.each do |path|
-      if File.exist?(path)
-        log("Warning: Jailbreak indicator found at #{path}")
-      end
+      log("Warning: Jailbreak indicator found at #{path}") if File.exist?(path)
     end
     log('Finished checking for jailbreak indicators on iOS.')
   end
@@ -117,9 +115,7 @@ class VulCheck
     ]
 
     root_indicators.each do |path|
-      if File.exist?(path)
-        log("Warning: Root access indicator found at #{path}")
-      end
+      log("Warning: Root access indicator found at #{path}") if File.exist?(path)
     end
 
     log('Active network connections:')
@@ -188,4 +184,3 @@ if options[:macos] || options[:ios] || options[:android]
 else
   VulCheck.log_and_exit('Error: Please specify either --macos, --ios, or --android.')
 end
-

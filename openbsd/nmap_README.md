@@ -2,7 +2,9 @@
 
 ## Overview
 
-The `nmap.sh` script is a cognitive-aware network security assessment tool designed specifically for OpenBSD environments. It replaces the existing `deep_nmap_scan.sh` with improved error handling, cognitive load management, and professional reporting capabilities.
+The `nmap.sh` script is a cognitive-aware network security assessment tool designed specifically for OpenBSD environments. It replaces the existing `deep_nmap_scan.sh` with improved error handling,
+cognitive load management,
+and professional reporting capabilities.
 
 ## Key Features
 

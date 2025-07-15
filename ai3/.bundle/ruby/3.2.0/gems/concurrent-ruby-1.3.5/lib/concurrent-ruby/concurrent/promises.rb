@@ -8,10 +8,8 @@ require 'concurrent/re_include'
 require 'concurrent/utility/monotonic_time'
 
 module Concurrent
-
   # {include:file:docs-source/promises-main.md}
   module Promises
-
     # @!macro promises.param.default_executor
     #   @param [Executor, :io, :fast] default_executor Instance of an executor or a name of the
     #     global executor. Default executor propagates to chained futures unless overridden with
@@ -91,8 +89,8 @@ module Concurrent
 
       # @!macro promises.shortcut.on
       # @return [Future]
-      def future(*args, &task)
-        future_on(default_executor, *args, &task)
+      def future(*, &)
+        future_on(default_executor, *, &)
       end
 
       # Constructs a new Future which will be resolved after block is evaluated on default executor.
@@ -103,8 +101,8 @@ module Concurrent
       # @yield [*args] to the task.
       # @!macro promise.param.task-future
       # @return [Future]
-      def future_on(default_executor, *args, &task)
-        ImmediateEventPromise.new(default_executor).future.then(*args, &task)
+      def future_on(default_executor, *, &)
+        ImmediateEventPromise.new(default_executor).future.then(*, &)
       end
 
       # Creates a resolved future with will be either fulfilled with the given value or rejected with
@@ -187,8 +185,8 @@ module Concurrent
 
       # @!macro promises.shortcut.on
       # @return [Future, Event]
-      def delay(*args, &task)
-        delay_on default_executor, *args, &task
+      def delay(*, &)
+        delay_on(default_executor, *, &)
       end
 
       # Creates a new event or future which is resolved only after it is touched,
@@ -204,15 +202,15 @@ module Concurrent
       # @overload delay_on(default_executor)
       #   If no task is provided, it returns an {Event}
       #   @return [Event]
-      def delay_on(default_executor, *args, &task)
+      def delay_on(default_executor, *, &task)
         event = DelayPromise.new(default_executor).event
-        task ? event.chain(*args, &task) : event
+        task ? event.chain(*, &task) : event
       end
 
       # @!macro promises.shortcut.on
       # @return [Future, Event]
-      def schedule(intended_time, *args, &task)
-        schedule_on default_executor, intended_time, *args, &task
+      def schedule(intended_time, *, &)
+        schedule_on(default_executor, intended_time, *, &)
       end
 
       # Creates a new event or future which is resolved in intended_time.
@@ -230,9 +228,9 @@ module Concurrent
       # @overload schedule_on(default_executor, intended_time)
       #   If no task is provided, it returns an {Event}
       #   @return [Event]
-      def schedule_on(default_executor, intended_time, *args, &task)
+      def schedule_on(default_executor, intended_time, *, &task)
         event = ScheduledPromise.new(default_executor, intended_time).event
-        task ? event.chain(*args, &task) : event
+        task ? event.chain(*, &task) : event
       end
 
       # @!macro promises.shortcut.on
@@ -255,7 +253,7 @@ module Concurrent
         ZipFuturesPromise.new_blocked_by(futures_and_or_events, default_executor).future
       end
 
-      alias_method :zip, :zip_futures
+      alias zip zip_futures
 
       # @!macro promises.shortcut.on
       # @return [Event]
@@ -279,7 +277,7 @@ module Concurrent
         any_resolved_future_on default_executor, *futures_and_or_events
       end
 
-      alias_method :any, :any_resolved_future
+      alias any any_resolved_future
 
       # Creates a new future which is resolved after the first futures_and_or_events is resolved.
       # Its result equals the result of the first resolved future.
@@ -330,7 +328,7 @@ module Concurrent
         AnyResolvedEventPromise.new_blocked_by(futures_and_or_events, default_executor).event
       end
 
-      # TODO consider adding first(count, *futures)
+      # TODO: consider adding first(count, *futures)
       # TODO consider adding zip_by(slice, *futures) processing futures in slices
       # TODO or rather a generic aggregator taking a function
     end
@@ -395,7 +393,6 @@ module Concurrent
 
       # @!visibility private
       class Fulfilled < ResolvedWithResult
-
         def initialize(value)
           @Value = value
         end
@@ -593,8 +590,8 @@ module Concurrent
 
       # @!macro promises.shortcut.on
       # @return [Future]
-      def chain(*args, &task)
-        chain_on @DefaultExecutor, *args, &task
+      def chain(*, &)
+        chain_on(@DefaultExecutor, *, &)
       end
 
       # Chains the task to be executed asynchronously on executor after it is resolved.
@@ -611,8 +608,8 @@ module Concurrent
       #   @yieldparam [true, false] fulfilled
       #   @yieldparam [Object] value
       #   @yieldparam [Object] reason
-      def chain_on(executor, *args, &task)
-        ChainPromise.new_blocked_by1(self, executor, executor, args, &task).future
+      def chain_on(executor, *args, &)
+        ChainPromise.new_blocked_by1(self, executor, executor, args, &).future
       end
 
       # @return [String] Short string representation.
@@ -620,7 +617,7 @@ module Concurrent
         format '%s %s>', super[0..-2], state
       end
 
-      alias_method :inspect, :to_s
+      alias inspect to_s
 
       # Resolves the resolvable when receiver is resolved.
       #
@@ -630,12 +627,12 @@ module Concurrent
         on_resolution! { resolvable.resolve_with internal_state }
       end
 
-      alias_method :tangle, :chain_resolvable
+      alias tangle chain_resolvable
 
       # @!macro promises.shortcut.using
       # @return [self]
-      def on_resolution(*args, &callback)
-        on_resolution_using @DefaultExecutor, *args, &callback
+      def on_resolution(*, &)
+        on_resolution_using(@DefaultExecutor, *, &)
       end
 
       # Stores the callback to be executed synchronously on resolving thread after it is
@@ -686,13 +683,14 @@ module Concurrent
 
       # @!visibility private
       def resolve_with(state, raise_on_reassign = true, reserved = false)
-        if compare_and_set_internal_state(reserved ? RESERVED : PENDING, state)
-          # go to synchronized block only if there were waiting threads
-          @Lock.synchronize { @Condition.broadcast } unless @Waiters.value == 0
-          call_callbacks state
-        else
+        unless compare_and_set_internal_state(reserved ? RESERVED : PENDING, state)
           return rejected_resolution(raise_on_reassign, state)
         end
+
+        # go to synchronized block only if there were waiting threads
+        @Lock.synchronize { @Condition.broadcast } unless @Waiters.value == 0
+        call_callbacks state
+
         self
       end
 
@@ -741,7 +739,7 @@ module Concurrent
 
       # @!visibility private
       def with_hidden_resolvable
-        # TODO (pitr-ch 10-Dec-2018): documentation, better name if in edge
+        # TODO: (pitr-ch 10-Dec-2018): documentation, better name if in edge
         self
       end
 
@@ -760,7 +758,7 @@ module Concurrent
         self
       end
 
-      def callback_clear_delayed_node(state, node)
+      def callback_clear_delayed_node(_state, node)
         node.value = nil
       end
 
@@ -776,14 +774,13 @@ module Concurrent
             if timeout
               start = Concurrent.monotonic_time
               until resolved?
-                break if @Condition.wait(@Lock, timeout) == nil # nil means timeout
+                break if @Condition.wait(@Lock, timeout).nil? # nil means timeout
+
                 timeout -= (Concurrent.monotonic_time - start)
                 break if timeout <= 0
               end
             else
-              until resolved?
-                @Condition.wait(@Lock, timeout)
-              end
+              @Condition.wait(@Lock, timeout) until resolved?
             end
           ensure
             # JRuby may raise ConcurrencyError
@@ -794,7 +791,7 @@ module Concurrent
       end
 
       def call_callback(method, state, args)
-        self.send method, state, *args
+        send method, state, *args
       end
 
       def call_callbacks(state)
@@ -805,8 +802,8 @@ module Concurrent
         end
       end
 
-      def with_async(executor, *args, &block)
-        Concurrent.executor(executor).post(*args, &block)
+      def with_async(executor, *, &)
+        Concurrent.executor(executor).post(*, &)
       end
 
       def async_callback_on_resolution(state, executor, args, callback)
@@ -815,7 +812,7 @@ module Concurrent
         end
       end
 
-      def callback_notify_blocked(state, promise, index)
+      def callback_notify_blocked(_state, promise, index)
         promise.on_blocker_resolution self, index
       end
     end
@@ -824,9 +821,7 @@ module Concurrent
     # pending or resolved. It should be always resolved. Use {Future} to communicate rejections and
     # cancellation.
     class Event < AbstractEventFuture
-
-      alias_method :then, :chain
-
+      alias then chain
 
       # @!macro promises.method.zip
       #   Creates a new event or a future which will be resolved when receiver and other are.
@@ -844,7 +839,7 @@ module Concurrent
         end
       end
 
-      alias_method :&, :zip
+      alias & zip
 
       # Creates a new event which will be resolved when the first of receiver, `event_or_future`
       # resolves.
@@ -854,7 +849,7 @@ module Concurrent
         AnyResolvedEventPromise.new_blocked_by2(self, event_or_future, @DefaultExecutor).event
       end
 
-      alias_method :|, :any
+      alias | any
 
       # Creates new event dependent on receiver which will not evaluate until touched, see {#touch}.
       # In other words, it inserts delay into the chain of Futures making rest of it lazy evaluated.
@@ -902,12 +897,13 @@ module Concurrent
 
       private
 
-      def rejected_resolution(raise_on_reassign, state)
+      def rejected_resolution(raise_on_reassign, _state)
         raise Concurrent::MultipleAssignmentError.new('Event can be resolved only once') if raise_on_reassign
-        return false
+
+        false
       end
 
-      def callback_on_resolution(state, args, callback)
+      def callback_on_resolution(_state, args, callback)
         callback.call(*args)
       end
     end
@@ -915,7 +911,6 @@ module Concurrent
     # Represents a value which will become available in future. May reject with a reason instead,
     # e.g. when the tasks raises an exception.
     class Future < AbstractEventFuture
-
       # Is it in fulfilled state?
       # @return [Boolean]
       def fulfilled?
@@ -1013,6 +1008,7 @@ module Concurrent
       def exception(*args)
         raise Concurrent::Error, 'it is not rejected' unless rejected?
         raise ArgumentError unless args.size <= 1
+
         reason = Array(internal_state.reason).flatten.compact
         if reason.size > 1
           ex = Concurrent::MultipleErrors.new reason
@@ -1031,8 +1027,8 @@ module Concurrent
 
       # @!macro promises.shortcut.on
       # @return [Future]
-      def then(*args, &task)
-        then_on @DefaultExecutor, *args, &task
+      def then(*, &)
+        then_on(@DefaultExecutor, *, &)
       end
 
       # Chains the task to be executed asynchronously on executor after it fulfills. Does not run
@@ -1043,14 +1039,14 @@ module Concurrent
       # @!macro promise.param.task-future
       # @return [Future]
       # @yield [value, *args] to the task.
-      def then_on(executor, *args, &task)
-        ThenPromise.new_blocked_by1(self, executor, executor, args, &task).future
+      def then_on(executor, *args, &)
+        ThenPromise.new_blocked_by1(self, executor, executor, args, &).future
       end
 
       # @!macro promises.shortcut.on
       # @return [Future]
-      def rescue(*args, &task)
-        rescue_on @DefaultExecutor, *args, &task
+      def rescue(*, &)
+        rescue_on(@DefaultExecutor, *, &)
       end
 
       # Chains the task to be executed asynchronously on executor after it rejects. Does not run
@@ -1061,8 +1057,8 @@ module Concurrent
       # @!macro promise.param.task-future
       # @return [Future]
       # @yield [reason, *args] to the task.
-      def rescue_on(executor, *args, &task)
-        RescuePromise.new_blocked_by1(self, executor, executor, args, &task).future
+      def rescue_on(executor, *args, &)
+        RescuePromise.new_blocked_by1(self, executor, executor, args, &).future
       end
 
       # @!macro promises.method.zip
@@ -1075,7 +1071,7 @@ module Concurrent
         end
       end
 
-      alias_method :&, :zip
+      alias & zip
 
       # Creates a new event which will be resolved when the first of receiver, `event_or_future`
       # resolves. Returning future will have value nil if event_or_future is event and resolves
@@ -1086,7 +1082,7 @@ module Concurrent
         AnyResolvedFuturePromise.new_blocked_by2(self, event_or_future, @DefaultExecutor).future
       end
 
-      alias_method :|, :any
+      alias | any
 
       # Creates new future dependent on receiver which will not evaluate until touched, see {#touch}.
       # In other words, it inserts delay into the chain of Futures making rest of it lazy evaluated.
@@ -1121,7 +1117,7 @@ module Concurrent
         FlatFuturePromise.new_blocked_by1(self, level, @DefaultExecutor).future
       end
 
-      alias_method :flat, :flat_future
+      alias flat flat_future
 
       # Creates new event which will be resolved when the returned event by receiver is.
       # Be careful if the receiver rejects it will just resolve since Event does not hold reason.
@@ -1133,8 +1129,8 @@ module Concurrent
 
       # @!macro promises.shortcut.using
       # @return [self]
-      def on_fulfillment(*args, &callback)
-        on_fulfillment_using @DefaultExecutor, *args, &callback
+      def on_fulfillment(*, &)
+        on_fulfillment_using(@DefaultExecutor, *, &)
       end
 
       # Stores the callback to be executed synchronously on resolving thread after it is
@@ -1162,8 +1158,8 @@ module Concurrent
 
       # @!macro promises.shortcut.using
       # @return [self]
-      def on_rejection(*args, &callback)
-        on_rejection_using @DefaultExecutor, *args, &callback
+      def on_rejection(*, &)
+        on_rejection_using(@DefaultExecutor, *, &)
       end
 
       # Stores the callback to be executed synchronously on resolving thread after it is
@@ -1240,7 +1236,7 @@ module Concurrent
         end
       end
 
-      alias_method :inspect, :to_s
+      alias inspect to_s
 
       private
 
@@ -1252,20 +1248,23 @@ module Concurrent
         if raise_on_reassign
           if internal_state == RESERVED
             raise Concurrent::MultipleAssignmentError.new(
-                "Future can be resolved only once. It is already reserved.")
+              'Future can be resolved only once. It is already reserved.'
+            )
           else
             raise Concurrent::MultipleAssignmentError.new(
-                "Future can be resolved only once. It's #{result}, trying to set #{state.result}.",
-                current_result: result,
-                new_result:     state.result)
+              "Future can be resolved only once. It's #{result}, trying to set #{state.result}.",
+              current_result: result,
+              new_result: state.result
+            )
           end
         end
-        return false
+        false
       end
 
       def wait_until_resolved!(timeout = nil)
         result = wait_until_resolved(timeout)
         raise self if rejected?
+
         result
       end
 
@@ -1292,7 +1291,6 @@ module Concurrent
       def callback_on_resolution(state, args, callback)
         callback.call(*state.result, *args)
       end
-
     end
 
     # Marker module of Future, Event resolved manually.
@@ -1392,8 +1390,8 @@ module Concurrent
       # @yield [*args] to the block.
       # @yieldreturn [Object] value
       # @return [self]
-      def evaluate_to(*args, &block)
-        promise.evaluate_to(*args, block)
+      def evaluate_to(*, &block)
+        promise.evaluate_to(*, block)
       end
 
       # Evaluates the block and sets its result as future's value fulfilling, if the block raises
@@ -1403,8 +1401,8 @@ module Concurrent
       # @yieldreturn [Object] value
       # @return [self]
       # @raise [Exception] also raise reason on rejection.
-      def evaluate_to!(*args, &block)
-        promise.evaluate_to(*args, block).wait!
+      def evaluate_to!(*, &block)
+        promise.evaluate_to(*, block).wait!
       end
 
       # @!macro promises.resolvable.resolve_on_timeout
@@ -1443,6 +1441,7 @@ module Concurrent
                               # if it fails to resolve it was resolved in the meantime
                               # so return true as if there was no timeout
                               raise self if rejected?
+
                               true
                             end
                           else
@@ -1460,13 +1459,12 @@ module Concurrent
         if wait_until_resolved timeout
           internal_state.value
         else
-          if resolve_on_timeout
-            unless resolve(*resolve_on_timeout, false)
-              # if it fails to resolve it was resolved in the meantime
-              # so return value as if there was no timeout
-              return internal_state.value
-            end
+          if resolve_on_timeout && !resolve(*resolve_on_timeout, false)
+            # if it fails to resolve it was resolved in the meantime
+            # so return value as if there was no timeout
+            return internal_state.value
           end
+
           timeout_value
         end
       end
@@ -1482,13 +1480,12 @@ module Concurrent
         if wait_until_resolved! timeout
           internal_state.value
         else
-          if resolve_on_timeout
-            unless resolve(*resolve_on_timeout, false)
-              # if it fails to resolve it was resolved in the meantime
-              # so return value as if there was no timeout
-              raise self if rejected?
-              return internal_state.value
-            end
+          if resolve_on_timeout && !resolve(*resolve_on_timeout, false)
+            # if it fails to resolve it was resolved in the meantime
+            # so return value as if there was no timeout
+            raise self if rejected?
+
+            return internal_state.value
           end
           timeout_value
         end
@@ -1504,13 +1501,12 @@ module Concurrent
         if wait_until_resolved timeout
           internal_state.reason
         else
-          if resolve_on_timeout
-            unless resolve(*resolve_on_timeout, false)
-              # if it fails to resolve it was resolved in the meantime
-              # so return value as if there was no timeout
-              return internal_state.reason
-            end
+          if resolve_on_timeout && !resolve(*resolve_on_timeout, false)
+            # if it fails to resolve it was resolved in the meantime
+            # so return value as if there was no timeout
+            return internal_state.reason
           end
+
           timeout_value
         end
       end
@@ -1524,13 +1520,11 @@ module Concurrent
       def result(timeout = nil, resolve_on_timeout = nil)
         if wait_until_resolved timeout
           internal_state.result
-        else
-          if resolve_on_timeout
-            unless resolve(*resolve_on_timeout, false)
-              # if it fails to resolve it was resolved in the meantime
-              # so return value as if there was no timeout
-              internal_state.result
-            end
+        elsif resolve_on_timeout
+          unless resolve(*resolve_on_timeout, false)
+            # if it fails to resolve it was resolved in the meantime
+            # so return value as if there was no timeout
+            internal_state.result
           end
           # otherwise returns nil
         end
@@ -1559,7 +1553,7 @@ module Concurrent
         @Future
       end
 
-      alias_method :event, :future
+      alias event future
 
       def default_executor
         future.default_executor
@@ -1569,14 +1563,13 @@ module Concurrent
         future.state
       end
 
-      def touch
-      end
+      def touch; end
 
       def to_s
         format '%s %s>', super[0..-2], @Future
       end
 
-      alias_method :inspect, :to_s
+      alias inspect to_s
 
       def delayed_because
         nil
@@ -1589,23 +1582,23 @@ module Concurrent
       end
 
       # @return [Future]
-      def evaluate_to(*args, block)
-        resolve_with Fulfilled.new(block.call(*args))
-      rescue Exception => error
-        resolve_with Rejected.new(error)
-        raise error unless error.is_a?(StandardError)
+      def evaluate_to(*, block)
+        resolve_with Fulfilled.new(block.call(*))
+      rescue Exception => e
+        resolve_with Rejected.new(e)
+        raise e unless e.is_a?(StandardError)
       end
     end
 
     class ResolvableEventPromise < AbstractPromise
       def initialize(default_executor)
-        super ResolvableEvent.new(self, default_executor)
+        super(ResolvableEvent.new(self, default_executor))
       end
     end
 
     class ResolvableFuturePromise < AbstractPromise
       def initialize(default_executor)
-        super ResolvableFuture.new(self, default_executor)
+        super(ResolvableFuture.new(self, default_executor))
       end
 
       public :evaluate_to
@@ -1617,34 +1610,33 @@ module Concurrent
 
     # @abstract
     class BlockedPromise < InnerPromise
-
       private_class_method :new
 
-      def self.new_blocked_by1(blocker, *args, &block)
+      def self.new_blocked_by1(blocker, *, &)
         blocker_delayed = blocker.promise.delayed_because
-        promise         = new(blocker_delayed, 1, *args, &block)
+        promise         = new(blocker_delayed, 1, *, &)
         blocker.add_callback_notify_blocked promise, 0
         promise
       end
 
-      def self.new_blocked_by2(blocker1, blocker2, *args, &block)
+      def self.new_blocked_by2(blocker1, blocker2, *, &)
         blocker_delayed1 = blocker1.promise.delayed_because
         blocker_delayed2 = blocker2.promise.delayed_because
         delayed          = if blocker_delayed1 && blocker_delayed2
-                             # TODO (pitr-ch 23-Dec-2016): use arrays when we know it will not grow (only flat adds delay)
+                             # TODO: (pitr-ch 23-Dec-2016): use arrays when we know it will not grow (only flat adds delay)
                              LockFreeStack.of2(blocker_delayed1, blocker_delayed2)
                            else
                              blocker_delayed1 || blocker_delayed2
                            end
-        promise          = new(delayed, 2, *args, &block)
+        promise          = new(delayed, 2, *, &)
         blocker1.add_callback_notify_blocked promise, 0
         blocker2.add_callback_notify_blocked promise, 1
         promise
       end
 
-      def self.new_blocked_by(blockers, *args, &block)
+      def self.new_blocked_by(blockers, *, &)
         delayed = blockers.reduce(nil) { |d, f| add_delayed d, f.promise.delayed_because }
-        promise = new(delayed, blockers.size, *args, &block)
+        promise = new(delayed, blockers.size, *, &)
         blockers.each_with_index { |f, i| f.add_callback_notify_blocked promise, i }
         promise
       end
@@ -1699,11 +1691,11 @@ module Concurrent
       end
 
       # @return [true,false] if resolvable
-      def resolvable?(countdown, future, index)
+      def resolvable?(countdown, _future, _index)
         countdown.zero?
       end
 
-      def process_on_blocker_resolution(future, index)
+      def process_on_blocker_resolution(_future, _index)
         @Countdown.decrement
       end
 
@@ -1714,9 +1706,10 @@ module Concurrent
 
     # @abstract
     class BlockedTaskPromise < BlockedPromise
-      def initialize(delayed, blockers_count, default_executor, executor, args, &task)
+      def initialize(delayed, _blockers_count, default_executor, executor, args, &task)
         raise ArgumentError, 'no block given' unless block_given?
-        super delayed, 1, Future.new(self, default_executor)
+
+        super(delayed, 1, Future.new(self, default_executor))
         @Executor = executor
         @Task     = task
         @Args     = args
@@ -1730,14 +1723,14 @@ module Concurrent
     class ThenPromise < BlockedTaskPromise
       private
 
-      def initialize(delayed, blockers_count, default_executor, executor, args, &task)
-        super delayed, blockers_count, default_executor, executor, args, &task
+      def initialize(delayed, blockers_count, default_executor, executor, args, &)
+        super
       end
 
-      def on_resolvable(resolved_future, index)
+      def on_resolvable(resolved_future, _index)
         if resolved_future.fulfilled?
           Concurrent.executor(@Executor).post(resolved_future, @Args, @Task) do |future, args, task|
-            evaluate_to lambda { future.apply args, task }
+            evaluate_to -> { future.apply args, task }
           end
         else
           resolve_with resolved_future.internal_state
@@ -1748,14 +1741,14 @@ module Concurrent
     class RescuePromise < BlockedTaskPromise
       private
 
-      def initialize(delayed, blockers_count, default_executor, executor, args, &task)
-        super delayed, blockers_count, default_executor, executor, args, &task
+      def initialize(delayed, blockers_count, default_executor, executor, args, &)
+        super
       end
 
-      def on_resolvable(resolved_future, index)
+      def on_resolvable(resolved_future, _index)
         if resolved_future.rejected?
           Concurrent.executor(@Executor).post(resolved_future, @Args, @Task) do |future, args, task|
-            evaluate_to lambda { future.apply args, task }
+            evaluate_to -> { future.apply args, task }
           end
         else
           resolve_with resolved_future.internal_state
@@ -1766,8 +1759,8 @@ module Concurrent
     class ChainPromise < BlockedTaskPromise
       private
 
-      def on_resolvable(resolved_future, index)
-        if Future === resolved_future
+      def on_resolvable(resolved_future, _index)
+        if resolved_future.is_a?(Future)
           Concurrent.executor(@Executor).post(resolved_future, @Args, @Task) do |future, args, task|
             evaluate_to(*future.result, *args, task)
           end
@@ -1782,19 +1775,18 @@ module Concurrent
     # will be immediately resolved
     class ImmediateEventPromise < InnerPromise
       def initialize(default_executor)
-        super Event.new(self, default_executor).resolve_with(RESOLVED)
+        super(Event.new(self, default_executor).resolve_with(RESOLVED))
       end
     end
 
     class ImmediateFuturePromise < InnerPromise
       def initialize(default_executor, fulfilled, value, reason)
-        super Future.new(self, default_executor).
-            resolve_with(fulfilled ? Fulfilled.new(value) : Rejected.new(reason))
+        super(Future.new(self, default_executor)
+                    .resolve_with(fulfilled ? Fulfilled.new(value) : Rejected.new(reason)))
       end
     end
 
     class AbstractFlatPromise < BlockedPromise
-
       def initialize(delayed_because, blockers_count, event_or_future)
         delayed = LockFreeStack.of1(self)
         super(delayed, blockers_count, event_or_future)
@@ -1806,9 +1798,9 @@ module Concurrent
       end
 
       def touch
-        if @Touched.make_true
-          clear_and_propagate_touch @DelayedBecause
-        end
+        return unless @Touched.make_true
+
+        clear_and_propagate_touch @DelayedBecause
       end
 
       private
@@ -1817,12 +1809,12 @@ module Concurrent
         @Touched.value
       end
 
-      def on_resolvable(resolved_future, index)
+      def on_resolvable(resolved_future, _index)
         resolve_with resolved_future.internal_state
       end
 
       def resolvable?(countdown, future, index)
-        !@Future.internal_state.resolved? && super(countdown, future, index)
+        !@Future.internal_state.resolved? && super
       end
 
       def add_delayed_of(future)
@@ -1834,19 +1826,17 @@ module Concurrent
           clear_and_propagate_touch @DelayedBecause if touched?
         end
       end
-
     end
 
     class FlatEventPromise < AbstractFlatPromise
-
       private
 
-      def initialize(delayed, blockers_count, default_executor)
-        super delayed, 2, Event.new(self, default_executor)
+      def initialize(delayed, _blockers_count, default_executor)
+        super(delayed, 2, Event.new(self, default_executor))
       end
 
       def process_on_blocker_resolution(future, index)
-        countdown = super(future, index)
+        countdown = super
         if countdown.nonzero?
           internal_state = future.internal_state
 
@@ -1867,22 +1857,21 @@ module Concurrent
         end
         countdown
       end
-
     end
 
     class FlatFuturePromise < AbstractFlatPromise
-
       private
 
-      def initialize(delayed, blockers_count, levels, default_executor)
+      def initialize(delayed, _blockers_count, levels, default_executor)
         raise ArgumentError, 'levels has to be higher than 0' if levels < 1
+
         # flat promise may result to a future having delayed futures, therefore we have to have empty stack
         # to be able to add new delayed futures
-        super delayed || LockFreeStack.new, 1 + levels, Future.new(self, default_executor)
+        super(delayed || LockFreeStack.new, 1 + levels, Future.new(self, default_executor))
       end
 
       def process_on_blocker_resolution(future, index)
-        countdown = super(future, index)
+        countdown = super
         if countdown.nonzero?
           internal_state = future.internal_state
 
@@ -1898,24 +1887,22 @@ module Concurrent
             value.add_callback_notify_blocked self, nil
             countdown
           else
-            evaluate_to(lambda { raise TypeError, "returned value #{value.inspect} is not a Future" })
+            evaluate_to(-> { raise TypeError, "returned value #{value.inspect} is not a Future" })
           end
         end
         countdown
       end
-
     end
 
     class RunFuturePromise < AbstractFlatPromise
-
       private
 
-      def initialize(delayed, blockers_count, default_executor, run_test)
-        super delayed, 1, Future.new(self, default_executor)
+      def initialize(delayed, _blockers_count, default_executor, run_test)
+        super(delayed, 1, Future.new(self, default_executor))
         @RunTest = run_test
       end
 
-      def process_on_blocker_resolution(future, index)
+      def process_on_blocker_resolution(future, _index)
         internal_state = future.internal_state
 
         unless internal_state.fulfilled?
@@ -1938,20 +1925,20 @@ module Concurrent
     end
 
     class ZipEventEventPromise < BlockedPromise
-      def initialize(delayed, blockers_count, default_executor)
-        super delayed, 2, Event.new(self, default_executor)
+      def initialize(delayed, _blockers_count, default_executor)
+        super(delayed, 2, Event.new(self, default_executor))
       end
 
       private
 
-      def on_resolvable(resolved_future, index)
+      def on_resolvable(_resolved_future, _index)
         resolve_with RESOLVED
       end
     end
 
     class ZipFutureEventPromise < BlockedPromise
-      def initialize(delayed, blockers_count, default_executor)
-        super delayed, 2, Future.new(self, default_executor)
+      def initialize(delayed, _blockers_count, default_executor)
+        super(delayed, 2, Future.new(self, default_executor))
         @result = nil
       end
 
@@ -1961,40 +1948,39 @@ module Concurrent
         # first blocking is future, take its result
         @result = future.internal_state if index == 0
         # super has to be called after above to piggyback on volatile @Countdown
-        super future, index
+        super
       end
 
-      def on_resolvable(resolved_future, index)
+      def on_resolvable(_resolved_future, _index)
         resolve_with @result
       end
     end
 
     class EventWrapperPromise < BlockedPromise
-      def initialize(delayed, blockers_count, default_executor)
-        super delayed, 1, Event.new(self, default_executor)
+      def initialize(delayed, _blockers_count, default_executor)
+        super(delayed, 1, Event.new(self, default_executor))
       end
 
       private
 
-      def on_resolvable(resolved_future, index)
+      def on_resolvable(_resolved_future, _index)
         resolve_with RESOLVED
       end
     end
 
     class FutureWrapperPromise < BlockedPromise
-      def initialize(delayed, blockers_count, default_executor)
-        super delayed, 1, Future.new(self, default_executor)
+      def initialize(delayed, _blockers_count, default_executor)
+        super(delayed, 1, Future.new(self, default_executor))
       end
 
       private
 
-      def on_resolvable(resolved_future, index)
+      def on_resolvable(resolved_future, _index)
         resolve_with resolved_future.internal_state
       end
     end
 
     class ZipFuturesPromise < BlockedPromise
-
       private
 
       def initialize(delayed, blockers_count, default_executor)
@@ -2005,12 +1991,12 @@ module Concurrent
       end
 
       def process_on_blocker_resolution(future, index)
-        # TODO (pitr-ch 18-Dec-2016): Can we assume that array will never break under parallel access when never re-sized?
+        # TODO: (pitr-ch 18-Dec-2016): Can we assume that array will never break under parallel access when never re-sized?
         @Resolutions[index] = future.internal_state # has to be set before countdown in super
-        super future, index
+        super
       end
 
-      def on_resolvable(resolved_future, index)
+      def on_resolvable(_resolved_future, _index)
         all_fulfilled = true
         values        = ::Array.new(@Resolutions.size)
         reasons       = ::Array.new(@Resolutions.size)
@@ -2029,16 +2015,15 @@ module Concurrent
     end
 
     class ZipEventsPromise < BlockedPromise
-
       private
 
       def initialize(delayed, blockers_count, default_executor)
-        super delayed, blockers_count, Event.new(self, default_executor)
+        super(delayed, blockers_count, Event.new(self, default_executor))
 
         on_resolvable nil, nil if blockers_count == 0
       end
 
-      def on_resolvable(resolved_future, index)
+      def on_resolvable(_resolved_future, _index)
         resolve_with RESOLVED
       end
     end
@@ -2048,56 +2033,52 @@ module Concurrent
     end
 
     class AnyResolvedEventPromise < AbstractAnyPromise
-
       private
 
       def initialize(delayed, blockers_count, default_executor)
-        super delayed, blockers_count, Event.new(self, default_executor)
+        super(delayed, blockers_count, Event.new(self, default_executor))
       end
 
-      def resolvable?(countdown, future, index)
+      def resolvable?(_countdown, _future, _index)
         true
       end
 
-      def on_resolvable(resolved_future, index)
+      def on_resolvable(_resolved_future, _index)
         resolve_with RESOLVED, false
       end
     end
 
     class AnyResolvedFuturePromise < AbstractAnyPromise
-
       private
 
       def initialize(delayed, blockers_count, default_executor)
-        super delayed, blockers_count, Future.new(self, default_executor)
+        super(delayed, blockers_count, Future.new(self, default_executor))
       end
 
-      def resolvable?(countdown, future, index)
+      def resolvable?(_countdown, _future, _index)
         true
       end
 
-      def on_resolvable(resolved_future, index)
+      def on_resolvable(resolved_future, _index)
         resolve_with resolved_future.internal_state, false
       end
     end
 
     class AnyFulfilledFuturePromise < AnyResolvedFuturePromise
-
       private
 
-      def resolvable?(countdown, event_or_future, index)
+      def resolvable?(countdown, event_or_future, _index)
         (event_or_future.is_a?(Event) ? event_or_future.resolved? : event_or_future.fulfilled?) ||
-            # inlined super from BlockedPromise
-            countdown.zero?
+          # inlined super from BlockedPromise
+          countdown.zero?
       end
     end
 
     class DelayPromise < InnerPromise
-
       def initialize(default_executor)
         event    = Event.new(self, default_executor)
         @Delayed = LockFreeStack.of1(self)
-        super event
+        super(event)
         event.add_callback_clear_delayed_node @Delayed.peek
       end
 
@@ -2108,7 +2089,6 @@ module Concurrent
       def delayed_because
         @Delayed
       end
-
     end
 
     class ScheduledPromise < InnerPromise
@@ -2123,7 +2103,7 @@ module Concurrent
       private
 
       def initialize(default_executor, intended_time)
-        super Event.new(self, default_executor)
+        super(Event.new(self, default_executor))
 
         @IntendedTime = intended_time
 
@@ -2172,7 +2152,5 @@ module Concurrent
                      :AnyResolvedEventPromise,
                      :DelayPromise,
                      :ScheduledPromise
-
-
   end
 end

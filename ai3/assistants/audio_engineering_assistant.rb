@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class AudioEngineerAssistant
   def initialize
-    @tools = [:equalizer, :reverb, :compressor, :limiter, :delay, :chorus, :flanger, :noise_gate]
+    @tools = %i[equalizer reverb compressor limiter delay chorus flanger noise_gate]
     @project_files = []
   end
 
@@ -83,7 +85,7 @@ class AudioEngineerAssistant
 
   # Mix the project files together
   def mix_project(output_file)
-    return puts "Error: No project files to mix." if @project_files.empty?
+    return puts 'Error: No project files to mix.' if @project_files.empty?
 
     puts "Mixing project files into #{output_file}..."
     # Placeholder for mixing logic
@@ -93,11 +95,10 @@ end
 
 # Example usage
 audio_assistant = AudioEngineerAssistant.new
-audio_assistant.add_project_file("track1.wav")
-audio_assistant.add_project_file("track2.wav")
-audio_assistant.apply_equalizer("track1.wav", 1000, 5)
-audio_assistant.apply_reverb("track2.wav", 0.5, 0.3)
-audio_assistant.apply_delay("track1.wav", 500, 70)
-audio_assistant.apply_chorus("track2.wav", 0.8, 1.5)
-audio_assistant.mix_project("final_mix.wav")
-
+audio_assistant.add_project_file('track1.wav')
+audio_assistant.add_project_file('track2.wav')
+audio_assistant.apply_equalizer('track1.wav', 1000, 5)
+audio_assistant.apply_reverb('track2.wav', 0.5, 0.3)
+audio_assistant.apply_delay('track1.wav', 500, 70)
+audio_assistant.apply_chorus('track2.wav', 0.8, 1.5)
+audio_assistant.mix_project('final_mix.wav')

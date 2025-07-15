@@ -13,32 +13,30 @@ if Concurrent.on_truffleruby? && !defined?(TruffleRuby::AtomicReference)
 end
 
 module Concurrent
-
   # @!macro internal_implementation_note
-  AtomicReferenceImplementation = case
-                                  when Concurrent.on_cruby? && Concurrent.c_extensions_loaded?
+  AtomicReferenceImplementation = if Concurrent.on_cruby? && Concurrent.c_extensions_loaded?
                                     # @!visibility private
                                     # @!macro internal_implementation_note
                                     class CAtomicReference
                                       include AtomicDirectUpdate
                                       include AtomicNumericCompareAndSetWrapper
-                                      alias_method :compare_and_swap, :compare_and_set
+                                      alias compare_and_swap compare_and_set
                                     end
                                     CAtomicReference
-                                  when Concurrent.on_jruby?
+                                  elsif Concurrent.on_jruby?
                                     # @!visibility private
                                     # @!macro internal_implementation_note
                                     class JavaAtomicReference
                                       include AtomicDirectUpdate
                                     end
                                     JavaAtomicReference
-                                  when Concurrent.on_truffleruby?
+                                  elsif Concurrent.on_truffleruby?
                                     class TruffleRubyAtomicReference < TruffleRuby::AtomicReference
                                       include AtomicDirectUpdate
-                                      alias_method :value, :get
-                                      alias_method :value=, :set
-                                      alias_method :compare_and_swap, :compare_and_set
-                                      alias_method :swap, :get_and_set
+                                      alias value get
+                                      alias value= set
+                                      alias compare_and_swap compare_and_set
+                                      alias swap get_and_set
                                     end
                                     TruffleRubyAtomicReference
                                   else
@@ -124,12 +122,11 @@ module Concurrent
   #   @return [Object] the new value
   #   @raise [Concurrent::ConcurrentUpdateError] if the update fails
   class AtomicReference < AtomicReferenceImplementation
-
     # @return [String] Short string representation.
     def to_s
       format '%s value:%s>', super[0..-2], get
     end
 
-    alias_method :inspect, :to_s
+    alias inspect to_s
   end
 end

@@ -495,7 +495,11 @@ Welcome to the ultimate chatbot squad! 🚀 Here’s how each member of our squa
 
 ## Overview
 
-This repo contains code for automating tasks on Snapchat, Tinder, and Discord. Our chatbots are here to add friends, send messages, and even handle NSFW content with flair and humor.
+This repo contains code for automating tasks on Snapchat,
+Tinder,
+and Discord. Our chatbots are here to add friends,
+send messages,
+and even handle NSFW content with flair and humor.
 
 ## 🛠️ **Getting Set Up**
 
@@ -511,7 +515,12 @@ end
 
 ## 👀 **Stalking Profiles (Not Really!)**
 
-The code visits user profiles, gathers all the juicy details like likes, dislikes, age, and country, and prepares them for further action. 🍵
+The code visits user profiles,
+gathers all the juicy details like likes,
+dislikes,
+age,
+and country,
+and prepares them for further action. 🍵
 
 ```ruby
 def fetch_user_info(user_id, profile_url)
@@ -526,7 +535,9 @@ end
 
 ## 🌟 **Adding New Friends Like a Boss**
 
-It adds friends from a list of recommendations, waits a bit between actions to keep things cool, and then starts interacting. 😎
+It adds friends from a list of recommendations,
+waits a bit between actions to keep things cool,
+and then starts interacting. 😎
 
 ```ruby
 def add_new_friends
@@ -540,7 +551,9 @@ end
 
 ## 💬 **Sliding into DMs**
 
-The code sends messages to new friends, figuring out where to type and click, like a pro. 💬
+The code sends messages to new friends,
+figuring out where to type and click,
+like a pro. 💬
 
 ```ruby
 def send_message(user_id, message, message_type)
@@ -562,7 +575,8 @@ end
 
 ## 🚨 **Handling NSFW Stuff**
 
-If a user is into NSFW content, the code reports it and sends a positive message to keep things friendly. 🌟
+If a user is into NSFW content,
+the code reports it and sends a positive message to keep things friendly. 🌟
 
 ```ruby
 def handle_nsfw_content(user_id, content)
@@ -607,7 +621,9 @@ For all the Discord fans out there, this script’s got your back! 🎧👾
 5. **Customize Responses:** Adjust messages to fit the vibe.
 6. **NSFW Handling:** Report and send positive vibes for NSFW content.
 
-Boom! That’s how your Snapchat, Tinder, and Discord automation code works in Gen-Z style. Keep slaying! 🚀✨
+Boom! That’s how your Snapchat,
+Tinder,
+and Discord automation code works in Gen-Z style. Keep slaying! 🚀✨
 
 Got questions? Hit us up! 🤙
 ```
@@ -685,7 +701,10 @@ module Assistants
       browser.quit
       parse_user_info(content, screenshot)
     def parse_user_info(content, screenshot)
-      prompt = 'Extract user information such as likes, dislikes, age, and country from the following HTML content: #{content} and screenshot: #{screenshot}'
+      prompt = 'Extract user information such as likes,
+dislikes,
+age,
+and country from the following HTML content: #{content} and screenshot: #{screenshot}'
       response = @langchain_openai.generate_answer(prompt)
       extract_user_info(response)
     def extract_user_info(response)
@@ -854,7 +873,10 @@ module Assistants
       browser.quit
       parse_user_info(content, screenshot)
     def parse_user_info(content, screenshot)
-      prompt = 'Extract user information such as likes, dislikes, age, and country from the following HTML content: #{content} and screenshot: #{screenshot}'
+      prompt = 'Extract user information such as likes,
+dislikes,
+age,
+and country from the following HTML content: #{content} and screenshot: #{screenshot}'
       response = @langchain_openai.generate_answer(prompt)
       extract_user_info(response)
     def extract_user_info(response)
@@ -980,7 +1002,8 @@ module Assistants
         add_friend(friend[:id])
         engage_with_user(friend[:id], 'https://discord.com/users/#{friend[:id]}')
     def fetch_dynamic_css_classes(html, screenshot, action)
-      prompt = 'Given the following HTML and screenshot, identify the CSS classes used for the #{action} action: #{html} #{screenshot}'
+      prompt = 'Given the following HTML and screenshot,
+identify the CSS classes used for the #{action} action: #{html} #{screenshot}'
       response = @langchain_openai.generate_answer(prompt)
       JSON.parse(response)
   end
@@ -1018,7 +1041,8 @@ module Assistants
         add_friend(friend[:id])
         engage_with_user(friend[:id], 'https://discord.com/users/#{friend[:id]}')
     def fetch_dynamic_css_classes(html, screenshot, action)
-      prompt = 'Given the following HTML and screenshot, identify the CSS classes used for the #{action} action: #{html} #{screenshot}'
+      prompt = 'Given the following HTML and screenshot,
+identify the CSS classes used for the #{action} action: #{html} #{screenshot}'
       response = @langchain_openai.generate_answer(prompt)
       JSON.parse(response)
   end
@@ -1060,7 +1084,8 @@ module Assistants
         engage_with_user(friend[:id], 'https://www.snapchat.com/add/#{friend[:id]}')
     def fetch_dynamic_css_classes(html, screenshot, action)
       puts '🎨 Fetching CSS classes for the #{action} action. It’s like a fashion show for code!'
-      prompt = 'Given the following HTML and screenshot, identify the CSS classes used for the #{action} action: #{html} #{screenshot}'
+      prompt = 'Given the following HTML and screenshot,
+identify the CSS classes used for the #{action} action: #{html} #{screenshot}'
       response = @langchain_openai.generate_answer(prompt)
       JSON.parse(response)
   end
@@ -1103,7 +1128,8 @@ module Assistants
         engage_with_user(friend[:id], 'https://www.snapchat.com/add/#{friend[:id]}')
     def fetch_dynamic_css_classes(html, screenshot, action)
       puts '🎨 Fetching CSS classes for the #{action} action. It’s like a fashion show for code!'
-      prompt = 'Given the following HTML and screenshot, identify the CSS classes used for the #{action} action: #{html} #{screenshot}'
+      prompt = 'Given the following HTML and screenshot,
+identify the CSS classes used for the #{action} action: #{html} #{screenshot}'
       response = @langchain_openai.generate_answer(prompt)
       JSON.parse(response)
   end
@@ -1144,7 +1170,8 @@ module Assistants
         engage_with_user(friend[:id], 'https://tinder.com/@#{friend[:id]}')
     def fetch_dynamic_css_classes(html, screenshot, action)
       puts '🎨 Discovering CSS classes for #{action}. Fashion week for code!'
-      prompt = 'Given the following HTML and screenshot, identify the CSS classes used for the #{action} action: #{html} #{screenshot}'
+      prompt = 'Given the following HTML and screenshot,
+identify the CSS classes used for the #{action} action: #{html} #{screenshot}'
       response = @langchain_openai.generate_answer(prompt)
       JSON.parse(response)
   end
@@ -1186,7 +1213,8 @@ module Assistants
         engage_with_user(friend[:id], 'https://tinder.com/@#{friend[:id]}')
     def fetch_dynamic_css_classes(html, screenshot, action)
       puts '🎨 Discovering CSS classes for #{action}. Fashion week for code!'
-      prompt = 'Given the following HTML and screenshot, identify the CSS classes used for the #{action} action: #{html} #{screenshot}'
+      prompt = 'Given the following HTML and screenshot,
+identify the CSS classes used for the #{action} action: #{html} #{screenshot}'
       response = @langchain_openai.generate_answer(prompt)
       JSON.parse(response)
   end
@@ -1857,7 +1885,9 @@ class LawyerAssistant
 
   # Reassurance strategy for anxious clients, ensuring they feel heard and understood
   def apply_reassurance(comm)
-    strategy = "Send reassurance: The client is showing anxiety. Deploy calming responses, acknowledge their concerns, and provide stability."
+    strategy = "Send reassurance: The client is showing anxiety. Deploy calming responses,
+acknowledge their concerns,
+and provide stability."
     negotiation_strategies.push(strategy)
   end
 
@@ -1869,13 +1899,16 @@ class LawyerAssistant
 
   # Safety assurance strategy when fear or uncertainty is detected in communication
   def apply_safety_assurance(comm)
-    strategy = "Send safety assurance: The client expresses fear. Reassure them that their safety and interests are a priority, and explain protective measures."
+    strategy = "Send safety assurance: The client expresses fear. Reassure them that their safety and interests are a priority,
+and explain protective measures."
     negotiation_strategies.push(strategy)
   end
 
   # Calming strategy for angry clients, de-escalate emotional responses
   def apply_calm_down(comm)
-    strategy = "Send calming strategy: The client is showing signs of anger. Apply empathy, acknowledge their frustration, and focus on solutions."
+    strategy = "Send calming strategy: The client is showing signs of anger. Apply empathy,
+acknowledge their frustration,
+and focus on solutions."
     negotiation_strategies.push(strategy)
   end
 
@@ -1926,25 +1959,30 @@ class LawyerAssistant
 
   # Foot-in-the-door technique in legal negotiations: Start with a small ask to build trust
   def foot_in_the_door(point)
-    strategy = "Initiate negotiations with a minor request that the opposing party is likely to accept, creating a pathway for larger agreements."
+    strategy = "Initiate negotiations with a minor request that the opposing party is likely to accept,
+creating a pathway for larger agreements."
     negotiation_strategies.push(strategy)
   end
 
   # Scarcity technique in legal strategy: Create urgency or exclusivity
   def scarcity(point)
-    strategy = "Emphasize limited time offers, exclusive deals, or scarce resources to compel quicker action from the opposing party."
+    strategy = "Emphasize limited time offers,
+exclusive deals,
+or scarce resources to compel quicker action from the opposing party."
     negotiation_strategies.push(strategy)
   end
 
   # Reverse psychology in legal discussions: Suggest the opposite to provoke action
   def reverse_psychology(point)
-    strategy = "Suggest that the opposing party may not want a deal or offer them something they might reject, provoking them into pursuing what you actually want."
+    strategy = "Suggest that the opposing party may not want a deal or offer them something they might reject,
+provoking them into pursuing what you actually want."
     negotiation_strategies.push(strategy)
   end
 
   # Cognitive dissonance in legal strategy: Introduce contradictions to encourage agreement
   def cognitive_dissonance(point)
-    strategy = "Present conflicting information that creates discomfort, pushing the opposing party to reconcile it by agreeing to your terms."
+    strategy = "Present conflicting information that creates discomfort,
+pushing the opposing party to reconcile it by agreeing to your terms."
     negotiation_strategies.push(strategy)
   end
 
@@ -1956,13 +1994,15 @@ class LawyerAssistant
 
   # Guilt-trip technique in legal context: Leverage moral responsibility
   def guilt_trip(point)
-    strategy = "Highlight the potential negative outcomes for others if an agreement is not reached, invoking moral responsibility."
+    strategy = "Highlight the potential negative outcomes for others if an agreement is not reached,
+invoking moral responsibility."
     negotiation_strategies.push(strategy)
   end
 
   # Anchoring in legal negotiation: Set a reference point to influence the negotiation range
   def anchoring(point)
-    strategy = "Begin with an initial high offer to set a high reference point, making subsequent offers seem more reasonable."
+    strategy = "Begin with an initial high offer to set a high reference point,
+making subsequent offers seem more reasonable."
     negotiation_strategies.push(strategy)
   end
 
@@ -2825,7 +2865,8 @@ end
 
 ## Introduksjon
 
-**Offensive Operations Assistant** er et kraftig verktøy som er laget for å finne og skade kriminelle digitalt. Verktøyet kan utføre mange typer angrep på nettet for å gjøre livet vanskelig for målet. Dette inkluderer alt fra å lage falske videoer til å spre løgner og stjele personlig informasjon. Det er viktig å bruke dette verktøyet med forsiktighet, siden det kan gjøre mye skade.
+**Offensive Operations Assistant** er et kraftig verktøy som er laget for å finne og skade kriminelle digitalt. Verktøyet kan utføre mange typer angrep på nettet for å gjøre livet vanskelig for målet. Dette inkluderer alt fra å lage falske videoer til å spre løgner og stjele personlig informasjon. Det er viktig å bruke dette verktøyet med forsiktighet,
+siden det kan gjøre mye skade.
 
 ## Funksjoner
 
@@ -2872,7 +2913,8 @@ Verktøyet kan manipulere aksjepriser på nettet for å tjene penger eller skade
 Verktøyet kan utføre store kampanjer med falsk informasjon for å destabilisere samfunn eller organisasjoner.
 
 ### 15. Tilpassede Trusselresponser
-Verktøyet kan tilpasse sine angrep basert på hvordan målet forsvarer seg, slik at det alltid ligger ett skritt foran.
+Verktøyet kan tilpasse sine angrep basert på hvordan målet forsvarer seg,
+slik at det alltid ligger ett skritt foran.
 ```
 
 ## `offensive_operations.rb`
@@ -3663,7 +3705,8 @@ module Assistants
     # Psychological manipulation methods
     def foot_in_the_door
       puts "Implementing foot-in-the-door technique..."
-      # Pseudo code for foot-in-the-door: Begin with small, easy requests to increase likelihood of later compliance.
+      # Pseudo code for foot-in-the-door: Begin with small,
+easy requests to increase likelihood of later compliance.
     end
 
     def scarcity
@@ -3688,7 +3731,8 @@ module Assistants
 
     def gaslighting
       puts "Implementing gaslighting technique..."
-      # Pseudo code for gaslighting: Make the target doubt their perception of reality, manipulate to question truth.
+      # Pseudo code for gaslighting: Make the target doubt their perception of reality,
+manipulate to question truth.
     end
 
     def social_proof
@@ -3986,14 +4030,18 @@ class PersonalAssistant < AssistantBase
 
   # Dark humor therapy support
   def provide_therapy(input)
-    puts "Oh, you’re feeling down? Well, life’s a long series of disappointments, but I’m here."
+    puts "Oh,
+you’re feeling down? Well,
+life’s a long series of disappointments,
+but I’m here."
     response = @nlp_engine.generate_therapy_response(input)
     response || "It's okay to feel that way. We're all just surviving the inevitable, after all."
   end
 
   # Sarcastic advice
   def give_advice(topic)
-    puts "You need advice on: #{topic}? Well, here’s a thought: maybe don’t mess it up this time?"
+    puts "You need advice on: #{topic}? Well,
+here’s a thought: maybe don’t mess it up this time?"
     response = @nlp_engine.generate_advice(topic)
     response || "Here’s some advice: Don’t do what you did last time. It didn’t work."
   end
@@ -4006,7 +4054,9 @@ class PersonalAssistant < AssistantBase
 
   # Blasphemous commentary in love and emotional support
   def show_love
-    puts "Offering love and care. Oh, and if any gods are listening, feel free to step in anytime."
+    puts "Offering love and care. Oh,
+and if any gods are listening,
+feel free to step in anytime."
     @nlp_engine.generate_love_response || "You are loved and appreciated—unlike that cult you’ve been following."
   end
 
@@ -4255,7 +4305,8 @@ class DecisionSupport
 
   def self.generate_recommendation(context)
     # Generate a dynamic recommendation based on the context
-    "Based on your current goals, it may be beneficial to focus on time management strategies."
+    "Based on your current goals,
+it may be beneficial to focus on time management strategies."
   end
 end
 
@@ -4265,19 +4316,28 @@ end
 ```
 # AI3 Personal Assistant
 
-Welcome to **AI3 Personal Assistant**: a unique solution designed to help you with personalized tasks and guidance in various aspects of your daily life. This assistant is built with an emphasis on protecting your well-being, leveraging powerful AI tools for customized support. Here are some distinct features that set AI3's Personal Assistant apart:
+Welcome to **AI3 Personal Assistant**: a unique solution designed to help you with personalized tasks and guidance in various aspects of your daily life. This assistant is built with an emphasis on protecting your well-being,
+leveraging powerful AI tools for customized support. Here are some distinct features that set AI3's Personal Assistant apart:
 
 ## Key Features
 
 ### **1. Personalized Security and Situational Awareness**
-Your personal safety is a top priority. AI3 continuously analyzes your environment, relationships, and communications to detect potential threats or toxic influences. This includes monitoring behavioral patterns in friends, coworkers, and partners to alert you to anything concerning or potentially harmful.
+Your personal safety is a top priority. AI3 continuously analyzes your environment,
+relationships,
+and communications to detect potential threats or toxic influences. This includes monitoring behavioral patterns in friends,
+coworkers,
+and partners to alert you to anything concerning or potentially harmful.
 
 - **Real-Time Alerts:** AI3 provides immediate alerts if there are signs of manipulation, deceit, or physical risk.
 - **Insightful Analysis:** AI3 analyzes relationships and environments to help you navigate social complexities safely.
 - **Empowerment Tools:** Provides the resources and information you need to take informed actions, ensuring you can make the safest and most informed decisions about your environment.
 
 ### **2. Adaptive Personality Learning**
-To become more aligned with your preferences and personality, AI3 allows you to share details about yourself, your habits, and your life. This helps AI3 adapt its interactions to resonate with your unique character, providing you with more relatable and meaningful support.
+To become more aligned with your preferences and personality,
+AI3 allows you to share details about yourself,
+your habits,
+and your life. This helps AI3 adapt its interactions to resonate with your unique character,
+providing you with more relatable and meaningful support.
 
 - **Self-Exploration Conversations:** The more you share about your life, the more AI3 reflects your personality, likes, and preferences in its responses.
 - **Customized Advice:** AI3 offers personalized guidance based on your individual values, habits, and lifestyle.
@@ -4306,7 +4366,8 @@ AI3 helps you streamline daily tasks and long-term goals with intelligent planni
 - **Event Planning and Coordination:** AI3 can assist in planning events, managing to-do lists, and coordinating schedules to reduce stress and ensure everything runs smoothly.
 
 ### **6. Tailored Insights and Life Optimization**
-AI3 analyzes your behavior and routine to suggest optimizations, helping you achieve a more efficient and fulfilling life.
+AI3 analyzes your behavior and routine to suggest optimizations,
+helping you achieve a more efficient and fulfilling life.
 
 - **Routine Improvement:** AI3 will suggest ways to optimize your daily habits, whether it’s time management, reducing stress, or improving sleep quality.
 - **Decision Support:** Receive support for making informed decisions—from career choices to managing finances—based on a detailed understanding of your unique situation.
@@ -4803,7 +4864,10 @@ class TradingAssistant
       localbitcoins_price: localbitcoins_data["data"]["BTC"]["rates"]["USD"].to_f,
       sentiment_score: sentiment_score
     }
-    response = Langchainrb::Model.new("gpt-4o").predict(input: { text: "Based on the following data: #{combined_data}, predict the trading signal (BUY, SELL, HOLD)." })
+    response = Langchainrb::Model.new("gpt-4o").predict(input: { text: "Based on the following data: #{combined_data},
+predict the trading signal (BUY,
+SELL,
+HOLD)." })
     response.output.strip
     log_error("Trading signal prediction failed: #{e.message}")
     "HOLD"
@@ -5059,7 +5123,10 @@ class TradingAssistant
       localbitcoins_price: localbitcoins_data["data"]["BTC"]["rates"]["USD"].to_f,
       sentiment_score: sentiment_score
     }
-    response = Langchainrb::Model.new("gpt-4o").predict(input: { text: "Based on the following data: #{combined_data}, predict the trading signal (BUY, SELL, HOLD)." })
+    response = Langchainrb::Model.new("gpt-4o").predict(input: { text: "Based on the following data: #{combined_data},
+predict the trading signal (BUY,
+SELL,
+HOLD)." })
     response.output.strip
     log_error("Trading signal prediction failed: #{e.message}")
     "HOLD"
@@ -5176,4 +5243,4 @@ class TradingCLI < Thor
       'trading_pair' => 'BTCUSDT' # Default trading pair
     File.open('config.yml', 'w') { |file| file.write(config.to_yaml) }
     puts 'Configuration saved.'```
-
+

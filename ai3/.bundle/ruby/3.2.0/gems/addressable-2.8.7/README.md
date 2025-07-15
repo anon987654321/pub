@@ -1,16 +1,16 @@
 # Addressable
 
 <dl>
-  <dt>Homepage</dt><dd><a href="https://github.com/sporkmonger/addressable">github.com/sporkmonger/addressable</a></dd>
+<dt>Homepage</dt><dd><a href="https://github.com/sporkmonger/addressable">github.com/sporkmonger/addressable</a></dd>.
   <dt>Author</dt><dd><a href="mailto:bob@sporkmonger.com">Bob Aman</a></dd>
   <dt>Copyright</dt><dd>Copyright © Bob Aman</dd>
   <dt>License</dt><dd>Apache 2.0</dd>
 </dl>
 
 [![Gem Version](https://img.shields.io/gem/dt/addressable.svg)][gem]
-[![Build Status](https://github.com/sporkmonger/addressable/workflows/CI/badge.svg)][actions]
-[![Test Coverage Status](https://img.shields.io/coveralls/sporkmonger/addressable.svg)][coveralls]
-[![Documentation Coverage Status](https://inch-ci.org/github/sporkmonger/addressable.svg?branch=master)][inch]
+[![Build Status](https://github.com/sporkmonger/addressable/workflows/CI/badge.svg)][actions].
+[![Test Coverage Status](https://img.shields.io/coveralls/sporkmonger/addressable.svg)][coveralls].
+[![Documentation Coverage Status](https://inch-ci.org/github/sporkmonger/addressable.svg?branch=master)][inch].
 
 [gem]: https://rubygems.org/gems/addressable
 [actions]: https://github.com/sporkmonger/addressable/actions
@@ -105,7 +105,8 @@ $ gem install idn-ruby
 
 # Semantic Versioning
 
-This project uses [Semantic Versioning](https://semver.org/). You can (and should) specify your
+This project uses [Semantic Versioning](https://semver.org/).
+You can (and should) specify your.
 dependency using a pessimistic version constraint covering the major and minor
 values:
 

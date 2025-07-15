@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #!/usr/bin/env zsh
 # Removes carriage returns, trailing whitespaces, and extra blank lines from text files.
 # Usage: ./clean.sh [target_folder]

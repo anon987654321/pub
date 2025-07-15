@@ -1,5 +1,7 @@
+#!/bin/bash
+
 #!/usr/bin/env zsh
-set -e
+set -euo pipefail
 
 # Brgen TV setup: AI-generated video content streaming platform with shows, episodes, live search, infinite scroll, and anonymous features on OpenBSD 7.5, unprivileged user
 

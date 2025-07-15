@@ -3,13 +3,13 @@
 module BCrypt
 end
 
-if RUBY_PLATFORM == "java"
+if RUBY_PLATFORM == 'java'
   require 'java'
 else
-  require "openssl"
+  require 'openssl'
 end
 
-require "bcrypt_ext"
+require 'bcrypt_ext'
 
 require 'bcrypt/error'
 require 'bcrypt/engine'

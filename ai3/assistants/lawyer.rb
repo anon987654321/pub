@@ -1,32 +1,35 @@
+# frozen_string_literal: true
+
 # encoding: utf-8
+
 # Lawyer Assistant
 
-require_relative "../lib/universal_scraper"
-require_relative "../lib/weaviate_integration"
+require_relative '../lib/universal_scraper'
+require_relative '../lib/weaviate_integration'
 # require_relative "../lib/translations"
 
 module Assistants
   class Lawyer
-#    include UniversalScraper
+    #    include UniversalScraper
 
     URLS = [
-      "https://lovdata.no/",
-      "https://bufdir.no/",
-      "https://barnevernsinstitusjonsutvalget.no/",
-      "https://lexisnexis.com/",
-      "https://westlaw.com/",
-      "https://hg.org/"
+      'https://lovdata.no/',
+      'https://bufdir.no/',
+      'https://barnevernsinstitusjonsutvalget.no/',
+      'https://lexisnexis.com/',
+      'https://westlaw.com/',
+      'https://hg.org/'
     ]
 
     SUBSPECIALTIES = {
-      family: [:family_law, :divorce, :child_custody],
-      corporate: [:corporate_law, :business_contracts, :mergers_and_acquisitions],
-      criminal: [:criminal_defense, :white_collar_crime, :drug_offenses],
-      immigration: [:immigration_law, :visa_applications, :deportation_defense],
-      real_estate: [:property_law, :real_estate_transactions, :landlord_tenant_disputes]
+      family: %i[family_law divorce child_custody],
+      corporate: %i[corporate_law business_contracts mergers_and_acquisitions],
+      criminal: %i[criminal_defense white_collar_crime drug_offenses],
+      immigration: %i[immigration_law visa_applications deportation_defense],
+      real_estate: %i[property_law real_estate_transactions landlord_tenant_disputes]
     }
 
-    def initialize(language: "en", subspecialty: :general)
+    def initialize(language: 'en', subspecialty: :general)
       @universal_scraper = UniversalScraper.new
       @weaviate_integration = WeaviateIntegration.new
       @language = language
@@ -52,24 +55,27 @@ module Assistants
 
     def ensure_data_prepared
       URLS.each do |url|
-        scrape_and_index(url, @universal_scraper, @weaviate_integration) unless @weaviate_integration.check_if_indexed(url)
+        unless @weaviate_integration.check_if_indexed(url)
+          scrape_and_index(url, @universal_scraper,
+                           @weaviate_integration)
+        end
       end
     end
 
     def questions
       case @subspecialty
       when :family
-        [:describe_family_issue, :child_custody_concerns, :desired_outcome]
+        %i[describe_family_issue child_custody_concerns desired_outcome]
       when :corporate
-        [:describe_business_issue, :contract_details, :company_impact]
+        %i[describe_business_issue contract_details company_impact]
       when :criminal
-        [:describe_crime_allegation, :evidence_details, :defense_strategy]
+        %i[describe_crime_allegation evidence_details defense_strategy]
       when :immigration
-        [:describe_immigration_case, :visa_status, :legal_disputes]
+        %i[describe_immigration_case visa_status legal_disputes]
       when :real_estate
-        [:describe_property_issue, :transaction_details, :legal_disputes]
+        %i[describe_property_issue transaction_details legal_disputes]
       else
-        [:describe_legal_issue, :impact_on_you, :desired_outcome]
+        %i[describe_legal_issue impact_on_you desired_outcome]
       end
     end
 
@@ -96,18 +102,18 @@ module Assistants
       analyze_abuse_allegations(input)
     end
 
-    def analyze_abuse_allegations(input)
-      puts "Analyzing abuse allegations and counter-evidence..."
+    def analyze_abuse_allegations(_input)
+      puts 'Analyzing abuse allegations and counter-evidence...'
       gather_counter_evidence
     end
 
     def gather_counter_evidence
-      puts "Gathering counter-evidence..."
+      puts 'Gathering counter-evidence...'
       highlight_important_cases
     end
 
     def highlight_important_cases
-      puts "Highlighting important cases..."
+      puts 'Highlighting important cases...'
     end
 
     def process_evidence_and_documents(input)
@@ -124,18 +130,18 @@ module Assistants
     end
 
     def challenge_legal_basis
-      puts "Challenging the legal basis of the emergency removal..."
+      puts 'Challenging the legal basis of the emergency removal...'
       propose_reunification_plan
     end
 
     def propose_reunification_plan
-      puts "Proposing a reunification plan..."
+      puts 'Proposing a reunification plan...'
     end
 
     def collect_feedback
       puts @translations[:feedback_request]
       feedback = gets.chomp.downcase
-      puts feedback == "yes" ? @translations[:feedback_positive] : @translations[:feedback_negative]
+      puts feedback == 'yes' ? @translations[:feedback_positive] : @translations[:feedback_negative]
     end
 
     def read_document(path)

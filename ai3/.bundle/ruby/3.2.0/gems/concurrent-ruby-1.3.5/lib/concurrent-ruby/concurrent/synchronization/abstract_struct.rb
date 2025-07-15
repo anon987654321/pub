@@ -1,10 +1,8 @@
 module Concurrent
   module Synchronization
-
     # @!visibility private
     # @!macro internal_implementation_note
     module AbstractStruct
-
       # @!visibility private
       def initialize(*values)
         super()
@@ -19,7 +17,7 @@ module Concurrent
       def length
         self.class::MEMBERS.length
       end
-      alias_method :size, :length
+      alias size length
 
       # @!macro struct_members
       #
@@ -50,7 +48,9 @@ module Concurrent
       #
       # @!visibility private
       def ns_to_h
-        length.times.reduce({}){|memo, i| memo[self.class::MEMBERS[i]] = @values[i]; memo}
+        length.times.each_with_object({}) do |i, memo|
+          memo[self.class::MEMBERS[i]] = @values[i]
+        end
       end
 
       # @!macro struct_get
@@ -61,6 +61,7 @@ module Concurrent
           if member >= @values.length
             raise IndexError.new("offset #{member} too large for struct(size:#{@values.length})")
           end
+
           @values[member]
         else
           send(member)
@@ -73,14 +74,14 @@ module Concurrent
       #
       # @!visibility private
       def ns_equality(other)
-        self.class == other.class && self.values == other.values
+        self.class == other.class && values == other.values
       end
 
       # @!macro struct_each
       #
       # @!visibility private
-      def ns_each
-        values.each{|value| yield value }
+      def ns_each(&)
+        values.each(&)
       end
 
       # @!macro struct_each_pair
@@ -95,8 +96,8 @@ module Concurrent
       # @!macro struct_select
       #
       # @!visibility private
-      def ns_select
-        values.select{|value| yield value }
+      def ns_select(&)
+        values.select(&)
       end
 
       # @!macro struct_inspect
@@ -104,35 +105,33 @@ module Concurrent
       # @!visibility private
       def ns_inspect
         struct = pr_underscore(self.class.ancestors[1])
-        clazz = ((self.class.to_s =~ /^#<Class:/) == 0) ? '' : " #{self.class}"
+        clazz = (self.class.to_s =~ /^#<Class:/) == 0 ? '' : " #{self.class}"
         "#<#{struct}#{clazz} #{ns_to_h}>"
       end
 
       # @!macro struct_merge
       #
       # @!visibility private
-      def ns_merge(other, &block)
-        self.class.new(*self.to_h.merge(other, &block).values)
+      def ns_merge(other, &)
+        self.class.new(*to_h.merge(other, &).values)
       end
 
       # @!visibility private
       def ns_initialize_copy
         @values = @values.map do |val|
-          begin
-            val.clone
-          rescue TypeError
-            val
-          end
+          val.clone
+        rescue TypeError
+          val
         end
       end
 
       # @!visibility private
       def pr_underscore(clazz)
         word = clazz.to_s.dup # dup string to workaround JRuby 9.2.0.0 bug https://github.com/jruby/jruby/issues/5229
-        word.gsub!(/::/, '/')
-        word.gsub!(/([A-Z]+)([A-Z][a-z])/,'\1_\2')
-        word.gsub!(/([a-z\d])([A-Z])/,'\1_\2')
-        word.tr!("-", "_")
+        word.gsub!('::', '/')
+        word.gsub!(/([A-Z]+)([A-Z][a-z])/, '\1_\2')
+        word.gsub!(/([a-z\d])([A-Z])/, '\1_\2')
+        word.tr!('-', '_')
         word.downcase!
         word
       end
@@ -141,10 +140,11 @@ module Concurrent
       def self.define_struct_class(parent, base, name, members, &block)
         clazz = Class.new(base || Object) do
           include parent
-          self.const_set(:MEMBERS, members.collect{|member| member.to_s.to_sym}.freeze)
+          const_set(:MEMBERS, members.collect { |member| member.to_s.to_sym }.freeze)
           def ns_initialize(*values)
             raise ArgumentError.new('struct size differs') if values.length > length
-            @values = values.fill(nil, values.length..length-1)
+
+            @values = values.fill(nil, values.length..length - 1)
           end
         end
         unless name.nil?

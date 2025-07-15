@@ -1,17 +1,17 @@
 # frozen_string_literal: true
 
-require "replicate"
-require "aws-sdk-s3"
-require "open-uri"
-require "fileutils"
+require 'replicate'
+require 'aws-sdk-s3'
+require 'open-uri'
+require 'fileutils'
 
-S3_BUCKET_NAME = "la2"
-AWS_REGION = "eu-north-1"
-AWS_ACCESS_KEY_ID = ENV["AWS_ACCESS_KEY_ID"]
-AWS_SECRET_ACCESS_KEY = ENV["AWS_SECRET_ACCESS_KEY"]
+S3_BUCKET_NAME = 'la2'
+AWS_REGION = 'eu-north-1'
+AWS_ACCESS_KEY_ID = ENV.fetch('AWS_ACCESS_KEY_ID', nil)
+AWS_SECRET_ACCESS_KEY = ENV.fetch('AWS_SECRET_ACCESS_KEY', nil)
 
-REPLICATE_API_KEY = ENV["REPLICATE_API_KEY"]
-REPLICATE_MODEL_NAME = "nightmareai/real-esrgan"
+REPLICATE_API_KEY = ENV.fetch('REPLICATE_API_KEY', nil)
+REPLICATE_MODEL_NAME = 'nightmareai/real-esrgan'
 
 s3 =
   Aws::S3::Resource.new(
@@ -35,39 +35,39 @@ def fetch_prediction(prediction)
     prediction.refetch
     break if prediction.finished?
 
-    puts "Sleeping 30 seconds while waiting for image..."
+    puts 'Sleeping 30 seconds while waiting for image...'
     sleep 30
   end
 end
 
 def download_file(uri_str, output_file)
   URI.open(uri_str) do |uri|
-    File.open(output_file, "wb") { |file| file.write(uri.read) }
+    File.binwrite(output_file, uri.read)
   end
 end
 
-puts "Retrieving model #{ REPLICATE_MODEL_NAME }..."
+puts "Retrieving model #{REPLICATE_MODEL_NAME}..."
 model = Replicate.client.retrieve_model(REPLICATE_MODEL_NAME)
 version = model.latest_version
-puts "Model retrieved."
+puts 'Model retrieved.'
 
 input_folder = ARGV[0] || Dir.pwd
 output_folder = ARGV[1] || Dir.pwd
 
 FileUtils.mkdir_p(output_folder) unless File.directory?(output_folder)
 
-Dir.glob(File.join(input_folder, "*.png")) do |file|
-  puts "Processing file: #{ file } ..."
+Dir.glob(File.join(input_folder, '*.png')) do |file|
+  puts "Processing file: #{file} ..."
   image_url = upload_to_s3(file, bucket)
-  puts "Uploaded to S3: #{ image_url }"
+  puts "Uploaded to S3: #{image_url}"
 
   prediction = version.predict(image: image_url)
-  puts "Predicting..."
+  puts 'Predicting...'
   fetch_prediction(prediction)
-  puts "Prediction finished."
+  puts 'Prediction finished.'
 
   output_file =
-    File.join(output_folder, "#{ File.basename(file, '.png') }_output.png")
+    File.join(output_folder, "#{File.basename(file, '.png')}_output.png")
   download_file(prediction.output, output_file)
-  puts "Output file saved as: #{ output_file }"
+  puts "Output file saved as: #{output_file}"
 end

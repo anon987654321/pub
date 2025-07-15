@@ -2,7 +2,9 @@
 ```
 # OpenBSD
 
-Ruby On Rails, Falcon and gems run from an unprivileged user account that that only owns `tmp/` and `log/`. This ensures not only that the root system remains unaffected from a break-in attempt, but that a compromised app will not have access to modify any of its runtime files.
+Ruby On Rails,
+Falcon and gems run from an unprivileged user account that that only owns `tmp/` and `log/`. This ensures not only that the root system remains unaffected from a break-in attempt,
+but that a compromised app will not have access to modify any of its runtime files.
 
 - `relayd(8)` reverse proxy listens on HTTP/2 and forwards connctions to Falcon in addition to handling all TLS, which is disabled internally in Rails to save resources. 
 - `httpd(8)` and `acme-client(1)` listens on HTTP/1.1 for ACME-challenges for Let's Encrypt TLS certificate generation.
@@ -247,15 +249,22 @@ table <bruteforce> persist
 block quick from <bruteforce>
 
 # SSH
-pass in on $ext_if inet proto tcp from any to $ext_if port 22 keep state (max-src-conn 15, max-src-conn-rate 5/3, overload <bruteforce> flush global)
+pass in on $ext_if inet proto tcp from any to $ext_if port 22 keep state (max-src-conn 15,
+max-src-conn-rate 5/3,
+overload <bruteforce> flush global)
 
 # DNS
 domeneshop = "194.63.248.53"
-pass in on $ext_if inet proto { tcp, udp } from $ext_if to $domeneshop port 53 keep state
-pass in on $ext_if inet proto { tcp, udp } from any to $ext_if port 53 keep state (max-src-conn 100, max-src-conn-rate 15/5, overload <bruteforce> flush global)
+pass in on $ext_if inet proto { tcp,
+udp } from $ext_if to $domeneshop port 53 keep state
+pass in on $ext_if inet proto { tcp,
+udp } from any to $ext_if port 53 keep state (max-src-conn 100,
+max-src-conn-rate 15/5,
+overload <bruteforce> flush global)
 
 # HTTP/HTTPS
-pass in on $ext_if inet proto tcp from any to $ext_if port { 80, 443 } keep state
+pass in on $ext_if inet proto tcp from any to $ext_if port { 80,
+443 } keep state
 
 anchor "relayd/*"
 
@@ -482,4 +491,4 @@ www IN CNAME @
 bsdports.org. 3m IN CAA 0 issue "letsencrypt.org"
 
 ```
-
+

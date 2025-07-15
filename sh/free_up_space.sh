@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #!/usr/bin/env zsh
 # Finds and deletes large files to free up space.
 # Usage: ./free_up_space.sh [directory]
