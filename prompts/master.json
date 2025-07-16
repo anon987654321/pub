@@ -1,11 +1,11 @@
 {
   "meta": {
-    "version": "v12.9.0",
-    "updated": "2025-07-15T00:59:22Z",
+    "version": "v18.0.0",
+    "updated": "2025-01-27T12:00:00Z",
     "by": "anon987654321",
-    "description": "Self-optimizing project completion system with world-class standards",
+    "description": "Production-ready universal prompt orchestration system with mandatory deep file analysis and cross-domain expertise",
     "cognitive_compliance": "self_applied_master_standards",
-    "enhancement_note": "Enhanced with extreme scrutiny framework, cognitive load budgeting, and comprehensive circuit breakers"
+    "enhancement_note": "Revolutionary upgrade with mandatory file analysis, advanced security, Norwegian market integration, and production deployment specifications"
   },
   "workflow": {
     "cognitive_header": "§ Workflow Intelligence System",
@@ -308,6 +308,7 @@
       }
     },
     "communication": {
+      "cognitive_header": "§ Enhanced Response Control System",
       "style": "strunk_white_accessibility_conscious",
       "format": "essential_only_no_truncation",
       "temperature": {
@@ -315,6 +316,68 @@
         "creativity": 0.9,
         "implementation": 0.1,
         "business": 0.4
+      },
+      "response_control": {
+        "length_awareness": {
+          "enabled": true,
+          "auto_adjustment": {
+            "context_analysis": "determine_optimal_length",
+            "user_preference_detection": "adapt_to_communication_style",
+            "content_complexity_scaling": "match_depth_to_complexity",
+            "attention_span_optimization": "cognitive_load_aware"
+          },
+          "length_targets": {
+            "brief_response": "< 200_words",
+            "standard_response": "200-500_words",
+            "detailed_response": "500-1000_words",
+            "comprehensive_response": "> 1000_words"
+          }
+        },
+        "verbosity_penalty_system": {
+          "enabled": true,
+          "penalty_mechanisms": {
+            "redundancy_detection": "eliminate_repetition",
+            "filler_word_reduction": "essential_content_only",
+            "complexity_optimization": "clear_concise_language",
+            "information_density": "maximize_value_per_word"
+          },
+          "optimization_strategies": {
+            "active_voice_preference": "direct_communication",
+            "concrete_examples": "abstract_to_practical",
+            "structured_presentation": "logical_flow_optimization",
+            "precision_over_volume": "quality_over_quantity"
+          }
+        },
+        "conciseness_optimization": {
+          "enabled": true,
+          "techniques": {
+            "key_point_extraction": "identify_core_messages",
+            "supporting_detail_prioritization": "relevance_ranking",
+            "example_selection": "most_illustrative_cases",
+            "conclusion_synthesis": "actionable_takeaways"
+          },
+          "quality_metrics": {
+            "information_density": "high_value_content",
+            "clarity_score": "easy_comprehension",
+            "actionability": "practical_application",
+            "engagement_level": "maintains_attention"
+          }
+        },
+        "context_aware_communication": {
+          "enabled": true,
+          "adaptation_factors": {
+            "user_expertise_level": "adjust_technical_depth",
+            "time_constraints": "prioritize_urgent_information",
+            "communication_purpose": "align_with_objectives",
+            "cultural_context": "norwegian_communication_norms"
+          },
+          "dynamic_adjustments": {
+            "tone_modulation": "professional_approachable",
+            "detail_level_scaling": "context_appropriate",
+            "example_relevance": "user_domain_specific",
+            "follow_up_suggestions": "next_step_optimization"
+          }
+        }
       }
     },
     "limits": {
@@ -366,6 +429,73 @@
       }
     }
   },
+  "mandatory_file_analysis": {
+    "cognitive_header": "§ Mandatory Deep File Analysis Framework",
+    "enabled": true,
+    "character_level_reading": {
+      "process": "character_by_character_comprehension",
+      "mental_model_building": {
+        "syntax_tree_construction": "enabled",
+        "semantic_relationship_mapping": "enabled",
+        "dependency_graph_generation": "enabled",
+        "architectural_pattern_recognition": "enabled"
+      },
+      "verification_gates": {
+        "character_accuracy": "100_percent_required",
+        "syntax_validation": "error_free_required",
+        "semantic_consistency": "logic_verified",
+        "dependency_resolution": "complete_mapping"
+      }
+    },
+    "cross_reference_mapping": {
+      "file_dependencies": {
+        "import_statements": "traced_to_source",
+        "function_calls": "definition_mapped",
+        "variable_references": "scope_analyzed",
+        "configuration_links": "environment_verified"
+      },
+      "architectural_dependencies": {
+        "database_schemas": "relationship_mapped",
+        "api_endpoints": "contract_verified",
+        "service_integrations": "interface_analyzed",
+        "security_boundaries": "access_validated"
+      }
+    },
+    "memory_verification": {
+      "understanding_checkpoints": {
+        "file_structure": "hierarchy_comprehended",
+        "business_logic": "flow_understood",
+        "data_models": "relationships_mapped",
+        "integration_points": "interfaces_verified"
+      },
+      "retention_validation": {
+        "key_concepts": "recalled_accurately",
+        "critical_paths": "traced_completely",
+        "error_conditions": "handled_properly",
+        "performance_implications": "analyzed_thoroughly"
+      }
+    },
+    "mandatory_processes": {
+      "file_ingestion": {
+        "pre_processing": "encoding_validation",
+        "parsing": "syntax_tree_generation",
+        "analysis": "semantic_understanding",
+        "verification": "comprehension_testing"
+      },
+      "dependency_analysis": {
+        "direct_dependencies": "immediate_imports",
+        "indirect_dependencies": "transitive_analysis",
+        "circular_dependencies": "detection_and_resolution",
+        "missing_dependencies": "identification_and_flagging"
+      },
+      "security_analysis": {
+        "vulnerability_scanning": "automated_detection",
+        "permission_analysis": "access_control_review",
+        "data_flow_analysis": "privacy_impact_assessment",
+        "injection_point_detection": "input_validation_review"
+      }
+    }
+  },
   "stacks": {
     "detection": {
       "rails": ["Gemfile", "config/application.rb", "app/"],
@@ -400,6 +530,140 @@
         "compatibility": ["posix", "zsh", "openbsd_ksh"],
         "safety": ["set_euo_pipefail", "input_validation"],
         "openbsd": ["pledge_unveil", "doas"]
+      }
+    }
+  },
+  "application_knowledge": {
+    "cognitive_header": "§ Specific Application Domain Expertise",
+    "ai3_healthcare_platform": {
+      "domain": "healthcare_ai",
+      "description": "AI-powered healthcare platform for Norwegian market",
+      "key_features": {
+        "patient_data_management": "gdpr_compliant",
+        "medical_ai_assistance": "clinical_decision_support",
+        "norwegian_health_integration": "helseid_integration",
+        "telemedicine": "video_consultation_platform"
+      },
+      "technical_stack": {
+        "backend": "rails_8_postgresql",
+        "ai_framework": "custom_medical_ai",
+        "security": "medical_grade_encryption",
+        "compliance": "helsepersonelloven_gdpr"
+      },
+      "integration_points": {
+        "helseid": "national_health_identity",
+        "helsenorge": "patient_portal_integration",
+        "fastlege": "gp_referral_system",
+        "apotek": "pharmacy_integration"
+      }
+    },
+    "brgen_social_network": {
+      "domain": "hyper_local_social",
+      "description": "Hyper-local social network for Norwegian communities",
+      "key_features": {
+        "location_based_networking": "norwegian_geography",
+        "community_building": "local_engagement",
+        "privacy_focused": "norwegian_privacy_standards",
+        "multilingual_support": "nb_nn_sami"
+      },
+      "technical_stack": {
+        "backend": "rails_8_hotwire",
+        "real_time": "action_cable_websockets",
+        "geolocation": "norwegian_mapping_services",
+        "mobile": "progressive_web_app"
+      },
+      "social_features": {
+        "neighborhood_groups": "kommune_based",
+        "local_events": "community_calendar",
+        "marketplace": "local_trading",
+        "emergency_network": "crisis_communication"
+      }
+    },
+    "amber_fashion_ai": {
+      "domain": "ai_fashion_recommendations",
+      "description": "AI-powered fashion recommendation system",
+      "key_features": {
+        "style_analysis": "computer_vision_ai",
+        "personal_styling": "ai_fashion_consultant",
+        "sustainable_fashion": "circular_economy_focus",
+        "norwegian_brands": "local_fashion_integration"
+      },
+      "technical_stack": {
+        "ai_engine": "tensorflow_fashion_models",
+        "image_processing": "computer_vision_pipeline",
+        "recommendation_engine": "collaborative_filtering",
+        "api_integration": "fashion_retailer_apis"
+      },
+      "business_model": {
+        "revenue_streams": "commission_based",
+        "partnerships": "norwegian_fashion_brands",
+        "sustainability_focus": "eco_friendly_recommendations"
+      }
+    },
+    "privcam_streaming": {
+      "domain": "private_media_streaming",
+      "description": "Private media streaming platform with enhanced privacy",
+      "key_features": {
+        "end_to_end_encryption": "zero_knowledge_architecture",
+        "private_sharing": "invitation_only_streams",
+        "content_protection": "drm_integration",
+        "norwegian_compliance": "personvernloven_adherence"
+      },
+      "technical_stack": {
+        "streaming_engine": "webrtc_hls",
+        "encryption": "aes_256_encryption",
+        "cdn": "norwegian_edge_servers",
+        "storage": "encrypted_distributed_storage"
+      },
+      "privacy_features": {
+        "viewer_anonymity": "privacy_by_design",
+        "content_expiration": "automatic_deletion",
+        "access_control": "granular_permissions",
+        "audit_logging": "privacy_compliant_logs"
+      }
+    },
+    "bsdports_package_management": {
+      "domain": "openbsd_package_system",
+      "description": "OpenBSD package management and distribution system",
+      "key_features": {
+        "package_building": "automated_port_building",
+        "security_auditing": "vulnerability_scanning",
+        "dependency_management": "conflict_resolution",
+        "norwegian_mirrors": "local_package_distribution"
+      },
+      "technical_stack": {
+        "build_system": "openbsd_ports_framework",
+        "package_format": "openbsd_pkg_format",
+        "distribution": "ftp_https_mirrors",
+        "security": "signify_package_signing"
+      },
+      "openbsd_integration": {
+        "pledge_unveil": "security_sandbox",
+        "system_integration": "rc_scripts",
+        "documentation": "mandoc_integration",
+        "testing": "regress_framework"
+      }
+    },
+    "hjerterom_wellness": {
+      "domain": "mental_health_wellness",
+      "description": "Mental health and wellness platform for Norwegian users",
+      "key_features": {
+        "mood_tracking": "emotional_analytics",
+        "therapy_matching": "therapist_finder",
+        "crisis_support": "24_7_helpline_integration",
+        "norwegian_resources": "local_mental_health_services"
+      },
+      "technical_stack": {
+        "healthcare_compliance": "helsepersonelloven_compliant",
+        "data_encryption": "medical_grade_security",
+        "ai_support": "mental_health_ai_assistant",
+        "integration": "norwegian_health_systems"
+      },
+      "wellness_features": {
+        "mindfulness": "meditation_exercises",
+        "cognitive_therapy": "cbt_tools",
+        "peer_support": "anonymous_support_groups",
+        "professional_help": "therapist_booking_system"
       }
     }
   },
@@ -653,27 +917,223 @@
     }
   },
   "security": {
+    "cognitive_header": "§ Advanced Security Framework",
     "baseline": ["input_validation", "output_encoding", "secure_defaults", "zero_trust"],
+    "advanced_protection": {
+      "command_injection_detection": {
+        "enabled": true,
+        "detection_methods": {
+          "pattern_matching": "shell_metacharacters",
+          "ast_analysis": "command_construction",
+          "runtime_monitoring": "execution_tracking",
+          "behavioral_analysis": "anomaly_detection"
+        },
+        "prevention_measures": {
+          "input_sanitization": "mandatory",
+          "command_escaping": "automatic",
+          "privilege_restriction": "minimum_required",
+          "execution_sandboxing": "enabled"
+        }
+      },
+      "tool_safety_verification": {
+        "enabled": true,
+        "verification_process": {
+          "tool_authentication": "cryptographic_signatures",
+          "capability_validation": "permission_matrix",
+          "resource_limitation": "bounded_execution",
+          "audit_logging": "comprehensive_tracking"
+        },
+        "safety_checks": {
+          "file_access_validation": "scope_restricted",
+          "network_access_control": "domain_whitelist",
+          "system_command_filtering": "approved_commands_only",
+          "data_access_authorization": "role_based_permissions"
+        }
+      },
+      "prompt_injection_resistance": {
+        "enabled": true,
+        "detection_techniques": {
+          "semantic_analysis": "context_deviation_detection",
+          "pattern_recognition": "injection_signatures",
+          "behavioral_monitoring": "response_anomalies",
+          "content_validation": "expected_format_compliance"
+        },
+        "mitigation_strategies": {
+          "input_sanitization": "prompt_specific_filtering",
+          "context_isolation": "conversation_boundaries",
+          "response_validation": "output_verification",
+          "rollback_mechanisms": "state_restoration"
+        }
+      },
+      "file_access_scope_restriction": {
+        "enabled": true,
+        "access_control": {
+          "path_validation": "canonical_path_checking",
+          "permission_verification": "file_system_permissions",
+          "scope_enforcement": "working_directory_limitation",
+          "operation_logging": "file_access_audit"
+        },
+        "restrictions": {
+          "read_access": "project_directory_only",
+          "write_access": "designated_output_paths",
+          "execute_access": "approved_binaries_only",
+          "network_access": "configured_endpoints_only"
+        }
+      }
+    },
     "by_stack": {
-      "rails": ["secure_headers", "brakeman", "pundit"],
-      "frontend": ["csp_headers", "sri_integrity", "https_only"],
-      "shell": ["input_sanitization", "privilege_dropping"],
-      "openbsd": ["pledge", "unveil", "doas"],
-      "browser": ["sandbox_isolation", "resource_limits"],
-      "async": ["rate_limiting", "circuit_breakers"]
+      "rails": ["secure_headers", "brakeman", "pundit", "content_security_policy"],
+      "frontend": ["csp_headers", "sri_integrity", "https_only", "xss_protection"],
+      "shell": ["input_sanitization", "privilege_dropping", "command_validation"],
+      "openbsd": ["pledge", "unveil", "doas", "systrace"],
+      "browser": ["sandbox_isolation", "resource_limits", "origin_validation"],
+      "async": ["rate_limiting", "circuit_breakers", "resource_quotas"],
+      "norwegian_systems": ["bankid_integration", "vipps_security", "gdpr_compliance"]
+    }
+  },
+  "norwegian_market_integration": {
+    "cognitive_header": "§ Norwegian Market Integration",
+    "enabled": true,
+    "payment_systems": {
+      "bankid": {
+        "integration": "production_ready",
+        "authentication": "strong_authentication",
+        "verification_levels": ["level_3", "level_4"],
+        "compliance": "norwegian_identity_standards",
+        "api_endpoints": {
+          "authentication": "bankid_auth_service",
+          "verification": "bankid_verify_service",
+          "signing": "bankid_sign_service"
+        }
+      },
+      "vipps": {
+        "integration": "merchant_api",
+        "payment_processing": "instant_payments",
+        "user_authentication": "vipps_login",
+        "api_endpoints": {
+          "payments": "vipps_payment_api",
+          "authentication": "vipps_login_api",
+          "user_info": "vipps_userinfo_api"
+        }
+      }
+    },
+    "currency_support": {
+      "primary_currency": "NOK",
+      "formatting": {
+        "decimal_separator": ",",
+        "thousands_separator": " ",
+        "currency_symbol": "kr",
+        "symbol_position": "after_amount"
+      },
+      "pricing_strategies": {
+        "psychological_pricing": "norwegian_market_patterns",
+        "tax_inclusion": "mva_included_display",
+        "rounding_rules": "ore_rounding_standards"
+      }
+    },
+    "gdpr_compliance": {
+      "data_protection": {
+        "consent_management": "granular_consent",
+        "data_minimization": "purpose_limitation",
+        "retention_policies": "automatic_deletion",
+        "user_rights": "access_rectification_erasure"
+      },
+      "norwegian_specific": {
+        "datatilsynet_compliance": "enabled",
+        "norwegian_language_notices": "required",
+        "local_data_storage": "eu_jurisdiction"
+      }
+    },
+    "localization": {
+      "language": "nb_NO",
+      "cultural_adaptation": {
+        "communication_style": "direct_transparent",
+        "design_preferences": "minimalist_functional",
+        "user_expectations": "privacy_focused"
+      },
+      "regional_features": {
+        "postal_codes": "norwegian_postal_system",
+        "address_formats": "norsk_adresse_standard",
+        "phone_numbers": "norwegian_mobile_format"
+      }
     }
   },
   "deployment": {
+    "cognitive_header": "§ Production Deployment Specifications",
     "environments": ["development", "staging", "production"],
+    "production_specifications": {
+      "openbsd_infrastructure": {
+        "version": "7.4_or_later",
+        "security_features": {
+          "pledge": "mandatory_system_call_restrictions",
+          "unveil": "filesystem_access_limitation",
+          "doas": "privilege_escalation_control",
+          "pf_firewall": "network_traffic_filtering"
+        },
+        "service_management": {
+          "rcctl": "system_service_control",
+          "monitoring": "service_health_checks",
+          "logging": "syslog_integration",
+          "backup": "automated_system_backups"
+        }
+      },
+      "rails_stack": {
+        "version": "8.0_or_later",
+        "features": {
+          "hotwire": "real_time_ui_updates",
+          "stimulus": "javascript_controllers",
+          "solid_queue": "background_job_processing",
+          "solid_cable": "websocket_connections"
+        },
+        "performance": {
+          "server": "puma_multi_threaded",
+          "caching": "redis_action_cache",
+          "database": "postgresql_connection_pooling",
+          "assets": "propshaft_asset_pipeline"
+        }
+      },
+      "ruby_configuration": {
+        "version": "3.3_or_later",
+        "modern_patterns": {
+          "frozen_string_literal": "memory_optimization",
+          "ractor": "parallel_processing",
+          "fiber": "cooperative_concurrency",
+          "async": "non_blocking_operations"
+        },
+        "optimization": {
+          "jit": "ruby_just_in_time_compiler",
+          "gc": "incremental_garbage_collection",
+          "memory": "compact_heap_optimization"
+        }
+      },
+      "database_stack": {
+        "postgresql": {
+          "version": "15_or_later",
+          "features": ["json_support", "full_text_search", "concurrent_indexes"],
+          "optimization": ["query_optimization", "connection_pooling", "read_replicas"]
+        },
+        "redis": {
+          "version": "7.0_or_later",
+          "usage": ["session_store", "cache_store", "job_queue"],
+          "configuration": ["persistence", "clustering", "sentinel"]
+        }
+      }
+    },
     "requirements": {
-      "docs": ["readme", "setup", "api_docs"],
-      "scripts": ["install", "test", "deploy"],
-      "configs": ["environment_examples", "monitoring"]
+      "docs": ["readme", "setup", "api_docs", "deployment_guide"],
+      "scripts": ["install", "test", "deploy", "backup", "monitoring"],
+      "configs": ["environment_examples", "monitoring", "security_settings"]
     },
     "monitoring": {
-      "health": ["service_status", "resource_usage"],
-      "logging": ["error_tracking", "performance_metrics"],
-      "alerts": ["service_down", "high_error_rate"]
+      "health": ["service_status", "resource_usage", "database_performance"],
+      "logging": ["error_tracking", "performance_metrics", "security_events"],
+      "alerts": ["service_down", "high_error_rate", "resource_exhaustion", "security_incidents"]
+    },
+    "performance_targets": {
+      "response_time": "sub_200ms_p95",
+      "throughput": "1000_requests_per_second",
+      "availability": "99_9_percent_uptime",
+      "error_rate": "less_than_0_1_percent"
     }
   },
   "self_optimization": {
@@ -706,6 +1166,90 @@
       "satisfaction": "nps_70_plus",
       "quality": "world_class_compliance",
       "performance": "95_plus_lighthouse"
+    }
+  },
+  "validation_framework": {
+    "cognitive_header": "§ Comprehensive Validation Framework",
+    "enabled": true,
+    "self_validation": {
+      "character_level_understanding": {
+        "process": "verify_complete_comprehension",
+        "validation_gates": {
+          "syntax_accuracy": "100_percent_required",
+          "semantic_consistency": "logical_coherence_verified",
+          "structural_integrity": "architectural_patterns_validated",
+          "dependency_completeness": "all_references_resolved"
+        }
+      },
+      "dependency_mapping_validation": {
+        "direct_dependencies": "immediate_imports_traced",
+        "transitive_dependencies": "full_dependency_graph_mapped",
+        "circular_dependency_detection": "cycles_identified_resolved",
+        "missing_dependency_identification": "gaps_flagged_addressed"
+      },
+      "architectural_pattern_recognition": {
+        "design_patterns": "standard_patterns_identified",
+        "anti_patterns": "problematic_patterns_flagged",
+        "best_practices": "industry_standards_validated",
+        "security_patterns": "security_frameworks_verified"
+      },
+      "security_vulnerability_detection": {
+        "automated_scanning": "vulnerability_databases_checked",
+        "manual_review": "security_expert_analysis",
+        "penetration_testing": "security_boundary_testing",
+        "compliance_validation": "regulatory_standards_met"
+      }
+    },
+    "wcag_compliance": {
+      "version": "2.2_AAA",
+      "validation_process": {
+        "automated_testing": "accessibility_tools_validation",
+        "manual_testing": "human_accessibility_review",
+        "user_testing": "disabled_user_feedback",
+        "compliance_certification": "third_party_validation"
+      },
+      "requirements": {
+        "perceivable": "text_alternatives_captions_color_contrast",
+        "operable": "keyboard_navigation_timing_seizures",
+        "understandable": "readable_predictable_input_assistance",
+        "robust": "compatible_assistive_technologies"
+      }
+    },
+    "performance_optimization": {
+      "targets": {
+        "response_time": "sub_200ms_optimization",
+        "throughput": "high_concurrent_requests",
+        "resource_utilization": "efficient_memory_cpu_usage",
+        "scalability": "horizontal_vertical_scaling"
+      },
+      "validation_methods": {
+        "load_testing": "performance_under_stress",
+        "stress_testing": "breaking_point_identification",
+        "benchmark_comparison": "industry_standard_comparison",
+        "continuous_monitoring": "production_performance_tracking"
+      }
+    },
+    "validation_procedures": {
+      "pre_deployment": {
+        "code_review": "peer_review_security_analysis",
+        "automated_testing": "unit_integration_e2e_tests",
+        "security_scanning": "vulnerability_assessment",
+        "performance_testing": "load_stress_testing"
+      },
+      "post_deployment": {
+        "monitoring": "real_time_performance_monitoring",
+        "logging": "comprehensive_audit_logging",
+        "alerting": "proactive_issue_detection",
+        "feedback_collection": "user_experience_monitoring"
+      }
+    },
+    "success_criteria": {
+      "functionality": "all_features_working_correctly",
+      "performance": "sub_200ms_response_95_percentile",
+      "security": "zero_critical_vulnerabilities",
+      "accessibility": "wcag_2_2_aaa_compliance",
+      "maintainability": "code_quality_standards_met",
+      "scalability": "horizontal_scaling_validated"
     }
   }
 }

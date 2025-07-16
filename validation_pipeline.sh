@@ -1,7 +1,7 @@
 #!/bin/bash
-# Automated validation pipeline for Master.json v12.9.0
+# Automated validation pipeline for Master.json v18.0.0
 
-echo "§ Master.json v12.9.0 Validation Pipeline"
+echo "§ Master.json v18.0.0 Validation Pipeline"
 echo "Running validation on critical files..."
 
 # Set paths
