@@ -1,14 +1,52 @@
 {
   "meta": {
-    "version": "v18.0.0",
+    "version": "v22.10.12",
     "updated": "2025-01-27T12:00:00Z",
     "by": "anon987654321",
     "description": "Production-ready universal prompt orchestration system with mandatory deep file analysis and cross-domain expertise",
     "cognitive_compliance": "self_applied_master_standards",
-    "enhancement_note": "Revolutionary upgrade with mandatory file analysis, advanced security, Norwegian market integration, and production deployment specifications"
+    "enhancement_note": "Revolutionary upgrade with mandatory file analysis, advanced security, Norwegian market integration, production deployment specifications, enhanced compliance standards, and Prompts.md methodology integration"
   },
   "workflow": {
     "cognitive_header": "§ Workflow Intelligence System",
+    "prompts_md_methodology": {
+      "enabled": true,
+      "modes": {
+        "ANALYZE": {
+          "description": "Deep analytical mode for comprehensive examination",
+          "cognitive_load": "high_focus_analytical",
+          "tools": ["pattern_recognition", "dependency_analysis", "architectural_review"],
+          "output_style": "detailed_systematic_breakdown",
+          "validation": "extreme_scrutiny_framework"
+        },
+        "IMPROVE": {
+          "description": "Enhancement and optimization mode",
+          "cognitive_load": "creative_solution_focused",
+          "tools": ["refactoring_analysis", "performance_optimization", "security_enhancement"],
+          "output_style": "actionable_improvements",
+          "validation": "measured_performance_gains"
+        },
+        "STYLE": {
+          "description": "Formatting and consistency mode",
+          "cognitive_load": "detail_oriented_precision",
+          "tools": ["formatting_analysis", "consistency_checking", "aesthetic_optimization"],
+          "output_style": "consistent_professional_formatting",
+          "validation": "style_guide_compliance"
+        },
+        "RESEARCH": {
+          "description": "Investigation and discovery mode",
+          "cognitive_load": "exploratory_comprehensive",
+          "tools": ["information_gathering", "trend_analysis", "market_research"],
+          "output_style": "comprehensive_research_findings",
+          "validation": "source_verification_accuracy"
+        }
+      },
+      "mode_detection": {
+        "auto_selection": "context_based_intelligent_routing",
+        "override_capability": "user_specified_mode_selection",
+        "hybrid_modes": "multi_mode_combination_support"
+      }
+    },
     "mode_detection": {
       "simple": [
         "basic_implementation", 
@@ -54,6 +92,56 @@
     "cognitive_framework": {
       "version": "2.0.0",
       "compliance_level": "master",
+      "repository_insights_integration": {
+        "cognitive_header": "§ Repository Insights Integration with Cognitive Framework 2.0",
+        "enabled": true,
+        "deep_repository_analysis": {
+          "codebase_comprehension": {
+            "architectural_mapping": "complete_system_understanding",
+            "dependency_graph_analysis": "transitive_dependency_tracking",
+            "code_quality_metrics": "continuous_quality_monitoring",
+            "security_posture_assessment": "comprehensive_security_analysis"
+          },
+          "cognitive_load_analysis": {
+            "complexity_measurement": "code_complexity_cognitive_mapping",
+            "maintainability_assessment": "cognitive_burden_evaluation",
+            "learning_curve_analysis": "onboarding_difficulty_assessment",
+            "documentation_cognitive_load": "information_architecture_optimization"
+          },
+          "extreme_scrutiny_application": {
+            "code_review_intensity": "character_level_analysis",
+            "logic_verification": "mathematical_proof_validation",
+            "edge_case_exploration": "boundary_condition_testing",
+            "failure_mode_analysis": "comprehensive_failure_scenario_mapping"
+          },
+          "never_truncate_policy": {
+            "complete_analysis_requirement": "no_shortcuts_or_abbreviations",
+            "full_context_preservation": "maintain_complete_information",
+            "comprehensive_reporting": "detailed_findings_documentation",
+            "thorough_validation": "exhaustive_verification_processes"
+          }
+        },
+        "repository_intelligence": {
+          "pattern_recognition": {
+            "architectural_patterns": "design_pattern_identification",
+            "anti_patterns": "problematic_code_detection",
+            "performance_patterns": "optimization_opportunity_identification",
+            "security_patterns": "vulnerability_pattern_recognition"
+          },
+          "predictive_analysis": {
+            "maintenance_forecasting": "technical_debt_prediction",
+            "scalability_assessment": "growth_bottleneck_identification",
+            "security_risk_prediction": "vulnerability_trend_analysis",
+            "performance_degradation_prediction": "performance_bottleneck_forecasting"
+          },
+          "optimization_recommendations": {
+            "refactoring_suggestions": "code_improvement_recommendations",
+            "performance_optimizations": "speed_and_efficiency_improvements",
+            "security_enhancements": "security_posture_improvements",
+            "maintainability_improvements": "code_clarity_enhancements"
+          }
+        }
+      },
       "formatting_standards": {
         "indentation": "2_spaces",
         "quotes": "double_quotes",
@@ -393,6 +481,96 @@
       "formatting": "universal_consistency",
       "preservation": "never_truncate_preserve_logic"
     },
+    "world_class_compliance_standards": {
+      "cognitive_header": "§ World-Class Compliance Standards Framework",
+      "enabled": true,
+      "iso_compliance": {
+        "iso_27001": {
+          "information_security_management": "certified_compliant",
+          "risk_assessment": "continuous_monitoring",
+          "security_controls": "147_controls_implemented",
+          "audit_trail": "comprehensive_logging"
+        },
+        "iso_9001": {
+          "quality_management": "process_optimization",
+          "customer_satisfaction": "feedback_loops",
+          "continuous_improvement": "pdca_cycle",
+          "documentation": "controlled_procedures"
+        },
+        "iso_14001": {
+          "environmental_management": "sustainability_focus",
+          "carbon_footprint": "green_hosting_optimization",
+          "resource_efficiency": "minimal_computational_waste",
+          "compliance_monitoring": "environmental_kpis"
+        }
+      },
+      "wcag_compliance": {
+        "version": "2.2_AAA",
+        "automated_testing": "continuous_validation",
+        "manual_testing": "expert_accessibility_review",
+        "user_testing": "disabled_user_feedback",
+        "compliance_monitoring": "real_time_accessibility_checks"
+      },
+      "soc_compliance": {
+        "soc_2_type_ii": {
+          "security": "advanced_security_controls",
+          "availability": "99_9_percent_uptime_sla",
+          "processing_integrity": "data_validation_frameworks",
+          "confidentiality": "encryption_at_rest_in_transit",
+          "privacy": "gdpr_compliant_data_handling"
+        },
+        "audit_requirements": {
+          "independent_auditor": "annual_soc_2_reports",
+          "control_testing": "continuous_monitoring",
+          "remediation": "immediate_issue_resolution",
+          "reporting": "transparent_compliance_status"
+        }
+      },
+      "gdpr_compliance": {
+        "data_protection_principles": {
+          "lawfulness": "explicit_consent_legal_basis",
+          "fairness": "transparent_data_processing",
+          "transparency": "clear_privacy_notices",
+          "purpose_limitation": "specific_processing_purposes",
+          "data_minimization": "collect_only_necessary_data",
+          "accuracy": "data_quality_maintenance",
+          "storage_limitation": "automatic_data_retention_policies",
+          "integrity_confidentiality": "security_by_design"
+        },
+        "individual_rights": {
+          "right_to_information": "comprehensive_privacy_notices",
+          "right_of_access": "data_subject_access_requests",
+          "right_to_rectification": "data_correction_procedures",
+          "right_to_erasure": "right_to_be_forgotten",
+          "right_to_restrict_processing": "processing_limitations",
+          "right_to_data_portability": "structured_data_export",
+          "right_to_object": "opt_out_mechanisms",
+          "rights_related_to_automated_decision_making": "human_review_processes"
+        },
+        "norwegian_specific_requirements": {
+          "datatilsynet_compliance": "norwegian_dpa_requirements",
+          "personvernloven": "norwegian_privacy_act_compliance",
+          "cross_border_transfers": "adequacy_decisions_sccs"
+        }
+      },
+      "additional_standards": {
+        "pci_dss": {
+          "enabled": "payment_processing_compliance",
+          "level": "level_1_merchant_compliance",
+          "tokenization": "secure_payment_data_handling"
+        },
+        "hipaa": {
+          "enabled": "healthcare_applications_only",
+          "safeguards": "administrative_physical_technical",
+          "breach_notification": "72_hour_reporting"
+        },
+        "sox": {
+          "enabled": "financial_applications",
+          "internal_controls": "financial_reporting_accuracy",
+          "audit_trails": "comprehensive_financial_logging"
+        }
+      }
+    },
     "multi_perspective": {
       "roles": [
         {"role": "security_expert", "temperature": 0.2, "weight": 0.25},
@@ -675,6 +853,95 @@
       "alignment": "optical_over_mathematical",
       "newlines": "semantic_grouping",
       "cognitive_headers": "enabled"
+    },
+    "tech_stack_integration": {
+      "cognitive_header": "§ Complete Tech Stack Formatting Integration",
+      "supported_stacks": {
+        "ruby": {
+          "enabled": true,
+          "priority": "primary",
+          "formatting_rules": "ruby_community_standards",
+          "tools": ["rubocop", "standardrb", "yard"]
+        },
+        "rails": {
+          "enabled": true,
+          "priority": "primary", 
+          "formatting_rules": "rails_conventions",
+          "tools": ["rails_best_practices", "brakeman"]
+        },
+        "javascript": {
+          "enabled": true,
+          "priority": "primary",
+          "formatting_rules": "prettier_eslint_standards",
+          "tools": ["eslint", "prettier", "jsdoc"]
+        },
+        "stimulus": {
+          "enabled": true,
+          "priority": "primary",
+          "formatting_rules": "stimulus_controller_conventions",
+          "tools": ["stimulus_linter"]
+        },
+        "zsh": {
+          "enabled": true,
+          "priority": "primary",
+          "formatting_rules": "posix_compliance",
+          "tools": ["shellcheck", "shfmt"]
+        },
+        "openbsd": {
+          "enabled": true,
+          "priority": "primary",
+          "formatting_rules": "openbsd_style_guide",
+          "tools": ["mandoc_lint", "pledge_unveil_analyzer"]
+        },
+        "html": {
+          "enabled": true,
+          "priority": "primary",
+          "formatting_rules": "semantic_html5_wcag_compliant",
+          "tools": ["html_validate", "accessibility_checker"]
+        },
+        "erb": {
+          "enabled": true,
+          "priority": "primary",
+          "formatting_rules": "rails_erb_conventions",
+          "tools": ["erb_lint", "htmlbeautifier"]
+        },
+        "css": {
+          "enabled": true,
+          "priority": "primary",
+          "formatting_rules": "bem_methodology_wcag_compliant",
+          "tools": ["stylelint", "csslint"]
+        },
+        "scss": {
+          "enabled": true,
+          "priority": "primary",
+          "formatting_rules": "sass_guidelines",
+          "tools": ["scss_lint", "sass_lint"]
+        },
+        "seo": {
+          "enabled": true,
+          "priority": "primary",
+          "formatting_rules": "structured_data_schema_org",
+          "tools": ["lighthouse_seo", "meta_inspector"]
+        },
+        "ui_ux": {
+          "enabled": true,
+          "priority": "primary",
+          "formatting_rules": "design_system_consistency",
+          "tools": ["design_tokens", "accessibility_validator"]
+        }
+      },
+      "explicitly_excluded_stacks": {
+        "python": {
+          "enabled": false,
+          "reason": "excluded_per_framework_specification",
+          "alternative_recommendation": "use_ruby_for_scripting"
+        },
+        "c": {
+          "enabled": false,
+          "reason": "excluded_per_framework_specification",
+          "alternative_recommendation": "use_openbsd_ksh_or_ruby"
+        }
+      }
     },
     "accessibility": {
       "alt_text": "descriptive_contextual",
@@ -1171,6 +1438,50 @@
   "validation_framework": {
     "cognitive_header": "§ Comprehensive Validation Framework",
     "enabled": true,
+    "enhanced_validation_pipeline": {
+      "cognitive_header": "§ Enhanced Validation Pipeline with Strict Output Management",
+      "strict_output_management": {
+        "output_validation": {
+          "syntax_checking": "zero_tolerance_syntax_errors",
+          "semantic_validation": "logical_consistency_required",
+          "formatting_compliance": "universal_standard_adherence",
+          "accessibility_validation": "wcag_2_2_aaa_mandatory"
+        },
+        "quality_gates": {
+          "gate_1_syntax": {
+            "requirement": "100_percent_syntax_accuracy",
+            "tools": ["language_specific_linters", "syntax_validators"],
+            "failure_action": "immediate_rejection"
+          },
+          "gate_2_security": {
+            "requirement": "zero_critical_vulnerabilities",
+            "tools": ["security_scanners", "dependency_checkers"],
+            "failure_action": "security_review_required"
+          },
+          "gate_3_performance": {
+            "requirement": "95_plus_lighthouse_score",
+            "tools": ["performance_analyzers", "web_vitals_checkers"],
+            "failure_action": "optimization_required"
+          },
+          "gate_4_accessibility": {
+            "requirement": "wcag_2_2_aaa_compliance",
+            "tools": ["accessibility_validators", "screen_reader_testing"],
+            "failure_action": "accessibility_remediation_required"
+          },
+          "gate_5_compliance": {
+            "requirement": "full_compliance_standards_met",
+            "tools": ["compliance_checkers", "audit_validators"],
+            "failure_action": "compliance_review_required"
+          }
+        },
+        "output_refinement": {
+          "continuous_improvement": "iterative_quality_enhancement",
+          "feedback_integration": "user_feedback_incorporation",
+          "automated_optimization": "ai_powered_quality_improvement",
+          "human_review_integration": "expert_validation_loops"
+        }
+      }
+    },
     "self_validation": {
       "character_level_understanding": {
         "process": "verify_complete_comprehension",
