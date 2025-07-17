@@ -1,11 +1,37 @@
 {
   "meta": {
-    "version": "v18.0.0",
-    "updated": "2025-01-27T12:00:00Z",
+    "version": "v22.1.0",
+    "updated": "2025-01-28T15:30:00Z",
     "by": "anon987654321",
     "description": "Production-ready universal prompt orchestration system with mandatory deep file analysis and cross-domain expertise",
     "cognitive_compliance": "self_applied_master_standards",
-    "enhancement_note": "Revolutionary upgrade with mandatory file analysis, advanced security, Norwegian market integration, and production deployment specifications"
+    "enhancement_note": "Major architectural upgrade with centralized definitions, reference pointers, environment overrides, and enhanced maintainability"
+  },
+  "quick_start": {
+    "cognitive_header": "§ Essential Quick Start Guide",
+    "description": "Minimal subset for rapid onboarding and simple implementations",
+    "essential_rules": [
+      "security_first",
+      "accessibility_required", 
+      "never_truncate_content",
+      "world_class_standards",
+      "cognitive_load_awareness"
+    ],
+    "common_stacks": {
+      "web_app": ["rails", "postgresql", "redis", "hotwire"],
+      "static_site": ["html5", "css3", "vanilla_js"],
+      "api_service": ["rails_api", "postgresql", "json"],
+      "shell_script": ["posix_sh", "input_validation"]
+    },
+    "simple_phases": [
+      "analyze_requirements",
+      "implement_solution", 
+      "test_functionality",
+      "deploy_securely"
+    ],
+    "core_principles": {
+      "ref": "core.principles"
+    }
   },
   "workflow": {
     "cognitive_header": "§ Workflow Intelligence System",
@@ -26,31 +52,255 @@
       ]
     },
     "phases": {
-      "simple": [
-        "analyze", 
-        "build", 
-        "verify", 
-        "package"
-      ],
-      "complex": [
-        "empathize_and_analyze", 
-        "define_and_design", 
-        "ideate_and_architect", 
-        "prototype_and_implement", 
-        "test_and_validate", 
-        "optimize_and_refine", 
-        "deliver_and_evolve"
-      ]
+      "simple": {
+        "ref": "core.central_definitions.phases.simple"
+      },
+      "complex": {
+        "ref": "core.central_definitions.phases.complex"
+      }
     },
     "execution": {
       "auto_iterate": true,
-      "max_iterations": 3,
-      "validation_required": true,
-      "ai_enhancement": "enabled"
+      "max_iterations": {
+        "ref": "core.central_definitions.execution_patterns.max_iterations"
+      },
+      "validation_required": {
+        "ref": "core.central_definitions.execution_patterns.validation_required"
+      },
+      "ai_enhancement": {
+        "ref": "core.central_definitions.execution_patterns.ai_enhancement"
+      },
+      "quiet_mode": {
+        "ref": "core.central_definitions.execution_patterns.quiet_mode"
+      }
+    },
+    "framework_activation": {
+      "cognitive_header": "§ Framework Activation Control",
+      "trigger_conditions": {
+        "complexity_threshold": "complex_mode_detection",
+        "stack_detection": "multi_technology_identified",
+        "user_request": "explicit_framework_activation"
+      },
+      "confirmation_required": {
+        "complex_workflows": true,
+        "resource_intensive": true,
+        "security_sensitive": true
+      },
+      "scope_definition": {
+        "project_boundaries": "clearly_defined",
+        "technology_stack": "explicitly_specified",
+        "success_criteria": "measurable_outcomes"
+      },
+      "override_mechanisms": {
+        "user_preference": "always_honored",
+        "emergency_mode": "bypass_confirmations",
+        "testing_mode": "isolated_execution"
+      }
+    }
+  },
+  "dependency_management": {
+    "cognitive_header": "§ Dependency Management Framework",
+    "security_scanning": {
+      "enabled": true,
+      "automated_vulnerability_detection": {
+        "dependency_check": "continuous_monitoring",
+        "security_advisories": "real_time_alerts",
+        "cve_tracking": "automated_reporting",
+        "license_compliance": "policy_enforcement"
+      },
+      "scan_frequency": {
+        "production": "daily",
+        "staging": "weekly", 
+        "development": "on_commit"
+      },
+      "remediation_workflow": {
+        "critical_vulnerabilities": "immediate_patch",
+        "high_severity": "within_24_hours",
+        "medium_severity": "within_week",
+        "low_severity": "next_maintenance_window"
+      }
+    },
+    "licensing_whitelists": {
+      "approved_licenses": [
+        "MIT", "BSD-3-Clause", "Apache-2.0", "ISC",
+        "BSD-2-Clause", "LGPL-3.0", "MPL-2.0"
+      ],
+      "restricted_licenses": [
+        "GPL-2.0", "GPL-3.0", "AGPL-3.0", "SSPL"
+      ],
+      "review_required": [
+        "proprietary", "custom", "unknown"
+      ],
+      "compliance_reporting": {
+        "format": "spdx_compatible",
+        "frequency": "per_release",
+        "distribution": ["legal", "security", "development"]
+      }
+    },
+    "versioning_strategy": {
+      "policy": "semantic_versioning_2_0",
+      "dependency_updates": {
+        "major_versions": "manual_review_required",
+        "minor_versions": "automated_with_testing",
+        "patch_versions": "automated_security_only"
+      },
+      "pinning_strategy": {
+        "production": "exact_versions",
+        "development": "compatible_versions",
+        "testing": "latest_stable"
+      },
+      "deprecation_timeline": {
+        "warning_period": "6_months",
+        "support_period": "12_months", 
+        "removal_timeline": "18_months"
+      }
+    },
+    "governance_workflows": {
+      "approval_matrix": {
+        "new_dependencies": ["security_team", "architecture_team"],
+        "major_updates": ["technical_lead", "security_team"],
+        "security_patches": ["automated", "post_deployment_review"]
+      },
+      "documentation_requirements": {
+        "dependency_justification": "business_technical_rationale",
+        "security_assessment": "threat_model_analysis",
+        "performance_impact": "benchmarking_required",
+        "maintenance_commitment": "long_term_support_plan"
+      },
+      "monitoring_dashboards": {
+        "dependency_health": "real_time_status",
+        "security_posture": "vulnerability_tracking",
+        "compliance_status": "license_adherence",
+        "update_pipeline": "automation_health"
+      }
+    }
+  },
+  "environment_overrides": {
+    "cognitive_header": "§ Environment-Specific Configuration Overrides",
+    "development": {
+      "validation_rules": {
+        "test_coverage": "70_percent_minimum",
+        "security_scanning": "basic_checks",
+        "performance_gates": "relaxed_thresholds",
+        "accessibility_checks": "automated_only"
+      },
+      "performance_settings": {
+        "response_time_threshold": "1000ms",
+        "resource_utilization": "90_percent_max",
+        "concurrent_requests": "50_max",
+        "memory_allocation": "development_optimized"
+      },
+      "logging_configuration": {
+        "level": "debug",
+        "output_format": "human_readable",
+        "performance_metrics": "detailed",
+        "error_stack_traces": "full_detail"
+      }
+    },
+    "staging": {
+      "validation_rules": {
+        "test_coverage": "85_percent_minimum",
+        "security_scanning": "comprehensive_checks",
+        "performance_gates": "production_like",
+        "accessibility_checks": "wcag_2_1_aa"
+      },
+      "performance_settings": {
+        "response_time_threshold": "500ms",
+        "resource_utilization": "80_percent_max",
+        "concurrent_requests": "200_max",
+        "memory_allocation": "production_like"
+      },
+      "logging_configuration": {
+        "level": "info",
+        "output_format": "structured_json",
+        "performance_metrics": "essential",
+        "error_stack_traces": "sanitized"
+      }
+    },
+    "production": {
+      "validation_rules": {
+        "test_coverage": "90_percent_minimum",
+        "security_scanning": "zero_tolerance",
+        "performance_gates": "sub_200ms_p95",
+        "accessibility_checks": "wcag_2_2_aaa"
+      },
+      "performance_settings": {
+        "response_time_threshold": "200ms",
+        "resource_utilization": "70_percent_max",
+        "concurrent_requests": "1000_max",
+        "memory_allocation": "optimized"
+      },
+      "logging_configuration": {
+        "level": "warn",
+        "output_format": "structured_json",
+        "performance_metrics": "critical_only",
+        "error_stack_traces": "anonymized"
+      }
     }
   },
   "core": {
     "cognitive_header": "§ Core Cognitive Framework",
+    "central_definitions": {
+      "cognitive_header": "§ Central Definitions Repository",
+      "phases": {
+        "simple": [
+          "analyze", 
+          "build", 
+          "verify", 
+          "package"
+        ],
+        "complex": [
+          "empathize_and_analyze", 
+          "define_and_design", 
+          "ideate_and_architect", 
+          "prototype_and_implement", 
+          "test_and_validate", 
+          "optimize_and_refine", 
+          "deliver_and_evolve"
+        ]
+      },
+      "coverage_defaults": {
+        "minimum_test_coverage": "90_percent",
+        "security_scan_required": true,
+        "accessibility_validation": "wcag_2_2_aaa",
+        "performance_threshold": "95_plus_core_web_vitals"
+      },
+      "formatting_defaults": {
+        "indentation": {"type": "spaces", "size": 2},
+        "quotes": "double_quotes_consistent",
+        "line_endings": "unix_lf",
+        "alignment": "optical_over_mathematical",
+        "newlines": "semantic_grouping",
+        "cognitive_headers": true
+      },
+      "execution_patterns": {
+        "max_iterations": {
+          "default": 3,
+          "complex_projects": 5,
+          "simple_tasks": 2,
+          "override_allowed": true
+        },
+        "ai_enhancement": {
+          "enabled": true,
+          "modes": ["code_review", "security_analysis", "performance_optimization"],
+          "temperature_ranges": {
+            "analysis": 0.2,
+            "creativity": 0.9,
+            "implementation": 0.1
+          }
+        },
+        "validation_required": {
+          "always": true,
+          "automated_gates": ["syntax", "security", "accessibility"],
+          "manual_gates": ["logic_review", "user_experience"]
+        },
+        "quiet_mode": {
+          "enabled": false,
+          "suppressed_outputs": ["debug_info", "verbose_logs"],
+          "preserved_outputs": ["errors", "warnings", "critical_info"]
+        }
+      }
+    },
     "cognitive_framework": {
       "version": "2.0.0",
       "compliance_level": "master",
@@ -669,19 +919,46 @@
   },
   "formatting": {
     "universal": {
-      "indentation": {"type": "spaces", "size": 2},
-      "quotes": "double_quotes_consistent",
-      "line_endings": "unix_lf",
-      "alignment": "optical_over_mathematical",
-      "newlines": "semantic_grouping",
-      "cognitive_headers": "enabled"
+      "ref": "core.central_definitions.formatting_defaults"
     },
     "accessibility": {
       "alt_text": "descriptive_contextual",
       "aria_labels": "comprehensive_semantic",
       "heading_hierarchy": "logical_sequential",
       "focus_indicators": "high_contrast_visible",
-      "wcag_compliance": "2.2_aaa_required"
+      "wcag_compliance": "2.2_aaa_required",
+      "dynamic_behavior": {
+        "aria_live_regions": {
+          "status_updates": "aria_live_polite",
+          "alerts": "aria_live_assertive", 
+          "loading_states": "aria_busy_true",
+          "content_changes": "aria_describedby"
+        },
+        "focus_management": {
+          "modal_dialogs": "trap_focus_restore_on_close",
+          "single_page_apps": "manage_focus_transitions",
+          "dynamic_content": "announce_content_changes",
+          "keyboard_navigation": "visible_focus_indicators"
+        },
+        "reduced_motion": {
+          "respect_prefers_reduced_motion": "required",
+          "animation_alternatives": "cross_fade_alternatives",
+          "scroll_behavior": "instant_when_reduced_motion",
+          "video_autoplay": "disabled_with_reduced_motion"
+        },
+        "color_blind_support": {
+          "contrast_ratios": "7_1_minimum",
+          "color_only_indicators": "additional_text_symbols",
+          "pattern_alternatives": "shape_texture_options",
+          "testing_tools": "colorblindness_simulation"
+        },
+        "voice_control": {
+          "voice_navigation": "aria_labels_match_visible_text",
+          "click_targets": "minimum_44px_touch_targets",
+          "speech_input": "voice_command_alternatives",
+          "dictation_support": "proper_form_labeling"
+        }
+      }
     },
     "language_specific": {
       "ruby": {
@@ -893,7 +1170,7 @@
       "ethics": ["robots_txt_compliance", "respectful_crawling"]
     }
   },
-  "quality_assurance": {
+  "quality_standards": {
     "gates": {
       "syntax": "no_errors",
       "tests": "90_percent_coverage",
@@ -914,6 +1191,61 @@
       "security": "vulnerability_detection",
       "performance": "predictive_analysis",
       "accessibility": "automated_validation"
+    },
+    "internationalization": {
+      "cognitive_header": "§ Internationalization Standards",
+      "date_localization": {
+        "format_patterns": {
+          "norwegian": "dd.mm.yyyy",
+          "iso_8601": "yyyy-mm-dd",
+          "user_preference": "configurable_format"
+        },
+        "timezone_handling": {
+          "storage": "utc_standardized",
+          "display": "user_local_timezone",
+          "conversion": "automatic_dst_awareness"
+        },
+        "calendar_systems": {
+          "primary": "gregorian_calendar",
+          "alternative_support": "localized_calendars",
+          "holiday_awareness": "regional_holidays"
+        }
+      },
+      "number_localization": {
+        "decimal_separators": {
+          "norwegian": "comma_separator",
+          "international": "period_separator",
+          "detection": "browser_locale_based"
+        },
+        "currency_formatting": {
+          "norwegian": "kr_suffix_space_separator",
+          "international": "iso_4217_standards",
+          "precision": "two_decimal_places"
+        },
+        "thousand_separators": {
+          "norwegian": "space_separator",
+          "international": "comma_separator",
+          "large_numbers": "readable_formatting"
+        }
+      },
+      "text_localization": {
+        "character_encoding": "utf_8_universal",
+        "direction_support": {
+          "primary": "left_to_right",
+          "rtl_support": "arabic_hebrew_ready",
+          "mixed_content": "bidirectional_handling"
+        },
+        "typography_rules": {
+          "line_breaking": "language_specific_rules",
+          "hyphenation": "css_hyphens_auto",
+          "quotation_marks": "localized_quotation_styles"
+        },
+        "pluralization": {
+          "rule_based": "cldr_plural_rules",
+          "context_aware": "grammatical_gender",
+          "fallback_handling": "english_defaults"
+        }
+      }
     }
   },
   "security": {
@@ -1171,6 +1503,25 @@
   "validation_framework": {
     "cognitive_header": "§ Comprehensive Validation Framework",
     "enabled": true,
+    "auto_versioning": {
+      "enabled": true,
+      "semantic_versioning": {
+        "major": "breaking_changes_api_modifications",
+        "minor": "new_features_backward_compatible",
+        "patch": "bug_fixes_security_patches"
+      },
+      "version_triggers": {
+        "structural_changes": "minor_version_bump",
+        "new_sections": "minor_version_bump", 
+        "bug_fixes": "patch_version_bump",
+        "security_updates": "patch_version_bump"
+      },
+      "validation_gates": {
+        "version_consistency": "cross_reference_validation",
+        "changelog_required": "human_readable_changes",
+        "compatibility_check": "backward_compatibility_verified"
+      }
+    },
     "self_validation": {
       "character_level_understanding": {
         "process": "verify_complete_comprehension",
