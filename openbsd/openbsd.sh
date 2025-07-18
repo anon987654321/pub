@@ -109,7 +109,7 @@ run() {
 install_system() {
     log "Installing system packages"
 
-    run pkg_add -U zsh ruby-3.3.5 postgresql-server redis node zap ldns-utils
+    run pkg_add -U zsh ruby-3.3.5 postgresql-server redis node zap ldns-utils mutt
     run gem install falcon
 
     cat > /etc/profile <<EOF
@@ -214,6 +214,7 @@ process_domains() {
     $serial 3600 1800 1209600 1800
 )
 @ IN NS ns.brgen.no.
+@ IN NS ns.hyp.net.
 @ IN A $BRGEN_IP
 mail IN A $BRGEN_IP
 @ IN MX 10 mail.$domain.
@@ -238,6 +239,11 @@ EOF
         local ksk=$(ldns-keygen -k -a ECDSAP256SHA256 -b 256 "$domain")
         run chown _nsd:_nsd "$zsk".* "$ksk".*
         run ldns-signzone -n -p -s "$(openssl rand -hex 8)" "$domain.zone" "$zsk" "$ksk"
+        
+        # Generate DS record for parent zone submission
+        ldns-key2ds -n -2 "$ksk.key" > "$domain.ds"
+        log "Generated DS record for $domain in $domain.ds"
+        
         cd - >/dev/null
 
         cat >> /var/nsd/etc/nsd.conf <<EOF
@@ -275,6 +281,13 @@ EOF
             log "Warning: acme-client failed for $domain, retrying after delay"
             sleep 5
             run timeout 120 acme-client -v "$domain"
+        fi
+
+        # Generate TLSA record for HTTPS
+        if [ -f "/etc/ssl/$domain.crt" ]; then
+            local tlsa_hash=$(openssl x509 -in "/etc/ssl/$domain.crt" -pubkey -noout | openssl pkey -pubin -outform DER | openssl dgst -sha256 -binary | hexdump -v -e '/1 "%02x"')
+            echo "_443._tcp IN TLSA 3 1 1 $tlsa_hash" >> "/var/nsd/zones/master/$domain.zone"
+            log "Generated TLSA record for $domain"
         fi
     done
 
@@ -491,6 +504,89 @@ cleanup_nsd() {
     echo "nsd_cleaned" >> "$STATE_FILE"
 }
 
+setup_email() {
+    log "Setting up OpenSMTPD for bergen@pub.attorney"
+
+    # Create vmail directories
+    run mkdir -p /var/vmail/pub.attorney/bergen/{new,cur,tmp}
+    run adduser -group daemon -batch -s /sbin/nologin -d /var/vmail -c "Virtual Mail" vmail
+    run chown -R vmail:daemon /var/vmail
+
+    # Configure OpenSMTPD
+    cat > /etc/mail/smtpd.conf <<EOF
+# OpenSMTPD configuration for bergen@pub.attorney
+table aliases file:/etc/mail/aliases
+table domains { "pub.attorney" }
+table virtuals { "bergen@pub.attorney" = "vmail" }
+
+pki pub.attorney cert "/etc/ssl/pub.attorney.fullchain.pem"
+pki pub.attorney key "/etc/ssl/private/pub.attorney.key"
+
+listen on $BRGEN_IP port 25 tls pki pub.attorney
+listen on $BRGEN_IP port 587 tls-require pki pub.attorney auth
+
+action "local_mail" maildir "/var/vmail/pub.attorney/bergen" virtual <virtuals>
+action "relay" relay
+
+match from any for domain <domains> action "local_mail"
+match from local for any action "relay"
+EOF
+
+    # Add mail aliases
+    echo "bergen: vmail" >> /etc/mail/aliases
+    run newaliases
+
+    # Setup user access for gfuser
+    if ! id gfuser >/dev/null 2>&1; then
+        run adduser -group users -batch gfuser
+        run pkg_add -U mutt
+    fi
+
+    # Create mutt config for gfuser
+    cat > /home/gfuser/.muttrc <<EOF
+set mbox_type=Maildir
+set folder="/var/vmail/pub.attorney/bergen"
+set spoolfile="+/"
+set record="+.Sent"
+set postponed="+.Drafts"
+set trash="+.Trash"
+set mail_check=60
+set timeout=15
+EOF
+    run chown gfuser:users /home/gfuser/.muttrc
+
+    run rcctl enable smtpd
+    run rcctl start smtpd
+    log "Email setup complete"
+    echo "email_setup" >> "$STATE_FILE"
+}
+
+pause_for_upload() {
+    log "Stage 1 complete - DNS and certificates configured"
+    echo "=================================================="
+    echo "STAGE 1 COMPLETE: DNS and Certificates"
+    echo "=================================================="
+    echo ""
+    echo "Next steps:"
+    echo "1. Upload Rails apps to the following directories:"
+    for app in "${APPS[@]}"; do
+        echo "   - /home/$app/$app (with Gemfile and database.yml)"
+    done
+    echo ""
+    echo "2. Submit DS records to Domeneshop.no from:"
+    echo "   /var/nsd/zones/master/*.ds"
+    echo ""
+    echo "3. Test DNS propagation:"
+    echo "   dig @46.23.95.45 brgen.no SOA"
+    echo "   dig DS brgen.no +short"
+    echo ""
+    echo "4. Wait 24-48 hours for propagation, then run:"
+    echo "   doas zsh openbsd.sh --resume"
+    echo ""
+    echo "=================================================="
+    read -p "Press Enter when ready to continue with app upload..."
+}
+
 main() {
     log "Starting OpenBSD setup"
 
@@ -500,6 +596,32 @@ main() {
     fi
 
     case "${1:-}" in
+        --resume)
+            # Stage 2: Services and Apps (after DNS propagation)
+            if ! grep -q "domains_processed" "$STATE_FILE" 2>/dev/null; then
+                log "Error: Stage 1 not complete. Run without --resume first."
+                exit 1
+            fi
+            deploy_apps
+            configure_relayd
+            echo "=================================================="
+            echo "STAGE 2 COMPLETE: Services and Applications"
+            echo "=================================================="
+            echo "Run 'doas zsh openbsd.sh --mail' to configure email"
+            ;;
+        --mail)
+            # Stage 3: Email configuration
+            if ! grep -q "relayd_configured" "$STATE_FILE" 2>/dev/null; then
+                log "Error: Stage 2 not complete. Run --resume first."
+                exit 1
+            fi
+            setup_email
+            echo "=================================================="
+            echo "STAGE 3 COMPLETE: Email Configuration"
+            echo "=================================================="
+            echo "Email available at bergen@pub.attorney"
+            echo "Access via: su - gfuser && mutt"
+            ;;
         --infra)
             install_system
             configure_firewall
@@ -528,18 +650,32 @@ main() {
             main "$@"
             ;;
         --help)
-            echo "Usage: doas zsh openbsd.sh [--infra|--deploy|--cleanup|--verbose|--dry-run|--help]"
+            echo "Usage: doas zsh openbsd.sh [--resume|--mail|--infra|--deploy|--cleanup|--verbose|--dry-run|--help]"
+            echo ""
+            echo "Stage-based deployment:"
+            echo "  (no args)  - Stage 1: DNS and certificates (pauses for app upload)"
+            echo "  --resume   - Stage 2: Services and applications (after DNS propagation)"
+            echo "  --mail     - Stage 3: Email configuration"
+            echo ""
+            echo "Individual components:"
+            echo "  --infra    - Infrastructure only"
+            echo "  --deploy   - Applications only"
+            echo "  --cleanup  - NSD cleanup"
+            echo ""
+            echo "Options:"
+            echo "  --verbose  - Enable verbose logging"
+            echo "  --dry-run  - Show commands without executing"
+            echo "  --help     - Show this help"
             exit 0
             ;;
         *)
+            # Stage 1: DNS and certificates with pause
             install_system
             configure_firewall
             setup_dns
             setup_services
             process_domains
-            deploy_apps
-            configure_relayd
-            echo "Deployment complete"
+            pause_for_upload
             ;;
     esac
 
