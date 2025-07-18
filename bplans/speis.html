@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYRE™ - Forretningsplan for Romarkitektur og Teknologi</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Variables */
+        :root {
+            --primary-color: #1a1a1a;
+            --background-color: #f5f5f5;
+            --text-color: #222222;
+            --highlight-color: #5d93ff;
+            --font-family: 'Inter', sans-serif;
+        }
+
+        /* General Styles */
+        body {
+            margin: 0;
+            font-family: var(--font-family);
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            font-size: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Logo Container */
+        .logo-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        /* Logo styling with animated gradient */
+        .logo-container {
+            font-family: 'Black Han Sans', sans-serif;
+            font-size: 70px;
+            color: transparent;
+            background: linear-gradient(45deg, #ff8c00, #ff0080, #8a2be2, #ff8c00);
+            background-size: 400%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            animation: gradientMove 5s infinite linear;
+        }
+
+        /* Header styling */
+        header {
+            text-align: center;
+            padding: 20px;
+            background-color: var(--background-color);
+        }
+
+        .header-text {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-color);
+            margin-top: -1.2rem;
+            max-width: 100%;
+            text-align: center;
+        }
+
+        /* Main content */
+        main {
+            max-width: 900px;
+            margin: 3rem auto;
+            padding: 0 1rem;
+        }
+
+        section {
+            padding: 2rem 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+        }
+
+        p {
+            font-size: 1rem;
+            color: #333333;
+        }
+
+        /* Image Placeholder Styles */
+        .image-placeholder {
+            width: 100%;
+            height: 250px;
+            background-color: #cccccc;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666666;
+            font-size: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <!-- Logo Wrapper with TM Symbol -->
+        <div class="logo-wrapper">
+            <div class="logo-container">SYRE</div>
+        </div>
+        <div class="header-text">
+            Neste-generasjons teknologi for romarkitektur, parametrisk design og fremdrift
+        </div>
+    </header>
+
+    <main>
+        <!-- Sammendrag Section -->
+        <section id="sammendrag">
+            <h2>Sammendrag</h2>
+            <h3>Visjon</h3>
+            <p>Å muliggjøre menneskelig utforskning og bosetting i rommet med avansert produksjonsteknologi, parametrisk arkitektur og fremdriftssystemer som er tilpasset rommiljøer.</p>
+            <h3>Misjon</h3>
+            <p>Å bygge skreddersydde løsninger for rombasert produksjon og arkitektur gjennom on-demand 3D-printing, nanomaterialer og parametrisk design, samt fremdriftsteknologier for langdistanse utforskning.</p>
+            <div class="image-placeholder">Bilde: Visjon og Misjon</div>
+        </section>
+
+        <!-- Markedsanalyse Section -->
+        <section id="marked">
+            <h2>Markedsanalyse</h2>
+            <p>Den globale romindustrien forventes å vokse til over USD 1 billion innen 2040. Etterspørselen for romarkitektur og produksjonsteknologi øker, drevet av behovet for langvarige strukturer og transportløsninger til Mars og månen.</p>
+            <div class="image-placeholder">Bilde: Markedsanalyse</div>
+        </section>
+
+        <!-- Teknologi og Produktutvikling Section -->
+        <section id="teknologi">
+            <h2>Teknologi og Produktutvikling</h2>
+            <h3>Parametrisk Arkitektur</h3>
+            <p>Parametrisk design gir muligheten til å skape skreddersydde strukturer som tilpasser seg miljømessige krav og tilgjengelige ressurser i rommet, noe som sikrer effektivitet og bærekraft.</p>
+            <div class="image-placeholder">Bilde: Parametrisk Arkitektur</div>
+            
+            <h3>On-Demand 3D-Printing</h3>
+            <p>Med autonom 3D-printing kan vi produsere romstrukturer på stedet, og utnytte ressurser fra månen og Mars for å bygge infrastruktur uten å måtte frakte alt fra Jorden.</p>
+            <div class="image-placeholder">Bilde: 3D-Printing</div>
+            
+            <h3>Materialdesign</h3>
+            <p>Avanserte nanomaterialer og kompositter utvikles for å forbedre styrke, isolasjon og strålingstoleranse, tilpasset ekstreme romforhold.</p>
+            <div class="image-placeholder">Bilde: Materialdesign</div>
+            
+            <h3>Avansert Fremdrift</h3>
+            <p>Våre fremdriftssystemer er designet for høy effektivitet og langdistanse reiser, med lavt drivstofforbruk og høy ytelse for dypromutforskning.</p>
+            <div class="image-placeholder">Bilde: Fremdriftssystemer</div>
+        </section>
+
+        <!-- Finansiering Section -->
+        <section id="finansiering">
+            <h2>Finansiering</h2>
+            <p>Vi søker NOK 20 millioner for å utvikle vår teknologiportefølje innen romarkitektur, parametrisk design og fremdrift, med fokus på å skape autonome produksjonsløsninger i rommet.</p>
+            <div class="image-placeholder">Bilde: Finansiering</div>
+        </section>
+
+        <!-- Konklusjon Section -->
+        <section id="konklusjon">
+            <h2>Konklusjon</h2>
+            <p>SYRE er posisjonert som en ledende aktør innen parametrisk romarkitektur og romteknologi. Gjennom partnerskap og strategisk finansiering kan vi forme en bærekraftig fremtid i rommet.</p>
+            <div class="image-placeholder">Bilde: Konklusjon</div>
+        </section>
+    </main>
+</body>
+</html>
+

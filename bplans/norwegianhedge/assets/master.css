@@ -1,0 +1,314 @@
+
+/* TODO: Switch to Cloud.typography w/ Gotham Tabular Figures */
+
+@font-face {
+  font-family: HelveticaNeueLtProHeavy;
+  src: url(helvetica_neue_lt_pro_heavy.otf) format("opentype");
+}
+
+@font-face {
+  font-family: SourceSansProBold;
+  src: url(SourceSansPro-Bold.ttf) format("truetype");
+}
+
+@font-face {
+  font-family: SourceSansProSemibold;
+  src: url(SourceSansPro-Semibold.ttf) format("truetype");
+}
+
+@font-face {
+  font-family: SourceSansProRegular;
+  src: url(SourceSansPro-Regular.ttf) format("truetype");
+}
+
+body {
+  font-family: "SourceSansProRegular", sans-serif;
+  font-size: 16px;
+}
+
+
+
+.frontpage {
+  background: url("pattern.png") no-repeat bottom;
+  background-color: #fff;
+  background-size: contain;
+}
+
+.frontpage h1 {
+  font-family: "HelveticaNeueLtProHeavy";
+  letter-spacing: -0.5px;
+  margin-left: -5px;
+  margin-bottom: 40px;
+  font-size: 45px;
+}
+
+.frontpage h1, .frontpage h2 {
+  color: #000;
+}
+
+.frontpage h2.version {
+  color: #ccc;
+  font-size: 24px;
+  margin-top: 48px;
+  font-family: "SourceSansProRegular";
+}
+
+.frontpage img {
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+}
+
+
+footer {
+  font-family: "SourceSansProRegular";
+  color: #ccc;
+  position: absolute;
+  bottom: 40px;
+}
+
+footer.pagination {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  font-size: 8px;
+  padding: 30px;
+  text-align: left;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.monospaced, ol.toc li:before {
+  font-family: "Roboto Mono", monospace;
+  font-size: 10px;
+}
+
+/* http://stackoverflow.com/questions/14138507/creating-table-of-contents-in-html */
+
+ol.toc, .toc ol {
+  counter-reset: item;
+}
+
+ol.toc {
+  padding-left: 3px;
+  line-height: 26px;
+}
+
+ol.toc li {
+  display: block;
+}
+
+ol.toc li:before {
+  content: counters(item, ".")" ";
+  counter-increment: item;
+  /* Required for pseudo-selector width below */
+  display: inline-block;
+  font-weight: normal;
+}
+
+/* Level 1 */
+
+ol.toc > li {
+  font-weight: bold;
+  padding: 3px 0;
+}
+
+ol.toc li li {
+  font-weight: normal;
+}
+
+ol.toc > li:before {
+  width: 20px;
+}
+
+/* Level 2 */
+
+ol.toc > li > ol {
+  padding-left: 24px;
+  line-height: 1.3em;
+}
+
+ol.toc > li > ol > li:before {
+  width: 25px;
+}
+
+/* Level 3 */
+
+ol.toc li ol ol {
+  padding-left: 25px;
+  padding-bottom: 2px;
+}
+
+ol.toc li ol ol li:before {
+  width: 35px;
+}
+
+a {
+
+  /* Prevent hyphened words from splitting */
+
+  white-space: nowrap;
+}
+
+h1, h2 {
+  font-weight: normal;
+}
+
+
+h1 {
+  font-size: 50px;
+  font-family: SourceSansProBold;
+  letter-spacing: 0.04em;
+}
+
+main h1 {
+  margin: 0 0 86px -2px;
+}
+
+h2 {
+  font-size: 33px;
+  font-family: SourceSansProSemibold;
+  line-height: 40px;
+  margin-left: -3px;
+}
+
+h3 {
+  font-size: 18px;
+  margin: 22px 0 11px;
+  letter-spacing: 0.05em;
+}
+
+h4 {
+  display: inline;
+  letter-spacing: 0.05em;
+}
+
+/* https://stackoverflow.com/questions/1530685/html-sup-tag-affecting-line-height-how-to-make-it-consistent */
+
+sup {
+  vertical-align: top;
+  position: relative;
+  top: -0.5em;
+}
+
+main p {
+  margin: 12px 0;
+  line-height: 1.5em;
+}
+
+main a {
+  color: #0000ee;
+  text-decoration: none;
+}
+
+
+/* Legg til ikon til linker */
+
+main a:after {
+  content: "";
+  display: inline-block;
+  background-image: url(linkikon.svg);
+  background-repeat: no-repeat;
+  background-size: 0.7em 0.7em;
+  width: 0.7em;
+  height: 0.7em;
+  margin: 0 4px 0 3px;
+  padding-bottom: 3px;
+}
+
+main canvas {
+    margin: 50px 0;
+}
+
+.signatures {
+    text-align: center;
+    margin-top: 200px;
+}
+
+.signatures p {
+    width: 250px;
+    height: 150px;
+    text-align: center;
+    display: inline-block;
+    border-top: 2px solid #ccc;
+    padding-top: 7px;
+    margin: 8px;
+}
+
+/* Sitering i sideramme
+
+main {
+  padding-right: 20%;
+}
+
+main cite {
+  position: absolute;
+  left: 75%;
+  margin-top: 3px;
+  max-width: 13%;
+  font-size: 8px;
+  line-height: 13px;
+  / Disable default /
+  font-style: normal;
+}
+
+main cite:before {
+  content: attr(data-index);
+}
+
+canvas {
+  padding: 25px 0;
+}
+ */
+/*
+dl.formel {
+  width: 100%;
+  overflow: hidden;
+  padding: 10px;
+  margin: 10px 0;
+  background: #efefef;
+  line-height: 20px;
+}
+
+dl.formel dt {
+    float: left;
+    width: 20%;
+    padding: 0;
+    margin: 0;
+}
+
+dl.formel dd {
+  float: left;
+  width: 80%;
+  padding: 0;
+  margin: 0
+}
+*/
+
+.swot {
+  border-top: 2px solid #ccc;
+  border-bottom: 2px solid #ccc;
+  line-height: 1.2em;
+}
+
+.swot tr td:first-of-type {
+  background: #efefef;
+  width: 2em;
+  text-align: center;
+  /* Sprite */
+}
+

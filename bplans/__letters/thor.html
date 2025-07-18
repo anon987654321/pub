@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+  <meta charset="UTF-8">
+  <title>Infrastruktur – Haster</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    html {
+      background: #f7f7f7;
+      color: #333333;
+      font-family: serif;
+      font-size: 17px;
+      line-height: 1.5;
+      word-spacing: 0.06em;
+      letter-spacing: 0.003em;
+      hyphens: auto;
+      hanging-punctuation: first last;
+      text-rendering: optimizeLegibility;
+      font-variant-ligatures: common-ligatures;
+    }
+    @media (min-width: 320px) and (max-width: 1200px) {
+      html { font-size: calc(17px + (24 - 17) * ((100vw - 320px) / (1200 - 320))); }
+    }
+    @media (max-width: 319px) {
+      html { font-size: 17px; }
+    }
+    @media (min-width: 1200px) {
+      html { font-size: 24px; }
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background: inherit;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      orphans: 3;
+      widows: 3;
+    }
+    main {
+      background: #fff;
+      max-width: 36rem;
+      width: 100%;
+      margin: 2.5rem 0.5rem 0 0.5rem;
+      padding: 2.5rem 1.5rem 2rem 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+      display: block;
+    }
+    h1, h2 {
+      font-weight: 700;
+      color: #333333;
+      margin-top: 0;
+      margin-bottom: 1.1em;
+      letter-spacing: -0.01em;
+      font-feature-settings: "liga", "kern";
+      text-align: left;
+    }
+    h1 {
+      font-size: 2.5rem;
+    }
+    h2 {
+      font-size: 1.35rem;
+    }
+    p, ul, li {
+      font-size: 1rem;
+      line-height: 1.6;
+      margin: 0 0 1.2em 0;
+      max-width: 32rem;
+      text-align: left;
+    }
+    p {
+      text-indent: 2em;
+      margin-top: 0;
+    }
+    p:first-of-type, .signature, .infra-note, ul, table, h1, h2 {
+      text-indent: 0;
+    }
+    ul {
+      padding-left: 1.5em;
+      margin-bottom: 1.5em;
+      list-style-type: disc;
+    }
+    li {
+      font-size: 0.97rem;
+      margin-bottom: 0.4em;
+      word-break: break-all;
+    }
+    a {
+      color: #333333;
+      text-decoration: underline dotted;
+      text-underline-position: under;
+      transition: color 0.2s;
+    }
+    a:hover, a:focus {
+      color: #555555;
+    }
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin: 1.4rem 0 1.8rem 0;
+      font-size: 1rem;
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: none;
+    }
+    th, td {
+      text-align: left;
+      padding: 0.5rem 0.2rem;
+      border-bottom: 1px solid #ececec;
+      font-variant-numeric: tabular-nums;
+      font-feature-settings: "tnum";
+    }
+    th {
+      font-weight: 500;
+      color: #555555;
+      background: #f7f7f7;
+      letter-spacing: 0.01em;
+    }
+    tr.total td {
+      border-top: 2px solid #ccc;
+      font-weight: 600;
+    }
+    .footer {
+      margin-top: 2rem;
+      color: #888888;
+      font-size: 0.92rem;
+      font-style: italic;
+      text-align: left;
+    }
+    .signature {
+      margin-top: 2.2rem;
+      font-size: 1rem;
+      margin-bottom: 0.5em;
+    }
+    .infra-note {
+      font-size: 0.92rem;
+      color: #555;
+      margin-top: 2rem;
+      margin-bottom: 0.7rem;
+    }
+    .page-break {
+      page-break-before: always;
+      border: none;
+      margin: 0;
+      height: 0;
+      background: none;
+    }
+    .domains {
+      column-count: 2;
+      column-gap: 2.5rem;
+      font-size: 0.98rem;
+      margin-bottom: 1.5rem;
+    }
+    @media (max-width: 600px) {
+      .domains { column-count: 1; }
+      main { padding: 1rem 0.5rem; }
+      h1 { font-size: 2rem; }
+      h2 { font-size: 1.08rem; }
+    }
+    @media print {
+      main { box-shadow: none; margin: 0.5rem; padding: 1rem; }
+      html, body { background: #fff !important; }
+      .page-break { display: block; page-break-before: always; }
+      .domains { column-count: 2; }
+      a { color: #000; }
+    }
+  </style>
+</head>
+<body>
+  <main aria-labelledby="brev-title">
+    <h1 id="brev-title">Infrastruktur – Haster</h1>
+    <p style="text-indent:0;"><strong>Kjære Thor,</strong></p>
+    <p>
+      Jeg har akutt behov for støtte for å videreføre arbeidet mitt. Om jeg ikke får inn 110 000 kr nå, risikerer jeg å miste alt: domener, servere – hele den digitale infrastrukturen.
+    </p>
+    <table aria-label="Budsjett">
+      <tr>
+        <th>Post</th>
+        <th>Beløp</th>
+      </tr>
+      <tr>
+        <td>Domenefornyelser (56 domener)</td>
+        <td>17 000</td>
+      </tr>
+      <tr>
+        <td>Servere (7 Rails-applikasjoner)</td>
+        <td>41 000</td>
+      </tr>
+      <tr>
+        <td>Backup og sikkerhet</td>
+        <td>12 000</td>
+      </tr>
+      <tr>
+        <td>Utviklingsverktøy og API-er</td>
+        <td>14 000</td>
+      </tr>
+      <tr>
+        <td>Mat og bosted</td>
+        <td>26 000</td>
+      </tr>
+      <tr class="total">
+        <td>SUM Q3 2025</td>
+        <td>110 000</td>
+      </tr>
+    </table>
+    <p>
+      Jeg ber ikke om veldedighet, men om et lån, investering eller forskudd. Jeg ønsker bare å sikre at alt jeg har bygd ikke forsvinner.
+    </p>
+    <div class="infra-note">
+      All infrastruktur kjører på <a href="https://openbsd.org/" target="_blank" rel="noopener">OpenBSD</a> for maksimal sikkerhet og pålitelighet.<br>
+      Jeg drifter 56 domener og 7 <a href="https://rubyonrails.org/" target="_blank" rel="noopener">Rails</a>-applikasjoner på én integrert plattform.<br>
+      <strong>Tjenester og samspill:</strong>
+      <ul>
+        <li><a href="https://man.openbsd.org/dnssec" target="_blank">DNSSEC</a> – sikrer alle soner og domener.</li>
+        <li><a href="https://man.openbsd.org/relayd" target="_blank">relayd</a> – lastbalansering og proxy for alle tjenester.</li>
+        <li><a href="https://man.openbsd.org/httpd" target="_blank">httpd</a> – leverer webtrafikk og omdirigeringer.</li>
+        <li><a href="https://man.openbsd.org/acme-client" target="_blank">acme-client</a> – automatisk TLS/SSL for alle domener.</li>
+        <li><a href="https://github.com/socketry/falcon" target="_blank">falcon</a> – høyytelses webapp-server for Rails-appene.</li>
+        <li><a href="https://www.postgresql.org/" target="_blank">PostgreSQL</a> – database for applikasjonene.</li>
+        <li>Alt styres av OpenBSDs sikkerhetsnivå, ingen cloud, ingen eksterne avhengigheter.</li>
+      </ul>
+      Trafikk møter først relayd (proxy og lastbalansering), så httpd (webserver og ACME/TLS), før den sendes videre til Falcon (Rails-app) eller statiske filer, med PostgreSQL for datalagring. Alt sikres av DNSSEC fra domenenivå og opp.
+    </div>
+    <p>
+      Jeg legger ved fullstendig domeneliste, oppsett, og dokumentasjon på AI-mestring og systemautomatisering (se vedlegg).
+    </p>
+    <div class="signature">
+      Vennlig hilsen,<br>
+      Johann
+    </div>
+    <div class="footer">Dette brevet er personlig og konfidensielt.</div>
+  </main>
+  <hr class="page-break" />
+  <main aria-labelledby="prosjekt-title">
+    <h1 id="prosjekt-title">Prosjekter</h1>
+    <ul>
+      <li><a href="https://brgen.no" target="_blank" rel="noopener">Brgen</a> – Sosial plattform for byliv (marked, dating, musikk, matlevering)</li>
+      <li><a href="https://ai3.no" target="_blank" rel="noopener">AI3</a> – Sikker AI-plattform for helse og styring</li>
+      <li><a href="https://druglab.no" target="_blank" rel="noopener">druglab</a> – En metallboks som kan produsere alle slags legemidler</li>
+      <li><a href="https://la2.ai" target="_blank" rel="noopener">LA2</a> – AI-basert byutvikling med svermerobotikk</li>
+      <li><a href="https://speis.no" target="_blank" rel="noopener">SPEIS</a> – Magnetohydrodynamisk fremdrift og AI-produksjon</li>
+      <li><a href="https://pub.healthcare" target="_blank" rel="noopener">pub.healthcare</a> – Autonome sykehus med fornybar energi</li>
+      <li><a href="https://autonomipartiet.no" target="_blank" rel="noopener">Autonomipartiet</a> – Norsk parti for transparent, bærekraftig styring</li>
+      <li><a href="https://syre.no" target="_blank" rel="noopener">SYRE</a> – 3D-printede sko med bærekraftig design</li>
+      <li><a href="https://ai-bibel.no" target="_blank" rel="noopener">AI-bibel</a> – Kollektiv oversettelse av hellige tekster</li>
+    </ul>
+    <h2>Alle mine domener</h2>
+    <div class="domains">
+      <ul>
+        <li><a href="https://brgen.no" target="_blank">brgen.no</a></li>
+        <li><a href="https://oshlo.no" target="_blank">oshlo.no</a></li>
+        <li><a href="https://stvanger.no" target="_blank">stvanger.no</a></li>
+        <li><a href="https://trmso.no" target="_blank">trmso.no</a></li>
+        <li><a href="https://trndheim.no" target="_blank">trndheim.no</a></li>
+        <li><a href="https://reykjavk.is" target="_blank">reykjavk.is</a></li>
+        <li><a href="https://kbenhvn.dk" target="_blank">kbenhvn.dk</a></li>
+        <li><a href="https://gtebrg.se" target="_blank">gtebrg.se</a></li>
+        <li><a href="https://mlmoe.se" target="_blank">mlmoe.se</a></li>
+        <li><a href="https://stholm.se" target="_blank">stholm.se</a></li>
+        <li><a href="https://hlsinki.fi" target="_blank">hlsinki.fi</a></li>
+        <li><a href="https://brmingham.uk" target="_blank">brmingham.uk</a></li>
+        <li><a href="https://cardff.uk" target="_blank">cardff.uk</a></li>
+        <li><a href="https://edinbrgh.uk" target="_blank">edinbrgh.uk</a></li>
+        <li><a href="https://glasgow.uk" target="_blank">glasgow.uk</a></li>
+        <li><a href="https://lndon.uk" target="_blank">lndon.uk</a></li>
+        <li><a href="https://lverpool.uk" target="_blank">lverpool.uk</a></li>
+        <li><a href="https://mnchester.uk" target="_blank">mnchester.uk</a></li>
+        <li><a href="https://amstrdam.nl" target="_blank">amstrdam.nl</a></li>
+        <li><a href="https://rottrdam.nl" target="_blank">rottrdam.nl</a></li>
+        <li><a href="https://utrcht.nl" target="_blank">utrcht.nl</a></li>
+        <li><a href="https://brssels.be" target="_blank">brssels.be</a></li>
+        <li><a href="https://zrich.ch" target="_blank">zrich.ch</a></li>
+        <li><a href="https://lchtenstein.li" target="_blank">lchtenstein.li</a></li>
+        <li><a href="https://frankfrt.de" target="_blank">frankfrt.de</a></li>
+        <li><a href="https://brdeaux.fr" target="_blank">brdeaux.fr</a></li>
+        <li><a href="https://mrseille.fr" target="_blank">mrseille.fr</a></li>
+        <li><a href="https://mlan.it" target="_blank">mlan.it</a></li>
+        <li><a href="https://lisbon.pt" target="_blank">lisbon.pt</a></li>
+        <li><a href="https://wrsawa.pl" target="_blank">wrsawa.pl</a></li>
+        <li><a href="https://gdnsk.pl" target="_blank">gdnsk.pl</a></li>
+        <li><a href="https://austn.us" target="_blank">austn.us</a></li>
+        <li><a href="https://chcago.us" target="_blank">chcago.us</a></li>
+        <li><a href="https://denvr.us" target="_blank">denvr.us</a></li>
+        <li><a href="https://dllas.us" target="_blank">dllas.us</a></li>
+        <li><a href="https://dtroit.us" target="_blank">dtroit.us</a></li>
+        <li><a href="https://houstn.us" target="_blank">houstn.us</a></li>
+        <li><a href="https://lsangeles.com" target="_blank">lsangeles.com</a></li>
+        <li><a href="https://mnnesota.com" target="_blank">mnnesota.com</a></li>
+        <li><a href="https://newyrk.us" target="_blank">newyrk.us</a></li>
+        <li><a href="https://prtland.com" target="_blank">prtland.com</a></li>
+        <li><a href="https://wshingtondc.com" target="_blank">wshingtondc.com</a></li>
+        <li><a href="https://pub.attorney" target="_blank">pub.attorney</a></li>
+        <li><a href="https://freehelp.legal" target="_blank">freehelp.legal</a></li>
+        <li><a href="https://bsdports.org" target="_blank">bsdports.org</a></li>
+        <li><a href="https://bsddocs.org" target="_blank">bsddocs.org</a></li>
+        <li><a href="https://hjerterom.no" target="_blank">hjerterom.no</a></li>
+        <li><a href="https://privcam.no" target="_blank">privcam.no</a></li>
+        <li><a href="https://amberapp.com" target="_blank">amberapp.com</a></li>
+        <li><a href="https://foodielicio.us" target="_blank">foodielicio.us</a></li>
+        <li><a href="https://stacyspassion.com" target="_blank">stacyspassion.com</a></li>
+        <li><a href="https://antibettingblog.com" target="_blank">antibettingblog.com</a></li>
+        <li><a href="https://anticasinoblog.com" target="_blank">anticasinoblog.com</a></li>
+        <li><a href="https://antigamblingblog.com" target="_blank">antigamblingblog.com</a></li>
+        <li><a href="https://foball.no" target="_blank">foball.no</a></li>
+      </ul>
+    </div>
+  </main>
+</body>
+</html>
