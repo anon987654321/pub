@@ -1,14 +1,60 @@
 {
   "meta": {
-    "version": "v18.0.0",
+    "version": "v22.10.12",
     "updated": "2025-01-27T12:00:00Z",
     "by": "anon987654321",
-    "description": "Production-ready universal prompt orchestration system with mandatory deep file analysis and cross-domain expertise",
+    "description": "Production-ready universal prompt orchestration system with comprehensive tech stack integration and enhanced cognitive framework",
     "cognitive_compliance": "self_applied_master_standards",
-    "enhancement_note": "Revolutionary upgrade with mandatory file analysis, advanced security, Norwegian market integration, and production deployment specifications"
+    "enhancement_note": "Enhanced tech stack integration with Ruby/Rails 8+, OpenBSD, Zsh, comprehensive formatting coverage, and ANALYZE/IMPROVE/STYLE/RESEARCH pattern integration"
   },
   "workflow": {
     "cognitive_header": "§ Workflow Intelligence System",
+    "methodology_patterns": {
+      "analyze_pattern": {
+        "description": "Deep analysis and understanding phase",
+        "process": [
+          "file_by_file_comprehensive_reading",
+          "dependency_mapping_and_tracing",
+          "architecture_pattern_recognition",
+          "security_vulnerability_assessment",
+          "performance_bottleneck_identification"
+        ],
+        "outputs": "detailed_analysis_report_with_recommendations"
+      },
+      "improve_pattern": {
+        "description": "Enhancement and optimization phase",
+        "process": [
+          "code_quality_improvements",
+          "performance_optimization",
+          "security_hardening",
+          "accessibility_enhancement",
+          "maintainability_refactoring"
+        ],
+        "outputs": "improved_codebase_with_documentation"
+      },
+      "style_pattern": {
+        "description": "Formatting and consistency enforcement",
+        "process": [
+          "universal_formatting_application",
+          "language_specific_style_enforcement",
+          "cognitive_load_optimization",
+          "visual_hierarchy_improvement",
+          "consistency_standardization"
+        ],
+        "outputs": "consistently_formatted_codebase"
+      },
+      "research_pattern": {
+        "description": "Investigation and learning phase",
+        "process": [
+          "technology_stack_research",
+          "best_practices_investigation",
+          "industry_standards_review",
+          "security_guidelines_analysis",
+          "performance_benchmarking"
+        ],
+        "outputs": "research_findings_with_actionable_insights"
+      }
+    },
     "mode_detection": {
       "simple": [
         "basic_implementation", 
@@ -58,7 +104,11 @@
         "indentation": "2_spaces",
         "quotes": "double_quotes",
         "line_length": 120,
-        "cognitive_headers": true
+        "line_endings": "unix_lf",
+        "encoding": "utf_8",
+        "cognitive_headers": true,
+        "tech_stack_exclusions": ["python", "c_language"],
+        "repository_integration": "pub_methodology_compliant"
       },
       "cognitive_constraints": {
         "max_concepts_per_section": 7,
@@ -390,8 +440,10 @@
       "quality": "world_class_standards",
       "accessibility": "wcag_2_2_aaa_compliant",
       "performance": "95_plus_core_web_vitals",
-      "formatting": "universal_consistency",
-      "preservation": "never_truncate_preserve_logic"
+      "formatting": "universal_consistency_comprehensive_tech_stack",
+      "preservation": "never_truncate_preserve_logic",
+      "tech_stack_coverage": "comprehensive_ruby_rails_openbsd_zsh_frontend",
+      "methodology_integration": "analyze_improve_style_research_patterns"
     },
     "multi_perspective": {
       "roles": [
@@ -498,10 +550,17 @@
   },
   "stacks": {
     "detection": {
-      "rails": ["Gemfile", "config/application.rb", "app/"],
-      "ruby": ["*.rb", "Gemfile", "Rakefile"],
-      "frontend": ["*.html", "*.css", "*.js", "package.json"],
+      "rails": ["Gemfile", "config/application.rb", "app/", "config/routes.rb"],
+      "ruby": ["*.rb", "Gemfile", "Rakefile", ".ruby-version"],
+      "frontend": ["*.html", "*.css", "*.js", "package.json", "*.erb"],
+      "javascript_stimulus": ["stimulus_controllers/", "*.stimulus.js", "hotwire", "turbo"],
       "shell": ["*.sh", "*.zsh", "*.bash"],
+      "zsh": ["*.zsh", ".zshrc", "zsh_functions/"],
+      "openbsd": ["rc.d/", "pf.conf", "httpd.conf", "doas.conf"],
+      "html_erb": ["*.erb", "*.html.erb", "app/views/"],
+      "css_scss": ["*.scss", "*.sass", "*.css", "app/assets/stylesheets/"],
+      "seo": ["sitemap.xml", "robots.txt", "meta_tags", "structured_data"],
+      "ui_ux": ["design_system/", "components/", "accessibility/"],
       "business": ["business_plan", "canvas", "financial_model"],
       "animation": ["babylon.js", "three.js", "d3.js", "svg_animations"],
       "async": ["async", "concurrent", "parallel", "queue"],
@@ -511,15 +570,60 @@
     "templates": {
       "rails": {
         "version": "8.0+",
-        "features": ["hotwire", "stimulus", "solid_queue"],
+        "features": ["hotwire", "stimulus", "solid_queue", "solid_cable"],
         "security": ["strong_params", "csrf_protection", "pundit"],
-        "performance": ["falcon_server", "fragment_caching"]
+        "performance": ["falcon_server", "fragment_caching"],
+        "i18n": ["rails_i18n", "norwegian_locales", "lazy_lookup"],
+        "components": ["view_components", "stimulus_controllers"]
       },
       "ruby": {
         "version": "3.3+",
         "patterns": ["frozen_string_literal", "yard_docs", "solid_principles"],
         "tools": ["rubocop", "rspec", "bundler"],
-        "async": ["async", "concurrent-ruby", "sidekiq"]
+        "async": ["async", "concurrent-ruby", "sidekiq"],
+        "performance": ["jit_optimization", "gc_tuning", "memory_optimization"]
+      },
+      "javascript_stimulus": {
+        "standards": ["es6_plus", "stimulus_controllers", "hotwire_integration"],
+        "organization": ["controller_naming", "target_management", "action_patterns"],
+        "accessibility": ["aria_integration", "keyboard_navigation", "screen_reader_support"],
+        "performance": ["lazy_loading", "code_splitting", "optimization"]
+      },
+      "zsh": {
+        "compatibility": ["posix", "zsh", "openbsd_ksh"],
+        "safety": ["set_euo_pipefail", "input_validation", "error_handling"],
+        "patterns": ["function_organization", "parameter_handling", "return_codes"],
+        "security": ["privilege_management", "command_validation", "input_sanitization"]
+      },
+      "openbsd": {
+        "security": ["pledge_unveil", "doas", "privilege_separation"],
+        "services": ["rc_scripts", "service_management", "monitoring"],
+        "networking": ["pf_firewall", "network_security", "ssl_termination"],
+        "web_server": ["httpd_config", "virtual_hosts", "security_headers"]
+      },
+      "html_erb": {
+        "standards": ["html5", "semantic_markup", "accessibility"],
+        "rails_integration": ["helpers", "partials", "layouts", "components"],
+        "accessibility": ["wcag_2_2_aaa", "aria_roles", "keyboard_navigation"],
+        "security": ["xss_prevention", "content_security_policy", "output_escaping"]
+      },
+      "css_scss": {
+        "methodology": ["bem", "mobile_first", "logical_properties"],
+        "organization": ["component_based", "variable_systems", "mixin_patterns"],
+        "performance": ["critical_css", "optimization", "compression"],
+        "accessibility": ["color_contrast", "focus_indicators", "responsive_typography"]
+      },
+      "seo": {
+        "meta_optimization": ["title_tags", "descriptions", "keywords", "social_meta"],
+        "structured_data": ["json_ld", "schema_org", "breadcrumbs", "rich_snippets"],
+        "technical_seo": ["semantic_urls", "sitemap", "robots_txt", "canonical_urls"],
+        "performance": ["core_web_vitals", "page_speed", "mobile_optimization"]
+      },
+      "ui_ux": {
+        "accessibility": ["inclusive_design", "wcag_compliance", "assistive_technology"],
+        "responsive": ["mobile_first", "breakpoint_strategy", "fluid_design"],
+        "typography": ["golden_ratio", "scale_systems", "readability_optimization"],
+        "interaction": ["micro_interactions", "feedback_systems", "error_handling"]
       },
       "frontend": {
         "standards": ["html5", "wcag_2.2_aaa", "mobile_first"],
@@ -685,24 +789,265 @@
     },
     "language_specific": {
       "ruby": {
-        "frozen_string_literal": "required",
-        "hash_syntax": "symbol_to_proc",
-        "method_chaining": "semantic_alignment",
-        "async_patterns": "clear_formatting",
-        "yard_docs": "required_for_public_methods"
+        "cognitive_header": "§ Ruby Language Standards",
+        "frozen_string_literal": "mandatory_header_comment",
+        "hash_syntax": "symbol_to_proc_modern_style",
+        "method_chaining": "semantic_alignment_visual_clarity",
+        "async_patterns": "clear_formatting_concurrent_ruby",
+        "yard_docs": "mandatory_public_methods_comprehensive",
+        "rails_8_integration": {
+          "solid_queue": "background_job_patterns",
+          "solid_cable": "websocket_integration",
+          "hotwire": "turbo_stimulus_patterns",
+          "new_authentication": "rails_8_auth_patterns"
+        },
+        "semantic_formatting": {
+          "method_definitions": "clear_parameter_separation",
+          "class_definitions": "module_namespace_clarity",
+          "constants": "SCREAMING_SNAKE_CASE",
+          "private_methods": "clear_visibility_markers"
+        },
+        "performance_patterns": {
+          "string_interpolation": "prefer_over_concatenation",
+          "enumerable_methods": "memory_efficient_chains",
+          "regex_compilation": "static_regex_constants",
+          "method_caching": "memoization_patterns"
+        }
       },
-      "javascript": {
-        "semicolons": "always",
-        "const_let_var": "const_first",
-        "async_await": "prefer_over_promises",
-        "double_quotes": "enforced"
+      "rails": {
+        "cognitive_header": "§ Rails Framework Standards",
+        "version": "8.0_plus_required",
+        "tag_helpers": {
+          "semantic_html": "content_tag_over_raw_html",
+          "form_helpers": "form_with_modern_patterns",
+          "link_helpers": "link_to_semantic_usage",
+          "image_helpers": "image_tag_accessibility_mandatory"
+        },
+        "i18n_mandatory": {
+          "string_externalization": "all_user_facing_text",
+          "norwegian_support": "nb_nn_locales",
+          "pluralization": "rails_i18n_patterns",
+          "lazy_lookup": "controller_view_namespacing"
+        },
+        "hotwire_turbo_stimulus": {
+          "turbo_frames": "semantic_frame_boundaries",
+          "turbo_streams": "progressive_enhancement",
+          "stimulus_controllers": "clear_naming_conventions",
+          "hotwire_patterns": "accessibility_compliant"
+        },
+        "view_components": {
+          "component_organization": "semantic_folder_structure",
+          "component_testing": "rspec_component_specs",
+          "component_documentation": "yard_component_docs",
+          "component_accessibility": "wcag_compliant_components"
+        },
+        "security_patterns": {
+          "strong_parameters": "comprehensive_filtering",
+          "csrf_protection": "form_authenticity_tokens",
+          "sql_injection_prevention": "parameterized_queries",
+          "xss_protection": "html_escaping_default"
+        }
       },
-      "css": {
-        "property_ordering": "logical_groups",
-        "custom_properties": "semantic_naming",
-        "media_queries": "mobile_first",
-        "class_naming": "underscore_convention",
-        "no_divitis": "semantic_html5_only"
+      "javascript_stimulus": {
+        "cognitive_header": "§ JavaScript/Stimulus Standards",
+        "es6_plus_standards": {
+          "const_let_var": "const_preferred_let_limited",
+          "arrow_functions": "appropriate_context_usage",
+          "destructuring": "readability_optimization",
+          "template_literals": "string_interpolation_preferred"
+        },
+        "stimulus_organization": {
+          "controller_naming": "kebab_case_descriptive",
+          "action_naming": "verb_noun_pattern",
+          "target_naming": "semantic_element_references",
+          "value_naming": "typed_value_declarations"
+        },
+        "modern_patterns": {
+          "async_await": "promise_chain_replacement",
+          "fetch_api": "xhr_replacement_modern",
+          "event_delegation": "stimulus_action_patterns",
+          "dom_manipulation": "target_based_interactions"
+        },
+        "accessibility_integration": {
+          "aria_updates": "dynamic_content_announcements",
+          "focus_management": "keyboard_navigation_support",
+          "screen_reader": "semantic_feedback_patterns",
+          "progressive_enhancement": "graceful_degradation"
+        }
+      },
+      "zsh": {
+        "cognitive_header": "§ Zsh/Shell Scripting Standards",
+        "error_handling": {
+          "set_flags": "set_euo_pipefail_mandatory",
+          "exit_codes": "meaningful_error_codes",
+          "error_messages": "descriptive_stderr_output",
+          "cleanup_traps": "resource_cleanup_patterns"
+        },
+        "posix_compliance": {
+          "portability": "posix_sh_compatible_base",
+          "shell_features": "bashisms_avoidance",
+          "command_substitution": "dollar_parentheses_preferred",
+          "parameter_expansion": "posix_parameter_patterns"
+        },
+        "function_patterns": {
+          "function_definition": "function_keyword_or_parentheses",
+          "local_variables": "local_scope_enforcement",
+          "return_values": "exit_code_conventions",
+          "parameter_handling": "argument_validation"
+        },
+        "security_practices": {
+          "input_validation": "parameter_sanitization",
+          "privilege_escalation": "doas_sudo_patterns",
+          "file_permissions": "restrictive_umask_settings",
+          "command_injection": "parameter_quoting_mandatory"
+        }
+      },
+      "openbsd": {
+        "cognitive_header": "§ OpenBSD System Integration",
+        "pledge_unveil": {
+          "pledge_usage": "minimal_system_calls",
+          "unveil_paths": "filesystem_access_restriction",
+          "capability_dropping": "progressive_restriction",
+          "security_model": "principle_least_privilege"
+        },
+        "doas_usage": {
+          "privilege_escalation": "doas_over_sudo",
+          "configuration": "minimal_doas_conf",
+          "command_restriction": "specific_command_permissions",
+          "logging": "execution_audit_trails"
+        },
+        "rc_scripts": {
+          "service_management": "rcctl_integration",
+          "startup_scripts": "rc_d_daemon_patterns",
+          "service_dependencies": "proper_ordering",
+          "error_handling": "service_failure_recovery"
+        },
+        "pf_rules": {
+          "firewall_configuration": "default_deny_policy",
+          "rule_organization": "logical_rule_grouping",
+          "port_management": "minimal_open_ports",
+          "logging_configuration": "security_event_logging"
+        },
+        "httpd_config": {
+          "web_server": "openbsd_httpd_configuration",
+          "ssl_termination": "tls_best_practices",
+          "virtual_hosts": "domain_based_routing",
+          "security_headers": "comprehensive_header_set"
+        }
+      },
+      "html_erb": {
+        "cognitive_header": "§ HTML/ERB Template Standards",
+        "semantic_html5": {
+          "structural_elements": "header_main_nav_footer",
+          "content_sectioning": "article_section_aside",
+          "interactive_elements": "button_form_input",
+          "accessibility_roles": "aria_landmark_roles"
+        },
+        "rails_helpers_preferred": {
+          "form_helpers": "form_with_over_raw_html",
+          "link_helpers": "link_to_with_accessibility",
+          "content_helpers": "content_tag_semantic_usage",
+          "asset_helpers": "rails_asset_pipeline_integration"
+        },
+        "wcag_2_2_aaa": {
+          "heading_hierarchy": "logical_h1_h2_h3_structure",
+          "alt_text": "descriptive_contextual_alternatives",
+          "color_contrast": "7_1_contrast_ratio",
+          "keyboard_navigation": "full_keyboard_accessibility"
+        },
+        "erb_best_practices": {
+          "output_escaping": "html_safe_explicit_usage",
+          "logic_separation": "minimal_logic_in_views",
+          "partial_organization": "semantic_partial_structure",
+          "content_security": "xss_prevention_patterns"
+        }
+      },
+      "css_scss": {
+        "cognitive_header": "§ CSS/SCSS Methodology Standards",
+        "bem_methodology": {
+          "block_element_modifier": "clear_naming_hierarchy",
+          "component_isolation": "no_cross_component_dependencies",
+          "modifier_patterns": "state_variation_clarity",
+          "nested_structure": "logical_dom_hierarchy"
+        },
+        "mobile_first": {
+          "responsive_design": "min_width_media_queries",
+          "progressive_enhancement": "mobile_base_desktop_enhancement",
+          "touch_targets": "44px_minimum_tap_targets",
+          "viewport_optimization": "fluid_responsive_patterns"
+        },
+        "logical_property_ordering": {
+          "positioning": "display_position_top_right_bottom_left",
+          "box_model": "width_height_margin_padding_border",
+          "typography": "font_text_color_properties",
+          "visual_effects": "background_shadow_transform_animation"
+        },
+        "nesting_restrictions": {
+          "max_nesting_depth": "3_levels_maximum",
+          "semantic_nesting": "html_structure_reflection",
+          "performance_optimization": "css_selector_efficiency",
+          "maintainability": "clear_specificity_management"
+        },
+        "scss_patterns": {
+          "variable_organization": "semantic_variable_naming",
+          "mixin_usage": "reusable_pattern_abstractions",
+          "function_definitions": "calculation_helper_functions",
+          "import_structure": "logical_file_organization"
+        }
+      },
+      "seo": {
+        "cognitive_header": "§ SEO Optimization Standards",
+        "meta_tags": {
+          "title_optimization": "unique_descriptive_under_60_chars",
+          "description_meta": "compelling_155_char_summaries",
+          "keywords_meta": "relevant_targeted_keywords",
+          "social_meta": "open_graph_twitter_cards"
+        },
+        "structured_data": {
+          "json_ld_format": "schema_org_markup",
+          "breadcrumb_markup": "navigation_hierarchy",
+          "article_markup": "content_type_specification",
+          "organization_markup": "business_entity_data"
+        },
+        "semantic_urls": {
+          "url_structure": "hierarchical_logical_paths",
+          "slug_optimization": "keyword_rich_readable_urls",
+          "canonical_urls": "duplicate_content_prevention",
+          "international_seo": "hreflang_norwegian_localization"
+        },
+        "performance_seo": {
+          "core_web_vitals": "lcp_fid_cls_optimization",
+          "mobile_optimization": "mobile_first_indexing",
+          "page_speed": "lighthouse_95_plus_score",
+          "technical_seo": "crawlability_indexability"
+        }
+      },
+      "ui_ux": {
+        "cognitive_header": "§ UI/UX Design Standards",
+        "accessibility_first": {
+          "inclusive_design": "universal_access_principles",
+          "disability_considerations": "visual_motor_cognitive_auditory",
+          "assistive_technology": "screen_reader_optimization",
+          "accessibility_testing": "automated_manual_user_testing"
+        },
+        "responsive_patterns": {
+          "breakpoint_strategy": "content_based_breakpoints",
+          "grid_systems": "css_grid_flexbox_modern",
+          "typography_scaling": "fluid_typography_systems",
+          "image_optimization": "responsive_srcset_optimization"
+        },
+        "golden_ratio_typography": {
+          "scale_progression": "1_618_mathematical_harmony",
+          "font_size_hierarchy": "h1_h2_h3_proportional_scaling",
+          "line_height_optimization": "readability_rhythm_optimization",
+          "spacing_systems": "vertical_rhythm_consistency"
+        },
+        "interaction_design": {
+          "micro_interactions": "feedback_oriented_animations",
+          "loading_states": "progressive_disclosure_patterns",
+          "error_handling": "user_friendly_error_recovery",
+          "form_design": "progressive_enhancement_validation"
+        }
       },
       "shell": {
         "posix_compliance": "required",
