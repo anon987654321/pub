@@ -1,5 +1,3 @@
-#!/bin/bash
-
 #!/usr/bin/env zsh
 
 # Configures OpenBSD 7.8 for 56 domains and 7 Rails apps with DNSSEC, relayd,
@@ -109,7 +107,7 @@ run() {
 install_system() {
     log "Installing system packages"
 
-    run pkg_add -U zsh ruby-3.3.5 postgresql-server redis node zap ldns-utils
+    run pkg_add -U zsh ruby-3.3.5 postgresql-server redis node zap ldns-utils mutt
     run gem install falcon
 
     cat > /etc/profile <<EOF
@@ -311,6 +309,9 @@ EOF
         run rcctl start "$service"
     done
 
+    # Enable smtpd but don't start until email setup
+    run rcctl enable smtpd
+
     log "Core services set up"
     echo "services_setup" >> "$STATE_FILE"
 }
@@ -477,6 +478,68 @@ EOF
     echo "relayd_configured" >> "$STATE_FILE"
 }
 
+setup_email() {
+    log "Setting up OpenSMTPD for bergen@pub.attorney"
+
+    # Create vmail directory structure
+    run mkdir -p /var/vmail/pub.attorney/bergen/{new,cur,tmp}
+    run adduser -group daemon -batch -shell /bin/ksh -home /var/vmail vmail || true
+    run chown -R vmail:daemon /var/vmail
+    run chmod -R 700 /var/vmail
+
+    cat > /etc/mail/smtpd.conf <<EOF
+# OpenSMTPD configuration for bergen@pub.attorney
+pki mail.pub.attorney cert "/etc/ssl/pub.attorney.fullchain.pem"
+pki mail.pub.attorney key "/etc/ssl/private/pub.attorney.key"
+
+# Tables
+table aliases file:/etc/mail/aliases
+table vusers file:/etc/mail/vusers
+
+# Listen
+listen on $BRGEN_IP port 25 tls pki mail.pub.attorney
+listen on $BRGEN_IP port 587 tls-require pki mail.pub.attorney auth
+
+# Actions
+action "local_mail" maildir "/var/vmail/%{dest.domain}/%{dest.user}" virtual <vusers>
+action "relay" relay
+
+# Rules
+match from any for domain "pub.attorney" action "local_mail"
+match from local for any action "relay"
+match auth from any for any action "relay"
+EOF
+
+    # Create virtual users table
+    echo "bergen@pub.attorney:vmail:1000:1000:/var/vmail/pub.attorney/bergen" > /etc/mail/vusers
+
+    # Update aliases
+    echo "bergen: bergen@pub.attorney" >> /etc/mail/aliases
+
+    # Install mutt for gfuser if not exists
+    run pkg_add -U mutt || true
+    
+    # Create gfuser for email access
+    run adduser -group daemon -batch -shell /bin/ksh gfuser || true
+
+    # Configure mutt for gfuser
+    run mkdir -p /home/gfuser
+    cat > /home/gfuser/.muttrc <<EOF
+set folder="/var/vmail/pub.attorney/bergen"
+set spoolfile="/var/vmail/pub.attorney/bergen"
+set mbox_type=Maildir
+set header_cache="~/.mutt/cache/headers"
+set message_cachedir="~/.mutt/cache/bodies"
+set certificate_file="~/.mutt/certificates"
+EOF
+    run chown gfuser:daemon /home/gfuser/.muttrc
+
+    run rcctl enable smtpd
+    run rcctl start smtpd
+    log "Email setup complete"
+    echo "email_setup" >> "$STATE_FILE"
+}
+
 cleanup_nsd() {
     log "Cleaning up NSD with zap"
 
@@ -506,7 +569,24 @@ main() {
             setup_dns
             setup_services
             process_domains
-            echo "Infrastructure setup complete"
+            echo "Infrastructure setup complete. Upload Rails apps to /home/<app>/<app>, then run with --resume"
+            ;;
+        --resume)
+            if ! grep -q "domains_processed" "$STATE_FILE" 2>/dev/null; then
+                log "Error: --resume requires Stage 1 (--infra) to be completed first"
+                exit 1
+            fi
+            deploy_apps
+            configure_relayd
+            echo "Application deployment complete. Run with --mail for email setup"
+            ;;
+        --mail)
+            if ! grep -q "relayd_configured" "$STATE_FILE" 2>/dev/null; then
+                log "Error: --mail requires Stage 2 (--resume) to be completed first"
+                exit 1
+            fi
+            setup_email
+            echo "Email setup complete"
             ;;
         --deploy)
             deploy_apps
@@ -528,7 +608,19 @@ main() {
             main "$@"
             ;;
         --help)
-            echo "Usage: doas zsh openbsd.sh [--infra|--deploy|--cleanup|--verbose|--dry-run|--help]"
+            echo "Usage: doas zsh openbsd.sh [--infra|--resume|--mail|--deploy|--cleanup|--verbose|--dry-run|--help]"
+            echo ""
+            echo "Stage-based deployment:"
+            echo "  --infra    Stage 1: DNS/certificates (pause for app upload)"
+            echo "  --resume   Stage 2: Services/apps deployment"
+            echo "  --mail     Stage 3: Email configuration"
+            echo ""
+            echo "Other options:"
+            echo "  --deploy   Deploy apps without stage checking"
+            echo "  --cleanup  Clean up NSD with zap"
+            echo "  --verbose  Enable verbose output"
+            echo "  --dry-run  Show commands without executing"
+            echo "  --help     Show this help message"
             exit 0
             ;;
         *)
@@ -539,7 +631,8 @@ main() {
             process_domains
             deploy_apps
             configure_relayd
-            echo "Deployment complete"
+            setup_email
+            echo "Complete deployment finished"
             ;;
     esac
 
