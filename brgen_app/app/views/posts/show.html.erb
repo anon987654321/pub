@@ -1,2 +1,189 @@
-<h1>Posts#show</h1>
-<p>Find me in app/views/posts/show.html.erb</p>
+<% content_for :title, "#{@post.title} - Brgen" %>
+
+<!-- Navigation -->
+<div class="mb-4">
+  <%= link_to posts_path, class: "btn btn-outline-secondary" do %>
+    ← Back to Posts
+  <% end %>
+</div>
+
+<!-- Post Content -->
+<article class="post-detail">
+  <!-- Post Header -->
+  <header class="post-header mb-4">
+    <h1 class="display-5 fw-bold mb-3"><%= @post.title %></h1>
+    
+    <div class="d-flex align-items-center mb-3">
+      <%= user_avatar(@post.user, size: 50) %>
+      <div class="ms-3">
+        <div class="fw-semibold">
+          <% if user_signed_in? %>
+            <%= link_to @post.user.full_name_or_email, user_path(@post.user), 
+                  class: "text-decoration-none text-dark" %>
+          <% else %>
+            <%= @post.user.full_name_or_email %>
+          <% end %>
+        </div>
+        <small class="text-muted">
+          <%= time_ago_in_words_or_date(@post.created_at) %>
+          • <%= @post.reading_time_minutes %> min read
+        </small>
+      </div>
+      
+      <!-- Follow/Unfollow Button -->
+      <% if user_signed_in? && @post.user != current_user %>
+        <div class="ms-auto">
+          <% if current_user.following?(@post.user) %>
+            <%= button_to "Unfollow", unfollow_user_path(@post.user), method: :delete,
+                  class: "btn btn-outline-primary btn-sm" %>
+          <% else %>
+            <%= button_to "Follow", follow_user_path(@post.user), method: :post,
+                  class: "btn btn-primary btn-sm" %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+    
+    <!-- Post Actions for Owner/Admin -->
+    <% if user_signed_in? && (@post.user == current_user || current_user.admin?) %>
+      <div class="post-owner-actions mb-3">
+        <div class="btn-group" role="group">
+          <%= link_to "Edit Post", edit_post_path(@post), class: "btn btn-outline-secondary btn-sm" %>
+          <%= button_to "Delete Post", post_path(@post), method: :delete,
+                class: "btn btn-outline-danger btn-sm",
+                data: { 
+                  confirm: "Are you sure you want to delete this post? This action cannot be undone.",
+                  turbo_method: :delete
+                } %>
+        </div>
+      </div>
+    <% end %>
+  </header>
+  
+  <!-- Featured Image -->
+  <% if @post.featured_image.attached? %>
+    <div class="post-image mb-4">
+      <%= image_tag @post.featured_image, 
+            class: "img-fluid rounded shadow-sm w-100", 
+            alt: @post.title %>
+    </div>
+  <% end %>
+  
+  <!-- Post Body -->
+  <div class="post-body mb-5">
+    <%= simple_format(@post.content, {}, wrapper_tag: "div", class: "lead") %>
+  </div>
+  
+  <!-- Post Interaction Bar -->
+  <div class="post-interactions py-3 border-top border-bottom mb-4">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <div class="d-flex align-items-center gap-3">
+          <!-- Like Button -->
+          <div id="post_<%= @post.id %>_likes">
+            <%= render 'likes', post: @post %>
+          </div>
+          
+          <!-- Comment Count -->
+          <div class="text-muted">
+            <i class="icon icon-message-circle" aria-hidden="true"></i>
+            <span><%= @post.comments_count %> comments</span>
+          </div>
+          
+          <!-- Share Button -->
+          <button class="btn btn-link btn-sm text-muted p-0" 
+                  onclick="sharePost('<%= j @post.title %>', '<%= post_url(@post) %>')">
+            <i class="icon icon-share" aria-hidden="true"></i>
+            <span>Share</span>
+          </button>
+        </div>
+      </div>
+      
+      <div class="col-md-6 text-md-end">
+        <!-- Publishing Status -->
+        <% unless @post.published %>
+          <span class="badge bg-warning">Draft</span>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</article>
+
+<!-- Comments Section -->
+<section class="comments-section">
+  <h3 class="mb-4">
+    Comments 
+    <span class="badge bg-secondary"><%= @comments.count %></span>
+  </h3>
+  
+  <!-- Comment Form -->
+  <% if user_signed_in? %>
+    <div class="comment-form mb-5">
+      <%= form_with model: [@post, @comment], local: true, class: "needs-validation" do |form| %>
+        <div class="mb-3">
+          <%= form.text_area :content, 
+                class: "form-control", 
+                placeholder: "Share your thoughts on this post...",
+                rows: 3,
+                required: true %>
+        </div>
+        
+        <div class="d-flex justify-content-between align-items-center">
+          <small class="text-muted">
+            Be respectful and constructive in your comments.
+          </small>
+          <%= form.submit "Post Comment", class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="comment-prompt text-center py-4 mb-5 bg-light rounded">
+      <p class="mb-3">Join the conversation!</p>
+      <div class="d-flex gap-2 justify-content-center">
+        <%= link_to "Sign In", new_user_session_path, class: "btn btn-primary" %>
+        <%= link_to "Sign Up", new_user_registration_path, class: "btn btn-outline-primary" %>
+      </div>
+    </div>
+  <% end %>
+  
+  <!-- Comments List -->
+  <% if @comments.any? %>
+    <div class="comments-list">
+      <% @comments.each do |comment| %>
+        <%= render 'comments/comment', comment: comment %>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="no-comments text-center py-5 text-muted">
+      <i class="display-4 mb-3">💬</i>
+      <h5>No comments yet</h5>
+      <p>Be the first to share your thoughts!</p>
+    </div>
+  <% end %>
+</section>
+
+<!-- JavaScript for enhanced UX -->
+<script>
+function sharePost(title, url) {
+  if (navigator.share) {
+    navigator.share({
+      title: title,
+      url: url
+    }).catch(console.error);
+  } else {
+    // Fallback: copy to clipboard
+    navigator.clipboard.writeText(url).then(() => {
+      // Show a temporary notification
+      const notification = document.createElement('div');
+      notification.className = 'alert alert-success position-fixed top-0 start-50 translate-middle-x mt-3';
+      notification.style.zIndex = '9999';
+      notification.textContent = 'Link copied to clipboard!';
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.remove();
+      }, 3000);
+    }).catch(console.error);
+  }
+}
+</script>

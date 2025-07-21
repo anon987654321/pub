@@ -1,4 +1,14 @@
 Rails.application.routes.draw do
+  get "search/index"
+  get "comments/create"
+  get "comments/edit"
+  get "comments/update"
+  get "comments/destroy"
+  get "users/show"
+  get "users/edit"
+  get "users/update"
+  get "users/follow"
+  get "users/unfollow"
   devise_for :users
   root 'home#index'
   

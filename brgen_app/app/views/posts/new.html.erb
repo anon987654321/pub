@@ -1,2 +1,48 @@
-<h1>Posts#new</h1>
-<p>Find me in app/views/posts/new.html.erb</p>
+<% content_for :title, "Create New Post - Brgen" %>
+
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <!-- Header -->
+    <div class="d-flex align-items-center mb-4">
+      <%= link_to posts_path, class: "btn btn-outline-secondary me-3" do %>
+        ← Back to Posts
+      <% end %>
+      <div>
+        <h1 class="mb-1">Create New Post</h1>
+        <p class="text-muted mb-0">Share your thoughts with the community</p>
+      </div>
+    </div>
+    
+    <!-- Post Form -->
+    <div class="card">
+      <div class="card-body">
+        <%= render 'form', post: @post %>
+      </div>
+    </div>
+    
+    <!-- Writing Tips -->
+    <div class="card mt-4">
+      <div class="card-header">
+        <h5 class="card-title mb-0">✍️ Writing Tips</h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <ul class="list-unstyled small">
+              <li class="mb-2">📝 Write a compelling title</li>
+              <li class="mb-2">🎯 Focus on one main idea</li>
+              <li>📸 Add images to engage readers</li>
+            </ul>
+          </div>
+          <div class="col-md-6">
+            <ul class="list-unstyled small">
+              <li class="mb-2">✅ Use clear, simple language</li>
+              <li class="mb-2">🔍 Proofread before publishing</li>
+              <li>💡 Share personal insights</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

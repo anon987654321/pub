@@ -4,7 +4,7 @@ class Comment < ApplicationRecord
   has_many :likes, as: :likeable, dependent: :destroy
   
   # Threaded comments using closure_tree
-  acts_as_tree order: 'created_at ASC', counter_cache: :children_count
+  has_closure_tree order: 'created_at ASC'
   
   validates :content, presence: true, length: { minimum: 3, maximum: 1000 }
   
