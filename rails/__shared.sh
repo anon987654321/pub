@@ -2335,24 +2335,32 @@ apply_common_features() {
   log "Applying common features across all models"
   
   # Add common features to main models
-  models_to_enhance = %w[Post Message Listing Show Episode Playlist Track]
+  models_to_enhance="Post Message Listing Show Episode Playlist Track"
   
-  models_to_enhance.each do |model|
-    if [ -f "app/models/#{model.downcase}.rb" ]; then
+  for model in $models_to_enhance; do
+    model_file="app/models/$(echo $model | tr '[:upper:]' '[:lower:]').rb"
+    if [ -f "$model_file" ]; then
       log "Enhancing $model with common features"
       
-      # Add concerns to model
-      sed -i '1a\
-  include Cacheable\
-  include SitemapGenerator if respond_to?(:after_commit)' "app/models/#{model.downcase}.rb"
+      # Add concerns to model (if not already present)
+      if ! grep -q "include Cacheable" "$model_file"; then
+        sed -i '2i\  include Cacheable' "$model_file"
+      fi
+      
+      if ! grep -q "include SitemapGenerator" "$model_file"; then
+        sed -i '3i\  include SitemapGenerator if respond_to?(:after_commit)' "$model_file"
+      fi
     fi
   done
   
   # Add votable functionality to main content models
-  content_models = %w[Post Listing Show Playlist Track]
-  content_models.each do |model|
-    if [ -f "app/models/#{model.downcase}.rb" ]; then
-      sed -i '1a\  acts_as_votable' "app/models/${model.downcase}.rb"
+  content_models="Post Listing Show Playlist Track"
+  for model in $content_models; do
+    model_file="app/models/$(echo $model | tr '[:upper:]' '[:lower:]').rb"
+    if [ -f "$model_file" ]; then
+      if ! grep -q "acts_as_votable" "$model_file"; then
+        sed -i '4i\  acts_as_votable' "$model_file"
+      fi
     fi
   done
   

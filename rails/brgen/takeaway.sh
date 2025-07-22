@@ -20,9 +20,12 @@ command_exists "node"
 command_exists "psql"
 command_exists "redis-server"
 
-bin/rails generate scaffold Restaurant name:string location:string cuisine:string delivery_fee:decimal min_order:decimal rating:decimal user:references photos:attachments
-bin/rails generate scaffold MenuItem name:string price:decimal description:text category:string restaurant:references
+# Generate enhanced models with SEO and karma support for takeaway
+bin/rails generate scaffold Restaurant name:string slug:string location:string cuisine:string delivery_fee:decimal min_order:decimal rating:decimal user:references photos:attachments karma_score:integer view_count:integer
+bin/rails generate scaffold MenuItem name:string price:decimal description:text category:string restaurant:references popular:boolean
 bin/rails generate scaffold Order restaurant:references customer:references status:string total_amount:decimal delivery_address:text order_items:text
+bin/rails generate scaffold RestaurantReview restaurant:references user:references rating:integer content:text helpful_count:integer
+bin/rails generate scaffold TakeawayKarma user:references restaurant_karma:integer review_karma:integer order_karma:integer total_karma:integer level:integer
 
 cat <<EOF > app/reflexes/restaurants_infinite_scroll_reflex.rb
 class RestaurantsInfiniteScrollReflex < InfiniteScrollReflex

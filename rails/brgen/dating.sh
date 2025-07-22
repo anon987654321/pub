@@ -20,8 +20,12 @@ command_exists "node"
 command_exists "psql"
 command_exists "redis-server"
 
-bin/rails generate scaffold Profile user:references bio:text location:string lat:decimal lng:decimal gender:string age:integer photos:attachments
-bin/rails generate scaffold Match initiator:references{polymorphic} receiver:references{polymorphic} status:string
+# Generate enhanced models with SEO and karma support for dating
+bin/rails generate scaffold Profile user:references bio:text location:string lat:decimal lng:decimal gender:string age:integer photos:attachments karma_score:integer view_count:integer verified:boolean
+bin/rails generate scaffold Match initiator:references receiver:references status:string compatibility_score:decimal
+bin/rails generate scaffold ProfileLike profile:references liker:references
+bin/rails generate scaffold ProfileVisit profile:references visitor:references
+bin/rails generate scaffold DatingKarma user:references profile_karma:integer match_karma:integer interaction_karma:integer total_karma:integer level:integer
 
 cat <<EOF > app/reflexes/profiles_infinite_scroll_reflex.rb
 class ProfilesInfiniteScrollReflex < InfiniteScrollReflex
