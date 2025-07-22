@@ -20,13 +20,27 @@ command_exists "node"
 command_exists "psql"
 command_exists "redis-server"
 
-bin/rails generate scaffold Playlist name:string description:text user:references tracks:text
-bin/rails generate scaffold Comment playlist:references user:references content:text
+# Generate enhanced models with SEO and karma support
+bin/rails generate scaffold Playlist name:string slug:string description:text user:references tracks:text is_public:boolean play_count:integer karma_score:integer
+bin/rails generate scaffold Track title:string artist:string duration:integer spotify_url:string youtube_url:string playlist:references position:integer
+bin/rails generate scaffold Comment playlist:references user:references content:text karma_score:integer
+bin/rails generate scaffold PlaylistFollow playlist:references user:references
+bin/rails generate scaffold PlaylistRating playlist:references user:references rating:integer
 
+# Add karma and reputation tracking for playlist features  
+bin/rails generate model PlaylistKarma user:references playlist_karma:integer track_karma:integer comment_karma:integer follow_karma:integer total_karma:integer level:integer
+
+# Enhanced infinite scroll reflexes with analytics and social features
 cat <<EOF > app/reflexes/playlists_infinite_scroll_reflex.rb
 class PlaylistsInfiniteScrollReflex < InfiniteScrollReflex
   def load_more
-    @pagy, @collection = pagy(Playlist.all.order(created_at: :desc), page: page)
+    @pagy, @collection = pagy(
+      Playlist.includes(:user, :tracks, :playlist_follows)
+              .where(tenant: ActsAsTenant.current_tenant, is_public: true)
+              .order(created_at: :desc), 
+      page: page
+    )
+    ahoy.track "Playlists infinite scroll", { page: page, tenant: ActsAsTenant.current_tenant&.name }
     super
   end
 end
@@ -35,19 +49,363 @@ EOF
 cat <<EOF > app/reflexes/comments_infinite_scroll_reflex.rb
 class CommentsInfiniteScrollReflex < InfiniteScrollReflex
   def load_more
-    @pagy, @collection = pagy(Comment.all.order(created_at: :desc), page: page)
+    playlist = Playlist.find(element.dataset["playlist_id"])
+    @pagy, @collection = pagy(playlist.comments.includes(:user).order(created_at: :desc), page: page)
+    ahoy.track "Comments infinite scroll", { playlist_id: playlist.id, page: page }
     super
   end
 end
 EOF
 
+# Enhanced playlist voting system
+cat <<EOF > app/reflexes/playlist_vote_reflex.rb
+class PlaylistVoteReflex < ApplicationReflex
+  def upvote
+    playlist = Playlist.find(element.dataset["playlist_id"])
+    vote = current_user.votes.find_or_initialize_by(votable: playlist)
+    
+    if vote.persisted? && vote.vote_flag
+      # Already upvoted, remove vote
+      vote.destroy
+      KarmaAction.create!(user: playlist.user, target: playlist, action_type: 'vote_removed', points: -1)
+    else
+      # Create or change to upvote
+      vote.destroy if vote.persisted?
+      playlist.upvote_by current_user
+      KarmaAction.create!(user: playlist.user, target: playlist, action_type: 'upvote', points: 3)
+      
+      # Update user karma
+      karma = playlist.user.playlist_karma || playlist.user.create_playlist_karma
+      karma.increment!(:playlist_karma, 3)
+      karma.update!(total_karma: karma.playlist_karma + karma.track_karma + karma.comment_karma + karma.follow_karma)
+    end
+    
+    ahoy.track "Playlist vote", { playlist_id: playlist.id, action: 'upvote' }
+    cable_ready.replace(selector: "#playlist-vote-#{playlist.id}", html: render(partial: "shared/vote_buttons", locals: { votable: playlist })).broadcast
+  end
+
+  def downvote
+    playlist = Playlist.find(element.dataset["playlist_id"])
+    vote = current_user.votes.find_or_initialize_by(votable: playlist)
+    
+    if vote.persisted? && !vote.vote_flag
+      # Already downvoted, remove vote  
+      vote.destroy
+      KarmaAction.create!(user: playlist.user, target: playlist, action_type: 'vote_removed', points: 1)
+    else
+      # Create or change to downvote
+      vote.destroy if vote.persisted?
+      playlist.downvote_by current_user
+      KarmaAction.create!(user: playlist.user, target: playlist, action_type: 'downvote', points: -1)
+      
+      # Update user karma
+      karma = playlist.user.playlist_karma || playlist.user.create_playlist_karma
+      karma.decrement!(:playlist_karma, 1)
+      karma.update!(total_karma: karma.playlist_karma + karma.track_karma + karma.comment_karma + karma.follow_karma)
+    end
+    
+    ahoy.track "Playlist vote", { playlist_id: playlist.id, action: 'downvote' }
+    cable_ready.replace(selector: "#playlist-vote-#{playlist.id}", html: render(partial: "shared/vote_buttons", locals: { votable: playlist })).broadcast
+  end
+end
+EOF
+
+# Playlist follow/unfollow reflex
+cat <<EOF > app/reflexes/playlist_follow_reflex.rb
+class PlaylistFollowReflex < ApplicationReflex
+  def toggle_follow
+    playlist = Playlist.find(element.dataset["playlist_id"])
+    follow = current_user.playlist_follows.find_by(playlist: playlist)
+    
+    if follow
+      # Unfollow
+      follow.destroy
+      KarmaAction.create!(user: playlist.user, target: playlist, action_type: 'unfollowed', points: -1)
+      action = 'unfollowed'
+    else
+      # Follow
+      current_user.playlist_follows.create!(playlist: playlist)
+      KarmaAction.create!(user: playlist.user, target: playlist, action_type: 'followed', points: 2)
+      
+      # Update playlist creator's karma
+      karma = playlist.user.playlist_karma || playlist.user.create_playlist_karma
+      karma.increment!(:follow_karma, 2)
+      karma.update!(total_karma: karma.playlist_karma + karma.track_karma + karma.comment_karma + karma.follow_karma)
+      action = 'followed'
+    end
+    
+    ahoy.track "Playlist follow", { playlist_id: playlist.id, action: action }
+    cable_ready.replace(selector: "#playlist-follow-#{playlist.id}", html: render(partial: "playlists/follow_button", locals: { playlist: playlist })).broadcast
+  end
+end
+EOF
+
+# Enhanced controllers with analytics and SEO
 cat <<EOF > app/controllers/playlists_controller.rb
 class PlaylistsController < ApplicationController
+  include AnalyticsTracking
+  include GitTracking
+  
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :set_playlist, only: [:show, :edit, :update, :destroy]
+  before_action :set_playlist, only: [:show, :edit, :update, :destroy, :play]
 
   def index
-    @pagy, @playlists = pagy(Playlist.all.order(created_at: :desc)) unless @stimulus_reflex
+    @pagy, @playlists = pagy(
+      Playlist.includes(:user, :tracks, :playlist_follows)
+              .where(tenant: ActsAsTenant.current_tenant, is_public: true)
+              .order(created_at: :desc)
+    ) unless @stimulus_reflex
+    
+    # SEO optimization
+    @seo_title = "Music Playlists - #{ActsAsTenant.current_tenant&.name || 'Brgen Playlist'}"
+    @seo_description = "Discover and share music playlists in your community"
+    @seo_keywords = "music, playlists, spotify, youtube, community, #{ActsAsTenant.current_tenant&.name}"
+    
+    ahoy.track "Playlists index", { 
+      playlists_count: @playlists&.count || 0,
+      tenant: ActsAsTenant.current_tenant&.name
+    }
+  end
+
+  def show
+    @tracks = @playlist.tracks.order(:position)
+    @comments = @playlist.comments.includes(:user).order(created_at: :desc).limit(10)
+    @user_comment = Comment.new
+    @user_rating = current_user&.playlist_ratings&.find_by(playlist: @playlist)
+    @is_following = current_user&.playlist_follows&.exists?(playlist: @playlist)
+    
+    # Increment play count
+    @playlist.increment!(:play_count)
+    
+    # SEO for individual playlist
+    @seo_title = @playlist.name
+    @seo_description = truncate(@playlist.description, length: 160)
+    @seo_keywords = "#{@playlist.name}, music playlist, #{@tracks.map(&:artist).uniq.join(', ')}"
+    
+    # Schema.org structured data
+    @schema_data = {
+      "@context" => "https://schema.org",
+      "@type" => "MusicPlaylist",
+      "name" => @playlist.name,
+      "description" => @playlist.description,
+      "numTracks" => @tracks.count,
+      "creator" => {
+        "@type" => "Person",
+        "name" => @playlist.user.email
+      }
+    }
+    
+    ahoy.track "Playlist view", { 
+      playlist_id: @playlist.id,
+      playlist_name: @playlist.name,
+      track_count: @tracks.count
+    }
+  end
+
+  def new
+    @playlist = current_user.playlists.build
+  end
+
+  def create
+    @playlist = current_user.playlists.build(playlist_params)
+    @playlist.tenant = ActsAsTenant.current_tenant
+    @playlist.slug = @playlist.name.parameterize if @playlist.name
+    
+    if @playlist.save
+      # Award karma for content creation
+      karma = current_user.playlist_karma || current_user.create_playlist_karma
+      karma.increment!(:playlist_karma, 10)
+      karma.update!(total_karma: karma.playlist_karma + karma.track_karma + karma.comment_karma + karma.follow_karma)
+      
+      KarmaAction.create!(user: current_user, target: @playlist, action_type: 'content_created', points: 10)
+      
+      ahoy.track "Playlist created", { playlist_id: @playlist.id, name: @playlist.name }
+      PublicActivity::Activity.create!(trackable: @playlist, owner: current_user, key: 'playlist.create')
+      
+      redirect_to @playlist, notice: 'Playlist was successfully created.'
+    else
+      render :new
+    end
+  end
+
+  def edit
+  end
+
+  def update
+    if @playlist.update(playlist_params)
+      @playlist.update(slug: @playlist.name.parameterize) if playlist_params[:name]
+      ahoy.track "Playlist updated", { playlist_id: @playlist.id, name: @playlist.name }
+      PublicActivity::Activity.create!(trackable: @playlist, owner: current_user, key: 'playlist.update')
+      redirect_to @playlist, notice: 'Playlist was successfully updated.'
+    else
+      render :edit
+    end
+  end
+
+  def destroy
+    playlist_name = @playlist.name
+    @playlist.destroy
+    ahoy.track "Playlist deleted", { name: playlist_name }
+    redirect_to playlists_url, notice: 'Playlist was successfully deleted.'
+  end
+
+  def play
+    # Track playlist plays for analytics
+    ahoy.track "Playlist played", { 
+      playlist_id: @playlist.id,
+      playlist_name: @playlist.name
+    }
+    
+    # Return playlist data for JavaScript player
+    render json: {
+      id: @playlist.id,
+      name: @playlist.name,
+      tracks: @tracks.map do |track|
+        {
+          id: track.id,
+          title: track.title,
+          artist: track.artist,
+          duration: track.duration,
+          spotify_url: track.spotify_url,
+          youtube_url: track.youtube_url,
+          position: track.position
+        }
+      end
+    }
+  end
+
+  private
+
+  def set_playlist
+    @playlist = Playlist.friendly.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    @playlist = Playlist.find(params[:id])
+  end
+
+  def playlist_params
+    params.require(:playlist).permit(:name, :description, :is_public)
+  end
+end
+EOF
+
+# Enhanced tracks controller
+cat <<EOF > app/controllers/tracks_controller.rb
+class TracksController < ApplicationController
+  include AnalyticsTracking
+  include GitTracking
+  
+  before_action :authenticate_user!
+  before_action :set_playlist
+  before_action :set_track, only: [:show, :edit, :update, :destroy, :move_up, :move_down]
+  before_action :check_playlist_owner, except: [:show]
+
+  def show
+    ahoy.track "Track view", {
+      track_id: @track.id,
+      playlist_id: @playlist.id,
+      title: @track.title,
+      artist: @track.artist
+    }
+  end
+
+  def new
+    @track = @playlist.tracks.build
+    @track.position = (@playlist.tracks.maximum(:position) || 0) + 1
+  end
+
+  def create
+    @track = @playlist.tracks.build(track_params)
+    @track.position = (@playlist.tracks.maximum(:position) || 0) + 1
+    
+    if @track.save
+      # Award karma for adding tracks
+      karma = current_user.playlist_karma || current_user.create_playlist_karma
+      karma.increment!(:track_karma, 2)
+      karma.update!(total_karma: karma.playlist_karma + karma.track_karma + karma.comment_karma + karma.follow_karma)
+      
+      KarmaAction.create!(user: current_user, target: @track, action_type: 'track_added', points: 2)
+      
+      ahoy.track "Track created", {
+        track_id: @track.id,
+        playlist_id: @playlist.id,
+        title: @track.title,
+        artist: @track.artist
+      }
+      
+      redirect_to @playlist, notice: 'Track was successfully added.'
+    else
+      render :new
+    end
+  end
+
+  def edit
+  end
+
+  def update
+    if @track.update(track_params)
+      ahoy.track "Track updated", { track_id: @track.id, playlist_id: @playlist.id }
+      redirect_to @playlist, notice: 'Track was successfully updated.'
+    else
+      render :edit
+    end
+  end
+
+  def destroy
+    track_title = @track.title
+    @track.destroy
+    # Reorder remaining tracks
+    @playlist.tracks.where('position > ?', @track.position).update_all('position = position - 1')
+    
+    ahoy.track "Track deleted", { playlist_id: @playlist.id, title: track_title }
+    redirect_to @playlist, notice: 'Track was successfully removed.'
+  end
+
+  def move_up
+    return if @track.position <= 1
+    
+    swap_with = @playlist.tracks.find_by(position: @track.position - 1)
+    if swap_with
+      @track.update!(position: @track.position - 1)
+      swap_with.update!(position: swap_with.position + 1)
+    end
+    
+    redirect_to @playlist
+  end
+
+  def move_down
+    max_position = @playlist.tracks.maximum(:position)
+    return if @track.position >= max_position
+    
+    swap_with = @playlist.tracks.find_by(position: @track.position + 1)
+    if swap_with
+      @track.update!(position: @track.position + 1)
+      swap_with.update!(position: swap_with.position - 1)
+    end
+    
+    redirect_to @playlist
+  end
+
+  private
+
+  def set_playlist
+    @playlist = Playlist.friendly.find(params[:playlist_id])
+  rescue ActiveRecord::RecordNotFound
+    @playlist = Playlist.find(params[:playlist_id])
+  end
+
+  def set_track
+    @track = @playlist.tracks.find(params[:id])
+  end
+
+  def check_playlist_owner
+    redirect_to @playlist, alert: 'Not authorized' unless @playlist.user == current_user
+  end
+
+  def track_params
+    params.require(:track).permit(:title, :artist, :duration, :spotify_url, :youtube_url)
+  end
+end
+EOF
   end
 
   def show
@@ -610,6 +968,92 @@ EOF
 
 generate_turbo_views "playlists" "playlist"
 generate_turbo_views "comments" "comment"
+
+# Enhanced models with SEO, caching, and social features
+cat <<EOF > app/models/playlist.rb
+class Playlist < ApplicationRecord
+  extend FriendlyId
+  include Cacheable
+  include SitemapGenerator
+  
+  acts_as_tenant(:tenant, class_name: 'City')
+  acts_as_votable
+  
+  friendly_id :name, use: [:slugged, :scoped], scope: :tenant
+  
+  belongs_to :user
+  belongs_to :tenant, class_name: 'City', optional: true
+  has_many :tracks, -> { order(:position) }, dependent: :destroy
+  has_many :comments, dependent: :destroy
+  has_many :playlist_follows, dependent: :destroy
+  has_many :playlist_ratings, dependent: :destroy
+  has_many :followers, through: :playlist_follows, source: :user
+  has_many :karma_actions, as: :target, dependent: :destroy
+  
+  validates :name, presence: true, length: { minimum: 2, maximum: 100 }
+  validates :description, presence: true, length: { minimum: 10, maximum: 500 }
+  validates :play_count, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
+  validates :karma_score, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
+  
+  scope :public_playlists, -> { where(is_public: true) }
+  scope :popular, -> { order(karma_score: :desc, play_count: :desc) }
+  scope :recent, -> { order(created_at: :desc) }
+  scope :trending, -> { where('play_count > ? AND created_at > ?', 50, 1.week.ago).order(:play_count) }
+  
+  before_save :calculate_karma_score
+  after_commit :update_sitemap, if: :should_update_sitemap?
+  
+  def should_regenerate_slug?
+    name_changed? || slug.blank?
+  end
+  
+  def average_rating
+    playlist_ratings.average(:rating)&.round(1) || 0
+  end
+  
+  def total_duration
+    tracks.sum(:duration)
+  end
+  
+  def followers_count
+    playlist_follows.count
+  end
+  
+  def trending?
+    play_count > 50 && created_at > 1.week.ago
+  end
+  
+  def formatted_duration
+    total_seconds = total_duration
+    hours = total_seconds / 3600
+    minutes = (total_seconds % 3600) / 60
+    seconds = total_seconds % 60
+    
+    if hours > 0
+      "%d:%02d:%02d" % [hours, minutes, seconds]
+    else
+      "%d:%02d" % [minutes, seconds]
+    end
+  end
+  
+  private
+  
+  def calculate_karma_score
+    self.karma_score = (get_upvotes.size * 3) - (get_downvotes.size * 1) + 
+                       (playlist_follows.count * 2) + 
+                       (comments.count * 1) + 
+                       (play_count / 5)
+  end
+  
+  def should_update_sitemap?
+    saved_change_to_name? || saved_change_to_slug? || saved_change_to_is_public?
+  end
+  
+  def update_sitemap
+    SitemapRegenerateJob.perform_later if is_public?
+  end
+end
+EOF
 
 commit "Brgen Playlist setup complete: Music playlist sharing platform with live search and anonymous features"
 
