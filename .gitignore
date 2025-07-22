@@ -44,3 +44,13 @@ logs/
 test_compliance_report.json
 validation_report.json
 # Framework validation artifacts
+# Rails application artifacts
+brgen_app/tmp/
+brgen_app/log/
+brgen_app/vendor/bundle/
+brgen_app/db/*.sqlite3
+brgen_app/db/*.sqlite3-*
+brgen_app/config/master.key
+brgen_app/config/credentials.yml.enc
+brgen_app/node_modules/
+brgen_app/public/assets/
