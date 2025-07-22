@@ -1030,6 +1030,28 @@ end
 EOF
 }
 
+setup_enhanced_gems() {
+  log "Setting up enhanced gems for modern Rails app"
+  
+  # SEO and content management gems
+  bundle add sitemap_generator friendly_id
+  
+  # Rich text and social features
+  bundle add tiptap-rails acts_as_votable public_activity
+  
+  # Analytics and insights
+  bundle add ahoy_matey blazer chartkick
+  
+  # Caching and performance
+  bundle add redis-rails connection_pool
+  
+  if [ $? -ne 0 ]; then
+    error "Failed to install enhanced gems"
+  fi
+  
+  log "Enhanced gems installed successfully"
+}
+
 setup_full_app() {
   log "Setting up full Rails app '$1' with NNG/SEO/Schema enhancements and Rails 8 modern stack"
   init_app "$1"
@@ -1038,6 +1060,7 @@ setup_full_app() {
   setup_ruby
   setup_yarn
   setup_rails "$1"
+  setup_enhanced_gems
   setup_solid_queue
   setup_solid_cache
   setup_core
@@ -1057,7 +1080,17 @@ setup_full_app() {
   setup_stimulus_components
   setup_vote_controller
   generate_social_models
+  setup_sitemap_generator
+  setup_tiptap
+  add_seo_metadata
+  configure_dynamic_sitemap_generation
+  setup_analytics
+  setup_advanced_pwa
+  setup_redis_caching
+  setup_enhanced_tenancy
+  apply_common_features
   migrate_db
+  generate_sitemap
 
   cat <<EOF > app/assets/stylesheets/application.scss
 :root {
@@ -1339,11 +1372,1114 @@ footer {
 EOF
 }
 
+setup_sitemap_generator() {
+  log "Setting up sitemap generator for SEO"
+  bundle add sitemap_generator
+  if [ $? -ne 0 ]; then
+    error "Failed to add sitemap_generator gem"
+  fi
+  
+  bin/rails generate sitemap:install
+  if [ $? -ne 0 ]; then
+    error "Failed to generate sitemap configuration"
+  fi
+  
+  cat <<EOF > config/sitemap.rb
+SitemapGenerator::Sitemap.default_host = "https://\#{ENV['APP_DOMAIN'] || 'example.com'}"
+SitemapGenerator::Sitemap.compress = false
+SitemapGenerator::Sitemap.create_index = true
+
+SitemapGenerator::Sitemap.create do
+  add root_path, changefreq: 'daily', priority: 1.0
+  
+  # Add posts
+  Post.find_each do |post|
+    add post_path(post), lastmod: post.updated_at, changefreq: 'weekly', priority: 0.8
+  end
+  
+  # Add listings if they exist
+  if defined?(Listing)
+    Listing.find_each do |listing|
+      add listing_path(listing), lastmod: listing.updated_at, changefreq: 'weekly', priority: 0.7
+    end
+  end
+  
+  # Add shows if they exist
+  if defined?(Show)
+    Show.find_each do |show|
+      add show_path(show), lastmod: show.updated_at, changefreq: 'weekly', priority: 0.7
+    end
+  end
+  
+  # Add playlists if they exist
+  if defined?(Playlist)
+    Playlist.find_each do |playlist|
+      add playlist_path(playlist), lastmod: playlist.updated_at, changefreq: 'weekly', priority: 0.7
+    end
+  end
+end
+EOF
+
+  # Add rake task to regenerate sitemap
+  cat <<EOF > lib/tasks/sitemap.rake
+namespace :sitemap do
+  desc 'Generate sitemap'
+  task generate: :environment do
+    SitemapGenerator::Interpreter.run
+  end
+  
+  desc 'Ping search engines'
+  task ping: :environment do
+    SitemapGenerator::Sitemap.ping_search_engines
+  end
+end
+EOF
+
+  log "Sitemap generator setup completed"
+}
+
+setup_tiptap() {
+  log "Setting up Tiptap rich text editor"
+  bundle add tiptap-rails
+  if [ $? -ne 0 ]; then
+    error "Failed to add tiptap-rails gem"
+  fi
+  
+  yarn add @tiptap/core @tiptap/pm @tiptap/starter-kit @tiptap/extension-placeholder
+  if [ $? -ne 0 ]; then
+    error "Failed to install Tiptap JS packages"
+  fi
+  
+  mkdir -p app/javascript/controllers
+  cat <<EOF > app/javascript/controllers/tiptap_controller.js
+import { Controller } from "@hotwired/stimulus"
+import { Editor } from "@tiptap/core"
+import StarterKit from "@tiptap/starter-kit"
+import Placeholder from "@tiptap/extension-placeholder"
+
+export default class extends Controller {
+  static targets = ["editor", "input"]
+  static values = { placeholder: String }
+  
+  connect() {
+    this.editor = new Editor({
+      element: this.editorTarget,
+      extensions: [
+        StarterKit,
+        Placeholder.configure({
+          placeholder: this.placeholderValue || 'Start typing...'
+        })
+      ],
+      content: this.inputTarget.value,
+      onUpdate: ({ editor }) => {
+        this.inputTarget.value = editor.getHTML()
+      }
+    })
+  }
+  
+  disconnect() {
+    if (this.editor) {
+      this.editor.destroy()
+    }
+  }
+}
+EOF
+
+  cat <<EOF > app/assets/stylesheets/tiptap.scss
+.ProseMirror {
+  border: 1px solid var(--light-grey);
+  border-radius: 4px;
+  padding: 12px;
+  min-height: 120px;
+  outline: none;
+  
+  &:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+  }
+  
+  p.is-editor-empty:first-child::before {
+    content: attr(data-placeholder);
+    float: left;
+    color: var(--grey);
+    pointer-events: none;
+    height: 0;
+  }
+}
+EOF
+
+  log "Tiptap setup completed"
+}
+
+add_seo_metadata() {
+  log "Adding SEO metadata helpers"
+  
+  mkdir -p app/helpers
+  cat <<EOF > app/helpers/seo_helper.rb
+module SeoHelper
+  def seo_title(title = nil)
+    if title
+      content_for(:title, "\#{title} - \#{Rails.application.class.name}")
+    else
+      content_for(:title) || Rails.application.class.name
+    end
+  end
+  
+  def seo_description(description = nil)
+    content_for(:description, description) if description
+    content_for(:description) || "Community-driven platform for \#{Rails.application.class.name}"
+  end
+  
+  def seo_keywords(keywords = nil)
+    content_for(:keywords, keywords) if keywords
+    content_for(:keywords) || "community, social, platform, \#{Rails.application.class.name.downcase}"
+  end
+  
+  def seo_canonical_url(url = nil)
+    content_for(:canonical, url) if url
+    content_for(:canonical) || request.original_url
+  end
+  
+  def seo_og_tags
+    {
+      'og:title' => seo_title,
+      'og:description' => seo_description,
+      'og:url' => seo_canonical_url,
+      'og:type' => 'website',
+      'og:site_name' => Rails.application.class.name,
+      'twitter:card' => 'summary_large_image',
+      'twitter:title' => seo_title,
+      'twitter:description' => seo_description
+    }
+  end
+end
+EOF
+
+  # Update application layout to use SEO helpers
+  if [ -f "app/views/layouts/application.html.erb" ]; then
+    cat <<EOF > app/views/layouts/application.html.erb
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= seo_title %></title>
+  <meta name="description" content="<%= seo_description %>">
+  <meta name="keywords" content="<%= seo_keywords %>">
+  <link rel="canonical" href="<%= seo_canonical_url %>">
+  
+  <% seo_og_tags.each do |property, content| %>
+    <meta property="<%= property %>" content="<%= content %>">
+  <% end %>
+  
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= stylesheet_link_tag "tiptap", "data-turbo-track": "reload" %>
+  <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+  <%= yield(:schema) %>
+</head>
+<body>
+  <%= yield %>
+</body>
+</html>
+EOF
+  fi
+
+  log "SEO metadata helpers added"
+}
+
+generate_sitemap() {
+  log "Generating initial sitemap"
+  if [ -f "bin/rails" ]; then
+    bin/rails sitemap:generate RAILS_ENV=development
+    if [ $? -ne 0 ]; then
+      log "Warning: Could not generate sitemap (database might not be migrated yet)"
+    fi
+  fi
+}
+
+configure_dynamic_sitemap_generation() {
+  log "Configuring dynamic sitemap generation"
+  
+  # Add sitemap generation to model callbacks
+  cat <<EOF > app/models/concerns/sitemap_generator.rb
+module SitemapGenerator
+  extend ActiveSupport::Concern
+  
+  included do
+    after_commit :regenerate_sitemap, if: :should_regenerate_sitemap?
+  end
+  
+  private
+  
+  def should_regenerate_sitemap?
+    persisted? && (saved_changes.keys & %w[title name slug]).any?
+  end
+  
+  def regenerate_sitemap
+    SitemapRegenerateJob.perform_later
+  end
+end
+EOF
+
+  # Create sitemap regenerate job
+  mkdir -p app/jobs
+  cat <<EOF > app/jobs/sitemap_regenerate_job.rb
+class SitemapRegenerateJob < ApplicationJob
+  queue_as :default
+  
+  def perform
+    Rails.logger.info "Regenerating sitemap..."
+    SitemapGenerator::Interpreter.run
+    Rails.logger.info "Sitemap regenerated successfully"
+  rescue => e
+    Rails.logger.error "Failed to regenerate sitemap: \#{e.message}"
+  end
+end
+EOF
+
+  log "Dynamic sitemap generation configured"
+}
+
+setup_analytics() {
+  log "Setting up advanced analytics with ahoy_matey, blazer, and chartkick"
+  
+  # Add analytics gems
+  bundle add ahoy_matey blazer chartkick
+  if [ $? -ne 0 ]; then
+    error "Failed to add analytics gems"
+  fi
+  
+  # Install Ahoy
+  bin/rails generate ahoy:install
+  if [ $? -ne 0 ]; then
+    error "Failed to generate Ahoy configuration"
+  fi
+  
+  cat <<EOF > config/initializers/ahoy.rb
+class Ahoy::Store < Ahoy::DatabaseStore
+end
+
+Ahoy.api = true
+Ahoy.track_visits_immediately = true
+Ahoy.geocode = false
+Ahoy.mask_ips = true
+Ahoy.cookies = :none
+EOF
+
+  # Setup Blazer
+  cat <<EOF > config/initializers/blazer.rb
+Blazer.data_sources["main"] = {
+  url: ENV["DATABASE_URL"],
+  smart_variables: {
+    user_id: "SELECT id, email FROM users ORDER BY email",
+    tenant_id: "SELECT id, name FROM cities ORDER BY name"
+  },
+  linked_columns: {
+    user_id: "users/{value}",
+    city_id: "cities/{value}"
+  }
+}
+
+# Protect Blazer with authentication
+Blazer.before_action = :require_admin
+
+module Blazer
+  class ApplicationController < ActionController::Base
+    def require_admin
+      redirect_to root_path unless current_user&.admin?
+    end
+  end
+end
+EOF
+
+  # Add analytics tracking to application controller
+  cat <<EOF > app/controllers/concerns/analytics_tracking.rb
+module AnalyticsTracking
+  extend ActiveSupport::Concern
+  
+  included do
+    after_action :track_action, if: -> { request.get? && !request.xhr? }
+  end
+  
+  private
+  
+  def track_action
+    ahoy.track "Page view", {
+      controller: controller_name,
+      action: action_name,
+      tenant: ActsAsTenant.current_tenant&.name,
+      user_type: current_user ? 'registered' : 'guest'
+    }
+  end
+end
+EOF
+
+  # Create analytics dashboard
+  mkdir -p app/controllers
+  cat <<EOF > app/controllers/analytics_controller.rb
+class AnalyticsController < ApplicationController
+  before_action :authenticate_user!
+  before_action :require_admin
+  
+  def dashboard
+    @total_visits = Ahoy::Visit.count
+    @total_events = Ahoy::Event.count
+    @recent_visits = Ahoy::Visit.includes(:user).order(started_at: :desc).limit(10)
+    @popular_pages = Ahoy::Event.where(name: "Page view")
+                                .group("properties ->> 'controller'")
+                                .group("properties ->> 'action'")
+                                .count
+                                .sort_by { |k, v| -v }
+                                .first(10)
+  end
+  
+  private
+  
+  def require_admin
+    redirect_to root_path unless current_user.admin?
+  end
+end
+EOF
+
+  # Create analytics dashboard view
+  mkdir -p app/views/analytics
+  cat <<EOF > app/views/analytics/dashboard.html.erb
+<% content_for :title, "Analytics Dashboard" %>
+
+<h1>Analytics Dashboard</h1>
+
+<div class="stats-grid">
+  <div class="stat-card">
+    <h3>Total Visits</h3>
+    <p class="stat-number"><%= number_with_delimiter(@total_visits) %></p>
+  </div>
+  
+  <div class="stat-card">
+    <h3>Total Events</h3>
+    <p class="stat-number"><%= number_with_delimiter(@total_events) %></p>
+  </div>
+  
+  <div class="stat-card">
+    <h3>Active Users (24h)</h3>
+    <p class="stat-number">
+      <%= Ahoy::Visit.where(started_at: 24.hours.ago..).distinct.count(:user_id) %>
+    </p>
+  </div>
+</div>
+
+<section>
+  <h2>Popular Pages</h2>
+  <%= column_chart @popular_pages.to_h, suffix: " views", height: "300px" %>
+</section>
+
+<section>
+  <h2>Recent Visits</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>User</th>
+        <th>Started At</th>
+        <th>Landing Page</th>
+        <th>City</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @recent_visits.each do |visit| %>
+        <tr>
+          <td><%= visit.user&.email || "Guest" %></td>
+          <td><%= visit.started_at.strftime("%Y-%m-%d %H:%M") %></td>
+          <td><%= visit.landing_page %></td>
+          <td><%= visit.city %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</section>
+EOF
+
+  log "Analytics setup completed"
+}
+
+setup_advanced_pwa() {
+  log "Setting up advanced PWA features"
+  
+  # Enhanced service worker with advanced caching strategies
+  cat <<EOF > app/assets/javascripts/serviceworker.js
+const CACHE_NAME = 'app-cache-v1';
+const STATIC_CACHE_NAME = 'static-cache-v1';
+const DYNAMIC_CACHE_NAME = 'dynamic-cache-v1';
+
+const STATIC_FILES = [
+  '/',
+  '/offline.html',
+  '/assets/application.css',
+  '/assets/application.js',
+  '/assets/tiptap.css'
+];
+
+// Install event - cache static files
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    Promise.all([
+      caches.open(STATIC_CACHE_NAME).then((cache) => {
+        return cache.addAll(STATIC_FILES);
+      }),
+      caches.open(DYNAMIC_CACHE_NAME)
+    ])
+  );
+  self.skipWaiting();
+});
+
+// Activate event - clean up old caches
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cacheName) => {
+          if (cacheName !== STATIC_CACHE_NAME && 
+              cacheName !== DYNAMIC_CACHE_NAME) {
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    })
+  );
+  self.clients.claim();
+});
+
+// Fetch event - advanced caching strategy
+self.addEventListener('fetch', (event) => {
+  const { request } = event;
+  
+  // Skip non-GET requests
+  if (request.method !== 'GET') return;
+  
+  // Handle API requests with network-first strategy
+  if (request.url.includes('/api/')) {
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          const responseClone = response.clone();
+          caches.open(DYNAMIC_CACHE_NAME).then((cache) => {
+            cache.put(request, responseClone);
+          });
+          return response;
+        })
+        .catch(() => {
+          return caches.match(request);
+        })
+    );
+    return;
+  }
+  
+  // Handle static files with cache-first strategy
+  if (STATIC_FILES.some(file => request.url.includes(file))) {
+    event.respondWith(
+      caches.match(request).then((response) => {
+        return response || fetch(request);
+      })
+    );
+    return;
+  }
+  
+  // Handle all other requests with stale-while-revalidate
+  event.respondWith(
+    caches.match(request).then((response) => {
+      const fetchPromise = fetch(request).then((networkResponse) => {
+        caches.open(DYNAMIC_CACHE_NAME).then((cache) => {
+          cache.put(request, networkResponse.clone());
+        });
+        return networkResponse;
+      });
+      
+      return response || fetchPromise;
+    }).catch(() => {
+      return caches.match('/offline.html');
+    })
+  );
+});
+
+// Background sync for offline actions
+self.addEventListener('sync', (event) => {
+  if (event.tag === 'post-sync') {
+    event.waitUntil(
+      // Handle offline post creation
+      handleOfflinePosts()
+    );
+  }
+});
+
+// Push notifications
+self.addEventListener('push', (event) => {
+  if (event.data) {
+    const data = event.data.json();
+    event.waitUntil(
+      self.registration.showNotification(data.title, {
+        body: data.body,
+        icon: '/icon-192.png',
+        badge: '/badge-72.png',
+        tag: data.tag || 'default',
+        requireInteraction: false,
+        actions: data.actions || []
+      })
+    );
+  }
+});
+
+async function handleOfflinePosts() {
+  // Implementation for handling offline posts
+  console.log('Handling offline posts...');
+}
+EOF
+
+  # Enhanced web app manifest
+  cat <<EOF > public/manifest.json
+{
+  "name": "${APP_NAME.capitalize}",
+  "short_name": "${APP_NAME}",
+  "description": "Community-driven platform for ${APP_NAME}",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#1a73e8",
+  "background_color": "#ffffff",
+  "orientation": "portrait-primary",
+  "categories": ["social", "community", "lifestyle"],
+  "lang": "en",
+  "dir": "ltr",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/icon-72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "New Post",
+      "short_name": "Post",
+      "description": "Create a new post",
+      "url": "/posts/new",
+      "icons": [{ "src": "/icon-96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Messages",
+      "short_name": "Chat",
+      "description": "View messages",
+      "url": "/messages",
+      "icons": [{ "src": "/icon-96.png", "sizes": "96x96" }]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
+}
+EOF
+
+  # Add PWA installation prompt
+  mkdir -p app/javascript/controllers
+  cat <<EOF > app/javascript/controllers/pwa_install_controller.js
+import { Controller } from "@hotwired/stimulus"
+
+export default class extends Controller {
+  static targets = ["button"]
+  
+  connect() {
+    this.deferredPrompt = null;
+    
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      this.deferredPrompt = e;
+      this.showInstallButton();
+    });
+    
+    window.addEventListener('appinstalled', () => {
+      this.hideInstallButton();
+      console.log('PWA was installed');
+    });
+  }
+  
+  install() {
+    if (this.deferredPrompt) {
+      this.deferredPrompt.prompt();
+      
+      this.deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          console.log('User accepted the install prompt');
+        }
+        this.deferredPrompt = null;
+      });
+    }
+  }
+  
+  showInstallButton() {
+    if (this.hasButtonTarget) {
+      this.buttonTarget.style.display = 'block';
+    }
+  }
+  
+  hideInstallButton() {
+    if (this.hasButtonTarget) {
+      this.buttonTarget.style.display = 'none';
+    }
+  }
+}
+EOF
+
+  log "Advanced PWA features setup completed"
+}
+
+setup_redis_caching() {
+  log "Setting up advanced Redis caching layer"
+  
+  bundle add redis-rails connection_pool
+  if [ $? -ne 0 ]; then
+    error "Failed to add Redis gems"
+  fi
+  
+  # Redis configuration
+  cat <<EOF > config/initializers/redis.rb
+Redis.exists_returns_integer = true
+
+redis_config = {
+  host: ENV.fetch('REDIS_HOST', 'localhost'),
+  port: ENV.fetch('REDIS_PORT', 6379),
+  db: ENV.fetch('REDIS_DB', 0),
+  password: ENV.fetch('REDIS_PASSWORD', nil)
+}
+
+\$redis = ConnectionPool.new(size: 5, timeout: 5) { Redis.new(redis_config) }
+
+# Configure Rails cache store
+Rails.application.configure do
+  config.cache_store = :redis_cache_store, {
+    url: "redis://\#{redis_config[:host]}:\#{redis_config[:port]}/\#{redis_config[:db]}",
+    password: redis_config[:password],
+    connect_timeout: 30,
+    read_timeout: 0.2,
+    write_timeout: 0.2,
+    reconnect_attempts: 1,
+    error_handler: -> (method:, returning:, exception:) {
+      Rails.logger.warn "Redis cache error: \#{exception.message}"
+    }
+  }
+  
+  # Configure session store
+  config.session_store :redis_store, {
+    servers: [redis_config],
+    expire_after: 90.minutes,
+    key: "_\#{Rails.application.class.name.underscore}_session"
+  }
+end
+EOF
+
+  # Caching helpers
+  cat <<EOF > app/models/concerns/cacheable.rb
+module Cacheable
+  extend ActiveSupport::Concern
+  
+  module ClassMethods
+    def cached_find(id, expires_in: 1.hour)
+      Rails.cache.fetch("#{name.downcase}/\#{id}", expires_in: expires_in) do
+        find(id)
+      end
+    end
+    
+    def cached_count(expires_in: 5.minutes)
+      Rails.cache.fetch("#{name.downcase}/count", expires_in: expires_in) do
+        count
+      end
+    end
+    
+    def invalidate_cache(id = nil)
+      if id
+        Rails.cache.delete("#{name.downcase}/\#{id}")
+      else
+        Rails.cache.delete_matched("#{name.downcase}/*")
+      end
+    end
+  end
+  
+  included do
+    after_commit :invalidate_cache_on_change
+  end
+  
+  private
+  
+  def invalidate_cache_on_change
+    self.class.invalidate_cache(id)
+    self.class.invalidate_cache # Invalidate count cache too
+  end
+end
+EOF
+
+  # Fragment caching helpers
+  cat <<EOF > app/helpers/cache_helper.rb
+module CacheHelper
+  def cache_key_for(object, suffix = nil)
+    key = [object.class.name.underscore, object.id, object.updated_at.to_i]
+    key << suffix if suffix
+    key.join('/')
+  end
+  
+  def tenant_cache_key(key)
+    tenant = ActsAsTenant.current_tenant
+    return key unless tenant
+    "tenant_\#{tenant.id}/\#{key}"
+  end
+end
+EOF
+
+  log "Redis caching setup completed"
+}
+
+setup_enhanced_tenancy() {
+  log "Setting up enhanced multi-tenancy support"
+  
+  # Enhanced tenant switching
+  cat <<EOF > app/controllers/concerns/tenant_switching.rb
+module TenantSwitching
+  extend ActiveSupport::Concern
+  
+  included do
+    before_action :switch_tenant
+    after_action :log_tenant_activity
+  end
+  
+  private
+  
+  def switch_tenant
+    subdomain = extract_subdomain
+    return unless subdomain
+    
+    tenant = City.find_by(subdomain: subdomain)
+    if tenant
+      ActsAsTenant.current_tenant = tenant
+      I18n.locale = tenant.language.to_sym if tenant.language.present?
+    else
+      render_tenant_not_found
+    end
+  end
+  
+  def extract_subdomain
+    # Extract from subdomain or custom logic
+    request.subdomain.presence || 
+    params[:tenant_id].presence ||
+    request.headers['X-Tenant-ID'].presence
+  end
+  
+  def render_tenant_not_found
+    render json: { error: 'Tenant not found' }, status: 404
+  end
+  
+  def log_tenant_activity
+    return unless ActsAsTenant.current_tenant
+    
+    TenantActivity.create!(
+      tenant: ActsAsTenant.current_tenant,
+      controller: controller_name,
+      action: action_name,
+      user: current_user,
+      ip_address: request.remote_ip,
+      user_agent: request.user_agent
+    )
+  end
+end
+EOF
+
+  # Tenant activity tracking
+  cat <<EOF > app/models/tenant_activity.rb
+class TenantActivity < ApplicationRecord
+  belongs_to :tenant, class_name: 'City'
+  belongs_to :user, optional: true
+  
+  validates :controller, :action, :ip_address, presence: true
+  
+  scope :recent, -> { order(created_at: :desc) }
+  scope :for_controller, ->(controller) { where(controller: controller) }
+  scope :for_user, ->(user) { where(user: user) }
+end
+EOF
+
+  # Migration for tenant activity
+  cat <<EOF > tmp_tenant_activity_migration.rb
+class CreateTenantActivities < ActiveRecord::Migration[8.0]
+  def change
+    create_table :tenant_activities do |t|
+      t.references :tenant, null: false, foreign_key: { to_table: :cities }
+      t.references :user, null: true, foreign_key: true
+      t.string :controller, null: false
+      t.string :action, null: false
+      t.string :ip_address
+      t.text :user_agent
+      t.json :params
+      
+      t.timestamps
+    end
+    
+    add_index :tenant_activities, [:tenant_id, :created_at]
+    add_index :tenant_activities, [:user_id, :created_at]
+    add_index :tenant_activities, :controller
+  end
+end
+EOF
+
+  # Enhanced tenant configuration
+  cat <<EOF > app/models/concerns/tenant_configurable.rb
+module TenantConfigurable
+  extend ActiveSupport::Concern
+  
+  included do
+    has_one :tenant_config, as: :configurable, dependent: :destroy
+    
+    after_create :create_default_config
+  end
+  
+  def config
+    tenant_config || create_default_config
+  end
+  
+  def update_config(attributes)
+    config.update(attributes)
+  end
+  
+  private
+  
+  def create_default_config
+    create_tenant_config(
+      settings: default_tenant_settings,
+      features: default_tenant_features,
+      theme: default_tenant_theme
+    )
+  end
+  
+  def default_tenant_settings
+    {
+      allow_anonymous_posts: true,
+      require_approval: false,
+      max_posts_per_day: 10,
+      enable_voting: true,
+      enable_chat: true
+    }
+  end
+  
+  def default_tenant_features
+    {
+      marketplace: true,
+      dating: true,
+      tv: true,
+      playlist: true,
+      takeaway: true
+    }
+  end
+  
+  def default_tenant_theme
+    {
+      primary_color: '#1a73e8',
+      secondary_color: '#ffffff',
+      accent_color: '#34a853',
+      font_family: 'Roboto'
+    }
+  end
+end
+EOF
+
+  log "Enhanced tenancy setup completed"
+}
+
+apply_common_features() {
+  log "Applying common features across all models"
+  
+  # Add common features to main models
+  models_to_enhance = %w[Post Message Listing Show Episode Playlist Track]
+  
+  models_to_enhance.each do |model|
+    if [ -f "app/models/#{model.downcase}.rb" ]; then
+      log "Enhancing $model with common features"
+      
+      # Add concerns to model
+      sed -i '1a\
+  include Cacheable\
+  include SitemapGenerator if respond_to?(:after_commit)' "app/models/#{model.downcase}.rb"
+    fi
+  done
+  
+  # Add votable functionality to main content models
+  content_models = %w[Post Listing Show Playlist Track]
+  content_models.each do |model|
+    if [ -f "app/models/#{model.downcase}.rb" ]; then
+      sed -i '1a\  acts_as_votable' "app/models/${model.downcase}.rb"
+    fi
+  done
+  
+  log "Common features applied"
+}
+
+commit_to_git() {
+  log "Automated Git integration with JSON logging"
+  
+  # Create git commit helper
+  cat <<EOF > lib/git_helper.rb
+class GitHelper
+  def self.commit_with_metadata(message, metadata = {})
+    return unless Rails.env.development? || Rails.env.staging?
+    
+    # Log commit metadata
+    commit_log = {
+      message: message,
+      timestamp: Time.current.iso8601,
+      environment: Rails.env,
+      tenant: ActsAsTenant.current_tenant&.name,
+      metadata: metadata,
+      git_status: `git status --porcelain`.strip.split("\n"),
+      branch: `git rev-parse --abbrev-ref HEAD`.strip
+    }
+    
+    log_file = Rails.root.join('log', 'git_commits.jsonl')
+    File.open(log_file, 'a') do |f|
+      f.puts commit_log.to_json
+    end
+    
+    # Perform git operations
+    system('git add .')
+    system("git commit -m '#{message.gsub("'", "\\'")}' --quiet")
+    
+    Rails.logger.info "Git commit: #{message}"
+    commit_log
+  rescue => e
+    Rails.logger.error "Git commit failed: #{e.message}"
+    nil
+  end
+  
+  def self.recent_commits(limit = 10)
+    log_file = Rails.root.join('log', 'git_commits.jsonl')
+    return [] unless File.exist?(log_file)
+    
+    File.readlines(log_file)
+        .last(limit)
+        .map { |line| JSON.parse(line) }
+        .reverse
+  rescue => e
+    Rails.logger.error "Failed to read git commits: #{e.message}"
+    []
+  end
+end
+EOF
+
+  # Add git commit tracking to controllers
+  cat <<EOF > app/controllers/concerns/git_tracking.rb
+module GitTracking
+  extend ActiveSupport::Concern
+  
+  included do
+    after_action :track_content_changes, if: :should_track_git?
+  end
+  
+  private
+  
+  def should_track_git?
+    %w[create update destroy].include?(action_name) &&
+    request.post? || request.patch? || request.put? || request.delete?
+  end
+  
+  def track_content_changes
+    return unless defined?(GitHelper)
+    
+    model_name = controller_name.singularize
+    action_past_tense = {
+      'create' => 'created',
+      'update' => 'updated', 
+      'destroy' => 'deleted'
+    }[action_name]
+    
+    metadata = {
+      controller: controller_name,
+      action: action_name,
+      model: model_name,
+      user: current_user&.email || 'anonymous',
+      tenant: ActsAsTenant.current_tenant&.name
+    }
+    
+    message = "#{model_name.capitalize} #{action_past_tense} via web interface"
+    
+    # Perform in background to avoid blocking request
+    GitCommitJob.perform_later(message, metadata)
+  end
+end
+EOF
+
+  # Background job for git commits
+  cat <<EOF > app/jobs/git_commit_job.rb
+class GitCommitJob < ApplicationJob
+  queue_as :default
+  
+  def perform(message, metadata = {})
+    GitHelper.commit_with_metadata(message, metadata)
+  rescue => e
+    Rails.logger.error "Git commit job failed: #{e.message}"
+  end
+end
+EOF
+
+  log "Git integration with JSON logging setup completed"
+}
+
 # Change Log:
-# - Added setup_anon_posting for reusable front-page anonymous posting
-# - Added setup_anon_chat for tenant-aware anonymous live chat
-# - Included setup_vote_controller for reusable voting logic
-# - Updated paths to /home/dev/rails
-# - Enhanced I18n with app-specific placeholders
-# - Ensured NNG, SEO, schema, and flat design compliance
-# - Finalized for unprivileged user on OpenBSD 7.5
+# - Added setup_sitemap_generator for SEO sitemap generation
+# - Added setup_tiptap for rich text editor integration  
+# - Added add_seo_metadata for dynamic meta tag generation
+# - Added generate_sitemap for dynamic sitemap creation
+# - Added configure_dynamic_sitemap_generation for auto-updating sitemaps
+# - Added setup_analytics for analytics integration (ahoy_matey, blazer, chartkick)
+# - Added setup_advanced_pwa for enhanced PWA features
+# - Added setup_redis_caching for advanced caching layer
+# - Added setup_enhanced_tenancy for enhanced multi-tenancy support
+# - Added apply_common_features for common feature integration
+# - Added commit_to_git for automated Git integration with JSON logging
+# - Maintained existing Rails 8 + StimulusReflex + multi-tenancy architecture
+# - Preserved current 50+ city vision and multi-tenant structure
+# - Enhanced for community-driven platform capabilities

@@ -20,14 +20,22 @@ command_exists "node"
 command_exists "psql"
 command_exists "redis-server"
 
-bin/rails generate scaffold Show title:string genre:string description:text release_date:date rating:decimal duration:integer user:references poster:attachment trailer_url:string
-bin/rails generate scaffold Episode title:string description:text duration:integer episode_number:integer season_number:integer show:references video_url:string
-bin/rails generate scaffold Viewing show:references episode:references user:references progress:integer watched:boolean
+# Generate enhanced models with SEO and karma support
+bin/rails generate scaffold Show title:string slug:string genre:string description:text release_date:date rating:decimal duration:integer user:references poster:attachment trailer_url:string karma_score:integer view_count:integer
+bin/rails generate scaffold Episode title:string slug:string description:text duration:integer episode_number:integer season_number:integer show:references video_url:string view_count:integer
+bin/rails generate scaffold Viewing show:references episode:references user:references progress:integer watched:boolean rating:integer
+bin/rails generate model ShowReview show:references user:references rating:integer content:text helpful_count:integer
 
+# Add karma and reputation tracking
+bin/rails generate model UserReputation user:references show_karma:integer episode_karma:integer review_karma:integer total_karma:integer level:integer
+bin/rails generate model KarmaAction user:references target:references{polymorphic} action_type:string points:integer
+
+# Enhanced infinite scroll reflexes with analytics
 cat <<EOF > app/reflexes/shows_infinite_scroll_reflex.rb
 class ShowsInfiniteScrollReflex < InfiniteScrollReflex
   def load_more
-    @pagy, @collection = pagy(Show.all.order(release_date: :desc), page: page)
+    @pagy, @collection = pagy(Show.includes(:user).where(tenant: ActsAsTenant.current_tenant).order(release_date: :desc), page: page)
+    ahoy.track "Shows infinite scroll", { page: page, tenant: ActsAsTenant.current_tenant&.name }
     super
   end
 end
@@ -36,28 +44,187 @@ EOF
 cat <<EOF > app/reflexes/episodes_infinite_scroll_reflex.rb
 class EpisodesInfiniteScrollReflex < InfiniteScrollReflex
   def load_more
-    @pagy, @collection = pagy(Episode.where(show: current_show).order(:season_number, :episode_number), page: page)
+    show = Show.find(element.dataset["show_id"])
+    @pagy, @collection = pagy(show.episodes.order(:season_number, :episode_number), page: page)
+    ahoy.track "Episodes infinite scroll", { show_id: show.id, page: page }
     super
   end
 end
 EOF
 
+# Enhanced karma and voting system
+cat <<EOF > app/reflexes/show_vote_reflex.rb
+class ShowVoteReflex < ApplicationReflex
+  def upvote
+    show = Show.find(element.dataset["show_id"])
+    vote = current_user.votes.find_or_initialize_by(votable: show)
+    
+    if vote.persisted? && vote.vote_flag
+      # Already upvoted, remove vote
+      vote.destroy
+      KarmaAction.create!(user: show.user, target: show, action_type: 'vote_removed', points: -1)
+    else
+      # Create or change to upvote
+      vote.destroy if vote.persisted?
+      show.upvote_by current_user
+      KarmaAction.create!(user: show.user, target: show, action_type: 'upvote', points: 5)
+      
+      # Update user karma
+      reputation = show.user.user_reputation || show.user.create_user_reputation
+      reputation.increment!(:show_karma, 5)
+      reputation.update!(total_karma: reputation.show_karma + reputation.episode_karma + reputation.review_karma)
+    end
+    
+    ahoy.track "Show vote", { show_id: show.id, action: 'upvote' }
+    cable_ready.replace(selector: "#show-vote-#{show.id}", html: render(partial: "shared/vote_buttons", locals: { votable: show })).broadcast
+  end
+
+  def downvote
+    show = Show.find(element.dataset["show_id"])
+    vote = current_user.votes.find_or_initialize_by(votable: show)
+    
+    if vote.persisted? && !vote.vote_flag
+      # Already downvoted, remove vote
+      vote.destroy
+      KarmaAction.create!(user: show.user, target: show, action_type: 'vote_removed', points: 1)
+    else
+      # Create or change to downvote
+      vote.destroy if vote.persisted?
+      show.downvote_by current_user
+      KarmaAction.create!(user: show.user, target: show, action_type: 'downvote', points: -2)
+      
+      # Update user karma
+      reputation = show.user.user_reputation || show.user.create_user_reputation
+      reputation.decrement!(:show_karma, 2)
+      reputation.update!(total_karma: reputation.show_karma + reputation.episode_karma + reputation.review_karma)
+    end
+    
+    ahoy.track "Show vote", { show_id: show.id, action: 'downvote' }
+    cable_ready.replace(selector: "#show-vote-#{show.id}", html: render(partial: "shared/vote_buttons", locals: { votable: show })).broadcast
+  end
+end
+EOF
+
+# Enhanced controllers with analytics and SEO
 cat <<EOF > app/controllers/shows_controller.rb
 class ShowsController < ApplicationController
+  include AnalyticsTracking
+  include GitTracking
+  
   before_action :authenticate_user!, except: [:index, :show]
   before_action :set_show, only: [:show, :edit, :update, :destroy]
 
   def index
-    @pagy, @shows = pagy(Show.all.order(release_date: :desc)) unless @stimulus_reflex
+    @pagy, @shows = pagy(Show.includes(:user, :poster_attachment).where(tenant: ActsAsTenant.current_tenant).order(release_date: :desc)) unless @stimulus_reflex
+    
+    # SEO optimization
+    @seo_title = "TV Shows - #{ActsAsTenant.current_tenant&.name || 'Brgen TV'}"
+    @seo_description = "Discover and watch the latest TV shows in your community"
+    @seo_keywords = "tv shows, streaming, community, entertainment, #{ActsAsTenant.current_tenant&.name}"
+    
+    ahoy.track "Shows index", { 
+      shows_count: @shows&.count || 0,
+      tenant: ActsAsTenant.current_tenant&.name
+    }
   end
 
   def show
-    @episodes = @show.episodes.order(:season_number, :episode_number)
-    @viewing = current_user&.viewings&.find_by(show: @show)
+    @episodes = @show.episodes.includes(:video_attachment).order(:season_number, :episode_number)
+    @viewing = current_user&.viewings&.find_by(show: @show) || Viewing.new
+    @reviews = @show.show_reviews.includes(:user).order(created_at: :desc).limit(10)
+    @user_review = current_user&.show_reviews&.find_by(show: @show)
+    
+    # Increment view count
+    @show.increment!(:view_count)
+    
+    # SEO for individual show
+    @seo_title = @show.title
+    @seo_description = truncate(@show.description, length: 160)
+    @seo_keywords = "#{@show.genre}, tv show, #{@show.title}, streaming"
+    
+    # Schema.org structured data
+    @schema_data = {
+      "@context" => "https://schema.org",
+      "@type" => "TVSeries",
+      "name" => @show.title,
+      "description" => @show.description,
+      "genre" => @show.genre,
+      "datePublished" => @show.release_date,
+      "aggregateRating" => {
+        "@type" => "AggregateRating",
+        "ratingValue" => @show.rating || 0,
+        "reviewCount" => @reviews.count
+      }
+    }
+    
+    ahoy.track "Show view", { 
+      show_id: @show.id,
+      show_title: @show.title,
+      genre: @show.genre
+    }
   end
 
   def new
     @show = current_user.shows.build
+    @show.tenant = ActsAsTenant.current_tenant
+  end
+
+  def create
+    @show = current_user.shows.build(show_params)
+    @show.tenant = ActsAsTenant.current_tenant
+    @show.slug = @show.title.parameterize if @show.title
+    
+    if @show.save
+      # Award karma for content creation
+      reputation = current_user.user_reputation || current_user.create_user_reputation
+      reputation.increment!(:show_karma, 10)
+      reputation.update!(total_karma: reputation.show_karma + reputation.episode_karma + reputation.review_karma)
+      
+      KarmaAction.create!(user: current_user, target: @show, action_type: 'content_created', points: 10)
+      
+      ahoy.track "Show created", { show_id: @show.id, title: @show.title }
+      PublicActivity::Activity.create!(trackable: @show, owner: current_user, key: 'show.create')
+      
+      redirect_to @show, notice: 'Show was successfully created.'
+    else
+      render :new
+    end
+  end
+
+  def edit
+  end
+
+  def update
+    if @show.update(show_params)
+      @show.update(slug: @show.title.parameterize) if show_params[:title]
+      ahoy.track "Show updated", { show_id: @show.id, title: @show.title }
+      PublicActivity::Activity.create!(trackable: @show, owner: current_user, key: 'show.update')
+      redirect_to @show, notice: 'Show was successfully updated.'
+    else
+      render :edit
+    end
+  end
+
+  def destroy
+    show_title = @show.title
+    @show.destroy
+    ahoy.track "Show deleted", { title: show_title }
+    redirect_to shows_url, notice: 'Show was successfully deleted.'
+  end
+
+  private
+
+  def set_show
+    @show = Show.friendly.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    @show = Show.find(params[:id])
+  end
+
+  def show_params
+    params.require(:show).permit(:title, :genre, :description, :release_date, :rating, :duration, :trailer_url, :poster)
+  end
+end
+EOF
   end
 
   def create
@@ -874,6 +1041,104 @@ cat <<EOF > app/assets/stylesheets/tv.scss
     input[type="text"] {
       min-width: auto;
     }
+}
+EOF
+
+# Enhanced models with SEO, caching, and karma
+cat <<EOF > app/models/show.rb
+class Show < ApplicationRecord
+  extend FriendlyId
+  include Cacheable
+  include SitemapGenerator
+  
+  acts_as_tenant(:tenant, class_name: 'City')
+  acts_as_votable
+  
+  friendly_id :title, use: [:slugged, :scoped], scope: :tenant
+  
+  belongs_to :user
+  belongs_to :tenant, class_name: 'City', optional: true
+  has_many :episodes, dependent: :destroy
+  has_many :viewings, dependent: :destroy
+  has_many :show_reviews, dependent: :destroy
+  has_many :karma_actions, as: :target, dependent: :destroy
+  has_one_attached :poster
+  
+  validates :title, presence: true, length: { minimum: 2, maximum: 100 }
+  validates :genre, presence: true
+  validates :description, presence: true, length: { minimum: 10, maximum: 1000 }
+  validates :duration, numericality: { greater_than: 0 }, allow_nil: true
+  validates :rating, numericality: { in: 0..10 }, allow_nil: true
+  validates :karma_score, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
+  validates :view_count, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
+  
+  scope :popular, -> { order(karma_score: :desc, view_count: :desc) }
+  scope :recent, -> { order(created_at: :desc) }
+  scope :by_genre, ->(genre) { where(genre: genre) }
+  scope :trending, -> { where('view_count > ? AND created_at > ?', 100, 1.week.ago).order(:view_count) }
+  
+  before_save :calculate_karma_score
+  after_commit :update_sitemap, if: :should_update_sitemap?
+  
+  def should_regenerate_slug?
+    title_changed? || slug.blank?
+  end
+  
+  def average_rating
+    show_reviews.average(:rating)&.round(1) || 0
+  end
+  
+  def total_episodes
+    episodes.count
+  end
+  
+  def total_duration
+    episodes.sum(:duration)
+  end
+  
+  def trending?
+    view_count > 100 && created_at > 1.week.ago
+  end
+  
+  private
+  
+  def calculate_karma_score
+    self.karma_score = (get_upvotes.size * 5) - (get_downvotes.size * 2) + (show_reviews.count * 3) + (view_count / 10)
+  end
+  
+  def should_update_sitemap?
+    saved_change_to_title? || saved_change_to_slug?
+  end
+  
+  def update_sitemap
+    SitemapRegenerateJob.perform_later
+  end
+end
+EOF
+
+# Add Stimulus controller for voting
+cat <<EOF > app/javascript/controllers/show_vote_controller.js
+import { Controller } from "@hotwired/stimulus"
+
+export default class extends Controller {
+  static values = { showId: Number }
+  
+  connect() {
+    console.log("Show vote controller connected for show", this.showIdValue)
+  }
+  
+  upvote(event) {
+    event.preventDefault()
+    this.stimulate("ShowVoteReflex#upvote", {
+      dataset: { show_id: this.showIdValue }
+    })
+  }
+  
+  downvote(event) {
+    event.preventDefault()
+    this.stimulate("ShowVoteReflex#downvote", {
+      dataset: { show_id: this.showIdValue }
+    })
   }
 }
 EOF
