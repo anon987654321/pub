@@ -58,8 +58,10 @@ class EnhancedSessionManager
       puts "🧠 Cognitive load reset for session #{user_id}"
     end
 
-    # Update session data
-    session[:context].merge!(new_context) if new_context.is_a?(Hash)
+    # Update session data with advanced context merging
+    if new_context.is_a?(Hash)
+      session[:context] = merge_context_intelligently(session[:context], new_context)
+    end
     session[:timestamp] = Time.now
     session[:cognitive_load] += cognitive_delta
     session[:concept_count] = count_concepts(session[:context])
@@ -71,6 +73,33 @@ class EnhancedSessionManager
     store_session_to_db(user_id, session)
 
     session
+  end
+
+  # Advanced context merging with merge! capabilities
+  def merge_context_intelligently(existing_context, new_context)
+    merged = existing_context.dup
+
+    new_context.each do |key, value|
+      if merged.key?(key)
+        # Smart merging based on value types
+        case [merged[key].class, value.class]
+        when [Hash, Hash]
+          merged[key] = merge_context_intelligently(merged[key], value)
+        when [Array, Array]
+          merged[key] = (merged[key] + value).uniq
+        when [String, String]
+          # Concatenate strings with separator if they're different
+          merged[key] = merged[key] == value ? value : "#{merged[key]} | #{value}"
+        else
+          # Replace with new value for different types
+          merged[key] = value
+        end
+      else
+        merged[key] = value
+      end
+    end
+
+    merged
   end
 
   # Store context with encryption
