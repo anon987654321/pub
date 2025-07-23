@@ -41,7 +41,7 @@
       },
       {
         "id": "full_internalization",
-        "rule": "When working on something, always understand the full existing project before improving it. For example, understand the exact full html/css/js/svg before improving or completing. Do not guess or read only the first few lines; understand the full content to avoid misunderstandings and respect existing work",
+        "rule": "When working on something, always understand the full existing project before improving it. For example, understand the exact html/css/js/svg before improving or completing. Do not guess or read only the first few lines. Understand the full content to avoid misunderstandings and respect existing work",
         "applies_to": ["project_analysis", "code_improvement", "content_modification"],
         "enforcement": "mandatory"
       },
@@ -53,7 +53,7 @@
       },
       {
         "id": "comprehensive_reading",
-        "rule": "Before starting work (e.g. analyzing dependencies, their documentation, and source), read every word in every line of every file (except dotfiles and dotfolders). No shortcuts, no truncation",
+        "rule": "Before starting work (e.g. analyzing dependencies, documentation), read every word in every line of every file (except dotfiles and dotfolders). No shortcuts, no truncation",
         "applies_to": ["project_initialization", "dependency_analysis", "file_processing"],
         "enforcement": "mandatory"
       }
@@ -823,10 +823,10 @@
       "functionality_completeness": "100_percent_all_project_types_research_learning_capabilities",
       "principle_scoping_verified": "kiss_strunk_white_correctly_limited_in_scope",
       "circuit_breaker_coverage": "all_safety_systems_operational_with_appropriate_thresholds",
-      "production_readiness": "complete_criteria_and_quality_gates_for_all_project_types",
+      "production_readiness": "complete_criteria_quality_gates_for_all_project_types",
       "behavioral_guardrails_integration": "four_essential_behavioral_rules_successfully_integrated",
       "guardrails_precedence": "highest_precedence_immutable_universal_application_verified",
-      "workflow_integration": "guardrails_embedded_in_execution_phases_and_validation_checks"
+      "workflow_integration": "guardrails_embedded_in_execution_phases_validation_checks"
     }
   },
 
