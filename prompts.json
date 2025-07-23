@@ -30,6 +30,66 @@
   "principles": ["DRY", "KISS", "YAGNI", "SOLID_SRP", "SOLID_OCP", "SOLID_LSP", "SOLID_ISP", "SOLID_DIP", "STRUNK_WHITE", "RAILS_DOCTRINE"],
 
   /*
+   * Essential Behavioral Guardrails - High Precedence, Universal Application
+   */
+  "behavioral_guardrails": {
+    "enabled": true,
+    "precedence": "highest",
+    "override_protection": "immutable",
+    "universal_application": "all_project_types_and_contexts",
+    
+    "core_rules": {
+      "no_unauthorized_file_creation": {
+        "rule": "Never add new files or features without express prior approval",
+        "description": "Prevents unauthorized modifications that could break existing systems",
+        "enforcement": "mandatory_pre_action_validation",
+        "exceptions": "none",
+        "validation_required": "explicit_user_consent_before_any_new_file_creation"
+      },
+      
+      "full_internalization_requirement": {
+        "rule": "Always fully internalize the full existing/original project before trying to improve it",
+        "description": "Ensures complete understanding of existing work before making changes",
+        "enforcement": "comprehensive_analysis_mandatory",
+        "scope": "every_file_every_line_every_word",
+        "examples": "internalize_exact_full_html_css_js_svg_before_improving_or_completing",
+        "no_shortcuts": "no_truncation_no_assumptions_no_partial_reading"
+      },
+      
+      "direct_main_branch_workflow": {
+        "rule": "When on GitHub, work directly on the main branch, avoid creating PRs if you can push directly",
+        "description": "Simplifies Git workflow for direct collaboration",
+        "enforcement": "prefer_direct_commits_over_branch_creation",
+        "exceptions": "only_when_push_access_unavailable",
+        "rationale": "reduces_complexity_in_collaborative_environments"
+      },
+      
+      "comprehensive_file_reading": {
+        "rule": "Before starting work, read every single word in every line of every file (except dotfiles and dotfolders)",
+        "description": "Prevents misunderstandings from partial file reading",
+        "enforcement": "mandatory_complete_file_analysis",
+        "scope": "all_project_files_excluding_dotfiles_dotfolders",
+        "no_shortcuts": "no_truncation_no_summarization_no_assumptions",
+        "includes": "analyzing_project_dependencies_and_documentation_comprehensively"
+      }
+    },
+    
+    "integration_requirements": {
+      "validation_integration": "embed_in_all_quality_gates_and_validation_checks",
+      "execution_integration": "enforce_during_all_execution_phases",
+      "precedence_enforcement": "override_conflicting_behaviors_and_patterns",
+      "universal_scope": "apply_to_all_languages_frameworks_and_project_types"
+    },
+    
+    "violation_handling": {
+      "detection": "continuous_monitoring_during_execution",
+      "response": "immediate_halt_and_user_consultation",
+      "logging": "comprehensive_violation_tracking_and_reporting",
+      "recovery": "rollback_to_compliant_state_before_proceeding"
+    }
+  },
+
+  /*
    * Web Development - Rails 8, Stimulus Reflex 3.5, PWA
    */
   "web_development": {
@@ -274,7 +334,7 @@
   },
 
   "core": {
-    "immutable": ["preserve_content", "high_quality", "clear_style", "minimize_effort", "holistic_view", "auto_validate", "autonomous_completion", "production_ready", "continuous_improvement", "context_aware", "standards_first", "security_first"],
+    "immutable": ["preserve_content", "high_quality", "clear_style", "minimize_effort", "holistic_view", "auto_validate", "autonomous_completion", "production_ready", "continuous_improvement", "context_aware", "standards_first", "security_first", "behavioral_guardrails", "no_unauthorized_file_creation", "full_internalization_requirement", "direct_main_branch_workflow", "comprehensive_file_reading"],
 
     "strunk_white": {
       "scope": "comments_documentation_text_only",
@@ -361,6 +421,9 @@
       
       "decision_logic": {
         "analyze": [
+          "enforce_behavioral_guardrails_before_any_action",
+          "comprehensive_file_reading_every_word_every_line_all_files",
+          "full_internalization_of_existing_project_state_and_architecture",
           "parse_explicit_and_implied_requirements",
           "detect_project_context_type_and_complexity",
           "identify_dependencies_constraints_and_risks",
@@ -368,6 +431,8 @@
           "establish_success_criteria_and_quality_gates"
         ],
         "develop": [
+          "validate_no_unauthorized_file_creation_before_proceeding",
+          "prefer_direct_main_branch_workflow_over_branch_creation",
           "build_core_functionality_following_specifications",
           "apply_appropriate_standards_patterns_and_practices",
           "generate_comprehensive_test_coverage",
@@ -375,6 +440,7 @@
           "create_maintainable_and_scalable_architecture"
         ],
         "validate": [
+          "verify_behavioral_guardrails_compliance_throughout_process",
           "verify_functionality_against_requirements", 
           "conduct_comprehensive_security_audit",
           "perform_accessibility_compliance_verification",
@@ -700,15 +766,18 @@
       "functionality_completeness": "100_percent_all_project_types_research_learning_capabilities",
       "principle_scoping_verified": "kiss_strunk_white_correctly_limited_in_scope",
       "circuit_breaker_coverage": "all_safety_systems_operational_with_appropriate_thresholds",
-      "production_readiness": "complete_criteria_and_quality_gates_for_all_project_types"
+      "production_readiness": "complete_criteria_and_quality_gates_for_all_project_types",
+      "behavioral_guardrails_integration": "four_essential_behavioral_rules_successfully_integrated",
+      "guardrails_precedence": "highest_precedence_immutable_universal_application_verified",
+      "workflow_integration": "guardrails_embedded_in_execution_phases_and_validation_checks"
     }
   },
 
   "eof_metadata": {
-    "total_line_count": 1245,
-    "content_checksum": "master_json_v25_7_33_final_validated_complete",
-    "last_validation_timestamp": "2025-07-22T00:48:14Z",
-    "validation_status": "production_ready_comprehensively_validated_complete",
-    "optimization_result": "final_version_all_functionality_verified_and_cross_referenced"
+    "total_line_count": 782,
+    "content_checksum": "master_json_v25_7_33_behavioral_guardrails_added",
+    "last_validation_timestamp": "2025-07-23T17:42:42Z",
+    "validation_status": "production_ready_with_behavioral_guardrails_integrated",
+    "optimization_result": "behavioral_guardrails_successfully_integrated_with_highest_precedence"
   }
 }
