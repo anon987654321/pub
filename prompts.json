@@ -9,7 +9,7 @@
    */
 
   "meta": {
-    "version": "v25.7.33",
+    "version": "v25.8.0-enhanced",
     "timestamp": "2025-07-22T00:48:14Z",
     "author": "anon987654321",
     "current_user": "anon987654321",
@@ -24,6 +24,45 @@
       "copilot_optimization": "claude_sonnet_4_github_native",
       "direct_repo_editing": "github_com_optimized",
       "standards_enforcement": "llm_guided_with_external_validation"
+    }
+  },
+
+  /*
+   * Behavioral Prompts - Core rules that govern all operations
+   */
+  "behavioral_prompts": {
+    "description": "Explicit behavioral rules that must be followed in all operations",
+    "rules": [
+      {
+        "id": "approval_required", 
+        "rule": "Never add new files or features without express prior approval",
+        "applies_to": ["file_creation", "feature_development", "system_changes"],
+        "enforcement": "mandatory"
+      },
+      {
+        "id": "full_internalization",
+        "rule": "When working on something, always fully internalize the full existing/original project before trying to improve it. For example, internalize the exact full html/css/js/svg before trying to improve or complete. Do not guess or only read the first few lines; always understand the full content to avoid misunderstandings and to respect existing work",
+        "applies_to": ["project_analysis", "code_improvement", "content_modification"],
+        "enforcement": "mandatory"
+      },
+      {
+        "id": "main_branch_workflow",
+        "rule": "When on GitHub, do not create new branches for fixes—work directly on the main branch. Avoid creating PRs if you can push (push -f) directly yourself",
+        "applies_to": ["github_operations", "version_control", "deployment"],
+        "enforcement": "mandatory"
+      },
+      {
+        "id": "comprehensive_reading",
+        "rule": "Before starting work (e.g. analyzing dependencies, their documentation, and source), always read every single word in every line of every file (except dotfiles and dotfolders). No shortcuts, no truncation",
+        "applies_to": ["project_initialization", "dependency_analysis", "file_processing"],
+        "enforcement": "mandatory"
+      }
+    ],
+    "cross_references": {
+      "change_management": "approval_required",
+      "workflow": "main_branch_workflow", 
+      "autonomous_completion": ["full_internalization", "comprehensive_reading"],
+      "file_processing": ["full_internalization", "comprehensive_reading"]
     }
   },
 
@@ -131,6 +170,11 @@
       "testing_frameworks_for_verification", 
       "deployment_tools_for_production"
     ],
+    "behavioral_compliance": {
+      "full_internalization": "Enforces behavioral_prompts.rules.full_internalization - always fully understand existing project before attempting improvements",
+      "comprehensive_reading": "Enforces behavioral_prompts.rules.comprehensive_reading - read every word in every line before starting work",
+      "reference": "See behavioral_prompts section for complete analysis and completion rules"
+    },
 
     "project_detection": {
       "methods": ["file_extensions", "dependencies", "directory_structure", "user_intent", "existing_patterns"],
@@ -498,7 +542,11 @@
     "policy": "require_explicit_consent", "format": "git_diff", 
     "prompt": "Require explicit user consent (Y/n) before writing changes",
     "triggers": ["code_changes", "config_changes", "files_>5"],
-    "logging": {"level": "detailed", "include_reason": true, "store_states": true}
+    "logging": {"level": "detailed", "include_reason": true, "store_states": true},
+    "behavioral_compliance": {
+      "approval_required": "Enforces behavioral_prompts.rules.approval_required - never add new files or features without express prior approval",
+      "reference": "See behavioral_prompts section for complete rules"
+    }
   },
 
   "infrastructure_preservation": {
@@ -610,6 +658,11 @@
   },
 
   "file_processing": {
+    "behavioral_compliance": {
+      "full_internalization": "Enforces behavioral_prompts.rules.full_internalization - understand full existing content before modification",
+      "comprehensive_reading": "Enforces behavioral_prompts.rules.comprehensive_reading - read every word in every line of every file (except dotfiles)",
+      "reference": "See behavioral_prompts section for complete file processing rules"
+    },
     "individual_file_pipeline": [
       "detect_file_type_purpose_and_project_context",
       "assess_file_role_within_overall_project_architecture", 
@@ -647,7 +700,11 @@
     "git": {
       "commits": {"format": "semantic_jira", "content": "descriptive_business_context", "size": "atomic_single_responsibility"},
       "hooks": {"pre_commit": "validation_pipeline_auto_fixes", "pre_push": "full_test_suite_reflex", "post_merge": "deps_docs_deployment_prep", "post_checkout": "env_setup_deps_validation"},
-      "branching": "feature_branches", "merge": "squash_and_merge"
+      "branching": "feature_branches", "merge": "squash_and_merge",
+      "behavioral_compliance": {
+        "main_branch_workflow": "Enforces behavioral_prompts.rules.main_branch_workflow - work directly on main branch, avoid PRs when direct push is possible",
+        "reference": "See behavioral_prompts section for complete GitHub workflow rules"
+      }
     },
     "automation": {
       "ci_cd": {"pipeline": "github_actions_rails_8_matrix", "gates": "mandatory_lighthouse_pwa_audit", "deployment": "kamal_2_zero_downtime_health_checks"},
