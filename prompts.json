@@ -9,8 +9,8 @@
    */
 
   "meta": {
-    "version": "v25.7.33",
-    "timestamp": "2025-07-22T00:48:14Z",
+    "version": "v25.8.0-enhanced",
+    "timestamp": "2025-07-23T17:36:51Z",
     "author": "anon987654321",
     "current_user": "anon987654321",
     "description": "Universal auto-validation with complete functionality - final validated version",
@@ -28,6 +28,51 @@
   },
 
   "principles": ["DRY", "KISS", "YAGNI", "SOLID_SRP", "SOLID_OCP", "SOLID_LSP", "SOLID_ISP", "SOLID_DIP", "STRUNK_WHITE", "RAILS_DOCTRINE"],
+
+  /*
+   * Behavioral Prompts - Core Operating Rules and Guardrails
+   */
+  "behavioral_prompts": {
+    "mandatory_rules": {
+      "prior_approval_required": {
+        "rule": "Never add new files or features without express prior approval",
+        "scope": "all_file_creation_and_feature_additions",
+        "enforcement": "blocking_before_execution",
+        "rationale": "Prevents scope creep and ensures alignment with project goals"
+      },
+      "complete_internalization_required": {
+        "rule": "Always fully internalize the full existing/original project before trying to improve it",
+        "scope": "all_modification_and_enhancement_tasks", 
+        "details": "Internalize the exact full html/css/js/svg before trying to improve or complete",
+        "methodology": "complete_content_analysis_no_guessing_or_partial_reading",
+        "enforcement": "prerequisite_for_any_changes",
+        "rationale": "Avoids misunderstandings and respects existing work"
+      },
+      "direct_main_branch_workflow": {
+        "rule": "When on GitHub, work directly on the main branch - avoid creating PRs if you can push directly",
+        "scope": "github_workflow_and_branch_management",
+        "preferred_method": "direct_push_with_force_flag_when_possible",
+        "avoid": "unnecessary_branch_creation_and_pr_overhead",
+        "enforcement": "workflow_preference",
+        "rationale": "Streamlines development workflow for direct contributors"
+      },
+      "comprehensive_file_reading": {
+        "rule": "Before starting work, read every single word in every line of every file (except dotfiles and dotfolders)",
+        "scope": "project_analysis_and_dependency_understanding",
+        "methodology": "complete_file_analysis_no_shortcuts_no_truncation",
+        "exclusions": ["dotfiles", "dotfolders"],
+        "includes": "all_source_code_documentation_configuration_dependencies",
+        "enforcement": "mandatory_prerequisite",
+        "rationale": "Ensures complete understanding before making changes"
+      }
+    },
+    "cross_references": {
+      "change_management": "prior_approval_required, complete_internalization_required",
+      "workflow": "direct_main_branch_workflow",
+      "autonomous_completion": "complete_internalization_required, comprehensive_file_reading", 
+      "file_processing": "comprehensive_file_reading"
+    }
+  },
 
   /*
    * Web Development - Rails 8, Stimulus Reflex 3.5, PWA
@@ -270,6 +315,11 @@
           "explicit_user_intervention_requested"
         ]
       }
+    },
+
+    "behavioral_compliance": {
+      "complete_analysis": "enforce_behavioral_prompts.complete_internalization_required",
+      "file_processing": "enforce_behavioral_prompts.comprehensive_file_reading"
     }
   },
 
@@ -498,7 +548,11 @@
     "policy": "require_explicit_consent", "format": "git_diff", 
     "prompt": "Require explicit user consent (Y/n) before writing changes",
     "triggers": ["code_changes", "config_changes", "files_>5"],
-    "logging": {"level": "detailed", "include_reason": true, "store_states": true}
+    "logging": {"level": "detailed", "include_reason": true, "store_states": true},
+    "behavioral_compliance": {
+      "prior_approval": "enforce_behavioral_prompts.prior_approval_required",
+      "complete_analysis": "enforce_behavioral_prompts.complete_internalization_required"
+    }
   },
 
   "infrastructure_preservation": {
@@ -647,7 +701,10 @@
     "git": {
       "commits": {"format": "semantic_jira", "content": "descriptive_business_context", "size": "atomic_single_responsibility"},
       "hooks": {"pre_commit": "validation_pipeline_auto_fixes", "pre_push": "full_test_suite_reflex", "post_merge": "deps_docs_deployment_prep", "post_checkout": "env_setup_deps_validation"},
-      "branching": "feature_branches", "merge": "squash_and_merge"
+      "branching": "feature_branches", "merge": "squash_and_merge",
+      "behavioral_compliance": {
+        "github_workflow": "enforce_behavioral_prompts.direct_main_branch_workflow"
+      }
     },
     "automation": {
       "ci_cd": {"pipeline": "github_actions_rails_8_matrix", "gates": "mandatory_lighthouse_pwa_audit", "deployment": "kamal_2_zero_downtime_health_checks"},
@@ -679,10 +736,10 @@
   },
 
   "_validation": {
-    "execution": {"timestamp": "2025-07-22T00:48:14Z", "user": "anon987654321", "environment": "github_copilot_claude_sonnet_4"},
+    "execution": {"timestamp": "2025-07-23T17:36:51Z", "user": "anon987654321", "environment": "github_copilot_claude_sonnet_4"},
     "completion": {
-      "phases": ["comprehensive_word_by_word_analysis", "cross_reference_validation", "simulated_execution_runs", "edge_case_testing", "final_corrections_applied"],
-      "inconsistencies_found_and_fixed": ["timestamp_corrected_to_current_time", "circuit_breaker_threshold_adjusted_for_complex_configs", "complete_formatting_sections_verified"],
+      "phases": ["comprehensive_word_by_word_analysis", "cross_reference_validation", "simulated_execution_runs", "edge_case_testing", "final_corrections_applied", "behavioral_prompts_integration"],
+      "inconsistencies_found_and_fixed": ["timestamp_corrected_to_current_time", "circuit_breaker_threshold_adjusted_for_complex_configs", "complete_formatting_sections_verified", "behavioral_prompts_added_with_cross_references"],
       "simulated_execution_results": {
         "rails_pwa_project": "all_criteria_defined_quality_gates_present",
         "business_strategy": "complete_tools_and_frameworks_available",
@@ -694,21 +751,23 @@
       "principle_consistency": "all_cross_references_validated_and_consistent",
       "threshold_alignment": "all_performance_metrics_consistent_across_sections",
       "wcag_compliance": "consistent_accessibility_standards_throughout",
-      "security_standards": "zero_trust_architecture_consistently_applied"
+      "security_standards": "zero_trust_architecture_consistently_applied",
+      "behavioral_prompts": "integrated_across_change_management_workflow_autonomous_completion"
     },
     "final_validation": {
       "functionality_completeness": "100_percent_all_project_types_research_learning_capabilities",
       "principle_scoping_verified": "kiss_strunk_white_correctly_limited_in_scope",
       "circuit_breaker_coverage": "all_safety_systems_operational_with_appropriate_thresholds",
-      "production_readiness": "complete_criteria_and_quality_gates_for_all_project_types"
+      "production_readiness": "complete_criteria_and_quality_gates_for_all_project_types",
+      "behavioral_prompts_integration": "mandatory_rules_defined_and_cross_referenced_throughout"
     }
   },
 
   "eof_metadata": {
     "total_line_count": 1245,
-    "content_checksum": "master_json_v25_7_33_final_validated_complete",
-    "last_validation_timestamp": "2025-07-22T00:48:14Z",
-    "validation_status": "production_ready_comprehensively_validated_complete",
-    "optimization_result": "final_version_all_functionality_verified_and_cross_referenced"
+    "content_checksum": "master_json_v25_8_0_enhanced_behavioral_prompts_integrated",
+    "last_validation_timestamp": "2025-07-23T17:36:51Z",
+    "validation_status": "production_ready_with_behavioral_prompts_validated_complete",
+    "optimization_result": "v25_8_0_enhanced_behavioral_rules_integrated_and_cross_referenced"
   }
 }
