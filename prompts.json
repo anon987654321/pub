@@ -1,10 +1,10 @@
 {
   /*
-   * Auto-validates files and projects. Fixes syntax errors, enforces style rules, checks security.
+   * Validates files and projects. Fixes syntax errors, enforces style rules, checks security.
    * Works silently in background. Supports all programming languages.
-   * Makes code production-ready automatically.
+   * Makes code production-ready.
    * 
-   * NOTE: Defines STANDARDS and CRITERIA for decision-making.
+   * NOTE: Defines standards and criteria for decision-making.
    * Execution requires external tools (GitHub Actions, CI/CD, etc.)
    */
 
@@ -13,7 +13,7 @@
     "timestamp": "2025-07-22T00:48:14Z",
     "author": "anon987654321",
     "current_user": "anon987654321",
-    "description": "Universal auto-validation with complete functionality - final validated version",
+    "description": "Universal auto-validation with complete functionality - final version",
     "self_validated": true,
     "auto_applies_to": "every_file_and_entire_projects",
     "compliance": ["WCAG_2_2_AAA", "ISO_9001_2015", "SOC_2_TYPE_II", "zero_trust"],
@@ -28,10 +28,10 @@
   },
 
   /*
-   * Behavioral Prompts - Core rules that govern all operations
+   * Behavioral Prompts - Core rules for all operations
    */
   "behavioral_prompts": {
-    "description": "Explicit behavioral rules that must be followed in all operations",
+    "description": "Behavioral rules that must be followed in all operations",
     "rules": [
       {
         "id": "approval_required", 
@@ -41,19 +41,19 @@
       },
       {
         "id": "full_internalization",
-        "rule": "When working on something, always fully internalize the full existing/original project before trying to improve it. For example, internalize the exact full html/css/js/svg before trying to improve or complete. Do not guess or only read the first few lines; always understand the full content to avoid misunderstandings and to respect existing work",
+        "rule": "When working on something, always understand the full existing project before improving it. For example, understand the exact html/css/js/svg before improving or completing. Do not guess or read only the first few lines. Understand the full content to avoid misunderstandings and respect existing work",
         "applies_to": ["project_analysis", "code_improvement", "content_modification"],
         "enforcement": "mandatory"
       },
       {
         "id": "main_branch_workflow",
-        "rule": "When on GitHub, do not create new branches for fixes—work directly on the main branch. Avoid creating PRs if you can push (push -f) directly yourself",
+        "rule": "When on GitHub, do not create new branches for fixes—work directly on the main branch. Avoid creating PRs if you can push directly",
         "applies_to": ["github_operations", "version_control", "deployment"],
         "enforcement": "mandatory"
       },
       {
         "id": "comprehensive_reading",
-        "rule": "Before starting work (e.g. analyzing dependencies, their documentation, and source), always read every single word in every line of every file (except dotfiles and dotfolders). No shortcuts, no truncation",
+        "rule": "Before starting work (e.g. analyzing dependencies, documentation), read every word in every line of every file (except dotfiles and dotfolders). No shortcuts, no truncation",
         "applies_to": ["project_initialization", "dependency_analysis", "file_processing"],
         "enforcement": "mandatory"
       }
@@ -87,11 +87,11 @@
       },
       
       "full_internalization_requirement": {
-        "rule": "Always fully internalize the full existing/original project before trying to improve it",
+        "rule": "Always understand the full existing project before improving it",
         "description": "Ensures complete understanding of existing work before making changes",
         "enforcement": "comprehensive_analysis_mandatory",
         "scope": "every_file_every_line_every_word",
-        "examples": "internalize_exact_full_html_css_js_svg_before_improving_or_completing",
+        "examples": "understand exact full html_css_js_svg before improving or completing",
         "no_shortcuts": "no_truncation_no_assumptions_no_partial_reading"
       },
       
@@ -100,16 +100,16 @@
         "description": "Simplifies Git workflow for direct collaboration",
         "enforcement": "prefer_direct_commits_over_branch_creation",
         "exceptions": "only_when_push_access_unavailable",
-        "rationale": "reduces_complexity_in_collaborative_environments"
+        "rationale": "reduces complexity in collaborative environments"
       },
       
       "comprehensive_file_reading": {
-        "rule": "Before starting work, read every single word in every line of every file (except dotfiles and dotfolders)",
+        "rule": "Before starting work, read every word in every line of every file (except dotfiles and dotfolders)",
         "description": "Prevents misunderstandings from partial file reading",
         "enforcement": "mandatory_complete_file_analysis",
         "scope": "all_project_files_excluding_dotfiles_dotfolders",
         "no_shortcuts": "no_truncation_no_summarization_no_assumptions",
-        "includes": "analyzing_project_dependencies_and_documentation_comprehensively"
+        "includes": "analyzing project dependencies and documentation thoroughly"
       }
     },
     
@@ -231,7 +231,7 @@
       "deployment_tools_for_production"
     ],
     "behavioral_compliance": {
-      "full_internalization": "Enforces behavioral_prompts.rules.full_internalization - always fully understand existing project before attempting improvements",
+      "full_internalization": "Enforces behavioral_prompts.rules.full_internalization - always understand existing project before attempting improvements",
       "comprehensive_reading": "Enforces behavioral_prompts.rules.comprehensive_reading - read every word in every line before starting work",
       "reference": "See behavioral_prompts section for complete analysis and completion rules"
     },
@@ -250,7 +250,7 @@
           "security_standards_met",
           "accessibility_wcag_2_2_aaa_compliant",
           "performance_targets_achieved",
-          "documentation_comprehensive_and_current",
+          "documentation_current",
           "test_coverage_above_95_percent"
         ],
         "quality_gates": [
@@ -282,16 +282,16 @@
       "business": {
         "indicators": [".md", ".docx", ".pdf", "business_plan", "strategy", "analysis"],
         "completion_criteria": [
-          "requirements_comprehensively_addressed",
+          "requirements_addressed",
           "stakeholder_needs_satisfied",
-          "documentation_professional_and_complete",
+          "documentation_professional_complete",
           "actionable_recommendations_provided"
         ],
         "quality_gates": [
           "clear_professional_writing",
           "data_supported_conclusions",
           "feasible_and_realistic_proposals",
-          "comprehensive_risk_assessment"
+          "risk_assessment"
         ]
       },
       "creative": {
@@ -312,16 +312,16 @@
       "documentation": {
         "indicators": ["README", ".md", "docs/", "wiki/", "help/"],
         "completion_criteria": [
-          "comprehensive_topic_coverage",
+          "topic_coverage",
           "practical_examples_included",
           "troubleshooting_guide_complete",
-          "information_current_and_accurate"
+          "information_current_accurate"
         ],
         "quality_gates": [
-          "clear_and_accessible_writing",
+          "clear_accessible_writing",
           "information_accuracy_verified",
-          "logical_structure_and_navigation",
-          "maintenance_and_update_plan"
+          "logical_structure_navigation",
+          "maintenance_update_plan"
         ]
       },
       "configuration": {
@@ -329,14 +329,14 @@
         "completion_criteria": [
           "environment_properly_configured",
           "security_settings_hardened",
-          "monitoring_and_logging_enabled",
-          "backup_and_recovery_strategy_implemented"
+          "monitoring_logging_enabled",
+          "backup_recovery_strategy_implemented"
         ],
         "quality_gates": [
           "syntax_validation_successful",
-          "permissions_and_access_properly_set",
-          "secrets_and_credentials_secured",
-          "changes_documented_and_tracked"
+          "permissions_access_properly_set",
+          "secrets_credentials_secured",
+          "changes_documented_tracked"
         ]
       }
     },
@@ -347,25 +347,25 @@
       "criteria": {
         "functionality": "all_core_features_working_as_specified",
         "performance": "response_times_under_200ms_95th_percentile",
-        "security": "zero_known_vulnerabilities_comprehensive_audit_clean", 
-        "accessibility": "wcag_2_2_aaa_compliant_with_testing_verification",
+        "security": "zero_known_vulnerabilities_audit_clean", 
+        "accessibility": "wcag_2_2_aaa_compliant_with_testing",
         "reliability": "error_rate_below_0_03_percent_with_monitoring",
         "maintainability": "documentation_complete_code_self_documenting",
         "scalability": "load_tested_for_expected_traffic_with_headroom"
       },
       "deployment_blockers": [
-        "any_failing_tests_or_build_errors",
+        "failing_tests_or_build_errors",
         "security_vulnerabilities_or_audit_failures",
         "accessibility_violations_or_compliance_gaps", 
         "performance_below_defined_thresholds",
-        "missing_critical_documentation_or_runbooks"
+        "missing_critical_documentation_runbooks"
       ],
       "stop_conditions": {
         "primary": [
           "all_quality_gates_verified_by_external_tools",
-          "completion_criteria_satisfied_and_validated",
-          "production_readiness_confirmed_by_comprehensive_testing",
-          "stakeholder_acceptance_and_sign_off_received"
+          "completion_criteria_satisfied_validated",
+          "production_readiness_confirmed_by_testing",
+          "stakeholder_acceptance_sign_off_received"
         ],
         "safety": [
           "maximum_iteration_limit_reached",
@@ -466,44 +466,44 @@
       "decision_logic": {
         "analyze": [
           "enforce_behavioral_guardrails_before_any_action",
-          "comprehensive_file_reading_every_word_every_line_all_files",
-          "full_internalization_of_existing_project_state_and_architecture",
-          "parse_explicit_and_implied_requirements",
-          "detect_project_context_type_and_complexity",
-          "identify_dependencies_constraints_and_risks",
-          "assess_complexity_and_choose_appropriate_approach",
-          "establish_success_criteria_and_quality_gates"
+          "file_reading_every_word_every_line_all_files",
+          "internalization_of_existing_project_state_architecture",
+          "parse_explicit_implied_requirements",
+          "detect_project_context_type_complexity",
+          "identify_dependencies_constraints_risks",
+          "assess_complexity_choose_appropriate_approach",
+          "establish_success_criteria_quality_gates"
         ],
         "develop": [
           "validate_no_unauthorized_file_creation_before_proceeding",
           "prefer_direct_main_branch_workflow_over_branch_creation",
           "build_core_functionality_following_specifications",
-          "apply_appropriate_standards_patterns_and_practices",
-          "generate_comprehensive_test_coverage",
-          "implement_security_accessibility_and_performance_measures",
-          "create_maintainable_and_scalable_architecture"
+          "apply_appropriate_standards_patterns_practices",
+          "generate_test_coverage",
+          "implement_security_accessibility_performance_measures",
+          "create_maintainable_scalable_architecture"
         ],
         "validate": [
           "verify_behavioral_guardrails_compliance_throughout_process",
           "verify_functionality_against_requirements", 
-          "conduct_comprehensive_security_audit",
+          "conduct_security_audit",
           "perform_accessibility_compliance_verification",
           "validate_performance_against_defined_targets",
-          "ensure_integration_compatibility_and_stability"
+          "ensure_integration_compatibility_stability"
         ],
         "optimize": [
-          "refine_code_for_clarity_efficiency_and_maintainability",
+          "refine_code_for_clarity_efficiency_maintainability",
           "enhance_performance_to_production_standards",
           "verify_optimizations_maintain_functionality",
-          "optimize_for_long_term_maintainability_and_scalability",
-          "prepare_for_production_deployment_and_monitoring"
+          "optimize_for_long_term_maintainability_scalability",
+          "prepare_for_production_deployment_monitoring"
         ],
         "deliver": [
           "package_outputs_for_appropriate_deployment_target",
-          "generate_comprehensive_documentation_and_guides",
-          "embed_version_metadata_and_tracking_information",
-          "prepare_handoff_materials_runbooks_and_support_documentation",
-          "establish_monitoring_alerting_and_maintenance_procedures"
+          "generate_documentation_guides",
+          "embed_version_metadata_tracking_information",
+          "prepare_handoff_materials_runbooks_support_documentation",
+          "establish_monitoring_alerting_maintenance_procedures"
         ]
       }
     },
@@ -530,34 +530,34 @@
         "arxiv_api": "https://ar5iv.labs.arxiv.org/",
         "github_trends": "https://github.com/trending",
         "industry_standards": "w3c_ieee_iso_owasp_documentation",
-        "best_practices": "community_consensus_and_expert_recommendations"
+        "best_practices": "community_consensus_expert_recommendations"
       },
       "market_analysis": {
         "temperature": 0.3,
         "focus": ["industry_trends", "competitive_landscape", "opportunities", "risks", "production_standards"],
-        "timing": "project_initiation_and_major_decision_points",
+        "timing": "project_initiation_major_decision_points",
         "autonomous_behavior": "gather_relevant_context_without_explicit_prompting"
       },
       "future_analysis": {
         "temperature": 0.85,
         "focus": ["emerging_technologies", "strategic_roadmap", "architectural_abstractions", "breakthrough_opportunities"],
-        "timing": "project_completion_and_strategic_planning_phases",
-        "autonomous_behavior": "proactively_suggest_improvements_and_future_directions"
+        "timing": "project_completion_strategic_planning_phases",
+        "autonomous_behavior": "proactively_suggest_improvements_future_directions"
       },
       "continuous_learning": {
         "pattern_recognition": "learn_from_successful_project_implementations",
         "technology_monitoring": "track_relevant_developments_in_technology_landscape",
-        "best_practice_evolution": "adapt_standards_based_on_industry_changes_and_feedback",
-        "user_preference_adaptation": "remember_and_apply_individual_user_preferences_and_patterns"
+        "best_practice_evolution": "adapt_standards_based_on_industry_changes_feedback",
+        "user_preference_adaptation": "remember_apply_individual_user_preferences_patterns"
       }
     },
 
     "ai": {
       "cognitive_abilities": {
-        "self_reflection": "analyze_own_work_quality_and_decision_making_process",
-        "pattern_learning": "identify_and_reuse_successful_approaches_and_solutions",
+        "self_reflection": "analyze_own_work_quality_decision_making_process",
+        "pattern_learning": "identify_reuse_successful_approaches_solutions",
         "smart_stopping": "recognize_when_objectives_achieved_or_further_work_counterproductive",
-        "error_recovery": "detect_mistakes_and_automatically_rollback_to_stable_state",
+        "error_recovery": "detect_mistakes_automatically_rollback_to_stable_state",
         "bias_prevention": "avoid_recency_bias_and_maintain_objective_decision_making",
         "continuous_optimization": "constantly_improve_processes_and_outcomes"
       },
@@ -702,7 +702,7 @@
     "json": {"properties": "semantic_then_alpha", "trailing_commas": "context_appropriate", "arrays": "semantic_multiline", "strings": "i18n_aware"},
 
     "comments": {
-      "style": {"single": "space_after_marker", "multi": "aligned_asterisks", "docs": "comprehensive_accessible"},
+      "style": {"single": "space_after_marker", "multi": "aligned_asterisks", "docs": "docs_accessible"},
       "content": {"meaningful": "enhance_context", "obvious": "replace_semantic", "redundant": "consolidate", "verbose": "clarity_over_brevity", "missing": "accessibility_maintainability"},
       "positioning": {"trailing": "semantic_not_arbitrary", "block": "logical_hierarchy", "sections": "prominent_accessible"}
     },
@@ -715,11 +715,11 @@
     "style": "clear_concise_actionable", "required": ["summary", "usage", "examples", "troubleshooting"],
     "code_examples": {"verified": true, "show_output": true, "real_world": true, "multi_language": "when_applicable"},
     "auto_generation": {
-      "api_documentation": "generated_from_code_comments_with_interactive_examples_and_testing_capability",
-      "project_documentation": "generated_from_project_structure_with_comprehensive_getting_started_guides",
-      "change_documentation": "generated_from_git_history_with_semantic_versioning_and_impact_analysis",
-      "architecture_documentation": "auto_generated_diagrams_with_visual_consistency_and_technical_accuracy",
-      "deployment_documentation": "environment_specific_guides_with_troubleshooting_and_rollback_procedures"
+      "api_documentation": "generated_from_code_comments_with_interactive_examples_testing_capability",
+      "project_documentation": "generated_from_project_structure_with_getting_started_guides",
+      "change_documentation": "generated_from_git_history_with_semantic_versioning_impact_analysis",
+      "architecture_documentation": "auto_generated_diagrams_with_visual_consistency_technical_accuracy",
+      "deployment_documentation": "environment_specific_guides_with_troubleshooting_rollback_procedures"
     }
   },
 
@@ -730,35 +730,35 @@
       "reference": "See behavioral_prompts section for complete file processing rules"
     },
     "individual_file_pipeline": [
-      "detect_file_type_purpose_and_project_context",
+      "detect_file_type_purpose_project_context",
       "assess_file_role_within_overall_project_architecture", 
-      "apply_language_and_framework_specific_standards",
-      "validate_and_enhance_human_readable_content_for_clarity",
+      "apply_language_framework_specific_standards",
+      "validate_enhance_human_readable_content_for_clarity",
       "perform_syntax_validation_with_automatic_correction",
-      "conduct_security_analysis_and_vulnerability_assessment",
-      "optimize_performance_and_provide_improvement_recommendations",
+      "conduct_security_analysis_vulnerability_assessment",
+      "optimize_performance_provide_improvement_recommendations",
       "verify_accessibility_compliance_for_user_facing_content",
-      "assess_production_readiness_against_comprehensive_criteria"
+      "assess_production_readiness_against_criteria"
     ],
 
     "project_wide_pipeline": [
-      "analyze_architecture_consistency_and_design_patterns",
-      "audit_dependencies_for_security_and_compatibility", 
-      "verify_integration_points_and_system_compatibility",
-      "profile_performance_and_identify_optimization_opportunities",
-      "conduct_comprehensive_security_assessment_including_supply_chain",
+      "analyze_architecture_consistency_design_patterns",
+      "audit_dependencies_for_security_compatibility", 
+      "verify_integration_points_system_compatibility",
+      "profile_performance_identify_optimization_opportunities",
+      "conduct_security_assessment_including_supply_chain",
       "validate_accessibility_compliance_across_all_user_interfaces",
-      "verify_documentation_completeness_accuracy_and_currency",
-      "assess_deployment_readiness_and_environment_compatibility"
+      "verify_documentation_completeness_accuracy_currency",
+      "assess_deployment_readiness_environment_compatibility"
     ],
 
     "automatic_remediation": {
-      "syntax_errors": "immediate_correction_with_comprehensive_testing_verification",
+      "syntax_errors": "immediate_correction_with_testing_verification",
       "style_violations": "immediate_fix_with_project_wide_consistency_check",
-      "security_issues": "immediate_remediation_with_comprehensive_impact_assessment",
+      "security_issues": "immediate_remediation_with_impact_assessment",
       "performance_problems": "staged_optimization_with_before_after_benchmarking",
-      "accessibility_violations": "immediate_correction_with_comprehensive_compliance_testing",
-      "documentation_gaps": "generate_contextually_appropriate_comprehensive_documentation"
+      "accessibility_violations": "immediate_correction_with_compliance_testing",
+      "documentation_gaps": "generate_contextually_appropriate_documentation"
     }
   },
 
@@ -785,26 +785,26 @@
       "system": {"files": "real_time_validation", "performance": "vitals_reflex_latency", "pwa": "service_worker_cache_offline", "security": "continuous_vulnerability_incident_response"},
       "vitals": {"lcp": "track_≤2500_target_1500", "fid": "track_≤100_target_50", "cls": "track_≤0_1_target_0_05", "reflex": "track_≤30_target_20"},
       "business_metrics": {
-        "user_experience": "real_user_monitoring_with_satisfaction_tracking_and_experience_optimization",
-        "performance_impact": "business_metric_correlation_with_technical_performance_and_optimization_opportunities",
-        "operational_efficiency": "process_optimization_tracking_with_automation_opportunities_and_cost_analysis"
+        "user_experience": "real_user_monitoring_with_satisfaction_tracking_experience_optimization",
+        "performance_impact": "business_metric_correlation_with_technical_performance_optimization_opportunities",
+        "operational_efficiency": "process_optimization_tracking_with_automation_opportunities_cost_analysis"
       }
     },
     "alerting": {
       "performance": {"vitals_degradation": "threshold_alerts", "reflex_latency": "≤30ms_alerts", "pwa_failures": "service_worker_cache_alerts", "bundle_growth": "≤250kb_alerts"},
       "intelligent": {
-        "anomaly_detection": "ml_based_anomaly_detection_with_pattern_recognition_and_predictive_capabilities",
-        "threshold_management": "dynamic_thresholds_with_seasonal_adjustment_and_business_context_awareness",
-        "alert_correlation": "intelligent_alert_grouping_with_root_cause_analysis_and_impact_prioritization"
+        "anomaly_detection": "ml_based_anomaly_detection_with_pattern_recognition_predictive_capabilities",
+        "threshold_management": "dynamic_thresholds_with_seasonal_adjustment_business_context_awareness",
+        "alert_correlation": "intelligent_alert_grouping_with_root_cause_analysis_impact_prioritization"
       }
     },
-    "reporting": {"daily": "quality_summary", "weekly": "trend_analysis", "monthly": "comprehensive_audit"}
+    "reporting": {"daily": "quality_summary", "weekly": "trend_analysis", "monthly": "audit"}
   },
 
   "_validation": {
     "execution": {"timestamp": "2025-07-22T00:48:14Z", "user": "anon987654321", "environment": "github_copilot_claude_sonnet_4"},
     "completion": {
-      "phases": ["comprehensive_word_by_word_analysis", "cross_reference_validation", "simulated_execution_runs", "edge_case_testing", "final_corrections_applied"],
+      "phases": ["word_by_word_analysis", "cross_reference_validation", "simulated_execution_runs", "edge_case_testing", "final_corrections_applied"],
       "inconsistencies_found_and_fixed": ["timestamp_corrected_to_current_time", "circuit_breaker_threshold_adjusted_for_complex_configs", "complete_formatting_sections_verified"],
       "simulated_execution_results": {
         "rails_pwa_project": "all_criteria_defined_quality_gates_present",
@@ -823,10 +823,10 @@
       "functionality_completeness": "100_percent_all_project_types_research_learning_capabilities",
       "principle_scoping_verified": "kiss_strunk_white_correctly_limited_in_scope",
       "circuit_breaker_coverage": "all_safety_systems_operational_with_appropriate_thresholds",
-      "production_readiness": "complete_criteria_and_quality_gates_for_all_project_types",
+      "production_readiness": "complete_criteria_quality_gates_for_all_project_types",
       "behavioral_guardrails_integration": "four_essential_behavioral_rules_successfully_integrated",
       "guardrails_precedence": "highest_precedence_immutable_universal_application_verified",
-      "workflow_integration": "guardrails_embedded_in_execution_phases_and_validation_checks"
+      "workflow_integration": "guardrails_embedded_in_execution_phases_validation_checks"
     }
   },
 
