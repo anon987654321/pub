@@ -1,10 +1,10 @@
 {
   /*
-   * Auto-validates files and projects. Fixes syntax errors, enforces style rules, checks security.
+   * Validates files and projects. Fixes syntax errors, enforces style rules, checks security.
    * Works silently in background. Supports all programming languages.
-   * Makes code production-ready automatically.
+   * Makes code production-ready.
    * 
-   * NOTE: Defines STANDARDS and CRITERIA for decision-making.
+   * NOTE: Defines standards and criteria for decision-making.
    * Execution requires external tools (GitHub Actions, CI/CD, etc.)
    */
 
@@ -13,7 +13,7 @@
     "timestamp": "2025-07-22T00:48:14Z",
     "author": "anon987654321",
     "current_user": "anon987654321",
-    "description": "Universal auto-validation with complete functionality - final validated version",
+    "description": "Universal auto-validation with complete functionality - final version",
     "self_validated": true,
     "auto_applies_to": "every_file_and_entire_projects",
     "compliance": ["WCAG_2_2_AAA", "ISO_9001_2015", "SOC_2_TYPE_II", "zero_trust"],
@@ -28,10 +28,10 @@
   },
 
   /*
-   * Behavioral Prompts - Core rules that govern all operations
+   * Behavioral Prompts - Core rules for all operations
    */
   "behavioral_prompts": {
-    "description": "Explicit behavioral rules that must be followed in all operations",
+    "description": "Behavioral rules that must be followed in all operations",
     "rules": [
       {
         "id": "approval_required", 
@@ -41,19 +41,19 @@
       },
       {
         "id": "full_internalization",
-        "rule": "When working on something, always fully internalize the full existing/original project before trying to improve it. For example, internalize the exact full html/css/js/svg before trying to improve or complete. Do not guess or only read the first few lines; always understand the full content to avoid misunderstandings and to respect existing work",
+        "rule": "When working on something, always understand the full existing project before improving it. For example, understand the exact full html/css/js/svg before improving or completing. Do not guess or read only the first few lines; understand the full content to avoid misunderstandings and respect existing work",
         "applies_to": ["project_analysis", "code_improvement", "content_modification"],
         "enforcement": "mandatory"
       },
       {
         "id": "main_branch_workflow",
-        "rule": "When on GitHub, do not create new branches for fixes—work directly on the main branch. Avoid creating PRs if you can push (push -f) directly yourself",
+        "rule": "When on GitHub, do not create new branches for fixes—work directly on the main branch. Avoid creating PRs if you can push directly",
         "applies_to": ["github_operations", "version_control", "deployment"],
         "enforcement": "mandatory"
       },
       {
         "id": "comprehensive_reading",
-        "rule": "Before starting work (e.g. analyzing dependencies, their documentation, and source), always read every single word in every line of every file (except dotfiles and dotfolders). No shortcuts, no truncation",
+        "rule": "Before starting work (e.g. analyzing dependencies, their documentation, and source), read every word in every line of every file (except dotfiles and dotfolders). No shortcuts, no truncation",
         "applies_to": ["project_initialization", "dependency_analysis", "file_processing"],
         "enforcement": "mandatory"
       }
@@ -87,11 +87,11 @@
       },
       
       "full_internalization_requirement": {
-        "rule": "Always fully internalize the full existing/original project before trying to improve it",
+        "rule": "Always understand the full existing project before improving it",
         "description": "Ensures complete understanding of existing work before making changes",
         "enforcement": "comprehensive_analysis_mandatory",
         "scope": "every_file_every_line_every_word",
-        "examples": "internalize_exact_full_html_css_js_svg_before_improving_or_completing",
+        "examples": "understand exact full html_css_js_svg before improving or completing",
         "no_shortcuts": "no_truncation_no_assumptions_no_partial_reading"
       },
       
@@ -100,16 +100,16 @@
         "description": "Simplifies Git workflow for direct collaboration",
         "enforcement": "prefer_direct_commits_over_branch_creation",
         "exceptions": "only_when_push_access_unavailable",
-        "rationale": "reduces_complexity_in_collaborative_environments"
+        "rationale": "reduces complexity in collaborative environments"
       },
       
       "comprehensive_file_reading": {
-        "rule": "Before starting work, read every single word in every line of every file (except dotfiles and dotfolders)",
+        "rule": "Before starting work, read every word in every line of every file (except dotfiles and dotfolders)",
         "description": "Prevents misunderstandings from partial file reading",
         "enforcement": "mandatory_complete_file_analysis",
         "scope": "all_project_files_excluding_dotfiles_dotfolders",
         "no_shortcuts": "no_truncation_no_summarization_no_assumptions",
-        "includes": "analyzing_project_dependencies_and_documentation_comprehensively"
+        "includes": "analyzing project dependencies and documentation thoroughly"
       }
     },
     
@@ -231,7 +231,7 @@
       "deployment_tools_for_production"
     ],
     "behavioral_compliance": {
-      "full_internalization": "Enforces behavioral_prompts.rules.full_internalization - always fully understand existing project before attempting improvements",
+      "full_internalization": "Enforces behavioral_prompts.rules.full_internalization - always understand existing project before attempting improvements",
       "comprehensive_reading": "Enforces behavioral_prompts.rules.comprehensive_reading - read every word in every line before starting work",
       "reference": "See behavioral_prompts section for complete analysis and completion rules"
     },
@@ -250,7 +250,7 @@
           "security_standards_met",
           "accessibility_wcag_2_2_aaa_compliant",
           "performance_targets_achieved",
-          "documentation_comprehensive_and_current",
+          "documentation_current",
           "test_coverage_above_95_percent"
         ],
         "quality_gates": [
@@ -282,16 +282,16 @@
       "business": {
         "indicators": [".md", ".docx", ".pdf", "business_plan", "strategy", "analysis"],
         "completion_criteria": [
-          "requirements_comprehensively_addressed",
+          "requirements_addressed",
           "stakeholder_needs_satisfied",
-          "documentation_professional_and_complete",
+          "documentation_professional_complete",
           "actionable_recommendations_provided"
         ],
         "quality_gates": [
           "clear_professional_writing",
           "data_supported_conclusions",
           "feasible_and_realistic_proposals",
-          "comprehensive_risk_assessment"
+          "risk_assessment"
         ]
       },
       "creative": {
@@ -312,16 +312,16 @@
       "documentation": {
         "indicators": ["README", ".md", "docs/", "wiki/", "help/"],
         "completion_criteria": [
-          "comprehensive_topic_coverage",
+          "topic_coverage",
           "practical_examples_included",
           "troubleshooting_guide_complete",
-          "information_current_and_accurate"
+          "information_current_accurate"
         ],
         "quality_gates": [
-          "clear_and_accessible_writing",
+          "clear_accessible_writing",
           "information_accuracy_verified",
-          "logical_structure_and_navigation",
-          "maintenance_and_update_plan"
+          "logical_structure_navigation",
+          "maintenance_update_plan"
         ]
       },
       "configuration": {
@@ -329,14 +329,14 @@
         "completion_criteria": [
           "environment_properly_configured",
           "security_settings_hardened",
-          "monitoring_and_logging_enabled",
-          "backup_and_recovery_strategy_implemented"
+          "monitoring_logging_enabled",
+          "backup_recovery_strategy_implemented"
         ],
         "quality_gates": [
           "syntax_validation_successful",
-          "permissions_and_access_properly_set",
-          "secrets_and_credentials_secured",
-          "changes_documented_and_tracked"
+          "permissions_access_properly_set",
+          "secrets_credentials_secured",
+          "changes_documented_tracked"
         ]
       }
     },
@@ -347,18 +347,18 @@
       "criteria": {
         "functionality": "all_core_features_working_as_specified",
         "performance": "response_times_under_200ms_95th_percentile",
-        "security": "zero_known_vulnerabilities_comprehensive_audit_clean", 
-        "accessibility": "wcag_2_2_aaa_compliant_with_testing_verification",
+        "security": "zero_known_vulnerabilities_audit_clean", 
+        "accessibility": "wcag_2_2_aaa_compliant_with_testing",
         "reliability": "error_rate_below_0_03_percent_with_monitoring",
         "maintainability": "documentation_complete_code_self_documenting",
         "scalability": "load_tested_for_expected_traffic_with_headroom"
       },
       "deployment_blockers": [
-        "any_failing_tests_or_build_errors",
+        "failing_tests_or_build_errors",
         "security_vulnerabilities_or_audit_failures",
         "accessibility_violations_or_compliance_gaps", 
         "performance_below_defined_thresholds",
-        "missing_critical_documentation_or_runbooks"
+        "missing_critical_documentation_runbooks"
       ],
       "stop_conditions": {
         "primary": [
