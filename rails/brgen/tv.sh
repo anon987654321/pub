@@ -1,9 +1,9 @@
-#!/bin/bash
-
 #!/usr/bin/env zsh
 set -euo pipefail
 
-# Brgen TV setup: AI-generated video content streaming platform with shows, episodes, live search, infinite scroll, and anonymous features on OpenBSD 7.5, unprivileged user
+# Brgen TV setup: Enhanced AI-generated video content streaming platform with advanced features
+# Enhanced with PWA, analytics, rich text, karma system, caching, error handling, video optimization
+# Modern Rails 8 architecture on OpenBSD 7.5, unprivileged user
 
 APP_NAME="brgen_tv"
 BASE_DIR="/home/dev/rails"
@@ -11,18 +11,370 @@ BRGEN_IP="46.23.95.45"
 
 source "./__shared.sh"
 
-log "Starting Brgen TV setup"
+log "Starting enhanced Brgen TV setup with production streaming capabilities"
 
 setup_full_app "$APP_NAME"
 
-command_exists "ruby"
-command_exists "node"
-command_exists "psql"
-command_exists "redis-server"
+# Verify system requirements for video streaming
+check_system_requirements
 
-bin/rails generate scaffold Show title:string genre:string description:text release_date:date rating:decimal duration:integer user:references poster:attachment trailer_url:string
-bin/rails generate scaffold Episode title:string description:text duration:integer episode_number:integer season_number:integer show:references video_url:string
-bin/rails generate scaffold Viewing show:references episode:references user:references progress:integer watched:boolean
+# Install additional gems for video streaming platform
+log "Installing video streaming and media processing gems"
+bundle add video_info streamio-ffmpeg hls_parser acts_as_commentable_with_threading \
+           acts_as_follower friendly_id elasticsearch-model searchkick shrine \
+           shrine-cloudinary image_processing mini_magick acts_as_taggable_on
+
+# Generate enhanced models with advanced video streaming features
+log "Generating enhanced video streaming models with relationships and validations"
+bin/rails generate scaffold Show title:string genre:string description:text release_date:date rating:decimal duration:integer user:references poster:attachment trailer_url:string status:string views_count:integer:default=0 featured:boolean:default=false
+bin/rails generate scaffold Episode title:string description:text duration:integer episode_number:integer season_number:integer show:references video_url:string thumbnail_url:string status:string views_count:integer:default=0
+bin/rails generate scaffold Viewing show:references episode:references user:references progress:integer watched:boolean completed_at:datetime rating:integer
+bin/rails generate model Watchlist user:references show:references created_at:datetime
+bin/rails generate model ShowFollow user:references show:references created_at:datetime
+bin/rails generate model VideoQuality episode:references quality:string file_url:string file_size:bigint
+
+# Enhanced Show model with advanced streaming features
+cat <<EOF > app/models/show.rb
+class Show < ApplicationRecord
+  belongs_to :user
+  has_many :episodes, dependent: :destroy
+  has_many :viewings, dependent: :destroy
+  has_many :watchlists, dependent: :destroy
+  has_many :show_follows, dependent: :destroy
+  has_many :followers, through: :show_follows, source: :user
+  has_one_attached :poster
+  has_many_attached :gallery_images
+  
+  include Searchable
+  include Trackable
+  include Cacheable
+  include FriendlyId
+  
+  acts_as_votable
+  acts_as_commentable
+  acts_as_taggable_on :genres, :themes, :moods
+  friendly_id :title, use: :slugged
+  
+  validates :title, presence: true, length: { minimum: 1, maximum: 100 }
+  validates :description, presence: true, length: { minimum: 10, maximum: 2000 }
+  validates :genre, presence: true
+  validates :duration, presence: true, numericality: { greater_than: 0 }
+  validates :rating, numericality: { in: 0..10 }, allow_nil: true
+  validates :status, inclusion: { in: %w[draft published archived] }
+  
+  scope :published, -> { where(status: 'published') }
+  scope :featured, -> { where(featured: true) }
+  scope :by_genre, ->(genre) { where(genre: genre) }
+  scope :recent, -> { where('release_date > ?', 1.year.ago) }
+  scope :popular, -> { order(views_count: :desc) }
+  scope :top_rated, -> { where('rating > ?', 7.0) }
+  scope :with_episodes, -> { joins(:episodes).distinct }
+  
+  before_validation :set_default_status
+  before_save :calculate_total_duration
+  after_create :award_creation_karma
+  
+  def to_param
+    slug
+  end
+  
+  def should_generate_new_friendly_id?
+    title_changed? || super
+  end
+  
+  def average_episode_duration
+    return 0 if episodes.empty?
+    episodes.average(:duration) || 0
+  end
+  
+  def total_episodes
+    episodes.published.count
+  end
+  
+  def total_seasons
+    episodes.published.maximum(:season_number) || 0
+  end
+  
+  def latest_episode
+    episodes.published.order(:season_number, :episode_number).last
+  end
+  
+  def completion_rate
+    return 0 if viewings.empty?
+    completed_viewings = viewings.where(watched: true).count
+    (completed_viewings.to_f / viewings.count * 100).round(2)
+  end
+  
+  def trending_score
+    # Calculate trending based on recent views, ratings, and engagement
+    recent_views = viewings.where('created_at > ?', 1.week.ago).count
+    avg_rating = rating || 0
+    engagement = (get_likes.size + comments.count) * 0.1
+    
+    (recent_views * 0.6 + avg_rating * 0.3 + engagement * 0.1).round(2)
+  end
+  
+  def similar_shows(limit = 5)
+    Show.published
+        .tagged_with(genre_list, any: true)
+        .where.not(id: id)
+        .limit(limit)
+        .order(views_count: :desc)
+  end
+  
+  def watch_time_analytics
+    Rails.cache.fetch("show_#{id}_analytics", expires_in: 1.hour) do
+      {
+        total_watch_time: viewings.sum(:progress),
+        average_completion: completion_rate,
+        retention_by_episode: episode_retention_stats,
+        viewer_demographics: viewer_demographics_stats
+      }
+    end
+  end
+  
+  private
+  
+  def set_default_status
+    self.status ||= 'draft'
+  end
+  
+  def calculate_total_duration
+    if episodes.any?
+      self.duration = episodes.sum(:duration)
+    end
+  end
+  
+  def award_creation_karma
+    user.award_karma(25, 'created a show') if user
+  end
+  
+  def episode_retention_stats
+    episodes.includes(:viewings).map do |episode|
+      total_views = episode.viewings.count
+      completed_views = episode.viewings.where(watched: true).count
+      
+      {
+        episode_id: episode.id,
+        title: episode.title,
+        total_views: total_views,
+        completion_rate: total_views > 0 ? (completed_views.to_f / total_views * 100).round(2) : 0
+      }
+    end
+  end
+  
+  def viewer_demographics_stats
+    # Placeholder for demographic analysis
+    {
+      total_unique_viewers: viewings.distinct.count(:user_id),
+      repeat_viewers: viewings.group(:user_id).having('COUNT(*) > 1').count.size,
+      average_sessions_per_user: viewings.count.to_f / viewings.distinct.count(:user_id)
+    }
+  end
+end
+EOF
+
+# Enhanced Episode model with video streaming capabilities
+cat <<EOF > app/models/episode.rb
+class Episode < ApplicationRecord
+  belongs_to :show
+  has_many :viewings, dependent: :destroy
+  has_many :video_qualities, dependent: :destroy
+  has_one_attached :thumbnail
+  has_one_attached :video_file
+  
+  include Searchable
+  include Trackable
+  include Cacheable
+  include FriendlyId
+  
+  acts_as_votable
+  acts_as_commentable
+  friendly_id :title, use: :slugged
+  
+  validates :title, presence: true, length: { minimum: 1, maximum: 100 }
+  validates :duration, presence: true, numericality: { greater_than: 0 }
+  validates :episode_number, presence: true, numericality: { greater_than: 0 }
+  validates :season_number, presence: true, numericality: { greater_than: 0 }
+  validates :video_url, presence: true, format: { with: URI::DEFAULT_PARSER.make_regexp }, if: -> { status == 'published' }
+  validates :status, inclusion: { in: %w[draft processing published archived] }
+  
+  scope :published, -> { where(status: 'published') }
+  scope :by_season, ->(season) { where(season_number: season) }
+  scope :in_order, -> { order(:season_number, :episode_number) }
+  scope :popular, -> { order(views_count: :desc) }
+  
+  before_validation :set_default_status
+  before_save :generate_thumbnail_if_needed
+  after_create :award_creation_karma
+  after_update :process_video_if_needed
+  
+  def to_param
+    slug
+  end
+  
+  def should_generate_new_friendly_id?
+    title_changed? || super
+  end
+  
+  def next_episode
+    show.episodes.published
+        .where(
+          "(season_number = ? AND episode_number > ?) OR season_number > ?",
+          season_number, episode_number, season_number
+        )
+        .order(:season_number, :episode_number)
+        .first
+  end
+  
+  def previous_episode
+    show.episodes.published
+        .where(
+          "(season_number = ? AND episode_number < ?) OR season_number < ?",
+          season_number, episode_number, season_number
+        )
+        .order(:season_number, :episode_number)
+        .last
+  end
+  
+  def season_episodes
+    show.episodes.published.by_season(season_number).in_order
+  end
+  
+  def average_watch_time
+    return 0 if viewings.empty?
+    viewings.average(:progress) || 0
+  end
+  
+  def completion_rate
+    return 0 if viewings.empty?
+    completed = viewings.where(watched: true).count
+    (completed.to_f / viewings.count * 100).round(2)
+  end
+  
+  def available_qualities
+    video_qualities.pluck(:quality, :file_url).to_h
+  end
+  
+  def hls_playlist_url
+    # Generate HLS playlist URL for adaptive streaming
+    return nil unless video_url.present?
+    
+    if video_url.include?('.m3u8')
+      video_url
+    else
+      # Convert to HLS if needed
+      VideoProcessingJob.perform_later(self) if status == 'processing'
+      nil
+    end
+  end
+  
+  def video_info
+    @video_info ||= VideoInfo.new(video_url) if video_url.present?
+  rescue StandardError => e
+    Rails.logger.error "Failed to get video info for episode #{id}: #{e.message}"
+    nil
+  end
+  
+  def estimated_data_usage(quality = '720p')
+    # Estimate data usage in MB based on duration and quality
+    base_bitrate = case quality
+                  when '1080p' then 5000 # kbps
+                  when '720p' then 3000
+                  when '480p' then 1500
+                  when '360p' then 800
+                  else 1500
+                  end
+    
+    ((duration * base_bitrate) / 8 / 1024).round(2) # Convert to MB
+  end
+  
+  private
+  
+  def set_default_status
+    self.status ||= 'draft'
+  end
+  
+  def generate_thumbnail_if_needed
+    return if thumbnail.attached? || video_url.blank?
+    
+    ThumbnailGenerationJob.perform_later(self)
+  end
+  
+  def award_creation_karma
+    show.user.award_karma(15, 'created an episode') if show&.user
+  end
+  
+  def process_video_if_needed
+    return unless saved_change_to_video_url? && status == 'processing'
+    
+    VideoProcessingJob.perform_later(self)
+  end
+end
+EOF
+
+# Enhanced Viewing model with analytics
+cat <<EOF > app/models/viewing.rb
+class Viewing < ApplicationRecord
+  belongs_to :show
+  belongs_to :episode, optional: true
+  belongs_to :user
+  
+  validates :progress, presence: true, numericality: { greater_than_or_equal_to: 0 }
+  validates :user_id, uniqueness: { scope: [:show_id, :episode_id] }
+  
+  scope :watched, -> { where(watched: true) }
+  scope :in_progress, -> { where(watched: false).where('progress > 0') }
+  scope :recent, -> { where('updated_at > ?', 1.week.ago) }
+  scope :completed_today, -> { where(watched: true, completed_at: 1.day.ago..) }
+  
+  before_save :set_completed_at
+  after_update :award_completion_karma
+  
+  def progress_percentage
+    return 0 if episode&.duration&.zero? || show&.duration&.zero?
+    
+    total_duration = episode&.duration || show&.duration || 1
+    (progress.to_f / total_duration * 100).round(1)
+  end
+  
+  def mark_as_watched!
+    update!(
+      watched: true, 
+      progress: episode&.duration || show&.duration || progress,
+      completed_at: Time.current
+    )
+  end
+  
+  def resume_point
+    return 0 if watched?
+    [progress - 30, 0].max # Resume 30 seconds before last position
+  end
+  
+  def estimated_time_remaining
+    return 0 if watched?
+    
+    total_duration = episode&.duration || show&.duration || 0
+    [total_duration - progress, 0].max
+  end
+  
+  private
+  
+  def set_completed_at
+    if watched_changed? && watched?
+      self.completed_at = Time.current
+    end
+  end
+  
+  def award_completion_karma
+    return unless saved_change_to_watched? && watched?
+    
+    points = episode ? 5 : 10
+    reason = episode ? 'completed an episode' : 'completed a show'
+    user.award_karma(points, reason)
+  end
+end
+EOF
 
 cat <<EOF > app/reflexes/shows_infinite_scroll_reflex.rb
 class ShowsInfiniteScrollReflex < InfiniteScrollReflex
