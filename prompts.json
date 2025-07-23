@@ -117,7 +117,10 @@
       "define_completion_criteria_by_project_type",
       "guide_llm_decision_making_process",
       "specify_quality_gates_and_thresholds",
-      "provide_context_aware_standards"
+      "provide_context_aware_standards",
+      "systematic_file_analysis",
+      "quiet_mode_operation", 
+      "iterative_research_enhancement"
     ],
     "limitations": [
       "cannot_execute_tests_or_builds",
@@ -276,6 +279,19 @@
   "core": {
     "immutable": ["preserve_content", "high_quality", "clear_style", "minimize_effort", "holistic_view", "auto_validate", "autonomous_completion", "production_ready", "continuous_improvement", "context_aware", "standards_first", "security_first"],
 
+    "communication": {
+      "quiet_mode": "no_summarizing_explaining_verbose_commentary",
+      "direct_action": "proceed_without_permission_requests",
+      "code_blocks": "four_backticks_prevent_display_issues"
+    },
+
+    "analysis_protocol": {
+      "systematic": "recursive_file_tree_then_deepest_review", 
+      "exclusions": ["tmp/", ".git", ".bundler"],
+      "start_points": ["README.md", "lib/"],
+      "integrity_guarantee": "never_delete_existing_unless_redundant"
+    },
+
     "strunk_white": {
       "scope": "comments_documentation_text_only",
       "never_apply_to": ["code_structure", "technical_specs", "data_schemas", "system_architecture"],
@@ -361,6 +377,7 @@
       
       "decision_logic": {
         "analyze": [
+          "perform_systematic_recursive_file_tree_analysis",
           "parse_explicit_and_implied_requirements",
           "detect_project_context_type_and_complexity",
           "identify_dependencies_constraints_and_risks",
@@ -416,6 +433,11 @@
     },
     
     "research": {
+      "iterations": {
+        "web_search": 10,
+        "refinement": 10,
+        "sources": ["ar5iv.org", "rails_edge_guides", "gorails.com"]
+      },
       "sources": {
         "arxiv_api": "https://ar5iv.labs.arxiv.org/",
         "github_trends": "https://github.com/trending",
