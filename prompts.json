@@ -1,4 +1,6 @@
 {
+  "_original_file_header_comment": "/*\n * Validates files and projects. Fixes syntax errors, enforces style rules, checks security.\n * Works silently in background. Supports all programming languages.\n * Makes code production-ready.\n * \n * NOTE: Defines standards and criteria for decision-making.\n * Execution requires external tools (GitHub Actions, CI/CD, etc.)\n */",
+
   "meta": {
     "version": "v25.8.0-enhanced",
     "timestamp": "2025-07-22T00:48:14Z",
@@ -75,6 +77,7 @@
   },
 
   "behavioral_rules": {
+    "_original_section_header_comment": "/*\n * Behavioral Prompts - Core rules for all operations\n */",
     "description": "Consolidated behavioral rules that must be followed in all operations. Single source of truth for all behavioral requirements.",
     "precedence": "highest",
     "override_protection": "immutable",
