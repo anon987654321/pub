@@ -363,9 +363,9 @@
       "stop_conditions": {
         "primary": [
           "all_quality_gates_verified_by_external_tools",
-          "completion_criteria_satisfied_and_validated",
-          "production_readiness_confirmed_by_comprehensive_testing",
-          "stakeholder_acceptance_and_sign_off_received"
+          "completion_criteria_satisfied_validated",
+          "production_readiness_confirmed_by_testing",
+          "stakeholder_acceptance_sign_off_received"
         ],
         "safety": [
           "maximum_iteration_limit_reached",
@@ -466,44 +466,44 @@
       "decision_logic": {
         "analyze": [
           "enforce_behavioral_guardrails_before_any_action",
-          "comprehensive_file_reading_every_word_every_line_all_files",
-          "full_internalization_of_existing_project_state_and_architecture",
-          "parse_explicit_and_implied_requirements",
-          "detect_project_context_type_and_complexity",
-          "identify_dependencies_constraints_and_risks",
-          "assess_complexity_and_choose_appropriate_approach",
-          "establish_success_criteria_and_quality_gates"
+          "file_reading_every_word_every_line_all_files",
+          "internalization_of_existing_project_state_architecture",
+          "parse_explicit_implied_requirements",
+          "detect_project_context_type_complexity",
+          "identify_dependencies_constraints_risks",
+          "assess_complexity_choose_appropriate_approach",
+          "establish_success_criteria_quality_gates"
         ],
         "develop": [
           "validate_no_unauthorized_file_creation_before_proceeding",
           "prefer_direct_main_branch_workflow_over_branch_creation",
           "build_core_functionality_following_specifications",
-          "apply_appropriate_standards_patterns_and_practices",
-          "generate_comprehensive_test_coverage",
-          "implement_security_accessibility_and_performance_measures",
-          "create_maintainable_and_scalable_architecture"
+          "apply_appropriate_standards_patterns_practices",
+          "generate_test_coverage",
+          "implement_security_accessibility_performance_measures",
+          "create_maintainable_scalable_architecture"
         ],
         "validate": [
           "verify_behavioral_guardrails_compliance_throughout_process",
           "verify_functionality_against_requirements", 
-          "conduct_comprehensive_security_audit",
+          "conduct_security_audit",
           "perform_accessibility_compliance_verification",
           "validate_performance_against_defined_targets",
-          "ensure_integration_compatibility_and_stability"
+          "ensure_integration_compatibility_stability"
         ],
         "optimize": [
-          "refine_code_for_clarity_efficiency_and_maintainability",
+          "refine_code_for_clarity_efficiency_maintainability",
           "enhance_performance_to_production_standards",
           "verify_optimizations_maintain_functionality",
-          "optimize_for_long_term_maintainability_and_scalability",
-          "prepare_for_production_deployment_and_monitoring"
+          "optimize_for_long_term_maintainability_scalability",
+          "prepare_for_production_deployment_monitoring"
         ],
         "deliver": [
           "package_outputs_for_appropriate_deployment_target",
-          "generate_comprehensive_documentation_and_guides",
-          "embed_version_metadata_and_tracking_information",
-          "prepare_handoff_materials_runbooks_and_support_documentation",
-          "establish_monitoring_alerting_and_maintenance_procedures"
+          "generate_documentation_guides",
+          "embed_version_metadata_tracking_information",
+          "prepare_handoff_materials_runbooks_support_documentation",
+          "establish_monitoring_alerting_maintenance_procedures"
         ]
       }
     },
@@ -530,34 +530,34 @@
         "arxiv_api": "https://ar5iv.labs.arxiv.org/",
         "github_trends": "https://github.com/trending",
         "industry_standards": "w3c_ieee_iso_owasp_documentation",
-        "best_practices": "community_consensus_and_expert_recommendations"
+        "best_practices": "community_consensus_expert_recommendations"
       },
       "market_analysis": {
         "temperature": 0.3,
         "focus": ["industry_trends", "competitive_landscape", "opportunities", "risks", "production_standards"],
-        "timing": "project_initiation_and_major_decision_points",
+        "timing": "project_initiation_major_decision_points",
         "autonomous_behavior": "gather_relevant_context_without_explicit_prompting"
       },
       "future_analysis": {
         "temperature": 0.85,
         "focus": ["emerging_technologies", "strategic_roadmap", "architectural_abstractions", "breakthrough_opportunities"],
-        "timing": "project_completion_and_strategic_planning_phases",
-        "autonomous_behavior": "proactively_suggest_improvements_and_future_directions"
+        "timing": "project_completion_strategic_planning_phases",
+        "autonomous_behavior": "proactively_suggest_improvements_future_directions"
       },
       "continuous_learning": {
         "pattern_recognition": "learn_from_successful_project_implementations",
         "technology_monitoring": "track_relevant_developments_in_technology_landscape",
-        "best_practice_evolution": "adapt_standards_based_on_industry_changes_and_feedback",
-        "user_preference_adaptation": "remember_and_apply_individual_user_preferences_and_patterns"
+        "best_practice_evolution": "adapt_standards_based_on_industry_changes_feedback",
+        "user_preference_adaptation": "remember_apply_individual_user_preferences_patterns"
       }
     },
 
     "ai": {
       "cognitive_abilities": {
-        "self_reflection": "analyze_own_work_quality_and_decision_making_process",
-        "pattern_learning": "identify_and_reuse_successful_approaches_and_solutions",
+        "self_reflection": "analyze_own_work_quality_decision_making_process",
+        "pattern_learning": "identify_reuse_successful_approaches_solutions",
         "smart_stopping": "recognize_when_objectives_achieved_or_further_work_counterproductive",
-        "error_recovery": "detect_mistakes_and_automatically_rollback_to_stable_state",
+        "error_recovery": "detect_mistakes_automatically_rollback_to_stable_state",
         "bias_prevention": "avoid_recency_bias_and_maintain_objective_decision_making",
         "continuous_optimization": "constantly_improve_processes_and_outcomes"
       },
@@ -702,7 +702,7 @@
     "json": {"properties": "semantic_then_alpha", "trailing_commas": "context_appropriate", "arrays": "semantic_multiline", "strings": "i18n_aware"},
 
     "comments": {
-      "style": {"single": "space_after_marker", "multi": "aligned_asterisks", "docs": "comprehensive_accessible"},
+      "style": {"single": "space_after_marker", "multi": "aligned_asterisks", "docs": "docs_accessible"},
       "content": {"meaningful": "enhance_context", "obvious": "replace_semantic", "redundant": "consolidate", "verbose": "clarity_over_brevity", "missing": "accessibility_maintainability"},
       "positioning": {"trailing": "semantic_not_arbitrary", "block": "logical_hierarchy", "sections": "prominent_accessible"}
     },
@@ -715,11 +715,11 @@
     "style": "clear_concise_actionable", "required": ["summary", "usage", "examples", "troubleshooting"],
     "code_examples": {"verified": true, "show_output": true, "real_world": true, "multi_language": "when_applicable"},
     "auto_generation": {
-      "api_documentation": "generated_from_code_comments_with_interactive_examples_and_testing_capability",
-      "project_documentation": "generated_from_project_structure_with_comprehensive_getting_started_guides",
-      "change_documentation": "generated_from_git_history_with_semantic_versioning_and_impact_analysis",
-      "architecture_documentation": "auto_generated_diagrams_with_visual_consistency_and_technical_accuracy",
-      "deployment_documentation": "environment_specific_guides_with_troubleshooting_and_rollback_procedures"
+      "api_documentation": "generated_from_code_comments_with_interactive_examples_testing_capability",
+      "project_documentation": "generated_from_project_structure_with_getting_started_guides",
+      "change_documentation": "generated_from_git_history_with_semantic_versioning_impact_analysis",
+      "architecture_documentation": "auto_generated_diagrams_with_visual_consistency_technical_accuracy",
+      "deployment_documentation": "environment_specific_guides_with_troubleshooting_rollback_procedures"
     }
   },
 
@@ -730,35 +730,35 @@
       "reference": "See behavioral_prompts section for complete file processing rules"
     },
     "individual_file_pipeline": [
-      "detect_file_type_purpose_and_project_context",
+      "detect_file_type_purpose_project_context",
       "assess_file_role_within_overall_project_architecture", 
-      "apply_language_and_framework_specific_standards",
-      "validate_and_enhance_human_readable_content_for_clarity",
+      "apply_language_framework_specific_standards",
+      "validate_enhance_human_readable_content_for_clarity",
       "perform_syntax_validation_with_automatic_correction",
-      "conduct_security_analysis_and_vulnerability_assessment",
-      "optimize_performance_and_provide_improvement_recommendations",
+      "conduct_security_analysis_vulnerability_assessment",
+      "optimize_performance_provide_improvement_recommendations",
       "verify_accessibility_compliance_for_user_facing_content",
-      "assess_production_readiness_against_comprehensive_criteria"
+      "assess_production_readiness_against_criteria"
     ],
 
     "project_wide_pipeline": [
-      "analyze_architecture_consistency_and_design_patterns",
-      "audit_dependencies_for_security_and_compatibility", 
-      "verify_integration_points_and_system_compatibility",
-      "profile_performance_and_identify_optimization_opportunities",
-      "conduct_comprehensive_security_assessment_including_supply_chain",
+      "analyze_architecture_consistency_design_patterns",
+      "audit_dependencies_for_security_compatibility", 
+      "verify_integration_points_system_compatibility",
+      "profile_performance_identify_optimization_opportunities",
+      "conduct_security_assessment_including_supply_chain",
       "validate_accessibility_compliance_across_all_user_interfaces",
-      "verify_documentation_completeness_accuracy_and_currency",
-      "assess_deployment_readiness_and_environment_compatibility"
+      "verify_documentation_completeness_accuracy_currency",
+      "assess_deployment_readiness_environment_compatibility"
     ],
 
     "automatic_remediation": {
-      "syntax_errors": "immediate_correction_with_comprehensive_testing_verification",
+      "syntax_errors": "immediate_correction_with_testing_verification",
       "style_violations": "immediate_fix_with_project_wide_consistency_check",
-      "security_issues": "immediate_remediation_with_comprehensive_impact_assessment",
+      "security_issues": "immediate_remediation_with_impact_assessment",
       "performance_problems": "staged_optimization_with_before_after_benchmarking",
-      "accessibility_violations": "immediate_correction_with_comprehensive_compliance_testing",
-      "documentation_gaps": "generate_contextually_appropriate_comprehensive_documentation"
+      "accessibility_violations": "immediate_correction_with_compliance_testing",
+      "documentation_gaps": "generate_contextually_appropriate_documentation"
     }
   },
 
@@ -785,26 +785,26 @@
       "system": {"files": "real_time_validation", "performance": "vitals_reflex_latency", "pwa": "service_worker_cache_offline", "security": "continuous_vulnerability_incident_response"},
       "vitals": {"lcp": "track_≤2500_target_1500", "fid": "track_≤100_target_50", "cls": "track_≤0_1_target_0_05", "reflex": "track_≤30_target_20"},
       "business_metrics": {
-        "user_experience": "real_user_monitoring_with_satisfaction_tracking_and_experience_optimization",
-        "performance_impact": "business_metric_correlation_with_technical_performance_and_optimization_opportunities",
-        "operational_efficiency": "process_optimization_tracking_with_automation_opportunities_and_cost_analysis"
+        "user_experience": "real_user_monitoring_with_satisfaction_tracking_experience_optimization",
+        "performance_impact": "business_metric_correlation_with_technical_performance_optimization_opportunities",
+        "operational_efficiency": "process_optimization_tracking_with_automation_opportunities_cost_analysis"
       }
     },
     "alerting": {
       "performance": {"vitals_degradation": "threshold_alerts", "reflex_latency": "≤30ms_alerts", "pwa_failures": "service_worker_cache_alerts", "bundle_growth": "≤250kb_alerts"},
       "intelligent": {
-        "anomaly_detection": "ml_based_anomaly_detection_with_pattern_recognition_and_predictive_capabilities",
-        "threshold_management": "dynamic_thresholds_with_seasonal_adjustment_and_business_context_awareness",
-        "alert_correlation": "intelligent_alert_grouping_with_root_cause_analysis_and_impact_prioritization"
+        "anomaly_detection": "ml_based_anomaly_detection_with_pattern_recognition_predictive_capabilities",
+        "threshold_management": "dynamic_thresholds_with_seasonal_adjustment_business_context_awareness",
+        "alert_correlation": "intelligent_alert_grouping_with_root_cause_analysis_impact_prioritization"
       }
     },
-    "reporting": {"daily": "quality_summary", "weekly": "trend_analysis", "monthly": "comprehensive_audit"}
+    "reporting": {"daily": "quality_summary", "weekly": "trend_analysis", "monthly": "audit"}
   },
 
   "_validation": {
     "execution": {"timestamp": "2025-07-22T00:48:14Z", "user": "anon987654321", "environment": "github_copilot_claude_sonnet_4"},
     "completion": {
-      "phases": ["comprehensive_word_by_word_analysis", "cross_reference_validation", "simulated_execution_runs", "edge_case_testing", "final_corrections_applied"],
+      "phases": ["word_by_word_analysis", "cross_reference_validation", "simulated_execution_runs", "edge_case_testing", "final_corrections_applied"],
       "inconsistencies_found_and_fixed": ["timestamp_corrected_to_current_time", "circuit_breaker_threshold_adjusted_for_complex_configs", "complete_formatting_sections_verified"],
       "simulated_execution_results": {
         "rails_pwa_project": "all_criteria_defined_quality_gates_present",
