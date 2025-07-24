@@ -16,6 +16,9 @@ vendor/
 node_modules/
 dist/
 build/
+package.json
+package-lock.json
+*.backup
 
 # IDE and editor files
 .vscode/
