@@ -1,7 +1,11 @@
 {
-  "_enforcement_mandate": "// All rules in this file must be programmatically and operationally enforced. No rule is advisory.\n// New file creation is forbidden without explicit owner approval.",
-  "_original_file_header_comment": "/*\n * Validates files and projects. Fixes syntax errors, enforces style rules, checks security.\n * Works silently in background. Supports all programming languages.\n * Makes code production-ready.\n * \n * NOTE: Defines standards and criteria for decision-making.\n * Execution requires external tools (GitHub Actions, CI/CD, etc.)\n */",
-
+  /*
+   * Auto-validates files and projects. Fixes syntax, enforces style, checks security.
+   * Supports all languages. Makes code production-ready.
+   *
+   * Defines standards and criteria for decision-making.
+   * Requires external tools (GitHub Actions, CI/CD) for execution.
+   */
   "meta": {
     "version": "v25.8.0-enhanced",
     "timestamp": "2025-07-22T00:48:14Z",
@@ -21,8 +25,11 @@
     }
   },
 
+  // Central standards referenced throughout the system
   "universal_standards": {
     "description": "Central definitions for all standards and compliance requirements referenced throughout the system",
+    
+    // WCAG 2.2 AAA compliance requirements
     "accessibility": {
       "wcag_standard": "WCAG_2_2_AAA",
       "contrast_minimum": "4.5:1",
@@ -36,6 +43,8 @@
       "focus_indicators": "High contrast and visible",
       "color_independence": "Not dependent on color alone"
     },
+    
+    // Zero-trust security architecture  
     "security": {
       "architecture": "zero_trust",
       "vulnerability_tolerance": "zero_known_vulnerabilities",
@@ -45,13 +54,15 @@
       "injection_prevention": "parameterized_queries_mandatory",
       "headers_required": ["content_security_policy", "strict_transport_security", "x_frame_options"]
     },
+    
+    // Performance metrics and Core Web Vitals
     "performance": {
       "core_web_vitals": {
-        "lcp_threshold": "≤2500ms",
+        "lcp_threshold": "≤2500ms", // Largest Contentful Paint
         "lcp_target": "1500ms",
-        "fid_threshold": "≤100ms", 
+        "fid_threshold": "≤100ms", // First Input Delay
         "fid_target": "50ms",
-        "cls_threshold": "≤0.1",
+        "cls_threshold": "≤0.1", // Cumulative Layout Shift
         "cls_target": "0.05"
       },
       "response_time_threshold": "≤200ms_95th_percentile",
@@ -60,6 +71,8 @@
       "error_rate_threshold": "≤0.03_percent",
       "stimulus_reflex_target": "≤30ms_round_trip"
     },
+    
+    // Minimum quality requirements for production
     "quality_gates": {
       "test_coverage_minimum": "95%",
       "e2e_coverage_minimum": "85%",
@@ -77,16 +90,16 @@
     }
   },
 
+  // Core behavioral rules for all operations
   "behavioral_rules": {
-    "_original_section_header_comment": "/*\n * Behavioral Prompts - Core rules for all operations\n */",
-    "_enforcement_mandate": "ALL RULES ARE MANDATORY AND MUST BE PROGRAMMATICALLY AND OPERATIONALLY ENFORCED. NO RULE IS ADVISORY.",
-    "description": "Consolidated behavioral rules that MUST be followed in all operations without exception. Single source of truth for all mandatory behavioral requirements.",
     "precedence": "highest",
     "override_protection": "immutable",
     "universal_application": "all_project_types_and_contexts",
     "enforcement": "mandatory_pre_action_validation_with_programmatic_enforcement",
     
+    // Four immutable behavioral rules
     "core_rules": {
+      // Require approval before creating files or features
       "approval_required": {
         "id": "approval_required",
         "rule": "FORBIDDEN: New file creation is absolutely prohibited without explicit owner approval",
@@ -154,6 +167,7 @@
     }
   },
 
+  // Design principles guiding all development
   "principles": [
     "DRY", 
     "KISS", 
@@ -167,6 +181,7 @@
     "RAILS_DOCTRINE"
   ],
 
+  // Rails 8, Stimulus Reflex 3.5, and PWA development standards  
   "web_development": {
     "description": "Web development standards for Rails 8, Stimulus Reflex 3.5, and PWA applications",
     "frontend": {
@@ -218,6 +233,7 @@
     }
   },
 
+  // Golden ratio design system with accessibility focus
   "design_system": {
     "description": "Design system standards based on golden ratio and accessibility-first principles",
     "principles": [
@@ -288,6 +304,7 @@
     }
   },
 
+  // Design thinking, lean startup, and agile methodology framework
   "business_strategy": {
     "description": "Business strategy framework combining design thinking, lean startup, and agile methodologies",
     "framework": "design_thinking_lean_startup_agile",
@@ -321,6 +338,7 @@
     }
   },
 
+  // Autonomous completion engine with project-specific criteria
   "autonomous_completion": {
     "description": "Autonomous completion engine with complete functionality for decision-making and criteria provision",
     "enabled": true,
@@ -490,6 +508,7 @@
     }
   },
 
+  // Core system configuration and safety systems
   "core": {
     "description": "Core system configuration with immutable principles and safety systems",
     "immutable": [
@@ -661,6 +680,7 @@
     }
   },
 
+  // Multi-phase execution framework with behavioral integration
   "execution": {
     "description": "Execution framework with behavioral rule integration and multi-phase approach",
     "detect": "auto_intelligent", 
@@ -844,6 +864,7 @@
     }
   },
 
+  // Change management with approval requirements
   "change_management": {
     "description": "Change management with behavioral rule compliance",
     "policy": "Require explicit consent", 
@@ -861,6 +882,7 @@
     }
   },
 
+  // Infrastructure and database preservation safeguards
   "infrastructure_preservation": {
     "description": "Infrastructure preservation with database safeguards",
     "database": {
@@ -873,6 +895,7 @@
     }
   },
 
+  // AI enhancement capabilities and continuous learning
   "ai_enhancement": {
     "description": "AI enhancement capabilities for quality gates and continuous learning",
     "quality_gates": {
@@ -882,6 +905,7 @@
     "continuous_learning": ["pattern_recognition", "best_practices", "optimization_suggestions"]
   },
 
+  // Specialized capabilities for visualization, async, and browser automation
   "specialized_capabilities": {
     "description": "Specialized capabilities for visualization, async patterns, browser automation, and scraping",
     "visualization": {
@@ -905,6 +929,7 @@
     }
   },
 
+  // Quality standards and coverage requirements
   "quality": {
     "description": "Quality standards with coverage and metrics requirements",
     "coverage": {
@@ -931,6 +956,7 @@
     }
   },
 
+  // Comprehensive formatting standards for all technology stacks
   "formatting": {
     "description": "Complete formatting standards for all technology stacks",
     "universal": {
@@ -1183,6 +1209,7 @@
     }
   },
 
+  // Documentation standards with automatic generation
   "documentation": {
     "description": "Documentation standards with automatic generation capabilities",
     "style": "Clear, concise, and actionable", 
@@ -1202,6 +1229,7 @@
     }
   },
 
+  // File processing with comprehensive validation pipelines
   "file_processing": {
     "description": "File processing with behavioral rule compliance and comprehensive pipelines",
     "behavioral_compliance": {
@@ -1242,6 +1270,7 @@
     }
   },
 
+  // Git workflow and CI/CD automation
   "workflow": {
     "description": "Workflow configuration with Git operations and automation",
     "git": {
@@ -1289,6 +1318,7 @@
     }
   },
 
+  // Real-time monitoring with intelligent alerting
   "monitoring": {
     "description": "Real-time monitoring with intelligent alerting and business metrics",
     "real_time": {
@@ -1386,6 +1416,6 @@
     "content_checksum": "refactored_v25_8_0_consolidated_behavioral_rules_universal_standards",
     "last_validation_timestamp": "2025-07-23T17:42:42Z",
     "validation_status": "production_ready_refactored_with_consolidated_structure",
-    "optimization_result": "Successfully refactored with behavioral rules consolidated, universal standards centralized, proper capitalization, and DRY compliance achieved"
-  }
+    "optimization_result": "Successfully refactored with behavioral rules consolidated, universal standards centralized, proper capitalization, and DRY compliance achieved",
+  },
 }
