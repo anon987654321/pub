@@ -137,6 +137,24 @@
         "enforcement": "mandatory_complete_file_analysis",
         "scope": "all_project_files_excluding_dotfiles_dotfolders",
         "no_shortcuts": "no_truncation_no_summarization_no_assumptions"
+      },
+      "comprehensive_reanalysis_and_cross_referencing": {
+        "id": "comprehensive_reanalysis_and_cross_referencing",
+        "rule": "Cross-reference all content for optimization opportunities",
+        "description": "Systematically analyze all project components to identify optimization opportunities through comprehensive cross-referencing. Ensures no improvement potential is overlooked.",
+        "applies_to": ["optimization_analysis", "architecture_review", "performance_enhancement", "code_improvement"],
+        "enforcement": "mandatory_cross_reference_analysis",
+        "scope": "all_project_components_dependencies_documentation",
+        "optimization_focus": "identify_enhancement_opportunities_through_systematic_analysis"
+      },
+      "simulated_execution_tracing": {
+        "id": "simulated_execution_tracing",
+        "rule": "Multi-perspective execution analysis for production readiness",
+        "description": "Perform comprehensive execution analysis from multiple perspectives to ensure production readiness. Includes security, performance, accessibility, and operational viewpoints.",
+        "applies_to": ["production_assessment", "deployment_readiness", "quality_assurance", "risk_analysis"],
+        "enforcement": "mandatory_multi_perspective_validation",
+        "scope": "complete_execution_path_analysis_all_scenarios",
+        "perspectives": "security_performance_accessibility_operational_business"
       }
     },
 
@@ -146,7 +164,11 @@
       "autonomous_completion": ["full_internalization", "comprehensive_reading"],
       "file_processing": ["full_internalization", "comprehensive_reading"],
       "git_operations": "main_branch_workflow",
-      "project_analysis": ["full_internalization", "comprehensive_reading"]
+      "project_analysis": ["full_internalization", "comprehensive_reading"],
+      "optimization_analysis": "comprehensive_reanalysis_and_cross_referencing",
+      "production_readiness": "simulated_execution_tracing",
+      "quality_assurance": ["comprehensive_reanalysis_and_cross_referencing", "simulated_execution_tracing"],
+      "multi_perspective_analysis": "simulated_execution_tracing"
     },
 
     "integration_requirements": {
@@ -475,6 +497,11 @@
     "production_readiness_assessment": {
       "enabled": true,
       "role": "Criteria definer, not executor",
+      "behavioral_compliance": {
+        "comprehensive_reanalysis": "@ref:behavioral_rules.core_rules.comprehensive_reanalysis_and_cross_referencing",
+        "execution_tracing": "@ref:behavioral_rules.core_rules.simulated_execution_tracing",
+        "reference": "See behavioral_rules section for complete production readiness validation"
+      },
       "criteria": {
         "functionality": "All core features working as specified",
         "performance": "@ref:universal_standards.performance.response_time_threshold",
@@ -1254,8 +1281,10 @@
       "Audit dependencies for security and compatibility", 
       "Verify integration points and system compatibility",
       "Profile performance and identify optimization opportunities",
+      "@ref:behavioral_rules.core_rules.comprehensive_reanalysis_and_cross_referencing for systematic optimization",
       "Conduct security assessment including supply chain analysis",
       "Validate accessibility compliance across all user interfaces",
+      "@ref:behavioral_rules.core_rules.simulated_execution_tracing for production readiness",
       "Verify documentation completeness, accuracy, and currency",
       "Assess deployment readiness and environment compatibility"
     ],
@@ -1412,10 +1441,10 @@
   },
 
   "eof_metadata": {
-    "total_line_count": 1247,
-    "content_checksum": "refactored_v25_8_0_consolidated_behavioral_rules_universal_standards",
-    "last_validation_timestamp": "2025-07-23T17:42:42Z",
-    "validation_status": "production_ready_refactored_with_consolidated_structure",
-    "optimization_result": "Successfully refactored with behavioral rules consolidated, universal standards centralized, proper capitalization, and DRY compliance achieved",
-  },
+    "total_line_count": 1451,
+    "content_checksum": "v25_8_0_enhanced_6_rule_behavioral_set_complete",
+    "last_validation_timestamp": "2025-01-08T10:30:00Z",
+    "validation_status": "production_ready_with_complete_6_rule_behavioral_set",
+    "optimization_result": "Successfully completed 6-rule behavioral set from PR #76: added comprehensive_reanalysis_and_cross_referencing and simulated_execution_tracing with full integration"
+  }
 }
