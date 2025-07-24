@@ -55,21 +55,95 @@
       },
       "phase_completion_tracking": {
         "enabled": true,
-        "standard_metrics": {
-          "completion_timestamp": "tracked_per_execution",
-          "duration_ms": "performance_measurement",
-          "cognitive_load_utilization": "percentage_of_allocated_budget",
-          "circuit_breaker_triggers": "count_and_reason_logged"
-        },
-        "phase_validation_mapping": {
-          "early_phases": ["analyze", "empathize_and_analyze"],
-          "middle_phases": ["develop", "define_and_design", "ideate_and_architect", "prototype_and_implement"],
-          "final_phases": ["validate", "optimize", "deliver", "test_and_validate", "optimize_and_refine", "deliver_and_evolve"]
-        },
-        "validation_integration": {
-          "early_phases": "@ref:execution.phases.validation_integration.early_phase completion_status",
-          "middle_phases": "@ref:execution.phases.validation_integration.middle_phase completion_status", 
-          "final_phases": "@ref:execution.phases.validation_integration.final_phase completion_status"
+        "phase_metrics": {
+          "simple_phases": {
+            "analyze": {
+              "completion_timestamp": "tracked_per_execution",
+              "duration_ms": "performance_measurement",
+              "validation_results": "@ref:execution.phases.validation_integration.early_phase completion_status",
+              "cognitive_load_utilization": "percentage_of_allocated_budget",
+              "circuit_breaker_triggers": "count_and_reason_logged"
+            },
+            "develop": {
+              "completion_timestamp": "tracked_per_execution", 
+              "duration_ms": "performance_measurement",
+              "validation_results": "@ref:execution.phases.validation_integration.middle_phase completion_status",
+              "cognitive_load_utilization": "percentage_of_allocated_budget",
+              "circuit_breaker_triggers": "count_and_reason_logged"
+            },
+            "validate": {
+              "completion_timestamp": "tracked_per_execution",
+              "duration_ms": "performance_measurement", 
+              "validation_results": "@ref:execution.phases.validation_integration.final_phase completion_status",
+              "cognitive_load_utilization": "percentage_of_allocated_budget",
+              "circuit_breaker_triggers": "count_and_reason_logged"
+            },
+            "optimize": {
+              "completion_timestamp": "tracked_per_execution",
+              "duration_ms": "performance_measurement",
+              "validation_results": "@ref:execution.phases.validation_integration.final_phase completion_status", 
+              "cognitive_load_utilization": "percentage_of_allocated_budget",
+              "circuit_breaker_triggers": "count_and_reason_logged"
+            },
+            "deliver": {
+              "completion_timestamp": "tracked_per_execution",
+              "duration_ms": "performance_measurement",
+              "validation_results": "@ref:execution.phases.validation_integration.final_phase completion_status",
+              "cognitive_load_utilization": "percentage_of_allocated_budget",
+              "circuit_breaker_triggers": "count_and_reason_logged"
+            }
+          },
+          "complex_phases": {
+            "empathize_and_analyze": {
+              "completion_timestamp": "tracked_per_execution",
+              "duration_ms": "performance_measurement",
+              "validation_results": "@ref:execution.phases.validation_integration.early_phase completion_status",
+              "cognitive_load_utilization": "percentage_of_allocated_budget",
+              "circuit_breaker_triggers": "count_and_reason_logged"
+            },
+            "define_and_design": {
+              "completion_timestamp": "tracked_per_execution",
+              "duration_ms": "performance_measurement", 
+              "validation_results": "@ref:execution.phases.validation_integration.middle_phase completion_status",
+              "cognitive_load_utilization": "percentage_of_allocated_budget",
+              "circuit_breaker_triggers": "count_and_reason_logged"
+            },
+            "ideate_and_architect": {
+              "completion_timestamp": "tracked_per_execution",
+              "duration_ms": "performance_measurement",
+              "validation_results": "@ref:execution.phases.validation_integration.middle_phase completion_status",
+              "cognitive_load_utilization": "percentage_of_allocated_budget", 
+              "circuit_breaker_triggers": "count_and_reason_logged"
+            },
+            "prototype_and_implement": {
+              "completion_timestamp": "tracked_per_execution",
+              "duration_ms": "performance_measurement",
+              "validation_results": "@ref:execution.phases.validation_integration.middle_phase completion_status",
+              "cognitive_load_utilization": "percentage_of_allocated_budget",
+              "circuit_breaker_triggers": "count_and_reason_logged"
+            },
+            "test_and_validate": {
+              "completion_timestamp": "tracked_per_execution",
+              "duration_ms": "performance_measurement",
+              "validation_results": "@ref:execution.phases.validation_integration.final_phase completion_status",
+              "cognitive_load_utilization": "percentage_of_allocated_budget",
+              "circuit_breaker_triggers": "count_and_reason_logged"
+            },
+            "optimize_and_refine": {
+              "completion_timestamp": "tracked_per_execution", 
+              "duration_ms": "performance_measurement",
+              "validation_results": "@ref:execution.phases.validation_integration.final_phase completion_status",
+              "cognitive_load_utilization": "percentage_of_allocated_budget",
+              "circuit_breaker_triggers": "count_and_reason_logged"
+            },
+            "deliver_and_evolve": {
+              "completion_timestamp": "tracked_per_execution",
+              "duration_ms": "performance_measurement",
+              "validation_results": "@ref:execution.phases.validation_integration.final_phase completion_status",
+              "cognitive_load_utilization": "percentage_of_allocated_budget",
+              "circuit_breaker_triggers": "count_and_reason_logged"
+            }
+          }
         },
         "aggregation_metrics": {
           "total_execution_time": "sum_of_all_phase_durations",
@@ -160,25 +234,6 @@
           "system_resilience_score": "composite_stability_and_recovery_metric"
         }
       }
-    }
-  },
-  "communication_standards": {
-    "status_format": "Current Date/Time (UTC - YYYY-MM-DD HH:MM:SS): {timestamp}\nCurrent User's Login: {username}",
-    "voice_tone": "Professional, direct, strategic emoji usage (🎯✅❌🚨)",
-    "error_protocols": "🚨 CRITICAL/WARNING/INFO with actionable steps",
-    "progress_tracking": "Phase X of Y: {percentage}% complete",
-    "unix_like_feedback": "Minimalistic status indicators for user-friendly process transparency",
-    "feedback_system": {
-      "minimalistic_indicators": {
-        "done": "✓ done",
-        "fail": "✗ fail", 
-        "warn": "⚠ warn",
-        "start": "▶ start",
-        "wait": "⏸ wait"
-      },
-      "progress_bars": "[████████░░] 80%",
-      "process_trees": "├── phase1 ✓\n└── phase2 ▶",
-      "transparency": "Simple, user-friendly without technical complexity"
     }
   },
   "universal_standards": {
@@ -559,25 +614,6 @@
       "comprehensive_reading": "@ref:behavioral_rules.core_rules.comprehensive_reading",
       "reference": "See behavioral_rules section for complete analysis and completion rules"
     },
-    "scope_separation": {
-      "autonomous_scope": [
-        "project_analysis",
-        "code_improvement", 
-        "optimization_suggestions",
-        "documentation_generation",
-        "testing_validation",
-        "performance_monitoring"
-      ],
-      "approval_required_scope": [
-        "file_creation",
-        "feature_development", 
-        "system_changes",
-        "architecture_modifications",
-        "dependency_updates",
-        "deployment_actions"
-      ],
-      "enforcement": "Clear separation prevents scope creep and unauthorized actions"
-    },
     "project_detection": {
       "methods": ["file_extensions", "dependencies", "directory_structure", "user_intent", "existing_patterns"],
       "confidence_threshold": 0.85,
@@ -739,7 +775,7 @@
             "current_score": "real_time_lighthouse_performance_score",
             "minimum_required": "@ref:universal_standards.quality_gates.lighthouse_score_minimum",
             "validation_status": "pass_fail_with_score_breakdown",
-            "performance_metrics": "@ref:universal_standards.performance.core_web_vitals",
+            "performance_metrics": "detailed_core_web_vitals_analysis",
             "optimization_recommendations": "specific_performance_improvement_suggestions"
           },
           "pwa_score_validation": {
@@ -878,7 +914,7 @@
         "health_dashboard": {
           "overall_readiness_score": "composite_production_readiness_percentage",
           "quality_gates_status": "visual_dashboard_of_all_quality_gate_statuses",
-          "performance_health": "@ref:universal_standards.performance.core_web_vitals monitoring_dashboard",
+          "performance_health": "real_time_performance_metrics_dashboard",
           "security_posture": "comprehensive_security_status_dashboard",
           "accessibility_compliance": "real_time_accessibility_compliance_dashboard",
           "documentation_health": "documentation_completeness_and_quality_dashboard"
@@ -960,7 +996,7 @@
           "real_time_tracking": "enabled",
           "allocation_alerts": "enabled",
           "rebalancing_triggers": "enabled",
-          "performance_metrics": "@ref:universal_standards.performance monitoring_enabled"
+          "performance_metrics": "enabled"
         }
       }
     },
@@ -996,23 +1032,20 @@
       "goal": "Simple user experience, not reduced functionality"
     },
     "auto_iteration": {
-      "description": "Automatic iteration system with infinite optimization protection",
+      "description": "Automatic iteration system with safety controls",
       "enabled": true, 
       "silent": true, 
-      "stop_when": "Production ready AND no improvements possible for 3 consecutive cycles",
-      "max_iterations": "unlimited_with_diminishing_returns_detection",
-      "framework_preservation": "absolute_immutable_core",
+      "stop_when": "Production ready or no improvements possible",
       "preserve_logic": true, 
+      "max_iterations": 12, 
       "convergence": 0.02, 
       "rollback_on_degradation": true,
-      "circuit_breaker": {
-        "max_size_reduction_per_cycle": "5_percent",
-        "min_content_retention": "95_percent", 
-        "line_count_floor": "2000_lines_minimum",
+      "circuit_breakers": {
         "memory": "80%", 
         "cpu": "75%", 
         "time_per_iteration": "30s", 
         "total_time": "300s",
+        "config_lines": "1500 max for complex configurations", 
         "preserve_expertise": true,
         "actions": ["pause_assess", "simplify_preserve_core", "rollback", "request_guidance"]
       },
@@ -1184,24 +1217,6 @@
         {"role": "rails", "temp": 0.4, "weight": 0.10}
       ],
       "consensus": 0.7
-    }
-  },
-  "context_preservation": {
-    "cross_session_memory": true,
-    "user_preference_learning": true, 
-    "workflow_resume_capability": true,
-    "interactive_confirmation": true,
-    "memory_management": {
-      "persistent_context": "Maintain project state across sessions",
-      "preference_storage": "Learn and remember user coding patterns",
-      "workflow_continuation": "Resume interrupted work seamlessly",
-      "decision_memory": "Remember user preferences for similar decisions"
-    },
-    "session_continuity": {
-      "state_persistence": "Project context survives session boundaries",
-      "preference_adaptation": "Continuously learn from user interactions",
-      "workflow_intelligence": "Predict next steps based on history",
-      "confirmation_protocols": "Interactive validation for critical decisions"
     }
   },
   "execution": {
@@ -1444,11 +1459,6 @@
       "quality": ["qa_engineer", "accessibility_specialist", "compliance_auditor", "technical_writer"]
     },
     "temperatures": {
-      "hierarchy": {
-        "order": "ultra_conservative < conservative < balanced < creative < experimental",
-        "selection_criteria": "Choose based on risk tolerance and innovation requirements",
-        "override_rules": "Security and compliance always use ultra_conservative regardless of task type"
-      },
       "ultra_conservative": {
         "temp": 0.05, 
         "focus": "Critical systems, security, regulatory", 
