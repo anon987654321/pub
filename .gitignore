@@ -9,6 +9,7 @@ final_compliance_report.json
 *.tmp
 *.log
 *.pid
+*.pre-conversion-backup
 
 # Build artifacts
 .bundle/
