@@ -48,6 +48,34 @@ Rails.application.routes.draw do
   # Search
   get 'search', to: 'search#index'
   
+  # Business Planning routes
+  resources :business_planning, only: [:index], path: 'business-planning' do
+    collection do
+      # Lean Canvas
+      get :lean_canvas, path: 'lean-canvas'
+      post :create_lean_canvas, path: 'lean-canvas'
+      patch 'lean-canvas/:id', to: 'business_planning#update_lean_canvas', as: :update_lean_canvas
+      
+      # OKRs
+      get :okrs
+      post :create_okr, path: 'okrs'
+      patch 'okrs/:okr_id/progress', to: 'business_planning#update_okr_progress', as: :update_okr_progress
+      
+      # Stakeholder Mapping
+      get :stakeholders
+      post :create_stakeholders, path: 'stakeholders'
+      
+      # Design Thinking
+      get :design_thinking, path: 'design-thinking'
+      post :create_design_thinking, path: 'design-thinking'
+      patch 'design-thinking/:session_id', to: 'business_planning#update_design_thinking', as: :update_design_thinking
+      
+      # Analytics and Insights
+      get :insights
+      post :trading_integration, path: 'trading-integration'
+    end
+  end
+
   # AI3 Integration routes
   resources :ai3, only: [:index], path: 'ai3' do
     collection do
