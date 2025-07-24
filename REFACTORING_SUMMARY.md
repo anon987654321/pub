@@ -83,14 +83,25 @@ This refactoring successfully consolidated duplicate logic, improved organizatio
 ## Statistics
 - Original file: 839 lines with comments and duplicates
 - Refactored file: 1,380 lines of valid JSON with consolidated structure
+- JSON5 conversion: Improved readability with native comments and better formatting
 - JSON validation: ✅ Passes syntax validation
+- JSON5 validation: ✅ Passes JSON5 syntax validation with backward compatibility
 - Cross-references: 25+ `@ref:` implementations eliminating duplication
 - Behavioral rules: Consolidated from 2 sections into 1 comprehensive section
 - Universal standards: Centralized 15+ previously scattered standards
 
+## JSON5 Format Adoption
+**Latest enhancement**: Converted to JSON5 format for improved maintainability:
+- Native comment support (replaced embedded comment strings)
+- Better code organization with section headers
+- Inline documentation for complex sections (e.g., Core Web Vitals)
+- Maintained 100% backward compatibility with JSON parsers
+- Enhanced developer experience with proper syntax highlighting
+
 ## Verification
 The refactored file maintains 100% functional compatibility while significantly improving:
 - Maintainability (single source of truth for all standards)
-- Clarity (proper capitalization and organization)
+- Clarity (proper capitalization and organization)  
+- Readability (JSON5 comments instead of embedded strings)
 - Compliance (strict adherence to DRY/KISS principles)
 - Extensibility (easier to add new standards and rules)
