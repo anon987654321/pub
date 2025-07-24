@@ -54,3 +54,4 @@ brgen_app/config/master.key
 brgen_app/config/credentials.yml.enc
 brgen_app/node_modules/
 brgen_app/public/assets/
+*.backup
