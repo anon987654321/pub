@@ -1,0 +1,7 @@
+app/javascript/controllers/application.js
+app/javascript/controllers/index.js
+config/cable.yml
+app/channels/application_cable/channel.rb
+app/controllers/application_controller.rb
+app/jobs/application_job.rb
+app/models/application_record.rb
