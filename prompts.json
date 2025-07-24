@@ -6,7 +6,6 @@
    * Defines standards and criteria for decision-making.
    * Requires external tools (GitHub Actions, CI/CD) for execution.
    */
-
   "meta": {
     "version": "v25.8.0-enhanced",
     "timestamp": "2025-07-22T00:48:14Z",
@@ -93,23 +92,24 @@
 
   // Core behavioral rules for all operations
   "behavioral_rules": {
-    "description": "Behavioral rules that must be followed in all operations. Single source of truth for all behavioral requirements.",
     "precedence": "highest",
     "override_protection": "immutable",
     "universal_application": "all_project_types_and_contexts",
-    "enforcement": "mandatory_pre_action_validation",
+    "enforcement": "mandatory_pre_action_validation_with_programmatic_enforcement",
     
     // Four immutable behavioral rules
     "core_rules": {
       // Require approval before creating files or features
       "approval_required": {
         "id": "approval_required",
-        "rule": "Never add new files or features without express prior approval",
-        "description": "Prevents unauthorized modifications that could break existing systems",
+        "rule": "FORBIDDEN: New file creation is absolutely prohibited without explicit owner approval",
+        "description": "MANDATORY ENFORCEMENT: This rule must be programmatically and operationally enforced. Any attempt to create new files without explicit owner approval must be blocked. Prevents unauthorized modifications that could break existing systems.",
         "applies_to": ["file_creation", "feature_development", "system_changes"],
-        "enforcement": "explicit_user_consent_before_any_new_file_creation",
-        "exceptions": "none",
-        "validation_required": true
+        "enforcement": "mandatory_programmatic_blocking_of_unauthorized_file_creation",
+        "enforcement_mechanism": "must_be_implemented_in_all_agents_scripts_and_tools",
+        "exceptions": "none_whatsoever",
+        "validation_required": true,
+        "compliance_requirement": "every_agent_script_contributor_must_enforce_this_rule"
       },
       "full_internalization": {
         "id": "full_internalization", 
@@ -150,10 +150,13 @@
     },
 
     "integration_requirements": {
-      "validation_integration": "Embed in all quality gates and validation checks",
-      "execution_integration": "Enforce during all execution phases", 
-      "precedence_enforcement": "Override conflicting behaviors and patterns",
-      "universal_scope": "Apply to all languages, frameworks, and project types"
+      "_enforcement_mandate": "MANDATORY: All integration requirements must be programmatically enforced",
+      "validation_integration": "MUST embed in all quality gates and validation checks - no exceptions",
+      "execution_integration": "MUST enforce during all execution phases - programmatic blocking required", 
+      "precedence_enforcement": "MUST override conflicting behaviors and patterns - highest priority",
+      "universal_scope": "MUST apply to all languages, frameworks, and project types - no exclusions",
+      "implementation_requirement": "Every agent, script, and contributor MUST implement enforcement mechanisms",
+      "compliance_verification": "Enforcement mechanisms must be verifiable and auditable"
     },
 
     "violation_handling": {
