@@ -1607,7 +1607,7 @@
   },
 
   "eof_metadata": {
-    "total_line_count": 1650,
+    "total_line_count": 1615,
     "content_checksum": "v26_0_0_behavioral_integrated_5step_validation_production_ready",
     "last_validation_timestamp": "2025-07-24T08:42:00Z",
     "validation_status": "production_ready_with_behavioral_integration_and_5step_validation",
