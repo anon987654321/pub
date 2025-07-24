@@ -1,16 +1,7 @@
-/*
- * Validates files and projects. Fixes syntax errors, enforces style rules, checks security.
- * Works silently in background. Supports all programming languages.
- * Makes code production-ready.
- * 
- * NOTE: Defines standards and criteria for decision-making.
- * Execution requires external tools (GitHub Actions, CI/CD, etc.)
- */
-
-// All rules in this file must be programmatically and operationally enforced. No rule is advisory.
-// New file creation is forbidden without explicit owner approval.
-
 {
+  "_enforcement_mandate": "// All rules in this file must be programmatically and operationally enforced. No rule is advisory.\n// New file creation is forbidden without explicit owner approval.",
+  "_original_file_header_comment": "/*\n * Validates files and projects. Fixes syntax errors, enforces style rules, checks security.\n * Works silently in background. Supports all programming languages.\n * Makes code production-ready.\n * \n * NOTE: Defines standards and criteria for decision-making.\n * Execution requires external tools (GitHub Actions, CI/CD, etc.)\n */",
+
   "meta": {
     "version": "v25.8.0-enhanced",
     "timestamp": "2025-07-22T00:48:14Z",
@@ -87,6 +78,8 @@
   },
 
   "behavioral_rules": {
+    "_original_section_header_comment": "/*\n * Behavioral Prompts - Core rules for all operations\n */",
+    "_enforcement_mandate": "ALL RULES ARE MANDATORY AND MUST BE PROGRAMMATICALLY AND OPERATIONALLY ENFORCED. NO RULE IS ADVISORY.",
     "description": "Consolidated behavioral rules that MUST be followed in all operations without exception. Single source of truth for all mandatory behavioral requirements.",
     "precedence": "highest",
     "override_protection": "immutable",
@@ -144,6 +137,7 @@
     },
 
     "integration_requirements": {
+      "_enforcement_mandate": "MANDATORY: All integration requirements must be programmatically enforced",
       "validation_integration": "MUST embed in all quality gates and validation checks - no exceptions",
       "execution_integration": "MUST enforce during all execution phases - programmatic blocking required", 
       "precedence_enforcement": "MUST override conflicting behaviors and patterns - highest priority",
