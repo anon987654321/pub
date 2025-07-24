@@ -4,7 +4,7 @@
     "timestamp": "2025-07-24T11:45:00Z",
     "author": "anon987654321",
     "current_user": "anon987654321",
-    "description": "Complete system restoration integrating ALL critical components from historical versions - Cognitive Framework 2.0, 7-phase workflow, world-class design system, never-truncate policy, self-optimization with safety mechanisms",
+    "description": "Project completion framework for GitHub Copilot, Claude 4, Grok and other LLMs (optimized for zsh, Ruby, Ruby on Rails, OpenBSD)",
     "self_validated": true,
     "auto_applies_to": "every_file_and_entire_projects",
     "compliance": ["WCAG_2_2_AAA", "ISO_9001_2015", "SOC_2_TYPE_II", "zero_trust"],
@@ -295,25 +295,25 @@
     "precedence": "highest",
     "override_protection": "immutable",
     "universal_application": "all_project_types_and_contexts",
-    "enforcement": "mandatory_pre_action_validation_with_programmatic_enforcement",
+    "enforcement": "pre_action_validation_with_programmatic_enforcement",
     "core_rules": {
       "approval_required": {
         "id": "approval_required",
-        "rule": "FORBIDDEN: New file creation is absolutely prohibited without explicit owner approval",
-        "description": "MANDATORY ENFORCEMENT: This rule must be programmatically and operationally enforced. Any attempt to create new files without explicit owner approval must be blocked. Prevents unauthorized modifications that could break existing systems.",
+        "rule": "New file creation requires explicit owner approval",
+        "description": "Prevents unauthorized modifications that could break existing systems. Any attempt to create new files must be blocked without explicit approval.",
         "applies_to": ["file_creation", "feature_development", "system_changes"],
-        "enforcement": "mandatory_programmatic_blocking_of_unauthorized_file_creation",
-        "enforcement_mechanism": "must_be_implemented_in_all_agents_scripts_and_tools",
-        "exceptions": "none_whatsoever",
+        "enforcement": "block_unauthorized_file_creation",
+        "enforcement_mechanism": "implemented_in_all_agents_and_tools",
+        "exceptions": "none",
         "validation_required": true,
-        "compliance_requirement": "every_agent_script_contributor_must_enforce_this_rule"
+        "compliance_requirement": "all_agents_must_enforce_this_rule"
       },
       "full_internalization": {
         "id": "full_internalization", 
         "rule": "Always understand the full existing project before improving it",
         "description": "Ensures complete understanding of existing work before making changes. For example, understand the exact full HTML/CSS/JS/SVG before improving or completing. Do not guess or read only the first few lines.",
         "applies_to": ["project_analysis", "code_improvement", "content_modification"],
-        "enforcement": "comprehensive_analysis_mandatory",
+        "enforcement": "complete_analysis_required",
         "scope": "every_file_every_line_every_word",
         "no_shortcuts": "no_truncation_no_assumptions_no_partial_reading"
       },
@@ -331,21 +331,21 @@
         "rule": "Before starting work, read every word in every line of every file (except dotfiles and dotfolders)",
         "description": "Prevents misunderstandings from partial file reading. Includes analyzing project dependencies and documentation thoroughly.",
         "applies_to": ["project_initialization", "dependency_analysis", "file_processing"],
-        "enforcement": "mandatory_complete_file_analysis",
+        "enforcement": "complete_file_analysis_required",
         "scope": "all_project_files_excluding_dotfiles_dotfolders",
         "no_shortcuts": "no_truncation_no_summarization_no_assumptions"
       },
       "never_truncate_policy": {
         "id": "never_truncate_policy",
-        "rule": "ABSOLUTE PROHIBITION: Never truncate, omit, or delete any content in any output, ever",
-        "description": "MANDATORY ENFORCEMENT: All outputs must be complete and preserve all user work. Any form of truncation, omission, ellipsis (...), or content deletion is absolutely forbidden. This includes code, documentation, comments, and any other content.",
+        "rule": "Never truncate, omit, or delete any content in any output",
+        "description": "All outputs must be complete and preserve all user work. No truncation, omission, ellipsis (...), or content deletion is allowed. This includes code, documentation, comments, and any other content.",
         "applies_to": ["all_outputs", "code_generation", "file_modification", "documentation", "responses"],
-        "enforcement": "mandatory_programmatic_blocking_of_truncation",
-        "enforcement_mechanism": "must_be_implemented_in_all_agents_scripts_and_tools",
+        "enforcement": "block_all_truncation",
+        "enforcement_mechanism": "implemented_in_all_agents_and_tools",
         "prohibited_actions": ["truncation", "omission", "deletion", "ellipsis", "summarization_without_full_content"],
-        "exceptions": "none_whatsoever",
+        "exceptions": "none",
         "violation_response": "immediate_halt_and_rollback",
-        "compliance_requirement": "every_agent_script_contributor_must_enforce_this_rule"
+        "compliance_requirement": "all_agents_must_enforce_this_rule"
       }
     },
     "cross_references": {
@@ -357,12 +357,12 @@
       "project_analysis": ["full_internalization", "comprehensive_reading"]
     },
     "integration_requirements": {
-      "_enforcement_mandate": "MANDATORY: All integration requirements must be programmatically enforced",
-      "validation_integration": "MUST embed in all quality gates and validation checks - no exceptions",
-      "execution_integration": "MUST enforce during all execution phases - programmatic blocking required", 
-      "precedence_enforcement": "MUST override conflicting behaviors and patterns - highest priority",
-      "universal_scope": "MUST apply to all languages, frameworks, and project types - no exclusions",
-      "implementation_requirement": "Every agent, script, and contributor MUST implement enforcement mechanisms",
+      "_enforcement_mandate": "All integration requirements must be programmatically enforced",
+      "validation_integration": "Embed in all quality gates and validation checks",
+      "execution_integration": "Enforce during all execution phases with programmatic blocking", 
+      "precedence_enforcement": "Override conflicting behaviors and patterns - highest priority",
+      "universal_scope": "Apply to all languages, frameworks, and project types",
+      "implementation_requirement": "All agents, scripts, and contributors must implement enforcement mechanisms",
       "compliance_verification": "Enforcement mechanisms must be verifiable and auditable"
     },
     "violation_handling": {
