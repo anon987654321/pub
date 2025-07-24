@@ -1,0 +1,180 @@
+<% content_for :title, "Welcome to Brgen - Social Platform" %>
+
+<!-- Hero Section -->
+<section class="hero-section bg-primary text-white py-5 mb-5 rounded-3">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-8">
+        <h1 class="display-4 fw-bold mb-3">Welcome to Brgen</h1>
+        <p class="lead mb-4">A modern social platform for sharing, connecting, and discovering amazing content from people around the world.</p>
+        
+        <% unless user_signed_in? %>
+          <div class="d-flex gap-3">
+            <%= link_to "Join Now", new_user_registration_path, class: "btn btn-light btn-lg" %>
+            <%= link_to "Sign In", new_user_session_path, class: "btn btn-outline-light btn-lg" %>
+          </div>
+        <% else %>
+          <p class="mb-3">Welcome back, <%= current_user.full_name_or_email %>!</p>
+          <%= link_to "Create New Post", new_post_path, class: "btn btn-light btn-lg" %>
+        <% end %>
+      </div>
+      <div class="col-lg-4 text-center">
+        <div class="feature-highlight p-4">
+          <h3>🌟 Features</h3>
+          <ul class="list-unstyled">
+            <li>📝 Share posts and thoughts</li>
+            <li>💬 Engage with comments</li>
+            <li>👥 Follow interesting people</li>
+            <li>📧 Direct messaging</li>
+            <li>🔔 Real-time notifications</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Main Content -->
+<div class="row">
+  <!-- Main Feed -->
+  <div class="col-lg-8">
+    <% if user_signed_in? %>
+      <!-- Dashboard Content -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Your Feed</h2>
+        <%= link_to "New Post", new_post_path, class: "btn btn-primary" %>
+      </div>
+      
+      <!-- Quick Stats -->
+      <div class="row mb-4">
+        <div class="col-md-4">
+          <div class="card text-center">
+            <div class="card-body">
+              <h5 class="card-title">Following</h5>
+              <h3 class="text-primary"><%= current_user.following.count %></h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card text-center">
+            <div class="card-body">
+              <h5 class="card-title">Followers</h5>
+              <h3 class="text-success"><%= current_user.followers.count %></h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card text-center">
+            <div class="card-body">
+              <h5 class="card-title">Posts</h5>
+              <h3 class="text-info"><%= current_user.posts.count %></h3>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Recent Posts Feed -->
+      <% if @recent_posts && @recent_posts.any? %>
+        <div class="posts-feed">
+          <% @recent_posts.each do |post| %>
+            <%= render 'posts/post_card', post: post %>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="empty-state text-center py-5">
+          <h4>No posts in your feed yet</h4>
+          <p class="text-muted">Start following people to see their posts here, or create your first post!</p>
+          <div class="d-flex gap-3 justify-content-center">
+            <%= link_to "Browse All Posts", posts_path, class: "btn btn-outline-primary" %>
+            <%= link_to "Create Post", new_post_path, class: "btn btn-primary" %>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <!-- Public Content -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Recent Posts</h2>
+        <%= link_to "View All Posts", posts_path, class: "btn btn-outline-primary" %>
+      </div>
+      
+      <% if @recent_posts && @recent_posts.any? %>
+        <div class="posts-feed">
+          <% @recent_posts.each do |post| %>
+            <%= render 'posts/post_card', post: post %>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="empty-state text-center py-5">
+          <h4>No posts yet</h4>
+          <p class="text-muted">Be the first to share something amazing!</p>
+          <%= link_to "Join Brgen", new_user_registration_path, class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+  
+  <!-- Sidebar -->
+  <div class="col-lg-4">
+    <!-- Trending Posts -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5 class="card-title mb-0">🔥 Trending</h5>
+      </div>
+      <div class="card-body">
+        <% if @trending_posts && @trending_posts.any? %>
+          <% @trending_posts.limit(5).each do |post| %>
+            <div class="trending-item mb-3">
+              <h6 class="mb-1">
+                <%= link_to post.title, post_path(post), class: "text-decoration-none" %>
+              </h6>
+              <small class="text-muted">
+                <%= post.likes_count %> likes • 
+                <%= time_ago_in_words_or_date(post.created_at) %>
+              </small>
+            </div>
+          <% end %>
+        <% else %>
+          <p class="text-muted">No trending posts yet.</p>
+        <% end %>
+      </div>
+    </div>
+    
+    <!-- Quick Actions -->
+    <% if user_signed_in? %>
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Quick Actions</h5>
+        </div>
+        <div class="card-body">
+          <div class="d-grid gap-2">
+            <%= link_to "✏️ New Post", new_post_path, class: "btn btn-outline-primary btn-sm" %>
+            <%= link_to "💬 Messages", direct_messages_path, class: "btn btn-outline-secondary btn-sm" %>
+            <%= link_to "🔔 Notifications", notifications_path, class: "btn btn-outline-info btn-sm" %>
+            <%= link_to "👤 Profile", user_path(current_user), class: "btn btn-outline-success btn-sm" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+    
+    <!-- Platform Stats -->
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title mb-0">📊 Platform Stats</h5>
+      </div>
+      <div class="card-body">
+        <div class="stat-item d-flex justify-content-between mb-2">
+          <span>Total Posts</span>
+          <strong><%= Post.published_posts.count %></strong>
+        </div>
+        <div class="stat-item d-flex justify-content-between mb-2">
+          <span>Total Users</span>
+          <strong><%= User.count %></strong>
+        </div>
+        <div class="stat-item d-flex justify-content-between">
+          <span>Total Likes</span>
+          <strong><%= Like.count %></strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

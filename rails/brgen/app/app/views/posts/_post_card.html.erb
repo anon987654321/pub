@@ -1,0 +1,85 @@
+<article class="post-card" id="<%= dom_id(post) %>">
+  <!-- Post Header -->
+  <div class="post-header">
+    <%= user_avatar(post.user, size: 40) %>
+    <div class="ms-3 flex-grow-1">
+      <h6 class="mb-1">
+        <% if user_signed_in? %>
+          <%= link_to post.user.full_name_or_email, user_path(post.user), class: "text-decoration-none text-dark fw-semibold" %>
+        <% else %>
+          <span class="text-dark fw-semibold"><%= post.user.full_name_or_email %></span>
+        <% end %>
+      </h6>
+      <small class="text-muted">
+        <%= time_ago_in_words_or_date(post.created_at) %>
+        <% if post.reading_time_minutes > 0 %>
+          • <%= post.reading_time_minutes %> min read
+        <% end %>
+      </small>
+    </div>
+  </div>
+  
+  <!-- Post Content -->
+  <div class="post-body">
+    <h3 class="post-title">
+      <%= link_to post.title, post_path(post), class: "text-decoration-none text-dark" %>
+    </h3>
+    
+    <div class="post-content">
+      <p class="mb-3"><%= post.summary_text %></p>
+      
+      <% if post.featured_image.attached? %>
+        <div class="post-image mb-3">
+          <%= image_tag post.featured_image, class: "img-fluid rounded", alt: post.title %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  
+  <!-- Post Actions -->
+  <div class="post-actions">
+    <!-- Like Button -->
+    <div id="post_<%= post.id %>_likes">
+      <%= render 'posts/likes', post: post %>
+    </div>
+    
+    <!-- Comment Count -->
+    <div class="action-item">
+      <%= link_to post_path(post), class: "text-decoration-none text-muted" do %>
+        <i class="icon icon-message-circle" aria-hidden="true"></i>
+        <span><%= post.comments_count %> comments</span>
+      <% end %>
+    </div>
+    
+    <!-- Share Button -->
+    <div class="action-item">
+      <button class="btn btn-link btn-sm text-muted p-0" onclick="navigator.share ? navigator.share({title: '<%= j post.title %>', url: '<%= post_url(post) %>'}) : copyToClipboard('<%= post_url(post) %>')">
+        <i class="icon icon-share" aria-hidden="true"></i>
+        <span>Share</span>
+      </button>
+    </div>
+    
+    <!-- Edit/Delete for post owner -->
+    <% if user_signed_in? && (post.user == current_user || current_user.admin?) %>
+      <div class="action-item ms-auto">
+        <div class="dropdown">
+          <button class="btn btn-link btn-sm text-muted p-0" data-bs-toggle="dropdown">
+            <i class="icon icon-more-horizontal" aria-hidden="true"></i>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><%= link_to "Edit", edit_post_path(post), class: "dropdown-item" %></li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+              <%= button_to "Delete", post_path(post), method: :delete, 
+                    class: "dropdown-item text-danger",
+                    data: { 
+                      confirm: "Are you sure you want to delete this post?",
+                      turbo_method: :delete
+                    } %>
+            </li>
+          </ul>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</article>

@@ -1,0 +1,137 @@
+<% content_for :title, "All Posts - Brgen" %>
+
+<!-- Header Section -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h1 class="mb-2">All Posts</h1>
+    <p class="text-muted mb-0">Discover amazing content from our community</p>
+  </div>
+  <% if user_signed_in? %>
+    <%= link_to "Create New Post", new_post_path, class: "btn btn-primary" %>
+  <% end %>
+</div>
+
+<!-- Search and Filters -->
+<div class="row mb-4">
+  <div class="col-md-8">
+    <%= form_with url: posts_path, method: :get, local: true, class: "d-flex" do |f| %>
+      <%= f.search_field :search, placeholder: "Search posts...", 
+            class: "form-control me-2", value: params[:search] %>
+      <%= f.submit "Search", class: "btn btn-outline-primary" %>
+      <% if params[:search].present? %>
+        <%= link_to "Clear", posts_path, class: "btn btn-outline-secondary ms-2" %>
+      <% end %>
+    <% end %>
+  </div>
+  <div class="col-md-4">
+    <!-- Future: Add sorting options -->
+    <div class="text-end">
+      <small class="text-muted">
+        Showing <%= @pagy.count %> posts
+      </small>
+    </div>
+  </div>
+</div>
+
+<!-- Search Results Info -->
+<% if params[:search].present? %>
+  <div class="alert alert-info" role="alert">
+    <% if @posts.any? %>
+      Found <%= @pagy.count %> posts matching "<strong><%= params[:search] %></strong>"
+    <% else %>
+      No posts found matching "<strong><%= params[:search] %></strong>"
+    <% end %>
+  </div>
+<% end %>
+
+<!-- Posts Grid -->
+<div class="row">
+  <div class="col-lg-8">
+    <!-- Posts Feed -->
+    <% if @posts.any? %>
+      <div class="posts-feed" id="posts-container">
+        <% @posts.each do |post| %>
+          <%= render 'post_card', post: post %>
+        <% end %>
+      </div>
+      
+      <!-- Pagination -->
+      <div class="pagination-wrapper text-center mt-4">
+        <%== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1 %>
+      </div>
+    <% else %>
+      <!-- Empty State -->
+      <div class="empty-state text-center py-5">
+        <div class="mb-4">
+          <i class="display-1 text-muted">📝</i>
+        </div>
+        <h3>No posts yet</h3>
+        <p class="text-muted mb-4">
+          <% if user_signed_in? %>
+            Be the first to share something amazing with the community!
+          <% else %>
+            Join Brgen to start sharing and discovering amazing content.
+          <% end %>
+        </p>
+        <% if user_signed_in? %>
+          <%= link_to "Create First Post", new_post_path, class: "btn btn-primary btn-lg" %>
+        <% else %>
+          <div class="d-flex gap-3 justify-content-center">
+            <%= link_to "Join Now", new_user_registration_path, class: "btn btn-primary btn-lg" %>
+            <%= link_to "Sign In", new_user_session_path, class: "btn btn-outline-primary btn-lg" %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+  
+  <!-- Sidebar -->
+  <div class="col-lg-4">
+    <!-- Quick Stats -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5 class="card-title mb-0">📊 Community Stats</h5>
+      </div>
+      <div class="card-body">
+        <div class="stat-item d-flex justify-content-between mb-2">
+          <span>Total Posts</span>
+          <strong><%= Post.published_posts.count %></strong>
+        </div>
+        <div class="stat-item d-flex justify-content-between mb-2">
+          <span>Active Users</span>
+          <strong><%= User.count %></strong>
+        </div>
+        <div class="stat-item d-flex justify-content-between">
+          <span>Total Interactions</span>
+          <strong><%= Like.count + Comment.count %></strong>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Popular Tags (Future Enhancement) -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5 class="card-title mb-0">🏷️ Popular Topics</h5>
+      </div>
+      <div class="card-body">
+        <p class="text-muted">Coming soon - discover trending topics and hashtags.</p>
+      </div>
+    </div>
+    
+    <!-- Community Guidelines -->
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title mb-0">📋 Community Guidelines</h5>
+      </div>
+      <div class="card-body">
+        <ul class="list-unstyled small">
+          <li class="mb-2">✅ Be respectful and kind</li>
+          <li class="mb-2">✅ Share original content</li>
+          <li class="mb-2">✅ Help others learn and grow</li>
+          <li class="mb-2">❌ No spam or self-promotion</li>
+          <li>❌ No hate speech or harassment</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
