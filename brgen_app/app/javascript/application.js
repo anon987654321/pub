@@ -1,6 +1,8 @@
 // Entry point for the build script in your package.json
 import "@hotwired/turbo-rails"
 import "./controllers"
+import "./config"
+import "./channels"
 
 // Modern JavaScript enhancements
 document.addEventListener('DOMContentLoaded', function() {

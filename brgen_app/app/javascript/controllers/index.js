@@ -1,10 +1,7 @@
-// Import and register all your controllers
-import { Application } from "@hotwired/stimulus"
+import { application } from "./application"
 
-const application = Application.start()
+import controllers from "./**/*_controller.js"
 
-// Configure Stimulus development experience
-application.debug = false
-window.Stimulus = application
-
-export { application }
+controllers.forEach((controller) => {
+  application.register(controller.name, controller.module.default)
+})

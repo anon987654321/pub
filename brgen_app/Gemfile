@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "~> 7.2.2", ">= 7.2.2.1"
+gem "rails", "~> 8.0.0"
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
 # Use sqlite3 as the database for Active Record
@@ -44,6 +44,13 @@ gem "solid_queue"
 
 # Caching
 gem "solid_cache"
+
+# Rails 8 features
+gem "kamal", require: false
+gem "thruster", require: false
+
+# Real-time features for Rails 8
+gem "stimulus_reflex", "~> 3.5"
 
 # Image processing
 gem "image_processing", "~> 1.2"
@@ -107,3 +114,7 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+gem "action-cable-redis-backport", "~> 1"
+
+gem "redis-session-store", "~> 0.11.5"
