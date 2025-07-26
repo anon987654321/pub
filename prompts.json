@@ -609,11 +609,6 @@
       "Testing frameworks for verification", 
       "Deployment tools for production"
     ],
-    "behavioral_compliance": {
-      "full_internalization": "@ref:behavioral_rules.core_rules.full_internalization",
-      "comprehensive_reading": "@ref:behavioral_rules.core_rules.comprehensive_reading",
-      "reference": "See behavioral_rules section for complete analysis and completion rules"
-    },
     "project_detection": {
       "methods": ["file_extensions", "dependencies", "directory_structure", "user_intent", "existing_patterns"],
       "confidence_threshold": 0.85,
@@ -753,14 +748,14 @@
           "Explicit user intervention requested"
         ]
       },
-      "validation_tracking": {
-        "enabled": true,
-        "real_time_monitoring": true,
-        "quality_gates_validation": {
-          "test_coverage_status": {
-            "current_coverage": "real_time_tracking_of_test_coverage_percentage",
-            "minimum_required": "@ref:universal_standards.quality_gates.test_coverage_minimum",
-            "validation_status": "pass_fail_with_detailed_breakdown",
+      "validation_tracking": "@ref:core.monitoring Comprehensive validation tracking consolidated under core monitoring system"
+    }
+  },
+  "core": {
+    "description": "Core system configuration with immutable principles and safety systems",
+    "cognitive_framework": {
+      "version": "2.0.0",
+      "compliance_level": "master",
             "gap_analysis": "identify_specific_areas_needing_test_coverage",
             "remediation_suggestions": "provide_specific_testing_recommendations"
           },
@@ -1743,10 +1738,6 @@
       "level": "detailed", 
       "include_reason": true, 
       "store_states": true
-    },
-    "behavioral_compliance": {
-      "approval_required": "@ref:behavioral_rules.core_rules.approval_required",
-      "reference": "See behavioral_rules section for complete rules"
     }
   },
   "infrastructure_preservation": {
@@ -2134,11 +2125,6 @@
   "file_processing": {
     "description": "File processing with phase-based validation integration and behavioral rule compliance",
     "validation_integration": "@ref:execution.phases.validation_integration",
-    "behavioral_compliance": {
-      "full_internalization": "@ref:behavioral_rules.core_rules.full_internalization",
-      "comprehensive_reading": "@ref:behavioral_rules.core_rules.comprehensive_reading",
-      "reference": "See behavioral_rules section for complete file processing rules"
-    },
     "individual_file_pipeline": [
       "@ref:execution.phases.validation_integration.early_phase.behavioral_rules_validation",
       "Detect file type, purpose, and project context",
@@ -2191,11 +2177,7 @@
         "post_checkout": "Environment setup and dependency validation"
       },
       "branching": "feature_branches", 
-      "merge": "squash_and_merge",
-      "behavioral_compliance": {
-        "main_branch_workflow": "@ref:behavioral_rules.core_rules.main_branch_workflow",
-        "reference": "See behavioral_rules section for complete GitHub workflow rules"
-      }
+      "merge": "squash_and_merge"
     },
     "automation": {
       "ci_cd": {
