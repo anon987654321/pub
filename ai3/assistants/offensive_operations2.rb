@@ -114,7 +114,7 @@ module Assistants
       distribute_article(article)
     end
 
-    def 3d_view_synthesis(gender)
+    def three_d_view_synthesis(gender)
       image_path = "path/to/target_image_#{gender}.jpg"
       # Generate multiple views using 3D synthesis
       views = generate_3d_views(image_path)
@@ -277,17 +277,6 @@ module Assistants
     def generate_article(topic); end
     def publish_article(article); end
     def generate_fake_profile(gender); end
-    defIt appears that the script's response was cut off due to the character limit. Here's the continuation and completion of the final script:
-
-```ruby
-    # Helper methods for various activities
-    def fetch_dataset(gender); end
-    def introduce_noise(value); end
-    def should_corrupt?(data); end
-    def fetch_related_texts(gender); end
-    def generate_article(topic); end
-    def publish_article(article); end
-    def generate_fake_profile(gender); end
     def join_online_community(group, profile); end
     def authenticate_to_system(system); end
     def extract_sensitive_data(system); end
@@ -296,52 +285,23 @@ module Assistants
     def segment_users(logs); end
     def create_segment_specific_content(segment); end
     def deliver_content(users, content); end
-    def find_exploit_for_target(target); end
-    def execute_exploit(target, exploit); end
-    def choose_social_engineering_approach(target); end
-    def execute_social_engineering(target, approach); end
-    def generate_misinformation_for_topic(topic); end
-    def distribute_misinformation(misinformation); end
-    def create_fake_profile_for_community(community); end
-    def participate_in_community_discussions(community, profile); end
-    def obtain_leaked_data(leak); end
-    def analyze_leaked_data(data); end
-    def use_exploited_data(data); end
-    def create_fake_event_details(event); end
-    def promote_fake_event(details); end
-    def gather_attendee_data(details); end
-    def gather_personal_info(target); end
-    def publish_personal_info(info); end
-    def assess_reputation(entity); end
-    def threshold; 50; end
-    def deploy_reputation_management_tactics(entity); end
-    def fetch_reviews(product); end
-    def alter_reviews(reviews); end
-    def post_altered_reviews(reviews); end
-    def create_sentiment_campaign(topic); end
-    def distribute_campaign(campaign); end
-    def monitor_campaign_impact(campaign); end
-    def select_harassment_tactics(target); end
-    def execute_harassment_tactics(target, tactics); end
-    def obtain_identity_data(identity); end
-    def misuse_identity(data); end
-    def create_fake_evidence(claim); end
-    def plant_evidence(evidence); end
-    def defend_fabricated_claim(claim, evidence); end
-    def develop_price_manipulation_tactics(stock); end
-    def execute_price_manipulation(stock, tactics); end
-    def select_scam_tactics(target); end
-    def execute_scam(target, tactics); end
-    def collect_scam_proceeds(target); end
-    def detect_deepfake(content); end
-    def cleanse_data(dataset); end
-    def scan_for_ai_generated_malware(system); end
-    def setup_secure_retrieval_augmentation; end
-    def detect_phishing_emails(emails); end
-    def bypass_content_moderation(platform); end
-    def manipulate_sentiment(topic); end
-    def simulate_adversarial_attack(system); end
-    def deploy_adaptive_threat_response(system); end
-    def conduct_information_warfare(target); end
+
+    # Helper methods for phishing and manipulation
+    def generate_phishing_emails; end
+    def send_phishing_email(email); end
+    def adjust_search_results(query); end
+    def hack_system(target); end
+    def engineer_socially(target); end
+    def spread_disinformation(topic); end
+    def join_community(community); end
+
+    # Helper methods for 3D and video processing
+    def generate_3d_views(image_path); end
+    def save_views(views, path); end
+    def apply_adversarial_modifications(video_path); end
+    def save_video(video, path); end
+    def simulate_chatbot_response(question, gender); end
+    def generate_ai_disinformation_article(topic); end
+    def distribute_article(article); end
   end
 end
