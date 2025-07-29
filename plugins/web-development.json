@@ -1,0 +1,91 @@
+{
+  "meta": {
+    "plugin_name": "web-development",
+    "version": "37.0.0",
+    "description": "Web development specific standards, patterns, and optimizations", 
+    "framework_version_compatibility": "37.x.x",
+    "plugin_type": "domain_plugin",
+    "dependencies": [
+      "universal-standards",
+      "quality-gates"
+    ]
+  },
+  "html_standards": {
+    "semantic_markup": "html5_semantic_elements_required",
+    "accessibility": "@ref:universal-standards.accessibility",
+    "seo_optimization": "meta_tags_structured_data_required",
+    "performance": "minification_compression_required"
+  },
+  "css_standards": {
+    "methodology": "bem_or_utility_first",
+    "responsive_design": "mobile_first_approach",
+    "performance": {
+      "critical_css": "above_fold_inline",
+      "bundle_size": "@ref:universal-standards.performance.resource_limits.bundle_size_max"
+    },
+    "accessibility": {
+      "contrast_ratios": "@ref:universal-standards.accessibility.contrast_minimum",
+      "focus_indicators": "visible_and_accessible"
+    }
+  },
+  "javascript_standards": {
+    "es_version": "es2022_minimum",
+    "module_system": "es_modules_preferred",
+    "performance": {
+      "bundle_splitting": "route_based_code_splitting",
+      "lazy_loading": "dynamic_imports_for_large_modules"
+    },
+    "accessibility": {
+      "aria_support": "comprehensive_implementation",
+      "keyboard_navigation": "full_support_required"
+    }
+  },
+  "framework_specific": {
+    "react": {
+      "version": "18_plus_with_concurrent_features",
+      "patterns": "hooks_functional_components",
+      "performance": "react_memo_use_callback_optimization"
+    },
+    "rails": {
+      "version": "7_plus_with_hotwire",
+      "patterns": "stimulus_turbo_integration",
+      "performance": "turbo_frames_streams_optimization"
+    },
+    "vue": {
+      "version": "3_plus_composition_api",
+      "patterns": "composition_api_preferred",
+      "performance": "vue_3_tree_shaking"
+    }
+  },
+  "performance_optimization": {
+    "core_web_vitals": "@ref:universal-standards.performance.core_web_vitals",
+    "image_optimization": {
+      "formats": "webp_avif_with_fallbacks",
+      "lazy_loading": "@ref:universal-standards.performance.resource_limits.lazy_loading",
+      "responsive_images": "srcset_sizes_attributes"
+    },
+    "caching_strategy": {
+      "static_assets": "long_term_caching_with_fingerprinting",
+      "api_responses": "appropriate_cache_headers",
+      "service_worker": "offline_first_progressive_enhancement"
+    }
+  },
+  "security_standards": {
+    "content_security_policy": "strict_csp_implementation",
+    "security_headers": "@ref:universal-standards.security.security_headers",
+    "input_validation": "client_and_server_side_validation",
+    "authentication": "@ref:universal-standards.security.authentication"
+  },
+  "testing_strategies": {
+    "unit_testing": "components_functions_utilities",
+    "integration_testing": "user_workflows_api_integration",
+    "end_to_end_testing": "critical_user_journeys",
+    "visual_regression": "component_screenshot_testing"
+  },
+  "deployment_patterns": {
+    "build_process": "optimized_production_builds",
+    "environment_management": "development_staging_production",
+    "monitoring": "performance_error_business_metrics",
+    "rollback_strategy": "zero_downtime_deployment"
+  }
+}
