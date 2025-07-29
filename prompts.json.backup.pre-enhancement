@@ -1,7 +1,7 @@
 {
   "meta": {
-    "version": "35.2.0",
-    "timestamp": "2025-07-29T21:08:05Z",
+    "version": "35.1.0",
+    "timestamp": "2025-01-27T10:00:00Z",
     "author": "anon987654321",
     "current_user": "anon987654321",
     "description": "Project completion framework for GitHub Copilot, Claude 4, Grok and other LLMs (optimized for zsh, Ruby, Ruby on Rails, OpenBSD)",
@@ -438,78 +438,6 @@
           "\u25b2",
           "\u25bc"
         ]
-      }
-    },
-    "enhanced_communication_system": {
-      "ultra_minimal_mode": {
-        "enabled": true,
-        "unix_style_status_indicators": {
-          "processing": "⚡",
-          "building": "⚙️",
-          "error": "❌",
-          "success": "✅",
-          "warning": "⚠️",
-          "info": "ℹ️"
-        },
-        "minimal_progress_format": "⚡ {action} [{progress}%]",
-        "single_line_updates": "enabled",
-        "noise_reduction": "maximum_signal_to_noise_ratio"
-      },
-      "temperature_controls": {
-        "precise_mode": {
-          "temperature": 0.1,
-          "description": "Maximum precision for critical operations",
-          "use_cases": ["security_implementations", "data_migrations", "production_deployments"]
-        },
-        "comprehensive_mode": {
-          "temperature": 0.9,
-          "description": "Enhanced creativity for complex problem solving",
-          "use_cases": ["architecture_design", "creative_solutions", "research_exploration"]
-        },
-        "balanced_mode": {
-          "temperature": 0.3,
-          "description": "Optimal balance for most development tasks",
-          "use_cases": ["standard_development", "refactoring", "testing"]
-        }
-      },
-      "notification_policies": {
-        "channels": {
-          "terminal": "primary_output_channel",
-          "status_bar": "secondary_progress_indication",
-          "log_file": "detailed_audit_trail",
-          "error_stream": "critical_issues_only"
-        },
-        "priority_levels": {
-          "critical": "immediate_attention_required",
-          "high": "prompt_response_needed",
-          "medium": "standard_workflow_notification",
-          "low": "informational_only"
-        },
-        "throttling": {
-          "max_notifications_per_minute": 10,
-          "duplicate_suppression": "enabled",
-          "priority_preservation": "critical_always_delivered"
-        }
-      },
-      "progress_indicators": {
-        "visual_symbols": {
-          "processing": "⚡",
-          "mechanical": "⚙️",
-          "error": "❌",
-          "success": "✅",
-          "validation": "🔍",
-          "optimization": "🎯"
-        },
-        "progress_bar_styles": {
-          "minimal": "▓▓▓▓▓░░░░░ 50%",
-          "standard": "[████████████████████████████████████████] 100%",
-          "compact": "⚡ 75%"
-        },
-        "adaptive_verbosity": {
-          "terse": "minimal_updates_essential_only",
-          "standard": "balanced_information_flow",
-          "verbose": "comprehensive_detailed_progress"
-        }
       }
     }
   },
@@ -1098,12 +1026,6 @@
           "enabled": true,
           "total_allocation": "100%",
           "allocation_strategy": {
-            "reconnaissance": "15%",
-            "architecture": "25%", 
-            "implementation": "45%",
-            "delivery": "15%"
-          },
-          "backup_allocation_strategy": {
             "analysis": "25%",
             "implementation": "40%",
             "validation": "20%",
@@ -1123,58 +1045,6 @@
             "allocation_alerts": "enabled",
             "rebalancing_triggers": "enabled",
             "performance_metrics": "enabled"
-          }
-        },
-        "self_validation_infrastructure": {
-          "description": "Real-time compliance tracking and enforcement system",
-          "enabled": true,
-          "real_time_compliance_tracking": {
-            "behavioral_rules_adherence": {
-              "monitoring_frequency": "continuous",
-              "violation_detection": "immediate",
-              "compliance_score_threshold": 95,
-              "auto_correction": "enabled_for_minor_violations"
-            },
-            "phase_completion_tracking": {
-              "analysis_phase": {
-                "required_artifacts": ["requirements", "constraints", "success_criteria"],
-                "completion_threshold": 100,
-                "validation_required": true
-              },
-              "implementation_phase": {
-                "required_artifacts": ["code", "tests", "documentation"],
-                "completion_threshold": 90,
-                "quality_gates": ["syntax", "style", "security"]
-              },
-              "delivery_phase": {
-                "required_artifacts": ["deployment", "monitoring", "rollback"],
-                "completion_threshold": 100,
-                "sign_off_required": true
-              }
-            },
-            "metrics_collection": {
-              "compliance_percentage": "real_time",
-              "phase_progress": "continuous",
-              "quality_score": "per_iteration",
-              "risk_assessment": "continuous"
-            }
-          },
-          "violation_detection_logging": {
-            "severity_levels": ["critical", "high", "medium", "low"],
-            "logging_format": "structured_json",
-            "retention_period": "30_days",
-            "escalation_rules": {
-              "critical": "immediate_halt",
-              "high": "require_approval", 
-              "medium": "log_and_continue",
-              "low": "log_only"
-            }
-          },
-          "enforcement_actions": {
-            "blocking_violations": ["security_breach", "data_loss_risk", "compliance_failure"],
-            "warning_violations": ["style_deviation", "performance_concern", "maintenance_debt"],
-            "auto_remediation": ["formatting", "basic_security", "standard_compliance"],
-            "manual_review_required": ["architecture_changes", "breaking_changes", "security_model_updates"]
           }
         }
       },
@@ -1462,82 +1332,22 @@
     }
   },
   "infrastructure_preservation": {
-    "description": "Infrastructure preservation with database safeguards, domain protection, and critical settings backup",
-    "database_detection_methods": {
-      "config_parse": {
-        "enabled": true,
-        "supported_formats": ["yaml", "json", "env", "toml", "ini"],
-        "search_patterns": ["database_url", "db_host", "connection_string"],
-        "extraction_rules": "comprehensive_credential_detection"
-      },
-      "connection_test": {
-        "enabled": true,
-        "protocols": ["postgresql", "mysql", "sqlite", "mongodb", "redis"],
-        "timeout_seconds": 5,
-        "validation_queries": {
-          "postgresql": "SELECT version()",
-          "mysql": "SELECT @@version",
-          "sqlite": "PRAGMA schema_version"
-        },
-        "health_checks": "comprehensive_connectivity_validation"
-      },
-      "process_scan": {
-        "enabled": true,
-        "scan_targets": ["database_processes", "connection_pools", "background_workers"],
-        "system_detection": "automatic_service_discovery",
-        "performance_impact": "minimal_overhead_monitoring"
-      }
-    },
-    "domain_preservation": {
-      "dns_inspection": {
-        "enabled": true,
-        "record_types": ["A", "AAAA", "CNAME", "MX", "TXT", "NS"],
-        "dns_propagation_check": "global_resolver_validation",
-        "subdomain_discovery": "automated_enumeration",
-        "backup_dns_configuration": "complete_zone_file_preservation"
-      },
-      "certificate_inspection": {
-        "ssl_tls_validation": "comprehensive_certificate_analysis",
-        "certificate_chain_verification": "full_trust_path_validation",
-        "expiration_monitoring": "automated_renewal_tracking",
-        "certificate_backup": "private_key_secure_storage",
-        "supported_protocols": ["TLS_1_2", "TLS_1_3"]
-      },
-      "domain_ownership_verification": {
-        "whois_validation": "automated_ownership_confirmation",
-        "administrative_contact_verification": "secure_validation_process",
-        "domain_transfer_protection": "lock_status_monitoring"
-      }
-    },
-    "critical_settings_backup": {
-      "postgresql": {
-        "configuration_files": ["postgresql.conf", "pg_hba.conf", "pg_ident.conf"],
-        "system_settings": ["shared_preload_libraries", "max_connections", "work_mem"],
-        "user_privileges": "complete_role_permission_matrix",
-        "database_schemas": "full_ddl_extraction",
-        "backup_frequency": "real_time_on_change"
-      },
-      "mysql": {
-        "configuration_files": ["my.cnf", "mysqld.cnf"],
-        "system_variables": ["innodb_buffer_pool_size", "max_connections", "query_cache_size"],
-        "user_accounts": "complete_privilege_mapping",
-        "database_structures": "full_schema_backup",
-        "replication_settings": "master_slave_configuration_preservation"
-      },
-      "sqlite": {
-        "database_files": "complete_file_system_backup",
-        "pragma_settings": "runtime_configuration_preservation",
-        "wal_checkpoint": "write_ahead_log_management",
-        "integrity_checks": "automated_corruption_detection"
-      }
+    "description": "Infrastructure preservation with database safeguards",
+    "database": {
+      "methods": [
+        "config_parse",
+        "connection_test",
+        "process_scan"
+      ],
+      "dbs": [
+        "postgres",
+        "mysql",
+        "sqlite"
+      ]
     },
     "safeguards": {
       "priority": "highest",
-      "policy": "enhance_only",
-      "backup_verification": "automated_restore_testing",
-      "rollback_capability": "instant_configuration_restoration",
-      "change_tracking": "comprehensive_audit_logging",
-      "disaster_recovery": "multi_location_backup_strategy"
+      "policy": "enhance_only"
     }
   },
   "ai_enhancement": {
@@ -2398,85 +2208,15 @@
       }
     },
     "security_policies": {
-      "openbsd_specific": {
-        "pledge_unveil_support": {
-          "enabled": true,
-          "automatic_privilege_set_generation": {
-            "analysis_based": "comprehensive_system_call_analysis",
-            "minimal_privilege_principle": "strict_capability_reduction",
-            "dynamic_adjustment": "runtime_privilege_optimization",
-            "validation_testing": "automated_privilege_verification"
-          },
-          "pledge_domains": {
-            "stdio": "standard_input_output_operations",
-            "rpath": "read_only_file_system_access",
-            "wpath": "write_file_system_access",
-            "cpath": "create_delete_file_operations",
-            "dpath": "create_delete_directory_operations",
-            "inet": "network_socket_operations",
-            "unix": "unix_domain_socket_operations",
-            "dns": "domain_name_resolution",
-            "proc": "process_management_operations",
-            "exec": "execute_binary_programs"
-          },
-          "unveil_path_management": {
-            "filesystem_sandboxing": "strict_path_access_control",
-            "minimal_access_principle": "only_required_paths_exposed",
-            "recursive_permissions": "directory_tree_access_control",
-            "permission_types": ["r", "w", "x", "c"]
-          }
-        },
-        "security_by_default": {
-          "privilege_separation": "automatic_process_isolation",
-          "memory_protection": "stack_heap_protection_enabled",
-          "address_space_randomization": "aslr_mandatory",
-          "stack_canaries": "buffer_overflow_protection"
-        }
-      },
-      "automatic_privilege_generation": {
-        "system_call_analysis": {
-          "static_analysis": "source_code_syscall_detection",
-          "dynamic_analysis": "runtime_syscall_monitoring",
-          "dependency_analysis": "library_requirement_mapping",
-          "privilege_minimization": "least_required_capabilities"
-        },
-        "privilege_validation": {
-          "testing_framework": "automated_privilege_verification",
-          "functionality_preservation": "feature_completeness_validation",
-          "security_verification": "attack_surface_reduction_confirmation",
-          "performance_impact": "minimal_overhead_measurement"
-        }
+      "openbsd": {
+        "pledge": "Auto-generation with minimal privileges",
+        "unveil": "Path sandboxing with minimal access"
       }
     },
-    "norwegian_business_compliance": {
-      "localization": {
-        "language": "nb_NO_required",
-        "currency": "NOK_standard",
-        "date_format": "dd.mm.yyyy",
-        "number_format": "space_thousands_comma_decimal",
-        "time_zone": "Europe_Oslo_CET_CEST"
-      },
-      "legal_compliance": {
-        "framework": "norwegian_law_compliance",
-        "data_protection": "gdpr_and_norwegian_extensions",
-        "business_registration": "brønnøysund_register_integration",
-        "tax_compliance": "skatteetaten_requirements",
-        "accounting_standards": "norwegian_gaap_compliance"
-      },
-      "regulatory_requirements": {
-        "financial_reporting": "regnskapsloven_compliance",
-        "privacy_protection": "personopplysningsloven_adherence",
-        "consumer_protection": "forbrukerkjøpsloven_compliance",
-        "accessibility": "universell_utforming_requirements",
-        "security_framework": "nsm_guidelines_implementation"
-      },
-      "business_practices": {
-        "payment_methods": ["vipps", "bank_transfer", "card_payment"],
-        "invoice_requirements": "norwegian_invoice_format",
-        "vat_handling": "mva_calculation_and_reporting",
-        "business_hours": "norwegian_standard_working_hours",
-        "holiday_calendar": "norwegian_public_holidays"
-      }
+    "norwegian_business": {
+      "language": "nb_NO_required",
+      "currency": "NOK_standard",
+      "legal": "norwegian_law"
     }
   },
   "documentation": {
@@ -3010,68 +2750,6 @@
       "gate_based_validation": "mandatory_quality_checkpoints",
       "automated_correction": "self_healing_quality_improvements",
       "escalation_protocols": "progressive_validation_enforcement"
-    },
-    "advanced_validation_pipeline": {
-      "description": "Comprehensive validation pipeline with no-truncation enforcement and rollback capabilities",
-      "strict_output_management": {
-        "no_truncation_policy": "absolute_enforcement",
-        "complete_output_guarantee": "100_percent_preservation",
-        "content_integrity_verification": "real_time_checksum_validation",
-        "truncation_detection": {
-          "monitoring": "continuous",
-          "alert_threshold": "any_missing_character",
-          "response": "immediate_halt_and_regeneration"
-        }
-      },
-      "iteration_validation": {
-        "rollback_capabilities": {
-          "automatic_state_preservation": "before_each_iteration",
-          "validation_checkpoints": "after_each_major_change",
-          "rollback_triggers": ["quality_degradation", "functionality_loss", "compliance_failure"],
-          "recovery_time_limit": "30_seconds_maximum"
-        },
-        "iteration_quality_gates": {
-          "syntax_validation": "mandatory_before_progression",
-          "semantic_validation": "context_awareness_check",
-          "regression_testing": "automated_previous_functionality_verification",
-          "progressive_improvement": "quality_score_must_maintain_or_improve"
-        }
-      },
-      "runtime_type_checking": {
-        "enabled": true,
-        "type_safety_enforcement": {
-          "json_schema_validation": "strict_conformance_required",
-          "yaml_syntax_verification": "real_time_parsing_validation",
-          "data_structure_integrity": "type_consistency_enforcement",
-          "cross_reference_type_validation": "reference_target_existence_verification"
-        },
-        "schema_validation": {
-          "json_validation": {
-            "schema_enforcement": "json_schema_draft_2020_12",
-            "syntax_checking": "real_time_parsing",
-            "structure_validation": "recursive_property_verification"
-          },
-          "yaml_validation": {
-            "syntax_enforcement": "yaml_1_2_specification",
-            "indentation_validation": "strict_spacing_requirements",
-            "anchor_reference_validation": "circular_reference_detection"
-          }
-        }
-      },
-      "ambiguity_detection": {
-        "language_analysis": {
-          "vague_terms_detection": ["maybe", "could", "might", "possibly", "perhaps"],
-          "precision_requirements": "specific_quantifiable_statements_required",
-          "clarity_scoring": "strunk_white_principles_application",
-          "improvement_suggestions": "automatic_clarity_enhancement_recommendations"
-        },
-        "requirement_precision": {
-          "threshold_specification": "all_limits_must_include_units_and_ranges",
-          "success_criteria_clarity": "measurable_verifiable_criteria_required",
-          "edge_case_specification": "boundary_condition_explicit_definition",
-          "failure_mode_specification": "comprehensive_error_scenario_coverage"
-        }
-      }
     }
   },
   "_validation": {
