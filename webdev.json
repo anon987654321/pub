@@ -1,0 +1,71 @@
+{
+  "tech_stack_specificity": {
+    "ruby_rails_patterns": {
+      "rails_8_plus": {
+        "frozen_string_literal": "# frozen_string_literal: true at top of every Ruby file",
+        "stimulus_hotwire": "use_stimulus_controllers_for_javascript_behavior",
+        "turbo_drive": "leverage_turbo_for_spa_like_navigation",
+        "action_cable": "real_time_features_through_websockets",
+        "solid_queue": "background_job_processing_with_solid_queue"
+      },
+      "ruby_conventions": {
+        "naming": "snake_case_for_variables_methods_PascalCase_for_classes",
+        "method_organization": "public_protected_private_clear_separation",
+        "error_handling": "explicit_exception_handling_rescue_specific_errors",
+        "testing": "rspec_for_behavior_driven_development",
+        "documentation": "yard_documentation_for_public_apis"
+      },
+      "performance_patterns": {
+        "database": "active_record_includes_to_avoid_n_plus_1_queries",
+        "caching": "fragment_caching_russian_doll_caching_strategies",
+        "background_jobs": "sidekiq_or_solid_queue_for_async_processing",
+        "monitoring": "new_relic_or_skylight_for_performance_monitoring"
+      }
+    },
+    
+    "openbsd_security": {
+      "security_principles": {
+        "principle_of_least_privilege": "minimal_permissions_for_all_processes",
+        "privilege_separation": "separate_processes_for_different_functions",
+        "pledge_unveil": "system_call_restrictions_file_access_limitations",
+        "default_deny": "block_everything_by_default_allow_explicitly"
+      },
+      "system_hardening": {
+        "network_security": "pf_firewall_configuration_intrusion_detection",
+        "file_permissions": "proper_ownership_chmod_settings_immutable_flags",
+        "service_management": "minimal_running_services_regular_updates",
+        "monitoring": "log_analysis_anomaly_detection_security_audits"
+      }
+    },
+    
+    "zsh_scripting": {
+      "script_standards": {
+        "shebang": "#!/usr/bin/env zsh for portability",
+        "error_handling": "set -euo pipefail for strict error handling",
+        "variables": "use_local_variables_avoid_global_pollution",
+        "functions": "modular_functions_with_clear_responsibilities"
+      },
+      "best_practices": {
+        "parameter_expansion": "use_zsh_parameter_expansion_features",
+        "arrays": "leverage_zsh_associative_arrays_and_indexing",
+        "globbing": "extended_globbing_patterns_for_file_matching",
+        "completion": "custom_completion_functions_for_user_scripts"
+      }
+    },
+    
+    "interface_design_rules": {
+      "responsive_design": {
+        "mobile_first": "design_for_mobile_first_progressive_enhancement",
+        "breakpoints": "content_based_breakpoints_not_device_specific",
+        "touch_targets": "minimum_44px_touch_targets_for_accessibility",
+        "performance": "optimize_for_slow_networks_and_older_devices"
+      },
+      "accessibility": {
+        "wcag_aaa": "meet_wcag_2_2_aaa_standards_where_possible",
+        "keyboard_navigation": "full_keyboard_accessibility_focus_management",
+        "screen_readers": "proper_aria_labels_semantic_markup",
+        "color_contrast": "7_1_contrast_ratio_for_normal_text_4_5_1_for_large"
+      }
+    }
+  }
+}

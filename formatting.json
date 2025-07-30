@@ -1,0 +1,73 @@
+{
+  "formatting_rules": {
+    "indentation": {
+      "standard": "2_spaces",
+      "consistency": "never_mix_tabs_spaces",
+      "enforcement": "automated_linting",
+      "files": ["html", "css", "js", "ruby", "yaml", "json"]
+    },
+    "quotes": {
+      "javascript": "double_quotes_preferred",
+      "ruby": "double_quotes_for_interpolation_single_for_static",
+      "html": "double_quotes_for_attributes",
+      "css": "single_quotes_for_strings",
+      "json": "double_quotes_required"
+    },
+    "semantic_html5": {
+      "structure": "use_semantic_elements_nav_main_section_article_aside_header_footer",
+      "accessibility": "proper_heading_hierarchy_alt_texts_aria_labels",
+      "validation": "w3c_html5_validator_clean",
+      "performance": "minimal_dom_nesting_efficient_selectors"
+    },
+    "css_root_variables": {
+      "organization": "root_level_custom_properties_for_design_tokens",
+      "naming": "semantic_names_not_presentational",
+      "scope": "global_variables_component_specific_overrides",
+      "fallbacks": "provide_fallback_values_for_browser_compatibility"
+    }
+  },
+  
+  "error_handling": {
+    "rollback_capabilities": {
+      "database_transactions": "atomic_operations_with_rollback_on_failure",
+      "file_operations": "backup_before_modification_restore_on_error",
+      "configuration_changes": "version_control_for_all_config_files",
+      "deployment": "blue_green_deployment_with_instant_rollback"
+    },
+    "validation_gates": {
+      "input_validation": "sanitize_and_validate_all_user_inputs",
+      "type_checking": "strict_type_checking_where_language_supports",
+      "boundary_conditions": "test_edge_cases_and_limit_conditions",
+      "integration_testing": "end_to_end_tests_for_critical_user_paths"
+    },
+    "integrity_checking": {
+      "data_integrity": "checksums_and_validation_for_critical_data",
+      "api_responses": "validate_response_structure_and_content",
+      "file_integrity": "hash_verification_for_uploaded_files",
+      "system_health": "monitoring_and_alerting_for_system_anomalies"
+    }
+  },
+  
+  "modular_architecture": {
+    "plugin_system": {
+      "hot_reload": {
+        "mechanism": "dynamic_module_loading_without_server_restart",
+        "file_watching": "monitor_plugin_files_for_changes",
+        "state_preservation": "maintain_application_state_during_reload",
+        "error_isolation": "plugin_errors_dont_crash_main_application"
+      },
+      "dependency_management": {
+        "resolution": "automatic_dependency_resolution_with_version_compatibility",
+        "loading_order": "topological_sort_for_dependency_loading",
+        "circular_dependencies": "detection_and_prevention_of_circular_dependencies",
+        "version_compatibility": "semantic_versioning_for_plugin_compatibility"
+      }
+    },
+    "module_interfaces": {
+      "standard_api": "consistent_interface_for_all_modules",
+      "event_system": "publish_subscribe_pattern_for_module_communication",
+      "configuration": "standardized_configuration_format_across_modules",
+      "lifecycle_hooks": "initialization_activation_deactivation_cleanup_hooks"
+    }
+  }
+}
