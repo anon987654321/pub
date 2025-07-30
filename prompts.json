@@ -6,8 +6,6 @@
     "current_user": "anon987654321",
     "description": "Project completion framework for GitHub Copilot, Claude 4, Grok and other LLMs (optimized for zsh, Ruby, Ruby on Rails, OpenBSD)",
     "self_validated": true,
-    "upgrade_notice": "Framework v37.0.0 with modular plugin architecture now available in prompts-v37.json",
-    "architectural_evolution": "This monolithic version improved to modular plugin-based v37.0.0",
     "auto_applies_to": "every_file_and_entire_projects",
     "compliance": [
       "WCAG_2_2_AAA",
