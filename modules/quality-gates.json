@@ -43,7 +43,8 @@
     "pre_deploy": {
       "security_audit": "comprehensive_scan",
       "accessibility_compliance": "automated_verification",
-      "performance_validation": "core_web_vitals_check"
+      "performance_validation": "core_web_vitals_check",
+      "copilot_context_alignment": "@ref:copilot-optimization.validation_framework.copilot_context_alignment"
     }
   },
   "monitoring_systems": {
@@ -85,6 +86,12 @@
       "coverage": "@ref:universal-standards.quality_gates.documentation_coverage",
       "accuracy": "automated_verification_where_possible",
       "accessibility": "clear_concise_comprehensive"
+    },
+    "copilot_optimization_metrics": {
+      "context_alignment_accuracy": "@ref:copilot-optimization.optimization_strategies.context_alignment_enhancement.target_accuracy",
+      "suggestion_relevance_score": "@ref:copilot-optimization.optimization_strategies.suggestion_relevance_optimization.target_score",
+      "workflow_disruption_reduction": "@ref:copilot-optimization.optimization_strategies.workflow_disruption_reduction.target_reduction",
+      "edge_case_coverage": "@ref:copilot-optimization.optimization_strategies.edge_case_coverage.target_coverage"
     }
   },
   "continuous_improvement": {
