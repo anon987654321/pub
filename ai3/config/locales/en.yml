@@ -1,0 +1,8 @@
+en:
+  welcome: "Welcome to AI³ (AI Cubed)"
+  errors:
+    not_found: "Command not found"
+    invalid_input: "Invalid input"
+  messages:
+    starting: "Starting AI³ session..."
+    goodbye: "Goodbye!"
