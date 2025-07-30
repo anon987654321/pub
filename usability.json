@@ -1,0 +1,282 @@
+{
+  "design_intelligence": {
+    "deep_ux_psychology": {
+      "nielsen_norman_group_heuristics": {
+        "visibility_of_system_status": {
+          "principle": "Keep users informed about what is going on through appropriate feedback within reasonable time",
+          "cognitive_psychology_foundation": "Human attention and working memory limitations require continuous feedback",
+          "implementation": "Real-time status indicators, progress bars, loading states, error messages",
+          "validation_criteria": "User can always understand current system state within 2 seconds"
+        },
+        "match_system_real_world": {
+          "principle": "Speak the users' language with words, phrases and concepts familiar to the user",
+          "cognitive_psychology_foundation": "Schema theory - humans organize knowledge in familiar patterns",
+          "implementation": "Domain-specific terminology, familiar metaphors, cultural context awareness",
+          "validation_criteria": "Interface terminology matches user mental models and cultural expectations"
+        },
+        "user_control_freedom": {
+          "principle": "Provide undo and redo functionality, emergency exits for unwanted states",
+          "cognitive_psychology_foundation": "Psychological safety and autonomy theory - users need sense of control",
+          "implementation": "Undo/redo, cancel operations, clear exit paths, recovery mechanisms",
+          "validation_criteria": "Users can always reverse or escape from unwanted actions"
+        },
+        "consistency_standards": {
+          "principle": "Follow platform conventions and maintain internal consistency",
+          "cognitive_psychology_foundation": "Cognitive load theory - consistent patterns reduce mental effort",
+          "implementation": "Design system enforcement, pattern library usage, platform-specific guidelines",
+          "validation_criteria": "Interface patterns consistent within application and with platform standards"
+        },
+        "error_prevention": {
+          "principle": "Prevent problems before they occur through good design",
+          "cognitive_psychology_foundation": "Error detection and prevention in human cognition",
+          "implementation": "Input validation, confirmation dialogs, guided workflows, smart defaults",
+          "validation_criteria": "Common errors prevented through design, not just handled"
+        },
+        "recognition_over_recall": {
+          "principle": "Make objects, actions, and options visible to minimize memory load",
+          "cognitive_psychology_foundation": "Recognition memory is superior to recall memory",
+          "implementation": "Visible navigation, clear labeling, contextual help, progressive disclosure",
+          "validation_criteria": "Users don't need to remember information from one part of interface to another"
+        },
+        "flexibility_efficiency": {
+          "principle": "Provide accelerators for expert users while maintaining novice accessibility",
+          "cognitive_psychology_foundation": "Skill acquisition theory - different interfaces for different expertise levels",
+          "implementation": "Keyboard shortcuts, customizable interfaces, power user features, guided modes",
+          "validation_criteria": "Both novice and expert users can accomplish tasks efficiently"
+        },
+        "aesthetic_minimalist_design": {
+          "principle": "Dialogues should not contain irrelevant or rarely needed information",
+          "cognitive_psychology_foundation": "Attention theory - irrelevant information competes for cognitive resources",
+          "implementation": "Information hierarchy, progressive disclosure, contextual relevance, clean layouts",
+          "validation_criteria": "Every element serves a clear purpose and supports user goals"
+        },
+        "help_users_recognize_diagnose_recover": {
+          "principle": "Error messages in plain language, precisely indicate problem, suggest solution",
+          "cognitive_psychology_foundation": "Error recovery and learning from failure",
+          "implementation": "Clear error messages, suggested solutions, recovery guidance, learning opportunities",
+          "validation_criteria": "Users can understand, diagnose, and recover from errors independently"
+        },
+        "help_documentation": {
+          "principle": "Provide searchable, focused, concrete help when needed",
+          "cognitive_psychology_foundation": "Just-in-time learning and contextual assistance",
+          "implementation": "Contextual help, searchable documentation, interactive tutorials, progressive guidance",
+          "validation_criteria": "Help is discoverable, relevant, and actionable when users need it"
+        }
+      },
+      "cognitive_psychology_foundations": {
+        "working_memory_limits": {
+          "principle": "Miller's Rule - humans can hold 7±2 items in working memory",
+          "design_application": "Limit choices, chunk information, use progressive disclosure",
+          "implementation": "Navigation menus ≤7 items, form sections, step-by-step processes"
+        },
+        "attention_theory": {
+          "principle": "Humans have limited attention capacity that can be directed and divided",
+          "design_application": "Visual hierarchy, focus management, distraction reduction",
+          "implementation": "Clear focal points, minimal competing elements, attention-directing cues"
+        },
+        "gestalt_principles": {
+          "proximity": "Elements close together are perceived as related",
+          "similarity": "Similar elements are perceived as grouped",
+          "closure": "Mind fills in gaps to create complete shapes",
+          "continuity": "Eyes follow smooth paths and lines",
+          "figure_ground": "Distinguish between foreground and background elements",
+          "implementation": "Consistent spacing, visual grouping, clear separation, guided eye movement"
+        },
+        "schema_theory": {
+          "principle": "Humans organize knowledge in structured patterns based on experience",
+          "design_application": "Leverage familiar patterns, respect conventions, support mental models",
+          "implementation": "Standard interface patterns, familiar workflows, intuitive information architecture"
+        },
+        "dual_coding_theory": {
+          "principle": "Information processed through both verbal and visual channels",
+          "design_application": "Combine text and visuals effectively, avoid redundancy",
+          "implementation": "Meaningful icons with labels, visual demonstrations, multimodal feedback"
+        }
+      }
+    },
+    
+    "swiss_international_typography": {
+      "helvetica_school_excellence": {
+        "philosophy": "Clarity, objectivity, and functional beauty through geometric precision",
+        "principles": {
+          "objectivity": "Typography should be neutral and not impose personality",
+          "clarity": "Information should be presented with maximum legibility",
+          "functionality": "Form follows function in typographic choices",
+          "universality": "Design should transcend cultural and temporal boundaries"
+        },
+        "implementation": {
+          "font_selection": "Sans-serif typefaces with clean geometric forms",
+          "hierarchy": "Clear typographic hierarchy through size, weight, and spacing",
+          "alignment": "Left-aligned text for optimal readability",
+          "spacing": "Generous white space for breathing room and focus",
+          "color": "High contrast for accessibility, minimal color palette"
+        }
+      },
+      "grid_systems": {
+        "modular_grid": {
+          "principle": "Systematic organization of information through mathematical relationships",
+          "baseline_grid": "Consistent vertical rhythm through baseline alignment",
+          "column_grid": "Horizontal organization through columnar structure",
+          "implementation": "CSS Grid, 8px base unit, modular scale typography"
+        },
+        "proportional_systems": {
+          "golden_ratio": "1.618 ratio for harmonious proportions",
+          "rule_of_thirds": "Division into three equal parts for visual balance",
+          "fibonacci_sequence": "Natural mathematical progression for scaling",
+          "implementation": "Layout proportions, spacing ratios, sizing relationships"
+        }
+      },
+      "modernist_principles": {
+        "less_is_more": "Reduction to essential elements for maximum impact",
+        "form_follows_function": "Visual form should serve informational purpose",
+        "truth_to_materials": "Design should respect medium and context",
+        "systematic_approach": "Consistent methodology applied across all elements",
+        "implementation": {
+          "minimalism": "Remove decorative elements that don't serve function",
+          "consistency": "Systematic application of design decisions",
+          "hierarchy": "Clear information hierarchy through visual weight",
+          "rhythm": "Consistent patterns and repetition for unity"
+        }
+      }
+    },
+    
+    "parametric_architecture": {
+      "swarm_intelligence": {
+        "principle": "Collective behavior emerges from simple rules followed by autonomous agents",
+        "design_application": {
+          "adaptive_layouts": "Interface elements that respond to user behavior patterns",
+          "emergent_navigation": "Navigation structures that evolve based on usage data",
+          "collective_optimization": "System-wide improvements from individual user interactions",
+          "distributed_decision_making": "Decentralized processing for performance and resilience"
+        },
+        "implementation": {
+          "agent_based_components": "UI components that learn and adapt independently",
+          "feedback_loops": "Continuous optimization based on user interaction data",
+          "emergence_detection": "Recognition of patterns in user behavior for system evolution",
+          "swarm_algorithms": "Particle swarm optimization for layout and performance tuning"
+        }
+      },
+      "tectonism": {
+        "principle": "Architecture emerges from structural and material logic",
+        "design_application": {
+          "structural_honesty": "Interface structure reflects underlying data and logic",
+          "material_authenticity": "Digital materials behave according to their true properties",
+          "tectonic_expression": "Visual language emerges from technical constraints and possibilities",
+          "systematic_construction": "Building blocks that combine according to clear rules"
+        },
+        "implementation": {
+          "component_systems": "Modular building blocks with clear assembly rules",
+          "responsive_structures": "Layouts that adapt based on content and context",
+          "material_design": "Visual elements that reflect their digital nature",
+          "generative_patterns": "Design patterns that emerge from systematic rules"
+        }
+      },
+      "adaptive_generation": {
+        "city_planning_algorithms": {
+          "organic_growth": "Systems that grow and evolve naturally over time",
+          "zoning_logic": "Functional areas that emerge from usage patterns",
+          "transportation_networks": "Efficient routing and connection systems",
+          "density_optimization": "Balanced distribution of elements and information"
+        },
+        "hospital_spatial_optimization": {
+          "workflow_efficiency": "Layouts optimized for critical path processes",
+          "wayfinding_clarity": "Intuitive navigation under stress conditions",
+          "flexibility_planning": "Adaptable spaces for changing requirements",
+          "healing_environments": "Biophilic design principles for well-being"
+        },
+        "implementation": {
+          "algorithmic_layout": "Automated layout generation based on content and usage",
+          "evolutionary_optimization": "Continuous improvement through generational selection",
+          "constraint_satisfaction": "Meeting multiple requirements through optimization",
+          "predictive_adaptation": "Anticipating user needs through pattern analysis"
+        }
+      }
+    },
+    
+    "snl_no_responsive_analysis": {
+      "mobile_first_methodology": {
+        "principle": "Design for smallest screen first, progressively enhance",
+        "breakpoint_strategy": {
+          "mobile": "320px-768px - Core functionality and content",
+          "tablet": "768px-1024px - Enhanced layouts and secondary features",
+          "desktop": "1024px+ - Full feature set and optimized workflows"
+        },
+        "content_prioritization": {
+          "critical_path": "Essential user tasks accessible on smallest screens",
+          "progressive_disclosure": "Additional features revealed on larger screens",
+          "contextual_adaptation": "Content and features adapt to device capabilities"
+        }
+      },
+      "academic_clarity": {
+        "information_architecture": {
+          "hierarchical_structure": "Clear parent-child relationships in content",
+          "categorical_organization": "Logical grouping of related information",
+          "cross_referencing": "Connections between related concepts and resources",
+          "progressive_complexity": "Information presented in order of increasing complexity"
+        },
+        "readability_optimization": {
+          "typography": "Academic-grade readability with serif fonts for body text",
+          "line_length": "45-75 characters for optimal reading comprehension",
+          "line_height": "1.4-1.6 for comfortable vertical rhythm",
+          "contrast": "Minimum 7:1 contrast ratio for academic accessibility"
+        }
+      },
+      "performance_optimization": {
+        "loading_strategies": {
+          "critical_css": "Above-the-fold styles loaded immediately",
+          "lazy_loading": "Progressive loading of non-critical resources",
+          "resource_hints": "Preload, prefetch, and preconnect for performance",
+          "code_splitting": "Modular loading based on user interaction"
+        },
+        "bandwidth_considerations": {
+          "image_optimization": "WebP format with fallbacks, responsive images",
+          "font_optimization": "WOFF2 compression, font-display: swap",
+          "asset_minimization": "Minified CSS/JS, gzip compression",
+          "caching_strategy": "Aggressive caching for static assets"
+        }
+      }
+    },
+    
+    "cultural_sensitivity": {
+      "global_accessibility": {
+        "language_support": {
+          "internationalization": "i18n framework for multi-language support",
+          "rtl_support": "Right-to-left language layout compatibility",
+          "character_encoding": "UTF-8 support for global character sets",
+          "locale_adaptation": "Date, number, and currency format localization"
+        },
+        "cultural_color_psychology": {
+          "western_cultures": "Blue trust, green success, red urgency/error",
+          "eastern_cultures": "Red prosperity/luck, white mourning/purity variations",
+          "middle_eastern": "Green sacred/nature, gold prosperity, color significance",
+          "implementation": "Configurable color schemes based on cultural context"
+        },
+        "gesture_and_interaction": {
+          "touch_patterns": "Cultural differences in touch and gesture expectations",
+          "reading_patterns": "F-pattern (Western) vs. different cultural reading behaviors",
+          "navigation_expectations": "Cultural conventions for menu placement and interaction"
+        }
+      },
+      "ethical_design_decisions": {
+        "privacy_by_design": {
+          "data_minimization": "Collect only necessary data for functionality",
+          "consent_management": "Clear, granular consent mechanisms",
+          "transparency": "Open about data collection and usage practices",
+          "user_control": "Easy access to data modification and deletion"
+        },
+        "inclusive_design": {
+          "accessibility": "Universal design principles for all abilities",
+          "economic_accessibility": "Functionality across device and connection quality",
+          "cognitive_accessibility": "Support for different learning and processing styles",
+          "age_inclusivity": "Usable across different age groups and technical literacy"
+        },
+        "dark_patterns_avoidance": {
+          "honest_defaults": "Default settings that benefit users, not business",
+          "clear_pricing": "Transparent cost structure and billing practices",
+          "easy_cancellation": "Simple processes for subscription cancellation",
+          "informed_consent": "Clear explanation of consequences before user action"
+        }
+      }
+    }
+  }
+}
