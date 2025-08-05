@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neuralink AppStore - Forretningsplan for Innovasjon Norge</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chart.js for financial projections -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* CSS Variables */
+        :root {
+            --primary-color: #000000;
+            --background-color: #ffffff;
+            --text-color: #333333;
+            --accent-color: #0078ff;
+            --neural-color: #8a2be2;
+            --font-family: 'Inter', sans-serif;
+        }
+
+        /* General Styles */
+        body {
+            margin: 0;
+            font-family: var(--font-family);
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            font-size: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Logo Container */
+        .logo-wrapper {
+            position: relative;
+            display: inline-block;
+            margin: 2rem 0;
+        }
+
+        /* Neural network inspired animated logo */
+        .logo-container {
+            font-family: 'Black Han Sans', sans-serif;
+            font-size: 70px;
+            color: transparent;
+            background: linear-gradient(45deg, #0078ff, #8a2be2, #ff0080, #0078ff);
+            background-size: 400%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            animation: gradientMove 5s infinite linear, neuralPulse 2s infinite ease-in-out;
+            position: relative;
+        }
+
+        .trademark-symbol {
+            position: absolute;
+            top: -10px;
+            right: -15px;
+            font-size: 16px;
+            color: var(--text-color);
+            font-family: var(--font-family);
+        }
+
+        /* Animations */
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes neuralPulse {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.2) drop-shadow(0 0 20px rgba(138, 43, 226, 0.5)); }
+        }
+
+        /* Header styling */
+        header {
+            text-align: center;
+            padding: 20px;
+            background-color: var(--background-color);
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .header-text {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: var(--text-color);
+            margin-top: 1rem;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        /* Main content */
+        main {
+            max-width: 1000px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        section {
+            padding: 3rem 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        section:last-child {
+            border-bottom: none;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        h2::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(45deg, var(--accent-color), var(--neural-color));
+            margin: 1rem auto;
+        }
+
+        h3 {
+            font-size: 1.8rem;
+            color: var(--neural-color);
+            margin-bottom: 1.5rem;
+        }
+
+        h4 {
+            font-size: 1.3rem;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        p {
+            font-size: 1.1rem;
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        /* Chart container */
+        .chart-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 1rem;
+            background: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        /* Highlight boxes */
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(0, 120, 255, 0.1), rgba(138, 43, 226, 0.1));
+            border-left: 4px solid var(--neural-color);
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+        }
+
+        .tech-spec {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+        }
+
+        /* Financial table */
+        .financial-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .financial-table th, .financial-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .financial-table th {
+            background-color: var(--neural-color);
+            color: white;
+            font-weight: 600;
+        }
+
+        .financial-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .logo-container {
+                font-size: 50px;
+            }
+            
+            main {
+                margin: 2rem auto;
+                padding: 0 1rem;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+            
+            section {
+                padding: 2rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <!-- Logo Wrapper with TM Symbol -->
+        <div class="logo-wrapper">
+            <div class="logo-container">
+                NEURALINK
+            </div>
+            <div class="trademark-symbol">™</div>
+        </div>
+        <div class="header-text">
+            Revolusjonerende AppStore for hjerne-maskin-grensesnitt teknologi
+        </div>
+    </header>
+
+    <main>
+        <!-- Sammendrag Section -->
+        <section id="sammendrag">
+            <h2>Sammendrag</h2>
+            
+            <div class="highlight-box">
+                <h3>Visjon</h3>
+                <p>Å skape verdens ledende markedsplass for applikasjoner som integrerer med Neuralink's hjerne-maskin-grensesnitt teknologi, og dermed bane veien for en ny æra innen helsevesen, sikkerhet, produktivitet og sosial interaksjon.</p>
+            </div>
+
+            <h3>Forretningsmodell</h3>
+            <p>Neuralink AppStore fungerer som en sentral hub for utviklere og brukere av Neuralink-kompatible applikasjoner. Vår plattform muliggjør sikker distribusjon, testing og drift av applikasjoner som integrerer direkte med hjerne-maskin-grensesnitt.</p>
+
+            <h4>Hovedprodukter:</h4>
+            <ul>
+                <li><strong>Emergency Alert App:</strong> Automatisk deteksjon og varsling av medisinske nødsituasjoner</li>
+                <li><strong>Fall Detection App:</strong> Sanntidsovervåking og forebygging av fall hos eldre og pasienter</li>
+                <li><strong>Cognitive Enhancement Suite:</strong> Applikasjoner for forbedret kognitiv funksjon og læring</li>
+                <li><strong>Motor Control Assistant:</strong> Rehabilitering og støtte for motoriske funksjoner</li>
+            </ul>
+        </section>
+
+        <!-- Markedsanalyse Section -->
+        <section id="marked">
+            <h2>Markedsanalyse</h2>
+            
+            <h3>Markedsstørrelse og Potensiale</h3>
+            <p>Det globale markedet for hjerne-maskin-grensesnitt forventes å vokse fra $1.4 milliarder i 2023 til $6.2 milliarder innen 2030, med en CAGR på 23.5%. Norge, med sin sterke fokus på helseteknologi og digitalisering, representerer et strategisk viktig marked.</p>
+
+            <div class="chart-container">
+                <canvas id="marketChart" width="400" height="200"></canvas>
+            </div>
+
+            <h3>Målgrupper</h3>
+            <h4>Primære brukere:</h4>
+            <ul>
+                <li>Pasienter med nevrologiske tilstander</li>
+                <li>Eldre som trenger helseovervåking</li>
+                <li>Forskere og utviklere innen nevroteknsisk</li>
+                <li>Helseinstitusjonse og sykehus</li>
+            </ul>
+
+            <h4>Sekundære brukere:</h4>
+            <ul>
+                <li>Friske personer som ønsker kognitiv forbedring</li>
+                <li>Utviklere av tredjepartsapplikasjoner</li>
+                <li>Forsikringsselskaper</li>
+            </ul>
+        </section>
+
+        <!-- Teknologi Section -->
+        <section id="teknologi">
+            <h2>Teknisk Arkitektur</h2>
+            
+            <h3>Systemdesign</h3>
+            <p>Vår plattform er bygget med fokus på sikkerhet, skalerbarhet og brukervennlighet. Vi bruker moderne teknologier for å sikre optimal ytelse og datatilgang.</p>
+
+            <div class="tech-spec">
+                <h4>Teknisk Implementering:</h4>
+                <pre>
+# Neuralink AppStore
++ has_many :neuralink_apps
++ belongs_to :user
+
+# Emergency Alert App  
++ has_many :emergency_alerts
++ belongs_to :user
++ belongs_to :alert_type
+
+# Fall Detection App
++ has_many :fall_events
++ belongs_to :user
+                </pre>
+            </div>
+
+            <h3>Sikkerhet og Personvern</h3>
+            <p>All data håndteres i henhold til GDPR og norske personvernlover. Vi implementerer end-to-end kryptering og avanserte sikkerhetsprotokoller for å beskytte sensitiv nevrologisk data.</p>
+
+            <h3>Integrasjonsmuligheter</h3>
+            <p>Vår API muliggjør sømløs integrasjon med eksisterende helsesystemer, forsikringsplattformer og forskningsinfrastruktur.</p>
+        </section>
+
+        <!-- Team Section -->
+        <section id="team">
+            <h2>Team og Kompetanse</h2>
+            
+            <h3>Ledergruppe</h3>
+            <p>Vårt team kombinerer ekspertise innen nevrovitenskap, programvareutvikling, regulatoriske forhold og forretningsutvikling.</p>
+
+            <h4>Nøkkelkompetanser:</h4>
+            <ul>
+                <li>Nevroteknikk og hjerne-maskin-grensesnitt</li>
+                <li>Medisinsk programvareutvikling</li>
+                <li>Cybersikkerhet og personvern</li>
+                <li>Regulatorisk godkjenning (FDA, CE-merking)</li>
+                <li>Markedsføring av medteknologi</li>
+            </ul>
+        </section>
+
+        <!-- Finansiering Section -->
+        <section id="finansiering">
+            <h2>Finansielle Projeksjoner</h2>
+            
+            <h3>Kapitalbehov</h3>
+            <p>Vi søker NOK 25 millioner fra Innovasjon Norge som del av en total finansieringsrunde på NOK 60 millioner over tre år.</p>
+
+            <div class="chart-container">
+                <canvas id="financeChart" width="400" height="200"></canvas>
+            </div>
+
+            <table class="financial-table">
+                <thead>
+                    <tr>
+                        <th>År</th>
+                        <th>Omsetning (MNOK)</th>
+                        <th>Kostnader (MNOK)</th>
+                        <th>Resultat (MNOK)</th>
+                        <th>Brukere</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>2025</td>
+                        <td>5</td>
+                        <td>15</td>
+                        <td>-10</td>
+                        <td>1,000</td>
+                    </tr>
+                    <tr>
+                        <td>2026</td>
+                        <td>18</td>
+                        <td>25</td>
+                        <td>-7</td>
+                        <td>5,000</td>
+                    </tr>
+                    <tr>
+                        <td>2027</td>
+                        <td>45</td>
+                        <td>35</td>
+                        <td>10</td>
+                        <td>15,000</td>
+                    </tr>
+                    <tr>
+                        <td>2028</td>
+                        <td>95</td>
+                        <td>50</td>
+                        <td>45</td>
+                        <td>40,000</td>
+                    </tr>
+                    <tr>
+                        <td>2029</td>
+                        <td>180</td>
+                        <td>70</td>
+                        <td>110</td>
+                        <td>85,000</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Bruk av Midler</h3>
+            <ul>
+                <li><strong>45%</strong> - Forskning og utvikling</li>
+                <li><strong>25%</strong> - Regulatorisk godkjenning og sertifisering</li>
+                <li><strong>20%</strong> - Markedsføring og salg</li>
+                <li><strong>10%</strong> - Drift og administrasjon</li>
+            </ul>
+        </section>
+
+        <!-- Risikoanalyse Section -->
+        <section id="risiko">
+            <h2>Risiko og Muligheter</h2>
+            
+            <h3>SWOT-Analyse</h3>
+            
+            <h4>Styrker:</h4>
+            <ul>
+                <li>Første i markedet for Neuralink-kompatible applikasjoner</li>
+                <li>Sterkt teknisk team med nevroteknikk-ekspertise</li>
+                <li>Strategisk posisjon i Norge med støtte fra Innovasjon Norge</li>
+                <li>Skalerbar plattformløsning</li>
+            </ul>
+
+            <h4>Svakheter:</h4>
+            <ul>
+                <li>Avhengighet av Neuralink's teknologiutvikling</li>
+                <li>Begrenset historisk data og markedserfaring</li>
+                <li>Høye utviklings- og regulatoriske kostnader</li>
+            </ul>
+
+            <h4>Muligheter:</h4>
+            <ul>
+                <li>Eksplosiv vekst i nevroteknikk-markedet</li>
+                <li>Økt fokus på personlig helseteknologi</li>
+                <li>Potensiale for globale partnerskap</li>
+                <li>Mulighet for IPO eller strategisk oppkjøp</li>
+            </ul>
+
+            <h4>Trusler:</h4>
+            <ul>
+                <li>Regulatorisk usikkerhet og forsinkelser</li>
+                <li>Konkurranse fra store teknologiselskaper</li>
+                <li>Etiske og personvernsmessige bekymringer</li>
+                <li>Tekniske utfordringer og sikkerhetsproblemer</li>
+            </ul>
+        </section>
+
+        <!-- Samfunnsimpact Section -->
+        <section id="impact">
+            <h2>Samfunnseffekt</h2>
+            
+            <div class="highlight-box">
+                <h3>Potential for Samfunnsendring</h3>
+                <p>Ved å skape en markedsplass for Neuralink-kompatible applikasjoner, baner vi veien for enestående fremskritt innen helsevesen, sikkerhet, produktivitet og sosial interaksjon. Våre løsninger kan revolusjonere behandling av nevrologiske tilstander og forbedre livskvaliteten for millioner av personer.</p>
+            </div>
+
+            <h3>Helsevesen</h3>
+            <ul>
+                <li>Revolusjonerende behandling av Parkinson, epilepsi og depresjon</li>
+                <li>Raskere diagnose og behandling av hjerneslag</li>
+                <li>Forbedret livskvalitet for personer med lamming</li>
+            </ul>
+
+            <h3>Sikkerhet</h3>
+            <ul>
+                <li>Automatisk varsling ved medisinske nødsituasjoner</li>
+                <li>Forebygging av ulykker og fall</li>
+                <li>Forbedret sikkerhet for eldre som bor alene</li>
+            </ul>
+        </section>
+
+        <!-- Konklusjon Section -->
+        <section id="konklusjon">
+            <h2>Konklusjon og Forespørsel</h2>
+            
+            <p>Neuralink AppStore representerer en unik mulighet til å posisjonere Norge som en global leder innen nevroteknikk og digitalt helsevesen. Med støtte fra Innovasjon Norge kan vi realisere vår visjon om å skape verdens mest avanserte plattform for hjerne-maskin-grensesnitt applikasjoner.</p>
+
+            <div class="highlight-box">
+                <h3>Finansieringsforespørsel til Innovasjon Norge</h3>
+                <p><strong>Beløp:</strong> NOK 25 millioner over 3 år</p>
+                <p><strong>Forventet ROI:</strong> 15x innen 5 år</p>
+                <p><strong>Arbeidsplasser:</strong> 150+ høykvalifiserte stillinger innen 2029</p>
+                <p><strong>Markedsposisjon:</strong> Global teknologileder innen nevroteknikk</p>
+            </div>
+
+            <p>Vi ser frem til muligheten for samarbeid med Innovasjon Norge for å revolusjonere fremtiden for nevroteknikk og skape betydelige samfunns- og økonomiske verdier for Norge.</p>
+        </section>
+
+        <!-- Konfidensialitet Section -->
+        <section id="confidentiality">
+            <h2>Konfidensialitet</h2>
+            <p>Denne forretningsplanen inneholder konfidensiell og eiendomsbeskyttet informasjon. Informasjonen er kun ment for Innovasjon Norge og eventuelle autoriserte representanter. Uautorisert distribusjon, reproduksjon eller deling av dette dokumentet er strengt forbudt.</p>
+            <p><strong>Dato:</strong> 5. august 2025</p>
+            <p><strong>Målgruppe:</strong> Innovasjon Norge investorer</p>
+        </section>
+    </main>
+
+    <script>
+        // Market Growth Chart
+        const marketCtx = document.getElementById('marketChart').getContext('2d');
+        const marketChart = new Chart(marketCtx, {
+            type: 'line',
+            data: {
+                labels: ['2023', '2024', '2025', '2026', '2027', '2028', '2029', '2030'],
+                datasets: [{
+                    label: 'Global BMI Market (Milliarder USD)',
+                    data: [1.4, 1.8, 2.3, 3.0, 3.9, 4.8, 5.5, 6.2],
+                    borderColor: '#8a2be2',
+                    backgroundColor: 'rgba(138, 43, 226, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: { display: true, text: 'Global Hjerne-Maskin-Grensesnitt Markedsvekst' },
+                    legend: { position: 'bottom' }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: { display: true, text: 'Milliarder USD' }
+                    }
+                }
+            }
+        });
+
+        // Financial Projections Chart
+        const financeCtx = document.getElementById('financeChart').getContext('2d');
+        const financeChart = new Chart(financeCtx, {
+            type: 'bar',
+            data: {
+                labels: ['2025', '2026', '2027', '2028', '2029'],
+                datasets: [
+                    {
+                        label: 'Omsetning (MNOK)',
+                        data: [5, 18, 45, 95, 180],
+                        backgroundColor: 'rgba(0, 120, 255, 0.8)',
+                        borderColor: '#0078ff',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Resultat (MNOK)',
+                        data: [-10, -7, 10, 45, 110],
+                        backgroundColor: 'rgba(138, 43, 226, 0.8)',
+                        borderColor: '#8a2be2',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: { display: true, text: 'Finansielle Projeksjoner - Neuralink AppStore' },
+                    legend: { position: 'bottom' }
+                },
+                scales: {
+                    y: {
+                        title: { display: true, text: 'Millioner NOK' }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

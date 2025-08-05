@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PubHealthcare - Forretningsplan for Innovasjon Norge</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chart.js for financial projections -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* CSS Variables */
+        :root {
+            --primary-color: #000000;
+            --background-color: #ffffff;
+            --text-color: #333333;
+            --health-color: #00a86b;
+            --medical-color: #dc143c;
+            --tech-color: #4169e1;
+            --font-family: 'Inter', sans-serif;
+        }
+
+        /* General Styles */
+        body {
+            margin: 0;
+            font-family: var(--font-family);
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            font-size: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Logo Container */
+        .logo-wrapper {
+            position: relative;
+            display: inline-block;
+            margin: 2rem 0;
+        }
+
+        /* Healthcare-inspired animated logo */
+        .logo-container {
+            font-family: 'Black Han Sans', sans-serif;
+            font-size: 60px;
+            color: transparent;
+            background: linear-gradient(45deg, #00a86b, #4169e1, #dc143c, #00a86b);
+            background-size: 400%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            animation: gradientMove 4s infinite linear, healthPulse 3s infinite ease-in-out;
+            position: relative;
+        }
+
+        .trademark-symbol {
+            position: absolute;
+            top: -10px;
+            right: -15px;
+            font-size: 16px;
+            color: var(--text-color);
+            font-family: var(--font-family);
+        }
+
+        /* Animations */
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes healthPulse {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.3) drop-shadow(0 0 25px rgba(0, 168, 107, 0.6)); }
+        }
+
+        /* Header styling */
+        header {
+            text-align: center;
+            padding: 20px;
+            background-color: var(--background-color);
+            border-bottom: 3px solid #f0f8ff;
+        }
+
+        .header-text {
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: var(--text-color);
+            margin-top: 1rem;
+            max-width: 900px;
+            text-align: center;
+        }
+
+        /* Main content */
+        main {
+            max-width: 1100px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        section {
+            padding: 3rem 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        section:last-child {
+            border-bottom: none;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        h2::after {
+            content: '';
+            display: block;
+            width: 120px;
+            height: 3px;
+            background: linear-gradient(45deg, var(--health-color), var(--tech-color));
+            margin: 1rem auto;
+        }
+
+        h3 {
+            font-size: 1.8rem;
+            color: var(--health-color);
+            margin-bottom: 1.5rem;
+        }
+
+        h4 {
+            font-size: 1.3rem;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        p {
+            font-size: 1.1rem;
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        /* Chart container */
+        .chart-container {
+            width: 100%;
+            max-width: 700px;
+            margin: 2rem auto;
+            padding: 1.5rem;
+            background: #f8fbff;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        /* Highlight boxes */
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(0, 168, 107, 0.1), rgba(65, 105, 225, 0.1));
+            border-left: 5px solid var(--health-color);
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 10px;
+        }
+
+        .tech-spec {
+            background: #f5f7fa;
+            border: 2px solid #e1e8ed;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            overflow-x: auto;
+        }
+
+        /* API spec styling */
+        .api-spec {
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        /* Financial table */
+        .financial-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: white;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+        }
+
+        .financial-table th, .financial-table td {
+            border: 1px solid #ddd;
+            padding: 14px;
+            text-align: left;
+        }
+
+        .financial-table th {
+            background-color: var(--health-color);
+            color: white;
+            font-weight: 600;
+        }
+
+        .financial-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        /* Standards section */
+        .standard-section {
+            background: #f0f8ff;
+            border: 1px solid #b0d4f0;
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 10px;
+        }
+
+        /* Equipment list */
+        .equipment-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .equipment-item {
+            background: white;
+            border: 2px solid #e0e0e0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .logo-container {
+                font-size: 45px;
+            }
+            
+            main {
+                margin: 2rem auto;
+                padding: 0 1rem;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+            
+            section {
+                padding: 2rem 0;
+            }
+            
+            .equipment-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <!-- Logo Wrapper with TM Symbol -->
+        <div class="logo-wrapper">
+            <div class="logo-container">
+                PUBHEALTHCARE
+            </div>
+            <div class="trademark-symbol">™</div>
+        </div>
+        <div class="header-text">
+            Revolusjonerende helseteknologi for avansert menneskelig simulering og laboratorie-automatisering
+        </div>
+    </header>
+
+    <main>
+        <!-- Sammendrag Section -->
+        <section id="sammendrag">
+            <h2>Sammendrag</h2>
+            
+            <div class="highlight-box">
+                <h3>Visjon</h3>
+                <p>Å revolusjonere helsevesenet gjennom avansert teknologi for menneskemodellering på molekylært nivå, automatiserte laboratorier og universell helsedata-integrasjon som overgår eksisterende standarder som FHIR.</p>
+            </div>
+
+            <h3>Forretningsmodell</h3>
+            <p>PubHealthcare utvikler tre integrerte teknologiløsninger som sammen skaper et komplett økosystem for neste generasjons helseforskning og -behandling:</p>
+
+            <h4>Kjerneprodukter:</h4>
+            <ul>
+                <li><strong>hAPI (healthcare API):</strong> Universell API for sykehus med avansert datasikkerhet på OpenBSD</li>
+                <li><strong>SSHM (Supersmall Scale Human Modeling):</strong> Molekylær og atomær modellering av menneskelige biologiske prosesser</li>
+                <li><strong>3D Human Simulation:</strong> Detaljert 3D-modellering med Ruby og Mittsu for vitenskapelig eksperimentering</li>
+                <li><strong>Automated Laboratory Systems:</strong> AI-drevet laboratorie-automatisering for legemiddelproduksjon og forskning</li>
+            </ul>
+        </section>
+
+        <!-- Markedsanalyse Section -->
+        <section id="marked">
+            <h2>Markedsanalyse</h2>
+            
+            <h3>Markedsstørrelse og Potensiale</h3>
+            <p>Det globale markedet for digital helse forventes å vokse fra $659 milliarder i 2025 til $1.8 billioner innen 2030. Markedet for laboratorieautomatisering forventes å nå $8.9 milliarder innen 2028.</p>
+
+            <div class="chart-container">
+                <canvas id="marketChart" width="400" height="200"></canvas>
+            </div>
+
+            <h3>Konkurransefortrinn</h3>
+            <h4>Vs. eksisterende løsninger som FHIR:</h4>
+            <ul>
+                <li>Dynamisk databehandling vs. statisk datautveksling</li>
+                <li>Molekylær simulering vs. kun datastrukturering</li>
+                <li>OpenBSD sikkerhet vs. standard webbaserte løsninger</li>
+                <li>AI-integrert laboratorie-automatisering</li>
+            </ul>
+
+            <h3>Målgrupper</h3>
+            <h4>Primære kunder:</h4>
+            <ul>
+                <li>Sykehus og helseinstitusjoner globalt</li>
+                <li>Forskningslaboratorier og universiteter</li>
+                <li>Farmasøytiske selskaper</li>
+                <li>Biotech-bedrifter</li>
+            </ul>
+        </section>
+
+        <!-- Teknologi Section -->
+        <section id="teknologi">
+            <h2>Teknologisk Innovasjon</h2>
+            
+            <div class="standard-section">
+                <h3>hAPI - Public Healthcare Unified Integration (PHUI)</h3>
+                <p><strong>RFC 9009 Standard:</strong> Vår hAPI-spesifikasjon overtar hvor FHIR slutter, ved å ikke bare organisere og utveksle data, men dynamisk behandle og implementere det for avansert biologisk simulering.</p>
+                
+                <div class="api-spec">
+                    <h4>Teknisk Spesifikasjon:</h4>
+                    <p><strong>Systemdesign:</strong> Eksklusivt på OpenBSD for optimal sikkerhet, med Roda's API-struktur</p>
+                    <p><strong>Endpoint:</strong> https://api.pub.healthcare</p>
+                    <p><strong>Sikkerhet:</strong> Tilgang kun til sertifiserte forskere med styregodkjenning</p>
+                    <p><strong>Integrasjon:</strong> Kompatibel med eksisterende FHIR-data, men med utvidet funksjonalitet</p>
+                </div>
+            </div>
+
+            <div class="standard-section">
+                <h3>SSHM - Supersmall Scale Human Modeling</h3>
+                <p><strong>Internet-Draft Standard:</strong> En ny standard for modellering av menneskelige biologiske prosesser på molekylært og atomært nivå.</p>
+                
+                <div class="tech-spec">
+                    <h4>SSHM Nøkkelfunksjoner:</h4>
+                    <pre>
+• Høyoppløselig modellering på atomært og molekylært nivå
+• Integrasjon med genomiske, proteomiske og biologiske data  
+• Skalerbarhet for store datasett og komplekse simuleringer
+• Tverrfaglig tilnærming: biologi, kjemi, fysikk, datavitenskap
+• AI og maskinlæring for forbedret modelleringsnøyaktighet
+                    </pre>
+                </div>
+
+                <h4>Implementeringsplan:</h4>
+                <ul>
+                    <li><strong>Fase 1:</strong> Forskning og utvikling av SSHM-standarder</li>
+                    <li><strong>Fase 2:</strong> Pilot-testing med initielle modeller</li>
+                    <li><strong>Fase 3:</strong> Standardisering og interessent-engasjement</li>
+                    <li><strong>Fase 4:</strong> Implementering i forskningsinstitusjoner</li>
+                    <li><strong>Fase 5:</strong> Kontinuerlig forbedring og kunnskaps-deling</li>
+                </ul>
+            </div>
+
+            <h3>3D Human Simulation med Ruby/Mittsu</h3>
+            <p>Vår unike tilnærming bruker Ruby-metoder som modulære byggeklosser for konstruksjon og simulering av molekylære modeller. Dette modulære systemet tillater ren, organisert kode som enkelt kan utvides og integreres.</p>
+
+            <div class="tech-spec">
+                <h4>Hvorfor Ruby og Mittsu?</h4>
+                <pre>
+Standard 3D-motorer som Blender håndterer ikke de ekstreme skalene
+involvert i molekylære eller atomære modeller.
+
+Ruby og Mittsu tilbyr:
+• Fleksibilitet for tilpassede skalerings- og renderingløsninger
+• Modulær arkitektur for vitenskapelig eksperimentering  
+• AI-integrasjon for omfattende testing av menneskemodeller
+                </pre>
+            </div>
+        </section>
+
+        <!-- Automatisert Laboratorium Section -->
+        <section id="laboratorium">
+            <h2>Automatisert Laboratorium-Teknologi</h2>
+            
+            <h3>AI-Drevet Laboratorium-Kontroller</h3>
+            <p>Vår laboratorium-kontrollsystem representerer neste generasjon innen automatisert legemiddelproduksjon og forskningsoperasjoner.</p>
+
+            <div class="equipment-list">
+                <div class="equipment-item">
+                    <h4>Reagent-Håndtering</h4>
+                    <p>Automatisk dosering og blanding av kjemiske reagenser med presisjon ned til nanoliter-nivå</p>
+                </div>
+                <div class="equipment-item">
+                    <h4>Temperatur-Kontroll</h4>
+                    <p>Avansert temperaturregulering fra -196°C til +1000°C med ±0.1°C nøyaktighet</p>
+                </div>
+                <div class="equipment-item">
+                    <h4>Reaksjons-Overvåking</h4>
+                    <p>Real-time spektroskopi og kromatografi for kontinuerlig kvalitetskontroll</p>
+                </div>
+                <div class="equipment-item">
+                    <h4>Sikkerhetssystemer</h4>
+                    <p>Integrerte sensorer og nødstopp-mekanismer for maksimal laboratorie-sikkerhet</p>
+                </div>
+            </div>
+
+            <div class="tech-spec">
+                <h4>Teknisk Implementering:</h4>
+                <pre>
+class LabEquipmentController
+  API_ENDPOINT = "http://localhost:3000/api/equipment"
+
+  # Hovedmetoder for automatisert syntese:
+  • add_reagent(name, volume)
+  • set_temperature(temp, duration)  
+  • stir(speed, duration)
+  • cool_down(temp)
+  • synthesize_drug(drug_name)
+
+  # Sikkerhet og overvåking:
+  • safety_check()
+  • emergency_stop()
+  • quality_control()
+                </pre>
+            </div>
+
+            <h3>Forsknings- og Utviklingsapplikasjoner</h3>
+            <p>Vårt system er designet for å støtte forskning innen medisinsk kjemi, med fokus på:</p>
+            <ul>
+                <li>Automatisert legemiddelutvikling og testing</li>
+                <li>Høyeffektiv syntese av forskningsforbindelser</li>
+                <li>Kvalitetskontroll og batch-dokumentasjon</li>
+                <li>Sikker håndtering av kontrollerte substanser</li>
+            </ul>
+        </section>
+
+        <!-- Team Section -->
+        <section id="team">
+            <h2>Team og Kompetanse</h2>
+            
+            <h3>Ledergruppe</h3>
+            <p>Vårt tverrfaglige team kombinerer ekspertise innen molekylærbiologi, informatikk, kjemi og regulatoriske forhold.</p>
+
+            <h4>Nøkkelkompetanser:</h4>
+            <ul>
+                <li>Molekylærbiologi og strukturell bioinformatikk</li>
+                <li>OpenBSD systemadministrasjon og cybersikkerhet</li>
+                <li>Ruby-programmering og 3D-grafisk programmering</li>
+                <li>Medisinsk kjemi og laboratorie-automatisering</li>
+                <li>Helsedata-standarder og FHIR-ekspertise</li>
+                <li>Regulatorisk godkjenning for medisinske enheter</li>
+            </ul>
+
+            <h3>Forskningspartnere</h3>
+            <ul>
+                <li>Universiteter med avanserte biomodellering-programmer</li>
+                <li>Internasjonale helseorganisasjoner</li>
+                <li>Europeiske og amerikanske forskningslaboratorier</li>
+            </ul>
+        </section>
+
+        <!-- Finansiering Section -->
+        <section id="finansiering">
+            <h2>Finansielle Projeksjoner</h2>
+            
+            <h3>Kapitalbehov</h3>
+            <p>Vi søker NOK 35 millioner fra Innovasjon Norge som del av en total finansieringsrunde på NOK 85 millioner over fire år.</p>
+
+            <div class="chart-container">
+                <canvas id="financeChart" width="400" height="200"></canvas>
+            </div>
+
+            <table class="financial-table">
+                <thead>
+                    <tr>
+                        <th>År</th>
+                        <th>Omsetning (MNOK)</th>
+                        <th>Kostnader (MNOK)</th>
+                        <th>Resultat (MNOK)</th>
+                        <th>Kunder</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>2025</td>
+                        <td>8</td>
+                        <td>22</td>
+                        <td>-14</td>
+                        <td>15</td>
+                    </tr>
+                    <tr>
+                        <td>2026</td>
+                        <td>28</td>
+                        <td>38</td>
+                        <td>-10</td>
+                        <td>45</td>
+                    </tr>
+                    <tr>
+                        <td>2027</td>
+                        <td>65</td>
+                        <td>50</td>
+                        <td>15</td>
+                        <td>120</td>
+                    </tr>
+                    <tr>
+                        <td>2028</td>
+                        <td>145</td>
+                        <td>75</td>
+                        <td>70</td>
+                        <td>280</td>
+                    </tr>
+                    <tr>
+                        <td>2029</td>
+                        <td>285</td>
+                        <td>110</td>
+                        <td>175</td>
+                        <td>520</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Bruk av Midler</h3>
+            <ul>
+                <li><strong>40%</strong> - Forskning og utvikling (SSHM, hAPI, 3D-simulering)</li>
+                <li><strong>25%</strong> - Laboratorium-automatisering og utstyr</li>
+                <li><strong>20%</strong> - Regulatorisk godkjenning og sertifisering</li>
+                <li><strong>10%</strong> - Markedsføring og partnerskapsutvikling</li>
+                <li><strong>5%</strong> - Drift og administrasjon</li>
+            </ul>
+        </section>
+
+        <!-- Risikoanalyse Section -->
+        <section id="risiko">
+            <h2>Risiko og Muligheter</h2>
+            
+            <h3>SWOT-Analyse</h3>
+            
+            <h4>Styrker:</h4>
+            <ul>
+                <li>Revolusjonerende teknologi som overtar hvor FHIR slutter</li>
+                <li>Tverrfaglig ekspertise i biologi, kjemi og informatikk</li>
+                <li>Unik kombinasjon av simulering og laboratorie-automatisering</li>
+                <li>Sterk fokus på sikkerhet med OpenBSD-plattform</li>
+            </ul>
+
+            <h4>Svakheter:</h4>
+            <ul>
+                <li>Kompleks teknologi som krever betydelige FoU-investeringer</li>
+                <li>Lang utviklingstid for molekylære simuleringssystemer</li>
+                <li>Behov for høyt kvalifisert, tverrfaglig personale</li>
+            </ul>
+
+            <h4>Muligheter:</h4>
+            <ul>
+                <li>Eksplosiv vekst i digital helse og personlig medisin</li>
+                <li>Økt etterspørsel etter laboratorie-automatisering</li>
+                <li>Potensiale for globale partnerskap med farmasøytisk industri</li>
+                <li>Mulighet for lisensiering av SSHM-standard</li>
+            </ul>
+
+            <h4>Trusler:</h4>
+            <ul>
+                <li>Konkurranse fra etablerte medtech-giganter</li>
+                <li>Regulatorisk kompleksitet for medisinsk programvare</li>
+                <li>Høye kostnader for sertifisering og godkjenning</li>
+                <li>Tekniske utfordringer ved molekylær modellering</li>
+            </ul>
+        </section>
+
+        <!-- Samfunnsimpact Section -->
+        <section id="impact">
+            <h2>Samfunnseffekt og Innovasjon</h2>
+            
+            <div class="highlight-box">
+                <h3>Revolusjonerende Helseområdet</h3>
+                <p>PubHealthcare posisjonerer Norge som global leder innen avansert helsemodellering og laboratorie-automatisering. Våre løsninger kan akselerere legemiddelutvikling, forbedre personlig medisin og revolusjonere hvordan vi forstår menneskelig biologi på det mest fundamentale nivået.</p>
+            </div>
+
+            <h3>Forskningsframskritt</h3>
+            <ul>
+                <li>Kraftig reduksjon i tid fra forskning til klinisk testing</li>
+                <li>Forbedret nøyaktighet i legemiddelutvikling</li>
+                <li>Reduserte kostnader for medisinsk forskning</li>
+                <li>Økt sikkerhet i laboratorie-operasjoner</li>
+            </ul>
+
+            <h3>Helsevesen-integrasjon</h3>
+            <ul>
+                <li>Sømløs dataflyt mellom forskningsinstitusjoner</li>
+                <li>Forbedret pasientbehandling gjennom personlig medisin</li>
+                <li>Raskere diagnose og behandlingsoptimalisering</li>
+                <li>Global standardisering av helsedata-håndtering</li>
+            </ul>
+
+            <h3>Utdannings- og Forskningseffekt</h3>
+            <ul>
+                <li>Nye vitenskapelige metoder for biological modellering</li>
+                <li>Tverrfaglig innovasjon mellom biologi og informatikk</li>
+                <li>Norge som eksportør av avansert helseteknologi</li>
+            </ul>
+        </section>
+
+        <!-- Konklusjon Section -->
+        <section id="konklusjon">
+            <h2>Konklusjon og Forespørsel</h2>
+            
+            <p>PubHealthcare representerer en paradigmeskifte innen helseteknologi, hvor vi ikke bare organiserer helsedata, men transformerer dem til revolusjonerende forskning og behandling. Med støtte fra Innovasjon Norge kan vi etablere Norge som verdensleder innen molekylær helsemodellering og laboratorium-automatisering.</p>
+
+            <div class="highlight-box">
+                <h3>Finansieringsforespørsel til Innovasjon Norge</h3>
+                <p><strong>Beløp:</strong> NOK 35 millioner over 4 år</p>
+                <p><strong>Forventet ROI:</strong> 20x innen 5 år</p>
+                <p><strong>Arbeidsplasser:</strong> 200+ høykvalifiserte forsknings- og utviklingsstillinger</p>
+                <p><strong>Global markedsposisjon:</strong> Teknologileder innen molekylær helsemodellering</p>
+                <p><strong>Eksportpotensial:</strong> Lisensiering til over 1000 helseinstitusjoner globalt</p>
+            </div>
+
+            <p>Våre tre integrerte teknologier - hAPI, SSHM og automatiserte laboratorier - skaper et komplett økosystem som kan revolusjonere medisinsk forskning og behandling. Vi ser frem til muligheten for samarbeid med Innovasjon Norge for å realisere denne visjonen.</p>
+        </section>
+
+        <!-- Konfidensialitet Section -->
+        <section id="confidentiality">
+            <h2>Konfidensialitet</h2>
+            <p>Denne forretningsplanen inneholder konfidensiell og eiendomsbeskyttet informasjon. Informasjonen er kun ment for Innovasjon Norge og eventuelle autoriserte representanter. Uautorisert distribusjon, reproduksjon eller deling av dette dokumentet er strengt forbudt.</p>
+            <p><strong>Dato:</strong> 5. august 2025</p>
+            <p><strong>Målgruppe:</strong> Innovasjon Norge investorer</p>
+            <p><strong>Kontakt:</strong> jmtepstad@pub.healthcare</p>
+        </section>
+    </main>
+
+    <script>
+        // Healthcare Market Growth Chart
+        const marketCtx = document.getElementById('marketChart').getContext('2d');
+        const marketChart = new Chart(marketCtx, {
+            type: 'line',
+            data: {
+                labels: ['2023', '2024', '2025', '2026', '2027', '2028', '2029', '2030'],
+                datasets: [
+                    {
+                        label: 'Digital Helse (Billioner USD)',
+                        data: [0.5, 0.58, 0.659, 0.89, 1.15, 1.42, 1.62, 1.8],
+                        borderColor: '#00a86b',
+                        backgroundColor: 'rgba(0, 168, 107, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Lab Automatisering (Milliarder USD)',
+                        data: [4.8, 5.2, 5.6, 6.1, 6.8, 7.5, 8.2, 8.9],
+                        borderColor: '#4169e1',
+                        backgroundColor: 'rgba(65, 105, 225, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: { display: true, text: 'Global Helseteknologi Markedsvekst' },
+                    legend: { position: 'bottom' }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: { display: true, text: 'Markedsverdi' }
+                    }
+                }
+            }
+        });
+
+        // Financial Projections Chart
+        const financeCtx = document.getElementById('financeChart').getContext('2d');
+        const financeChart = new Chart(financeCtx, {
+            type: 'bar',
+            data: {
+                labels: ['2025', '2026', '2027', '2028', '2029'],
+                datasets: [
+                    {
+                        label: 'Omsetning (MNOK)',
+                        data: [8, 28, 65, 145, 285],
+                        backgroundColor: 'rgba(0, 168, 107, 0.8)',
+                        borderColor: '#00a86b',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Resultat (MNOK)',
+                        data: [-14, -10, 15, 70, 175],
+                        backgroundColor: 'rgba(65, 105, 225, 0.8)',
+                        borderColor: '#4169e1',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: { display: true, text: 'Finansielle Projeksjoner - PubHealthcare' },
+                    legend: { position: 'bottom' }
+                },
+                scales: {
+                    y: {
+                        title: { display: true, text: 'Millioner NOK' }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
