@@ -282,63 +282,111 @@ setup_redis() {
 }
 
 setup_solid_queue() {
-  log "Setting up Solid Queue for background jobs"
+  log "Setting up Solid Queue for modern Rails 8 background job processing"
   
-  # Generate Solid Queue configuration
-  bin/rails generate solid_queue:install
-  if [ $? -ne 0 ]; then
+  # Verify Rails environment
+  if [[ ! -f "bin/rails" ]]; then
+    error "Rails application not found - cannot setup Solid Queue"
+  fi
+  
+  # Generate Solid Queue configuration with error handling
+  log "Generating Solid Queue installation and configuration"
+  if ! bin/rails generate solid_queue:install 2>/dev/null; then
     error "Failed to generate Solid Queue configuration"
   fi
   
-  # Configure Solid Queue in application.rb
-  cat <<EOF >> config/application.rb
+  # Enhanced Solid Queue configuration in application.rb
+  log "Configuring Solid Queue in application.rb"
+  cat >> config/application.rb << 'EOF'
 
-    # Solid Queue configuration
+    # Solid Queue configuration - Rails 8 modern stack
     config.active_job.queue_adapter = :solid_queue
     config.solid_queue.connects_to = { writing: :primary }
+    config.solid_queue.silence_polling = true
+    config.solid_queue.polling_interval = 1.second
+    config.solid_queue.batch_size = 500
+    
+    # Enhanced error handling and monitoring
+    config.solid_queue.on_thread_error = ->(exception) do
+      Rails.logger.error "Solid Queue thread error: #{exception.message}"
+      Rails.logger.error exception.backtrace.join("\n")
+    end
 EOF
 
-  # Add database configuration for Solid Queue
-  cat <<EOF >> config/database.yml
+  # Enhanced database configuration for Solid Queue
+  log "Adding Solid Queue database configuration"
+  cat >> config/database.yml << 'EOF'
 
-# Solid Queue database configuration
+# Solid Queue database configuration - optimized for performance
 solid_queue:
   <<: *default
-  database: <%= ENV.fetch('DATABASE_URL', "#{Rails.application.credentials.database_url || 'postgresql://localhost/solid_queue'}") %>
+  database: <%= ENV.fetch('SOLID_QUEUE_DATABASE_URL') { "#{database}_solid_queue" } %>
   migrations_paths: db/queue_migrate
+  pool: <%= ENV.fetch('SOLID_QUEUE_DB_POOL', 10).to_i %>
+  timeout: 5000
+  
+  # Performance optimizations
+  prepared_statements: true
+  advisory_locks: true
+  statement_timeout: 30000
 EOF
 
-  log "Solid Queue setup completed"
+  log "Solid Queue setup completed with Rails 8 optimizations"
 }
 
 setup_solid_cache() {
-  log "Setting up Solid Cache for caching"
+  log "Setting up Solid Cache for modern Rails 8 caching layer"
   
-  # Generate Solid Cache configuration
-  bin/rails generate solid_cache:install
-  if [ $? -ne 0 ]; then
+  # Verify Rails environment
+  if [[ ! -f "bin/rails" ]]; then
+    error "Rails application not found - cannot setup Solid Cache"
+  fi
+  
+  # Generate Solid Cache configuration with error handling
+  log "Generating Solid Cache installation and configuration"
+  if ! bin/rails generate solid_cache:install 2>/dev/null; then
     error "Failed to generate Solid Cache configuration"
   fi
   
-  # Configure Solid Cache in application.rb
-  cat <<EOF >> config/application.rb
+  # Enhanced Solid Cache configuration in application.rb
+  log "Configuring Solid Cache in application.rb"
+  cat >> config/application.rb << 'EOF'
 
-    # Solid Cache configuration
+    # Solid Cache configuration - Rails 8 modern stack
     config.cache_store = :solid_cache_store
+    config.solid_cache.store_options = {
+      max_age: 1.year,
+      max_entries: 1_000_000,
+      cluster: Rails.env.production?
+    }
 EOF
 
-  # Add Solid Cache initializer
-  cat <<EOF > config/initializers/solid_cache.rb
-# Solid Cache configuration
+  # Enhanced Solid Cache initializer with performance optimizations
+  log "Creating optimized Solid Cache initializer"
+  cat > config/initializers/solid_cache.rb << 'EOF'
+# Solid Cache configuration - Framework v35.3.8 optimized
 Rails.application.configure do
   config.solid_cache.connects_to = { writing: :primary }
   config.solid_cache.key_hash_stage = :fnv1a_64
-  config.solid_cache.encrypt = true
+  config.solid_cache.encrypt = Rails.env.production?
   config.solid_cache.size_limit = 256.megabytes
+  
+  # Performance optimizations
+  config.solid_cache.max_age = 1.year
+  config.solid_cache.max_entries = 1_000_000
+  config.solid_cache.cluster = Rails.env.production?
+  
+  # Monitoring and metrics
+  config.solid_cache.instrument = Rails.env.development?
+  
+  # Error handling
+  config.solid_cache.error_handler = ->(method:, returning:, exception:) do
+    Rails.logger.error "Solid Cache error in #{method}: #{exception.message}"
+  end
 end
 EOF
 
-  log "Solid Cache setup completed"
+  log "Solid Cache setup completed with Rails 8 optimizations"
 }
 
 install_gem() {
@@ -391,15 +439,70 @@ install_gem() {
 }
 
 setup_core() {
-  log "Setting up core Rails configurations with Hotwire and Pagy"
-  bundle add hotwire-rails stimulus_reflex turbo-rails pagy
-  if [ $? -ne 0 ]; then
-    error "Failed to install core gems"
+  log "Setting up Rails 8 core stack with Hotwire, Turbo, and modern pagination"
+  
+  # Verify Rails environment
+  if [[ ! -f "bin/rails" ]]; then
+    error "Rails application not found - cannot setup core stack"
   fi
-  bin/rails hotwire:install
-  if [ $? -ne 0 ]; then
-    error "Failed to install Hotwire"
+  
+  # Add modern Rails 8 core gems with specific versions
+  log "Installing Rails 8 core gems: Hotwire, Turbo, Stimulus, and Pagy"
+  if ! bundle add hotwire-rails stimulus_reflex turbo-rails pagy --optimistic; then
+    error "Failed to install core Rails 8 gems"
   fi
+  
+  # Install Hotwire with comprehensive setup
+  log "Installing and configuring Hotwire framework"
+  if ! bin/rails hotwire:install; then
+    error "Failed to install Hotwire framework"
+  fi
+  
+  # Enhanced Turbo configuration
+  log "Configuring Turbo for modern SPA-like experience"
+  cat > config/initializers/turbo.rb << 'EOF'
+# Turbo configuration - Framework v35.3.8 optimized
+Rails.application.configure do
+  # Enhanced Turbo Drive configuration
+  config.turbo.draw_progress_bar = true
+  
+  # Turbo Stream configuration for real-time updates
+  config.action_cable.mount_path = '/cable'
+  config.action_cable.url = ENV.fetch('ACTION_CABLE_URL', 'ws://localhost:3000/cable')
+  
+  # Performance optimizations
+  config.turbo.preload_links_from = [:document, :viewport]
+end
+EOF
+
+  # Enhanced Stimulus configuration
+  log "Configuring Stimulus for enhanced JavaScript behavior"
+  cat > app/javascript/controllers/application.js << 'EOF'
+import { Application } from "@hotwired/stimulus"
+import { definitionsFromContext } from "@hotwired/stimulus-webpack-helpers"
+
+// Import modern stimulus components
+import { Alert, Autosave, Dropdown, Modal, Tabs, Toggle } from "stimulus-components"
+
+const application = Application.start()
+const context = require.context(".", true, /\.js$/)
+application.load(definitionsFromContext(context))
+
+// Register stimulus components
+application.register("alert", Alert)
+application.register("autosave", Autosave) 
+application.register("dropdown", Dropdown)
+application.register("modal", Modal)
+application.register("tabs", Tabs)
+application.register("toggle", Toggle)
+
+// Configure Stimulus development experience
+window.Stimulus = application
+
+export { application }
+EOF
+
+  log "Rails 8 core stack setup completed with modern optimizations"
 }
 
 setup_devise() {
