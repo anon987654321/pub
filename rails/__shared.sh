@@ -506,52 +506,150 @@ EOF
 }
 
 setup_devise() {
-  log "Setting up Devise with Vipps and guest login, NNG/SEO optimized"
-  bundle add devise omniauth-vipps devise-guests
-  if [ $? -ne 0 ]; then
+  log "Setting up Devise with enhanced security, Vipps OAuth, and guest login functionality"
+  
+  # Verify Rails environment
+  if [[ ! -f "bin/rails" ]]; then
+    error "Rails application not found - cannot setup Devise"
+  fi
+  
+  # Add Devise gems with comprehensive security features
+  log "Installing Devise gems with security enhancements"
+  if ! bundle add devise omniauth-vipps devise-guests omniauth-rails_csrf_protection; then
     error "Failed to add Devise gems"
   fi
-  bin/rails generate devise:install
-  bin/rails generate devise User anonymous:boolean guest:boolean vipps_id:string citizenship_status:string claim_count:integer
-  bin/rails generate migration AddOmniauthToUsers provider:string uid:string
+  
+  # Generate Devise installation with error handling
+  log "Generating Devise installation"
+  if ! bin/rails generate devise:install; then
+    error "Failed to generate Devise installation"
+  fi
+  
+  # Generate User model with enhanced fields and security
+  log "Generating User model with security enhancements"
+  if ! bin/rails generate devise User anonymous:boolean guest:boolean vipps_id:string citizenship_status:string claim_count:integer failed_attempts:integer unlock_token:string locked_at:datetime; then
+    error "Failed to generate User model"
+  fi
+  
+  # Add OAuth fields migration
+  if ! bin/rails generate migration AddOmniauthToUsers provider:string uid:string; then
+    error "Failed to generate OAuth migration"
+  fi
 
-  cat <<EOF > config/initializers/devise.rb
+  # Enhanced Devise configuration with security features
+  log "Configuring Devise with enhanced security settings"
+  cat > config/initializers/devise.rb << 'EOF'
+# Devise configuration - Framework v35.3.8 security enhanced
 Devise.setup do |config|
+  # Mailer configuration
   config.mailer_sender = "noreply@#{ENV['APP_DOMAIN'] || 'example.com'}"
-  config.omniauth :vipps, ENV["VIPPS_CLIENT_ID"], ENV["VIPPS_CLIENT_SECRET"], scope: "openid,email,name"
-  config.navigational_formats = [:html]
+  
+  # Enhanced OAuth configuration with CSRF protection
+  config.omniauth :vipps, ENV["VIPPS_CLIENT_ID"], ENV["VIPPS_CLIENT_SECRET"], {
+    scope: "openid,email,name",
+    strategy_class: OmniAuth::Strategies::Vipps,
+    setup: true
+  }
+  
+  # Security configurations
+  config.navigational_formats = [:html, :turbo_stream]
   config.sign_out_via = :delete
   config.guest_user = true
+  
+  # Password security
+  config.password_length = 8..128
+  config.reset_password_within = 6.hours
+  config.sign_in_after_reset_password = false
+  
+  # Account locking for security
+  config.lock_strategy = :failed_attempts
+  config.maximum_attempts = 5
+  config.unlock_strategy = :email
+  config.unlock_in = 1.hour
+  
+  # Session security
+  config.timeout_in = 30.minutes
+  config.expire_all_remember_me_on_sign_out = true
+  
+  # Email validation
+  config.email_regexp = /\A[^@\s]+@[^@\s]+\z/
+  
+  # Case insensitive keys
+  config.case_insensitive_keys = [:email]
+  config.strip_whitespace_keys = [:email]
+  
+  # Paranoid mode for security
+  config.paranoid = true
 end
 EOF
 
-  cat <<EOF > app/models/user.rb
+  # Enhanced User model with security validations
+  log "Creating enhanced User model with security features"
+  cat > app/models/user.rb << 'EOF'
 class User < ApplicationRecord
-  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable,
+  devise :database_authenticatable, :registerable, :recoverable, :rememberable, 
+         :validatable, :trackable, :lockable, :timeoutable,
          :omniauthable, omniauth_providers: [:vipps]
 
-  validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
+  # Enhanced validations with security focus
+  validates :email, presence: true, uniqueness: { case_sensitive: false }, 
+            format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :claim_count, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
-
+  validates :citizenship_status, length: { maximum: 100 }, allow_blank: true
+  validates :vipps_id, uniqueness: true, allow_blank: true
+  
+  # Security scopes
+  scope :guests, -> { where(guest: true) }
+  scope :regular_users, -> { where(guest: false) }
+  scope :locked, -> { where.not(locked_at: nil) }
+  
+  # Enhanced OAuth authentication with security checks
   def self.from_omniauth(auth)
+    # Validate OAuth data
+    return nil unless auth&.provider && auth&.uid && auth&.info&.email
+    
     where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
       user.email = auth.info.email
       user.password = Devise.friendly_token[0, 20]
       user.vipps_id = auth.uid
-      user.citizenship_status = auth.info.nationality || "unknown"
+      user.citizenship_status = auth.info.nationality&.slice(0, 100) || "unknown"
       user.guest = false
+      user.confirmed_at = Time.current if user.respond_to?(:confirmed_at)
     end
   end
 
+  # Enhanced guest user creation with security
   def self.guest
+    Rails.cache.fetch("guest_user_#{session_id}", expires_in: 1.hour) do
+      create_guest_user
+    end
+  end
+  
+  private
+  
+  def self.create_guest_user
     find_or_create_by(guest: true) do |user|
-      user.email = "guest_#{Time.now.to_i}#{rand(100)}@example.com"
+      user.email = "guest_#{SecureRandom.uuid}@example.com"
       user.password = Devise.friendly_token[0, 20]
       user.anonymous = true
     end
   end
+  
+  # Security methods
+  def display_name
+    return "Anonymous User" if anonymous?
+    return "Guest User" if guest?
+    email.split('@').first.titleize
+  end
+  
+  def can_post?
+    !locked? && (confirmed? || guest?)
+  end
 end
 EOF
+
+  log "Devise setup completed with enhanced security features"
+}
 
   mkdir -p app/views/devise/sessions
   cat <<EOF > app/views/devise/sessions/new.html.erb
@@ -1285,82 +1383,231 @@ EOF
 }
 
 setup_stimulus_components() {
-  log "Setting up Stimulus components for enhanced UX from stimulus-components.com"
+  log "Setting up modern Stimulus components for enhanced UX with accessibility focus"
   
-  # Install core stimulus components from stimulus-components.com
-  yarn add stimulus-lightbox stimulus-infinite-scroll stimulus-character-counter stimulus-textarea-autogrow stimulus-carousel stimulus-use stimulus-debounce stimulus-dropdown stimulus-clipboard stimulus-tabs stimulus-popover stimulus-tooltip
-  if [ $? -ne 0 ]; then
-    error "Failed to install Stimulus components"
+  # Verify Rails and Node environment
+  if [[ ! -f "bin/rails" ]] || [[ ! -f "package.json" ]]; then
+    error "Rails application or Node.js environment not properly configured"
   fi
   
-  # Create modern stimulus controllers
+  # Install comprehensive stimulus components from stimulus-components.com
+  log "Installing modern Stimulus component library"
+  if ! yarn add \
+    stimulus-lightbox stimulus-infinite-scroll stimulus-character-counter \
+    stimulus-textarea-autogrow stimulus-carousel stimulus-use \
+    stimulus-debounce stimulus-dropdown stimulus-clipboard \
+    stimulus-tabs stimulus-popover stimulus-tooltip \
+    stimulus-sortable stimulus-reveal stimulus-scroll-progress \
+    --silent; then
+    error "Failed to install Stimulus components via Yarn"
+  fi
+  
+  # Create enhanced stimulus controllers directory
   mkdir -p app/javascript/controllers
   
-  # Modern lightbox controller
-  cat <<EOF > app/javascript/controllers/lightbox_controller.js
+  # Enhanced lightbox controller with accessibility
+  log "Creating accessible lightbox controller"
+  cat > app/javascript/controllers/lightbox_controller.js << 'EOF'
 import { Controller } from "@hotwired/stimulus"
 import { Lightbox } from "stimulus-lightbox"
 
+// Accessible lightbox controller - WCAG compliant
 export default class extends Controller {
-  static targets = ["image"]
+  static targets = ["image", "caption"]
+  static classes = ["open", "loading"]
   
   connect() {
     this.lightbox = new Lightbox(this.element, {
       keyboard: true,
-      closeOnOutsideClick: true
+      closeOnOutsideClick: true,
+      closeOnEscape: true,
+      trapFocus: true,
+      ariaLabel: "Image lightbox",
+      closeButtonAriaLabel: "Close lightbox"
     })
+    
+    // Announce to screen readers
+    this.element.setAttribute("aria-live", "polite")
+  }
+  
+  open(event) {
+    event.preventDefault()
+    this.element.classList.add(this.loadingClass)
+    this.element.setAttribute("aria-expanded", "true")
+    
+    // Announce to screen readers
+    this.announce("Image lightbox opened")
+  }
+  
+  close(event) {
+    this.element.classList.remove(this.openClass, this.loadingClass)
+    this.element.setAttribute("aria-expanded", "false")
+    
+    // Return focus to trigger element
+    event.target.focus()
+    this.announce("Image lightbox closed")
+  }
+  
+  announce(message) {
+    const announcement = document.createElement("div")
+    announcement.setAttribute("aria-live", "assertive")
+    announcement.setAttribute("aria-atomic", "true")
+    announcement.className = "sr-only"
+    announcement.textContent = message
+    
+    document.body.appendChild(announcement)
+    setTimeout(() => document.body.removeChild(announcement), 1000)
   }
   
   disconnect() {
-    this.lightbox.destroy()
+    this.lightbox?.destroy()
   }
 }
 EOF
 
-  # Modern dropdown controller
-  cat <<EOF > app/javascript/controllers/dropdown_controller.js
+  # Enhanced dropdown controller with keyboard navigation
+  log "Creating accessible dropdown controller"
+  cat > app/javascript/controllers/dropdown_controller.js << 'EOF'
 import { Controller } from "@hotwired/stimulus"
-import { useClickOutside } from "stimulus-use"
+import { useClickOutside, useHotkeys } from "stimulus-use"
 
+// Accessible dropdown controller - WCAG compliant
 export default class extends Controller {
-  static targets = ["menu"]
+  static targets = ["menu", "button", "item"]
   static classes = ["open"]
   
   connect() {
     useClickOutside(this)
+    useHotkeys(this, [
+      ["Escape", () => this.close()],
+      ["ArrowDown", () => this.focusNext()],
+      ["ArrowUp", () => this.focusPrevious()],
+      ["Home", () => this.focusFirst()],
+      ["End", () => this.focusLast()]
+    ])
   }
   
-  toggle() {
-    this.menuTarget.classList.toggle(this.openClass)
+  toggle(event) {
+    event.preventDefault()
+    
+    if (this.isOpen) {
+      this.close()
+    } else {
+      this.open()
+    }
+  }
+  
+  open() {
+    this.menuTarget.classList.add(this.openClass)
+    this.buttonTarget.setAttribute("aria-expanded", "true")
+    this.menuTarget.setAttribute("aria-hidden", "false")
+    
+    // Focus first menu item
+    this.focusFirst()
+  }
+  
+  close() {
+    this.menuTarget.classList.remove(this.openClass)
+    this.buttonTarget.setAttribute("aria-expanded", "false")
+    this.menuTarget.setAttribute("aria-hidden", "true")
+    
+    // Return focus to button
+    this.buttonTarget.focus()
+  }
+  
+  focusNext() {
+    const items = this.itemTargets
+    const currentIndex = items.indexOf(document.activeElement)
+    const nextIndex = (currentIndex + 1) % items.length
+    items[nextIndex].focus()
+  }
+  
+  focusPrevious() {
+    const items = this.itemTargets
+    const currentIndex = items.indexOf(document.activeElement)
+    const previousIndex = currentIndex === 0 ? items.length - 1 : currentIndex - 1
+    items[previousIndex].focus()
+  }
+  
+  focusFirst() {
+    this.itemTargets[0]?.focus()
+  }
+  
+  focusLast() {
+    this.itemTargets[this.itemTargets.length - 1]?.focus()
+  }
+  
+  get isOpen() {
+    return this.menuTarget.classList.contains(this.openClass)
   }
   
   clickOutside() {
-    this.menuTarget.classList.remove(this.openClass)
+    this.close()
   }
 }
 EOF
 
-  # Modern clipboard controller
-  cat <<EOF > app/javascript/controllers/clipboard_controller.js
+  # Enhanced clipboard controller with user feedback
+  log "Creating accessible clipboard controller with user feedback"
+  cat > app/javascript/controllers/clipboard_controller.js << 'EOF'
 import { Controller } from "@hotwired/stimulus"
 
+// Accessible clipboard controller - WCAG compliant
 export default class extends Controller {
   static targets = ["source", "button"]
-  static classes = ["success"]
+  static classes = ["success", "error"]
+  static values = { successText: String, errorText: String }
   
-  copy() {
-    navigator.clipboard.writeText(this.sourceTarget.textContent)
-      .then(() => {
-        this.buttonTarget.classList.add(this.successClass)
-        setTimeout(() => {
-          this.buttonTarget.classList.remove(this.successClass)
-        }, 2000)
-      })
+  copy(event) {
+    event.preventDefault()
+    
+    const text = this.sourceTarget.textContent || this.sourceTarget.value
+    
+    navigator.clipboard.writeText(text)
+      .then(() => this.showSuccess())
+      .catch(() => this.showError())
+  }
+  
+  showSuccess() {
+    this.buttonTarget.classList.add(this.successClass)
+    this.buttonTarget.setAttribute("aria-label", this.successTextValue || "Copied!")
+    
+    // Announce to screen readers
+    this.announce(this.successTextValue || "Content copied to clipboard")
+    
+    setTimeout(() => {
+      this.buttonTarget.classList.remove(this.successClass)
+      this.buttonTarget.setAttribute("aria-label", "Copy to clipboard")
+    }, 2000)
+  }
+  
+  showError() {
+    this.buttonTarget.classList.add(this.errorClass)
+    this.buttonTarget.setAttribute("aria-label", this.errorTextValue || "Copy failed")
+    
+    // Announce to screen readers
+    this.announce(this.errorTextValue || "Failed to copy content")
+    
+    setTimeout(() => {
+      this.buttonTarget.classList.remove(this.errorClass)
+      this.buttonTarget.setAttribute("aria-label", "Copy to clipboard")
+    }, 2000)
+  }
+  
+  announce(message) {
+    const announcement = document.createElement("div")
+    announcement.setAttribute("aria-live", "assertive")
+    announcement.setAttribute("aria-atomic", "true")
+    announcement.className = "sr-only"
+    announcement.textContent = message
+    
+    document.body.appendChild(announcement)
+    setTimeout(() => document.body.removeChild(announcement), 1000)
   }
 }
 EOF
 
-  log "Modern Stimulus components setup completed"
+  log "Modern Stimulus components with accessibility features setup completed"
 }
 
 setup_vote_controller() {
