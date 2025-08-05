@@ -193,6 +193,12 @@ class AI3CLI
       handle_scrape_command(args)
     when 'switch'
       handle_switch_command(args)
+    when 'assistant'
+      handle_assistant_command(args)
+    when 'legal'
+      handle_legal_command(args)
+    when 'swarm'
+      handle_swarm_command(args)
     when 'list'
       handle_list_command(args)
     when 'status'
@@ -364,6 +370,82 @@ class AI3CLI
     end
   end
 
+  def handle_assistant_command(args)
+    return puts '❌ Please specify assistant name' unless args
+
+    begin
+      @current_assistant = @assistant_registry.get_assistant(args)
+      puts "✅ Switched to #{@current_assistant.name} assistant"
+    rescue StandardError => e
+      puts "❌ Assistant switch failed: #{e.message}"
+    end
+  end
+
+  def handle_legal_command(args)
+    return puts '❌ Please provide a legal query' unless args
+
+    # Get Norwegian legal assistant
+    legal_assistant = @assistant_registry.get_assistant('lawyer')
+    
+    if legal_assistant.nil?
+      puts '❌ Norwegian Legal Assistant not available'
+      return
+    end
+
+    spinner = TTY::Spinner.new("[:spinner] #{I18n.t('ai3.legal.norwegian.searching_lovdata', default: 'Researching Norwegian law')}...", format: :dots)
+    spinner.auto_spin
+
+    begin
+      # Use the specialized Norwegian legal assistant
+      response = legal_assistant.respond(args)
+      
+      spinner.stop
+      puts "\n#{@pastel.green('Norwegian Legal Analysis:')} #{response}\n"
+      
+      # Add to session for context
+      @session_manager.update_session('default_user', {
+        last_legal_query: args,
+        last_legal_response: response,
+        assistant_used: legal_assistant.name
+      })
+      
+    rescue StandardError => e
+      spinner.stop
+      puts "❌ Legal research error: #{e.message}"
+    end
+  end
+
+  def handle_swarm_command(args)
+    return puts '❌ Please provide a task for multi-agent coordination' unless args
+
+    puts I18n.t('ai3.assistants.swarm.orchestration_started', default: 'Multi-agent orchestration started')
+    
+    # Check if cognitive load allows multi-agent processing
+    if @cognitive_orchestrator.cognitive_overload?
+      puts "🧠 Cognitive overload - deferring to single agent processing"
+      handle_chat_command(args)
+      return
+    end
+
+    # Determine optimal assistant combination for the task
+    relevant_assistants = determine_relevant_assistants(args)
+    
+    spinner = TTY::Spinner.new("[:spinner] Coordinating #{relevant_assistants.size} agents...", format: :dots)
+    spinner.auto_spin
+
+    begin
+      # Coordinate multiple assistants
+      swarm_results = coordinate_swarm_task(args, relevant_assistants)
+      
+      spinner.stop
+      puts "\n#{@pastel.green('Multi-Agent Response:')} #{swarm_results}\n"
+      
+    rescue StandardError => e
+      spinner.stop
+      puts "❌ Swarm coordination error: #{e.message}"
+    end
+  end
+
   def handle_list_command(type)
     case type&.downcase
     when 'assistants', 'assistant', 'a'
@@ -442,6 +524,92 @@ class AI3CLI
 
   def list_tools
     puts '🔧 Available tools: RAG, Web Scraping, Session Management, Cognitive Monitoring'
+  end
+
+  # Determine which assistants are most relevant for a given task
+  def determine_relevant_assistants(task)
+    task_downcase = task.downcase
+    relevant = []
+    
+    # Add legal assistant for legal queries
+    relevant << 'lawyer' if task_downcase.match?(/law|legal|court|contract|compliance/)
+    
+    # Add trading assistant for financial queries
+    relevant << 'trader' if task_downcase.match?(/trading|stock|finance|investment|market/)
+    
+    # Add medical assistant for health queries
+    relevant << 'medical' if task_downcase.match?(/health|medical|doctor|diagnosis|drug/)
+    
+    # Add security assistant for security queries
+    relevant << 'hacker' if task_downcase.match?(/security|hack|vulnerability|penetration|threat/)
+    
+    # Add web developer for technical queries
+    relevant << 'web_developer' if task_downcase.match?(/web|app|development|programming|code/)
+    
+    # Always include general assistant as coordinator
+    relevant << 'general' unless relevant.empty?
+    
+    relevant.uniq
+  end
+
+  # Coordinate a task across multiple assistants
+  def coordinate_swarm_task(task, assistant_names)
+    results = []
+    
+    assistant_names.each do |name|
+      assistant = @assistant_registry.get_assistant(name)
+      next unless assistant
+      
+      begin
+        # Get response from each assistant
+        response = assistant.respond(task)
+        results << {
+          assistant: assistant.name,
+          response: response
+        }
+        
+        # Add cognitive load for coordination
+        @cognitive_orchestrator.add_concept("swarm_#{name}", 0.5)
+        
+      rescue StandardError => e
+        results << {
+          assistant: name,
+          error: e.message
+        }
+      end
+    end
+    
+    # Synthesize results
+    synthesize_swarm_results(results)
+  end
+
+  # Combine results from multiple assistants into coherent response
+  def synthesize_swarm_results(results)
+    return "No results from swarm coordination" if results.empty?
+    
+    synthesis = "Multi-Agent Analysis:\n\n"
+    
+    results.each do |result|
+      if result[:error]
+        synthesis += "#{result[:assistant]}: Error - #{result[:error]}\n\n"
+      else
+        synthesis += "#{result[:assistant]}:\n#{result[:response]}\n\n"
+      end
+    end
+    
+    synthesis += "Coordinated Recommendation:\n"
+    synthesis += generate_coordinated_recommendation(results)
+    
+    synthesis
+  end
+
+  # Generate a coordinated recommendation from multiple assistant inputs
+  def generate_coordinated_recommendation(results)
+    successful_results = results.reject { |r| r[:error] }
+    return "Unable to generate recommendation due to errors" if successful_results.empty?
+    
+    "Based on analysis from #{successful_results.size} specialized assistants, " \
+    "consider the integrated insights above for a comprehensive approach to your query."
   end
 
   # Initialize scraper with cognitive integration
