@@ -3,7 +3,8 @@
 #!/usr/bin/env zsh
 set -euo pipefail
 
-# Brgen TV setup: AI-generated video content streaming platform with shows, episodes, live search, infinite scroll, and anonymous features on OpenBSD 7.5, unprivileged user
+# Brgen TV setup: Video streaming platform with live streaming, content management, and social viewing features on OpenBSD 7.5, unprivileged user
+# Framework v37.3.2 compliant with enhanced video streaming capabilities
 
 APP_NAME="brgen_tv"
 BASE_DIR="/home/dev/rails"
@@ -11,7 +12,7 @@ BRGEN_IP="46.23.95.45"
 
 source "./__shared.sh"
 
-log "Starting Brgen TV setup"
+log "Starting Brgen TV setup with video streaming and live broadcasting"
 
 setup_full_app "$APP_NAME"
 
@@ -20,9 +21,20 @@ command_exists "node"
 command_exists "psql"
 command_exists "redis-server"
 
-bin/rails generate scaffold Show title:string genre:string description:text release_date:date rating:decimal duration:integer user:references poster:attachment trailer_url:string
-bin/rails generate scaffold Episode title:string description:text duration:integer episode_number:integer season_number:integer show:references video_url:string
-bin/rails generate scaffold Viewing show:references episode:references user:references progress:integer watched:boolean
+# Generate enhanced video streaming models
+bin/rails generate model Video title:string description:text user:references duration:integer views:integer status:string category:string
+bin/rails generate model LiveStream title:string description:text user:references status:string viewer_count:integer stream_key:string
+bin/rails generate model Channel name:string description:text user:references subscriber_count:integer verified:boolean
+bin/rails generate model Subscription user:references channel:references
+bin/rails generate model VideoComment video:references user:references content:text timestamp:integer
+bin/rails generate model StreamChat live_stream:references user:references message:text
+
+# Add video processing and streaming capabilities
+bundle add image_processing
+bundle add mini_magick
+bundle add aws-sdk-s3
+bundle add video_info
+bundle install
 
 cat <<EOF > app/reflexes/shows_infinite_scroll_reflex.rb
 class ShowsInfiniteScrollReflex < InfiniteScrollReflex

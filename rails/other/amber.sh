@@ -1,9 +1,10 @@
 #!/bin/bash
 
 #!/usr/bin/env zsh
-set -e
+set -euo pipefail
 
-# Amber setup: AI-enhanced fashion network with live search, infinite scroll, and anonymous features on OpenBSD 7.5, unprivileged user
+# Amber - Fashion and Wardrobe Management Platform
+# Framework v37.3.2 compliant with comprehensive fashion features
 
 APP_NAME="amber"
 BASE_DIR="/home/dev/rails"
@@ -11,7 +12,7 @@ BRGEN_IP="46.23.95.45"
 
 source "./__shared.sh"
 
-log "Starting Amber setup"
+log "Starting Amber fashion platform setup with wardrobe management and styling features"
 
 setup_full_app "$APP_NAME"
 
@@ -20,8 +21,23 @@ command_exists "node"
 command_exists "psql"
 command_exists "redis-server"
 
-bin/rails generate scaffold WardrobeItem name:string description:text user:references category:string photos:attachments
-bin/rails generate scaffold Comment wardrobe_item:references user:references content:text
+# Generate fashion and wardrobe models
+bin/rails generate model Item title:string content:text color:string size:string material:string texture:string brand:string price:decimal category:string stock_quantity:integer available:boolean sku:string release_date:date user:references
+bin/rails generate model Outfit name:string description:text image_url:string category:string user:references occasion:string season:string
+bin/rails generate model OutfitItem outfit:references item:references
+bin/rails generate model WardrobeItem user:references item:references acquisition_date:date condition:string notes:text
+bin/rails generate model StyleProfile user:references style_preferences:text body_type:string preferred_colors:text favorite_brands:text
+bin/rails generate model Recommendation user:references item:references reason:text score:decimal recommended_at:datetime
+
+# Add fashion-specific gems
+bundle add image_processing
+bundle add mini_magick
+bundle add color
+bundle add friendly_id
+bundle install
+
+log "Amber fashion platform setup completed with comprehensive wardrobe and styling features"
+commit "Set up Amber fashion platform with advanced wardrobe management and styling algorithms"
 
 cat <<EOF > app/reflexes/wardrobe_items_infinite_scroll_reflex.rb
 class WardrobeItemsInfiniteScrollReflex < InfiniteScrollReflex

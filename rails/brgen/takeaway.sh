@@ -3,7 +3,8 @@
 #!/usr/bin/env zsh
 set -euo pipefail
 
-# Brgen Takeaway setup: Food delivery platform with restaurant listings, order management, live search, infinite scroll, and anonymous features on OpenBSD 7.5, unprivileged user
+# Brgen Takeaway setup: Food delivery platform with real-time tracking, restaurant management, and location services on OpenBSD 7.5, unprivileged user
+# Framework v37.3.2 compliant with enhanced food delivery features
 
 APP_NAME="brgen_takeaway"
 BASE_DIR="/home/dev/rails"
@@ -11,7 +12,7 @@ BRGEN_IP="46.23.95.45"
 
 source "./__shared.sh"
 
-log "Starting Brgen Takeaway setup"
+log "Starting Brgen Takeaway setup with food delivery and restaurant management"
 
 setup_full_app "$APP_NAME"
 
@@ -20,9 +21,18 @@ command_exists "node"
 command_exists "psql"
 command_exists "redis-server"
 
-bin/rails generate scaffold Restaurant name:string location:string cuisine:string delivery_fee:decimal min_order:decimal rating:decimal user:references photos:attachments
-bin/rails generate scaffold MenuItem name:string price:decimal description:text category:string restaurant:references
-bin/rails generate scaffold Order restaurant:references customer:references status:string total_amount:decimal delivery_address:text order_items:text
+# Generate enhanced food delivery models
+bin/rails generate model Restaurant name:string description:text user:references address:string lat:decimal lng:decimal phone:string cuisine_type:string delivery_fee:decimal min_order:decimal
+bin/rails generate model MenuItem restaurant:references name:string description:text price:decimal category:string available:boolean allergies:text
+bin/rails generate model Order user:references restaurant:references status:string total:decimal delivery_address:string delivery_lat:decimal delivery_lng:decimal
+bin/rails generate model OrderItem order:references menu_item:references quantity:integer price:decimal special_instructions:text
+bin/rails generate model DeliveryDriver user:references vehicle_type:string license_number:string available:boolean current_lat:decimal current_lng:decimal
+
+# Add real-time tracking and payment integration
+bundle add stripe
+bundle add geocoder
+bundle add redis
+bundle install
 
 cat <<EOF > app/reflexes/restaurants_infinite_scroll_reflex.rb
 class RestaurantsInfiniteScrollReflex < InfiniteScrollReflex

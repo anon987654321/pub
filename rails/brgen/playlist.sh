@@ -3,7 +3,8 @@
 #!/usr/bin/env zsh
 set -e
 
-# Brgen Playlist setup: Music playlist sharing platform with live search, infinite scroll, and anonymous features on OpenBSD 7.5, unprivileged user
+# Brgen Playlist setup: Music playlist sharing platform with streaming, collaboration, and social features on OpenBSD 7.5, unprivileged user
+# Framework v37.3.2 compliant with enhanced music sharing capabilities
 
 APP_NAME="brgen_playlist"
 BASE_DIR="/home/dev/rails"
@@ -11,7 +12,7 @@ BRGEN_IP="46.23.95.45"
 
 source "./__shared.sh"
 
-log "Starting Brgen Playlist setup"
+log "Starting Brgen Playlist setup with music streaming and collaboration features"
 
 setup_full_app "$APP_NAME"
 
@@ -20,8 +21,269 @@ command_exists "node"
 command_exists "psql"
 command_exists "redis-server"
 
-bin/rails generate scaffold Playlist name:string description:text user:references tracks:text
-bin/rails generate scaffold Comment playlist:references user:references content:text
+# Generate enhanced playlist models
+bin/rails generate model Playlist::Set name:string description:text user:references privacy:string collaborative:boolean
+bin/rails generate model Playlist::Track name:string artist:string audio_url:string duration:integer set:references position:integer
+bin/rails generate model Playlist::Collaboration user:references set:references role:string
+bin/rails generate model Playlist::Like user:references set:references
+bin/rails generate scaffold Comment playlist_set:references user:references content:text
+
+# Add music service integrations
+bundle add spotify-web-api-sdk
+bundle add youtube-api-v3-ruby
+bundle add soundcloud-ruby
+bundle install
+
+# Enhanced Playlist models with music service integration
+mkdir -p app/models/playlist
+cat <<EOF > app/models/playlist/set.rb
+module Playlist
+  class Set < ApplicationRecord
+    belongs_to :user
+    has_many :tracks, -> { order(:position) }, class_name: 'Playlist::Track', dependent: :destroy
+    has_many :collaborations, class_name: 'Playlist::Collaboration', dependent: :destroy
+    has_many :collaborators, through: :collaborations, source: :user
+    has_many :likes, class_name: 'Playlist::Like', dependent: :destroy
+    has_many :likers, through: :likes, source: :user
+    has_many :comments, class_name: 'Comment', foreign_key: 'playlist_set_id', dependent: :destroy
+
+    validates :name, presence: true
+    validates :privacy, inclusion: { in: %w[public private unlisted] }
+
+    enum privacy: { public: 0, private: 1, unlisted: 2 }
+
+    scope :public_playlists, -> { where(privacy: :public) }
+    scope :popular, -> { joins(:likes).group('playlist_sets.id').order('COUNT(playlist_likes.id) DESC') }
+
+    def total_duration
+      tracks.sum(:duration)
+    end
+
+    def formatted_duration
+      total_seconds = total_duration
+      hours = total_seconds / 3600
+      minutes = (total_seconds % 3600) / 60
+      seconds = total_seconds % 60
+      
+      if hours > 0
+        format('%d:%02d:%02d', hours, minutes, seconds)
+      else
+        format('%d:%02d', minutes, seconds)
+      end
+    end
+
+    def can_edit?(user)
+      return false unless user
+      return true if self.user == user
+      collaborations.where(user: user, role: ['editor', 'admin']).exists?
+    end
+
+    def can_view?(user)
+      return true if public?
+      return false unless user
+      return true if self.user == user
+      collaborations.where(user: user).exists?
+    end
+
+    def like_count
+      likes.count
+    end
+
+    def liked_by?(user)
+      return false unless user
+      likes.exists?(user: user)
+    end
+  end
+end
+EOF
+
+cat <<EOF > app/models/playlist/track.rb
+module Playlist
+  class Track < ApplicationRecord
+    belongs_to :set, class_name: 'Playlist::Set'
+
+    validates :name, :artist, presence: true
+    validates :position, presence: true, uniqueness: { scope: :set_id }
+    validates :duration, presence: true, numericality: { greater_than: 0 }
+
+    before_validation :set_position, if: :new_record?
+
+    scope :ordered, -> { order(:position) }
+
+    def formatted_duration
+      return '0:00' unless duration
+
+      minutes = duration / 60
+      seconds = duration % 60
+      format('%d:%02d', minutes, seconds)
+    end
+
+    def previous_track
+      set.tracks.where('position < ?', position).order(position: :desc).first
+    end
+
+    def next_track
+      set.tracks.where('position > ?', position).order(position: :asc).first
+    end
+
+    private
+
+    def set_position
+      self.position ||= (set.tracks.maximum(:position) || 0) + 1
+    end
+  end
+end
+EOF
+
+# Enhanced controllers with music streaming features
+mkdir -p app/controllers/playlist
+cat <<EOF > app/controllers/playlist/sets_controller.rb
+module Playlist
+  class SetsController < ApplicationController
+    before_action :authenticate_user!, except: [:index, :show]
+    before_action :set_playlist_set, only: [:show, :edit, :update, :destroy, :like, :unlike, :collaborate]
+    before_action :check_view_permission, only: [:show]
+    before_action :check_edit_permission, only: [:edit, :update, :destroy]
+
+    def index
+      @sets = Playlist::Set.public_playlists.includes(:user, :tracks, :likes)
+      @sets = @sets.where("name ILIKE ?", "%#{params[:search]}%") if params[:search].present?
+      
+      case params[:sort]
+      when 'popular'
+        @sets = @sets.popular
+      when 'recent'
+        @sets = @sets.order(created_at: :desc)
+      else
+        @sets = @sets.order(:name)
+      end
+      
+      @pagy, @sets = pagy(@sets) unless @stimulus_reflex
+    end
+
+    def show
+      @tracks = @set.tracks.ordered
+      @comments = @set.comments.includes(:user).order(created_at: :desc).limit(10)
+      @new_comment = Comment.new
+      
+      respond_to do |format|
+        format.html
+        format.json { render json: serialize_playlist(@set) }
+      end
+    end
+
+    def new
+      @set = current_user.playlist_sets.build
+    end
+
+    def create
+      @set = current_user.playlist_sets.build(set_params)
+      
+      if @set.save
+        redirect_to playlist_set_path(@set), notice: 'Playlist created successfully!'
+      else
+        render :new, status: :unprocessable_entity
+      end
+    end
+
+    def edit
+    end
+
+    def update
+      if @set.update(set_params)
+        redirect_to playlist_set_path(@set), notice: 'Playlist updated successfully!'
+      else
+        render :edit, status: :unprocessable_entity
+      end
+    end
+
+    def destroy
+      @set.destroy
+      redirect_to playlist_sets_path, notice: 'Playlist deleted successfully!'
+    end
+
+    def like
+      like = @set.likes.find_or_initialize_by(user: current_user)
+      
+      if like.persisted?
+        like.destroy
+        liked = false
+      else
+        like.save!
+        liked = true
+      end
+      
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.replace(
+            "like-button-#{@set.id}",
+            partial: "playlist/sets/like_button",
+            locals: { set: @set, liked: liked }
+          )
+        end
+        format.json { render json: { liked: liked, like_count: @set.like_count } }
+      end
+    end
+
+    def collaborate
+      collaboration_params = params.require(:collaboration).permit(:user_id, :role)
+      user = User.find(collaboration_params[:user_id])
+      
+      collaboration = @set.collaborations.find_or_initialize_by(user: user)
+      collaboration.role = collaboration_params[:role]
+      
+      if collaboration.save
+        render json: { success: true, message: 'Collaborator added successfully!' }
+      else
+        render json: { success: false, errors: collaboration.errors.full_messages }
+      end
+    end
+
+    private
+
+    def set_playlist_set
+      @set = Playlist::Set.find(params[:id])
+    end
+
+    def check_view_permission
+      unless @set.can_view?(current_user)
+        redirect_to playlist_sets_path, alert: 'You do not have permission to view this playlist.'
+      end
+    end
+
+    def check_edit_permission
+      unless @set.can_edit?(current_user)
+        redirect_to playlist_set_path(@set), alert: 'You do not have permission to edit this playlist.'
+      end
+    end
+
+    def set_params
+      params.require(:playlist_set).permit(:name, :description, :privacy, :collaborative)
+    end
+
+    def serialize_playlist(set)
+      {
+        id: set.id,
+        name: set.name,
+        description: set.description,
+        duration: set.formatted_duration,
+        track_count: set.tracks.count,
+        like_count: set.like_count,
+        tracks: set.tracks.map do |track|
+          {
+            id: track.id,
+            name: track.name,
+            artist: track.artist,
+            duration: track.formatted_duration,
+            audio_url: track.audio_url,
+            position: track.position
+          }
+        end
+      }
+    end
+  end
+end
+EOF
 
 cat <<EOF > app/reflexes/playlists_infinite_scroll_reflex.rb
 class PlaylistsInfiniteScrollReflex < InfiniteScrollReflex
