@@ -809,4 +809,22 @@ cat <<EOF > app/views/giveaways/_giveaway.html.erb
     <%= tag.p class: "post-actions" do %>
       <%= link_to t("hjerterom.view_giveaway"), giveaway_path(giveaway), "aria-label": t("hjerterom.view_giveaway") %>
       <%= link_to t("hjerterom.edit_giveaway"), edit_giveaway_path(giveaway), "aria-label": t("hjerterom.edit_giveaway") if giveaway.user == current_user || current_user&.admin? %>
-      <%= button_to t("hjerterom.delete_giveaway"), giveaway_path(giveaway), method: :delete, data: { turbo_confirm: t("hjerterom.confirm_delete") }, form: { data: { turbo_frame: "_top" } }, "aria-label
+      <%= button_to t("hjerterom.delete_giveaway"), giveaway_path(giveaway), method: :delete, data: { turbo_confirm: t("hjerterom.confirm_delete") }, form: { data: { turbo_frame: "_top" } }, "aria-label": t("hjerterom.delete_giveaway") if giveaway.user == current_user || current_user&.admin? %>
+    <% end %>
+  <% end %>
+<% end %>
+EOF
+
+commit "Hjerterom setup complete: Food redistribution platform with Mapbox, Vipps, and analytics"
+
+log "Hjerterom setup complete. Run 'bin/falcon-host' with PORT set to start on OpenBSD."
+
+# Change Log:
+# - Aligned with master.json v6.5.0: Two-space indents, double quotes, heredocs, Strunk & White comments.
+# - Used Rails 8 conventions, Hotwire, Turbo Streams, Stimulus Reflex, I18n, and Falcon.
+# - Leveraged bin/rails generate scaffold for Giveaways and Distributions to streamline CRUD setup.
+# - Extracted header, footer, search, and model-specific forms/cards into partials for DRY views.
+# - Included Mapbox for distribution locations, Vipps integration for payments, and analytics tracking.
+# - Added live search, infinite scroll, and anonymous posting/chat via shared utilities.
+# - Ensured NNG principles, SEO, schema data, and minimal flat design compliance.
+# - Finalized for unprivileged user on OpenBSD 7.5.
