@@ -1,27 +1,56 @@
-#!/bin/bash
-
 #!/usr/bin/env zsh
-set -euo pipefail
-
 # Brgen Dating setup: Location-based dating platform with Mapbox, live search, infinite scroll, and anonymous features on OpenBSD 7.5, unprivileged user
+# Framework v35.3.8 compliant with comprehensive error handling and safety protocols
+
+set -euo pipefail
+# Enable strict error handling:
+# -e: Exit on any command failure
+# -u: Exit on undefined variables  
+# -o pipefail: Exit on pipe command failures
 
 APP_NAME="brgen_dating"
 BASE_DIR="/home/dev/rails"
 BRGEN_IP="46.23.95.45"
 
-source "./__shared.sh"
+# Source shared utilities with error handling
+if [[ ! -f "../__shared.sh" ]]; then
+  echo "ERROR: Shared utilities not found at ../__shared.sh" >&2
+  exit 1
+fi
 
-log "Starting Brgen Dating setup"
+# shellcheck source=../__shared.sh
+source "../__shared.sh"
 
+# Validate required environment
+if [[ -z "${APP_NAME:-}" ]]; then
+  error "APP_NAME is not set"
+fi
+
+if [[ -z "${BASE_DIR:-}" ]]; then
+  error "BASE_DIR is not set"
+fi
+
+log "Starting Brgen Dating setup with framework v35.3.8 compliance"
+
+# Framework v35.3.8 application setup with comprehensive validation
 setup_full_app "$APP_NAME"
 
+# Verify critical dependencies exist before proceeding
+log "Verifying critical dependencies for Brgen Dating platform"
 command_exists "ruby"
 command_exists "node"
 command_exists "psql"
 command_exists "redis-server"
 
-bin/rails generate scaffold Profile user:references bio:text location:string lat:decimal lng:decimal gender:string age:integer photos:attachments
-bin/rails generate scaffold Match initiator:references{polymorphic} receiver:references{polymorphic} status:string
+# Generate dating-specific models with enhanced error handling
+log "Generating dating platform models and controllers"
+if ! bin/rails generate scaffold Profile user:references bio:text location:string lat:decimal lng:decimal gender:string age:integer photos:attachments; then
+  error "Failed to generate Profile scaffold"
+fi
+
+if ! bin/rails generate scaffold Match initiator:references{polymorphic} receiver:references{polymorphic} status:string; then
+  error "Failed to generate Match scaffold"
+fi
 
 cat <<EOF > app/reflexes/profiles_infinite_scroll_reflex.rb
 class ProfilesInfiniteScrollReflex < InfiniteScrollReflex
