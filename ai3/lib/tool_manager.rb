@@ -1,14 +1,14 @@
 # lib/tool_manager.rb
 #
 # ToolManager: Handles execution of integrated tools.
-# Loads available tools from the "tools" subdirectory.
+# Loads available tools dynamically from the lib directory.
 
-require_relative "tools/filesystem_tool"
-require_relative "tools/universal_scraper"
+require_relative "filesystem_tool"
+require_relative "universal_scraper"
 
 class ToolManager
   TOOLS = {
-    "filesystem" => FilesystemTool.new,
+    "filesystem" => FileSystemTool.new,
     "scraper" => UniversalScraper.new
   }
 
