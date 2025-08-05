@@ -861,6 +861,53 @@ setup_falcon() {
   fi
 }
 
+# Meta-questioning helpers for DRY code optimization
+generate_social_models() {
+  log "Generating core social models for '$1'"
+  bin/rails generate model Post title:string body:text user:references anonymous:boolean
+  bin/rails generate model Message content:text sender:references receiver:references anonymous:boolean
+  bin/rails generate model Vote votable:references{polymorphic} user:references value:integer
+}
+
+generate_rails_scaffold() {
+  local model="$1"
+  local fields="$2"
+  log "Generating Rails scaffold for $model with fields: $fields"
+  bin/rails generate scaffold "$model" $fields
+}
+
+setup_core_rails_stack() {
+  log "Setting up core Rails 8 stack for '$1'"
+  setup_postgresql "$1"
+  setup_redis
+  setup_ruby
+  setup_yarn
+  setup_rails "$1"
+  setup_solid_queue
+  setup_solid_cache
+}
+
+setup_frontend_stack() {
+  log "Setting up frontend stack with modern components"
+  setup_core
+  setup_stimulus_components
+  setup_vote_controller
+}
+
+setup_authentication_stack() {
+  log "Setting up authentication and storage stack"
+  setup_devise
+  setup_storage
+}
+
+setup_features_stack() {
+  log "Setting up feature stack"
+  setup_live_search
+  setup_infinite_scroll
+  setup_anon_posting
+  setup_anon_chat
+}
+
 generate_social_models() {
   log "Generating social models with Post, Vote, Message"
   bin/rails generate model Post title:string body:text user:references anonymous:boolean
@@ -1030,29 +1077,31 @@ EOF
 setup_full_app() {
   log "Setting up full Rails app '$1' with NNG/SEO/Schema enhancements and Rails 8 modern stack"
   init_app "$1"
-  setup_postgresql "$1"
-  setup_redis
-  setup_ruby
-  setup_yarn
-  setup_rails "$1"
-  setup_solid_queue
-  setup_solid_cache
-  setup_core
-  setup_devise
-  setup_storage
+  
+  # Core infrastructure (necessity test: breaks without these)
+  setup_core_rails_stack "$1"
+  
+  # Frontend and UI (necessity test: UX severely degraded without these)
+  setup_frontend_stack
+  
+  # Authentication and file handling (necessity test: security and uploads fail)
+  setup_authentication_stack
+  
+  # Advanced features (necessity test: modern UX features missing)
+  setup_features_stack
+  
+  # Optional integrations (necessity test: can be removed for simpler apps)
   setup_stripe
   setup_mapbox
-  setup_live_search
-  setup_infinite_scroll
-  setup_anon_posting
-  setup_anon_chat
+  
+  # Finalization (necessity test: needed for deployment)
   setup_expiry_job
   setup_seeds
   setup_pwa
   setup_i18n
   setup_falcon
-  setup_stimulus_components
-  setup_vote_controller
+  
+  # Generate core models (necessity test: social features don't work without these)
   generate_social_models
   migrate_db
 
