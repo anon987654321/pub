@@ -1,27 +1,51 @@
-#!/bin/bash
-
 #!/usr/bin/env zsh
-set -e
-
 # Brgen core setup: Multi-tenant social and marketplace platform with Mapbox, live search, infinite scroll, and anonymous features on OpenBSD 7.5, unprivileged user
+# Framework v35.3.8 compliant with comprehensive error handling and safety protocols
+
+set -euo pipefail
+# Enable strict error handling:
+# -e: Exit on any command failure
+# -u: Exit on undefined variables  
+# -o pipefail: Exit on pipe command failures
 
 APP_NAME="brgen"
 BASE_DIR="/home/dev/rails"
 BRGEN_IP="46.23.95.45"
 
-source "./__shared.sh"
+# Source shared utilities with error handling
+if [[ ! -f "../__shared.sh" ]]; then
+  echo "ERROR: Shared utilities not found at ../__shared.sh" >&2
+  exit 1
+fi
 
-log "Starting Brgen core setup"
+# shellcheck source=../__shared.sh
+source "../__shared.sh"
 
+# Validate required environment
+if [[ -z "${APP_NAME:-}" ]]; then
+  error "APP_NAME is not set"
+fi
+
+if [[ -z "${BASE_DIR:-}" ]]; then
+  error "BASE_DIR is not set"
+fi
+
+log "Starting Brgen core setup with framework v35.3.8 compliance"
+
+# Framework v35.3.8 application setup with comprehensive validation
 setup_full_app "$APP_NAME"
 
+# Verify critical dependencies exist before proceeding
+log "Verifying critical dependencies for Brgen platform"
 command_exists "ruby"
-command_exists "node"
+command_exists "node" 
 command_exists "psql"
 command_exists "redis-server"
 
-install_gem "acts_as_tenant"
-install_gem "pagy"
+# Install tenant management and pagination gems with validation
+log "Installing multi-tenant and pagination dependencies"
+install_gem "acts_as_tenant" "~> 1.0"
+install_gem "pagy" "~> 6.0"
 
 bin/rails generate model Follower follower:references followed:references
 bin/rails generate scaffold Listing title:string description:text price:decimal category:string status:string user:references location:string lat:decimal lng:decimal photos:attachments

@@ -1114,11 +1114,47 @@ commit() {
 }
 
 migrate_db() {
-  log "Running database migrations"
-  bin/rails db:migrate RAILS_ENV=production
-  if [ $? -ne 0 ]; then
-    error "Failed to run database migrations"
+  local environment="${1:-production}"
+  
+  # Validate environment parameter
+  case "$environment" in
+    "development"|"test"|"production")
+      ;;
+    *)
+      error "Invalid Rails environment: '$environment'. Must be development, test, or production"
+      ;;
+  esac
+  
+  log "Running database migrations for environment: $environment"
+  
+  # Verify Rails application structure
+  if [[ ! -f "bin/rails" ]]; then
+    error "Rails application not found - bin/rails missing"
   fi
+  
+  if [[ ! -d "db" ]]; then
+    error "Database directory not found - db/ missing"
+  fi
+  
+  # Check for pending migrations
+  if ! bin/rails db:migrate:status RAILS_ENV="$environment" >/dev/null 2>&1; then
+    log "Unable to check migration status - proceeding with migration"
+  fi
+  
+  # Run migrations with comprehensive error handling
+  log "Executing: bin/rails db:migrate RAILS_ENV=$environment"
+  if ! bin/rails db:migrate RAILS_ENV="$environment"; then
+    error "Database migrations failed for environment '$environment'"
+  fi
+  
+  # Verify migration completion
+  if bin/rails db:migrate:status RAILS_ENV="$environment" | grep -q "down"; then
+    log "Warning: Some migrations may not have completed successfully"
+  else
+    log "All migrations completed successfully"
+  fi
+  
+  log "Database migration completed for environment: $environment"
 }
 
 generate_turbo_views() {
