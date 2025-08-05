@@ -1,0 +1,92 @@
+# AI³ Configuration File
+# Consolidated settings for all AI³ components
+
+# Core System Settings
+system:
+  version: "12.3.0"
+  log_level: "INFO"
+  log_file: "ai3.log"
+  log_rotation: "daily"
+  max_sessions: 10
+  session_timeout: 3600 # 1 hour in seconds
+
+# Multi-LLM Configuration
+llm:
+  default_provider: "openai"
+  providers:
+    openai:
+      model: "gpt-4"
+      temperature: 0.7
+      max_tokens: 2000
+    anthropic:
+      model: "claude-3-sonnet"
+      temperature: 0.7
+      max_tokens: 2000
+  rate_limits:
+    requests_per_minute: 60
+    requests_per_hour: 1000
+
+# Weaviate Vector Database
+weaviate:
+  host: "localhost"
+  port: 8080
+  api_key: "" # Set via environment variable WEAVIATE_API_KEY
+  timeout: 30
+  default_class: "Document"
+
+# Universal Scraper Settings
+scraper:
+  screenshot_dir: "data/screenshots"
+  max_depth: 2
+  timeout: 30
+  user_agent: "AI3-UniversalScraper/1.0"
+  window_size: [1920, 1080]
+  headless: true
+
+# Swarm Agent Configuration
+swarm:
+  max_agents: 10
+  task_timeout: 300
+  parallel_execution: true
+  result_format: "json"
+
+# Assistant Settings
+assistants:
+  auto_load: true
+  search_paths:
+    - "assistants/"
+    - "assistants/chatbots/"
+  default_assistant: "casual_assistant"
+
+# Security Settings
+security:
+  enable_safe_mode: true
+  allowed_file_extensions: [".txt", ".md", ".json", ".csv"]
+  max_file_size: 10485760 # 10MB
+  sandbox_mode: false
+
+# Data Storage
+storage:
+  data_dir: "data"
+  sessions_dir: "data/sessions"
+  screenshots_dir: "data/screenshots"
+  logs_dir: "logs"
+  temp_dir: "tmp"
+
+# Social Media Bot Settings (if enabled)
+social_bots:
+  enabled: false
+  discord:
+    enabled: false
+    token: "" # Set via environment variable
+  snapchat:
+    enabled: false
+  tinder:
+    enabled: false
+
+# Development Settings
+development:
+  debug_mode: false
+  verbose_logging: false
+  test_mode: false
+  mock_llm_responses: false
