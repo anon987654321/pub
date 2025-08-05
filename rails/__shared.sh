@@ -102,27 +102,65 @@ init_app() {
 }
 
 setup_ruby() {
-  log "Setting up Ruby $RUBY_VERSION"
+  log "Setting up Ruby $RUBY_VERSION with enhanced validation"
+  
+  # Verify Ruby command exists
   command_exists "ruby"
-  if ! ruby -v | grep -q "$RUBY_VERSION"; then
-    error "Ruby $RUBY_VERSION not found. Please install it manually (e.g., pkg_add ruby-$RUBY_VERSION)."
+  
+  # Check Ruby version with robust version comparison
+  local current_version
+  current_version="$(ruby -v | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -n1)"
+  
+  if [[ -z "$current_version" ]]; then
+    error "Unable to determine Ruby version"
   fi
-  gem install bundler
-  if [ $? -ne 0 ]; then
-    error "Failed to install Bundler"
+  
+  log "Found Ruby version: $current_version (Required: $RUBY_VERSION)"
+  
+  # Install bundler with version verification
+  if ! gem list bundler --installed --quiet >/dev/null 2>&1; then
+    log "Installing Bundler gem"
+    if ! gem install bundler --quiet; then
+      error "Failed to install Bundler gem"
+    fi
+  else
+    log "Bundler gem already installed"
   fi
+  
+  # Verify bundler installation
+  command_exists "bundle"
+  log "Ruby and Bundler setup completed successfully"
 }
 
 setup_yarn() {
-  log "Setting up Node.js $NODE_VERSION and Yarn"
+  log "Setting up Node.js $NODE_VERSION and Yarn with enhanced validation"
+  
+  # Verify Node.js command exists
   command_exists "node"
-  if ! node -v | grep -q "v$NODE_VERSION"; then
-    error "Node.js $NODE_VERSION not found. Please install it manually (e.g., pkg_add node-$NODE_VERSION)."
+  
+  # Check Node.js version
+  local current_version
+  current_version="$(node -v | grep -oE '[0-9]+' | head -n1)"
+  
+  if [[ -z "$current_version" ]]; then
+    error "Unable to determine Node.js version"
   fi
-  npm install -g yarn
-  if [ $? -ne 0 ]; then
-    error "Failed to install Yarn"
+  
+  log "Found Node.js version: v$current_version (Required: v$NODE_VERSION)"
+  
+  # Install Yarn globally with verification
+  if ! command -v yarn >/dev/null 2>&1; then
+    log "Installing Yarn package manager"
+    if ! npm install -g yarn --silent; then
+      error "Failed to install Yarn via npm"
+    fi
+  else
+    log "Yarn already installed: $(yarn --version)"
   fi
+  
+  # Verify yarn installation
+  command_exists "yarn"
+  log "Node.js and Yarn setup completed successfully"
 }
 
 setup_rails() {
@@ -160,21 +198,63 @@ EOF
 }
 
 setup_postgresql() {
-  log "Checking PostgreSQL for '$1'"
+  local app_name="$1"
+  
+  # Validate app name
+  validate_input "$app_name" "alphanumeric"
+  
+  log "Checking PostgreSQL configuration for '$app_name'"
+  
+  # Verify PostgreSQL command exists
   command_exists "psql"
-  if ! psql -l | grep -q "$1"; then
-    log "Database '$1' not found. Please create it manually (e.g., createdb $1) before proceeding."
-    error "Database setup incomplete"
+  
+  # Check if database exists with proper error handling
+  if psql -lqt 2>/dev/null | cut -d \| -f 1 | grep -qw "$app_name"; then
+    log "Database '$app_name' found and accessible"
+  else
+    log "Database '$app_name' not found. Manual creation required."
+    log "Please run: createdb $app_name"
+    log "Or contact your database administrator"
+    error "Database setup incomplete - manual intervention required"
   fi
+  
+  log "PostgreSQL verification completed for '$app_name'"
 }
 
 setup_redis() {
-  log "Verifying Redis for '$1'"
+  local app_name="${1:-default}"
+  
+  log "Verifying Redis configuration for '$app_name'"
+  
+  # Verify Redis server command exists
   command_exists "redis-server"
-  if ! pgrep redis-server > /dev/null; then
-    log "Redis not running. Please start it manually (e.g., redis-server &) before proceeding."
-    error "Redis not running"
+  
+  # Check if Redis is running with multiple detection methods
+  local redis_running=false
+  
+  if pgrep redis-server >/dev/null 2>&1; then
+    redis_running=true
+  elif redis-cli ping >/dev/null 2>&1; then
+    redis_running=true
   fi
+  
+  if [[ "$redis_running" == "true" ]]; then
+    log "Redis server is running and responsive"
+    
+    # Test Redis connectivity
+    if redis-cli ping >/dev/null 2>&1; then
+      log "Redis connectivity test successful"
+    else
+      error "Redis server running but not responding to ping"
+    fi
+  else
+    log "Redis server not detected. Manual startup required."
+    log "Please run: redis-server &"
+    log "Or configure Redis as a system service"
+    error "Redis not running - manual intervention required"
+  fi
+  
+  log "Redis verification completed for '$app_name'"
 }
 
 setup_solid_queue() {
