@@ -3,7 +3,8 @@
 #!/usr/bin/env zsh
 set -euo pipefail
 
-# Brgen Marketplace setup: E-commerce platform with live search, infinite scroll, and anonymous features on OpenBSD 7.5, unprivileged user
+# Brgen Marketplace setup: Multi-vendor marketplace with Solidus, payments, Mapbox, search, and anonymous features on OpenBSD 7.5, unprivileged user
+# Framework v37.3.2 compliant with enhanced e-commerce functionality
 
 APP_NAME="brgen_marketplace"
 BASE_DIR="/home/dev/rails"
@@ -11,7 +12,7 @@ BRGEN_IP="46.23.95.45"
 
 source "./__shared.sh"
 
-log "Starting Brgen Marketplace setup"
+log "Starting Brgen Marketplace setup with Solidus e-commerce platform"
 
 setup_full_app "$APP_NAME"
 
@@ -20,8 +21,25 @@ command_exists "node"
 command_exists "psql"
 command_exists "redis-server"
 
-bin/rails generate scaffold Product name:string price:decimal description:text user:references photos:attachments
-bin/rails generate scaffold Order product:references buyer:references status:string
+# Install Solidus e-commerce platform
+log "Installing Solidus e-commerce platform"
+bundle add solidus --github='solidusio/solidus'
+bundle add solidus_auth_devise --github='solidusio/solidus_auth_devise' 
+bundle add solidus_searchkick --github='solidusio-contrib/solidus_searchkick'
+bundle add solidus_reviews --github='solidusio-contrib/solidus_reviews'
+bundle add solidus_stripe
+bundle install
+
+# Generate Solidus installation
+bin/rails generate solidus:install --auto-accept
+bin/rails generate solidus_searchkick:install
+bin/rails generate solidus_reviews:install
+bin/rails db:migrate
+
+# Add custom marketplace models
+bin/rails generate model Vendor name:string description:text user:references verified:boolean
+bin/rails generate model VendorProduct vendor:references product:references commission_rate:decimal
+bin/rails generate scaffold Listing title:string description:text price:decimal vendor:references category:string status:string location:string lat:decimal lng:decimal photos:attachments
 
 cat <<EOF > app/reflexes/products_infinite_scroll_reflex.rb
 class ProductsInfiniteScrollReflex < InfiniteScrollReflex

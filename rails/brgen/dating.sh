@@ -3,7 +3,8 @@
 #!/usr/bin/env zsh
 set -euo pipefail
 
-# Brgen Dating setup: Location-based dating platform with Mapbox, live search, infinite scroll, and anonymous features on OpenBSD 7.5, unprivileged user
+# Brgen Dating setup: Location-based dating platform with matchmaking, Mapbox, live search, infinite scroll, and anonymous features on OpenBSD 7.5, unprivileged user
+# Framework v37.3.2 compliant
 
 APP_NAME="brgen_dating"
 BASE_DIR="/home/dev/rails"
@@ -11,7 +12,7 @@ BRGEN_IP="46.23.95.45"
 
 source "./__shared.sh"
 
-log "Starting Brgen Dating setup"
+log "Starting Brgen Dating setup with enhanced matchmaking"
 
 setup_full_app "$APP_NAME"
 
@@ -20,8 +21,120 @@ command_exists "node"
 command_exists "psql"
 command_exists "redis-server"
 
-bin/rails generate scaffold Profile user:references bio:text location:string lat:decimal lng:decimal gender:string age:integer photos:attachments
+bin/rails generate scaffold Profile user:references bio:text location:string lat:decimal lng:decimal gender:string age:integer photos:attachments interests:text
 bin/rails generate scaffold Match initiator:references{polymorphic} receiver:references{polymorphic} status:string
+bin/rails generate model Dating::Like user:references liked_user:references
+bin/rails generate model Dating::Dislike user:references disliked_user:references
+
+# Add matchmaking service
+mkdir -p app/services/dating
+cat <<EOF > app/services/dating/matchmaking_service.rb
+module Dating
+  class MatchmakingService
+    def self.find_matches(user)
+      return [] unless user.profile
+
+      # Get users who liked this user and this user also liked
+      likes_given = user.dating_likes.pluck(:liked_user_id)
+      likes_received = Dating::Like.where(liked_user_id: user.id).pluck(:user_id)
+      mutual_likes = likes_given & likes_received
+      
+      # Create matches for mutual likes
+      mutual_likes.each do |match_id|
+        match_user = User.find(match_id)
+        Match.find_or_create_by(
+          initiator: user.profile,
+          receiver: match_user.profile,
+          status: 'matched'
+        )
+      end
+      
+      # Return potential matches based on location and interests
+      find_potential_matches(user)
+    end
+
+    def self.find_potential_matches(user)
+      return [] unless user.profile
+
+      # Exclude already liked/disliked users
+      excluded_ids = [user.id]
+      excluded_ids += user.dating_likes.pluck(:liked_user_id)
+      excluded_ids += user.dating_dislikes.pluck(:disliked_user_id)
+
+      # Find profiles within reasonable distance and similar interests
+      Profile.joins(:user)
+             .where.not(user_id: excluded_ids)
+             .where(gender: compatible_genders(user.profile.gender))
+             .near([user.profile.lat, user.profile.lng], 50) # 50km radius
+             .limit(10)
+    end
+
+    private
+
+    def self.compatible_genders(user_gender)
+      case user_gender
+      when 'male' then ['female', 'non-binary']
+      when 'female' then ['male', 'non-binary']
+      when 'non-binary' then ['male', 'female', 'non-binary']
+      else ['male', 'female', 'non-binary']
+      end
+    end
+  end
+end
+EOF
+
+# Enhanced Profile controller with matchmaking
+mkdir -p app/controllers/dating
+cat <<EOF > app/controllers/dating/profiles_controller.rb
+module Dating
+  class ProfilesController < ApplicationController
+    before_action :set_profile, only: [:show, :edit, :update, :like, :dislike]
+    before_action :authenticate_user!
+
+    def index
+      @profiles = MatchmakingService.find_potential_matches(current_user)
+      @pagy, @profiles = pagy(@profiles) unless @stimulus_reflex
+    end
+
+    def show
+    end
+
+    def like
+      Dating::Like.find_or_create_by(
+        user: current_user,
+        liked_user: @profile.user
+      )
+      
+      # Check for match
+      if Dating::Like.exists?(user: @profile.user, liked_user: current_user)
+        Match.find_or_create_by(
+          initiator: current_user.profile,
+          receiver: @profile,
+          status: 'matched'
+        )
+        flash[:notice] = "It's a match! 🎉"
+      end
+      
+      redirect_to dating_profiles_path
+    end
+
+    def dislike
+      Dating::Dislike.find_or_create_by(
+        user: current_user,
+        disliked_user: @profile.user
+      )
+      
+      redirect_to dating_profiles_path
+    end
+
+    private
+
+    def set_profile
+      @profile = Profile.find(params[:id])
+    end
+  end
+end
+EOF
 
 cat <<EOF > app/reflexes/profiles_infinite_scroll_reflex.rb
 class ProfilesInfiniteScrollReflex < InfiniteScrollReflex

@@ -4,6 +4,7 @@
 set -e
 
 # Shared utility functions for Rails apps on OpenBSD 7.5, unprivileged user, NNG/SEO/Schema optimized
+# Framework v37.3.2 compliant
 
 BASE_DIR="/home/dev/rails"
 RAILS_VERSION="8.0.0"
@@ -29,6 +30,18 @@ command_exists() {
   fi
 }
 
+commit_to_git() {
+  git add -A
+  git commit -m "$1"
+  log "Git commit: $1"
+}
+
+check_file_exists() {
+  if [ ! -f "$1" ]; then
+    error "File $1 does not exist."
+  fi
+}
+
 init_app() {
   log "Initializing app directory for '$1'"
   mkdir -p "$BASE_DIR/$1"
@@ -51,6 +64,60 @@ setup_ruby() {
   if [ $? -ne 0 ]; then
     error "Failed to install Bundler"
   fi
+}
+
+setup_postgresql() {
+  log "Setting up PostgreSQL for '$1'"
+  command_exists "psql"
+  
+  # Create database configuration
+  cat <<EOF > config/database.yml
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  username: <%= ENV.fetch("POSTGRES_USER", "dev") %>
+  password: <%= ENV.fetch("POSTGRES_PASSWORD", "") %>
+  host: <%= ENV.fetch("POSTGRES_HOST", "localhost") %>
+  port: <%= ENV.fetch("POSTGRES_PORT", "5432") %>
+
+development:
+  <<: *default
+  database: <%= ENV.fetch("POSTGRES_DB", "${1}_development") %>
+
+test:
+  <<: *default
+  database: <%= ENV.fetch("POSTGRES_TEST_DB", "${1}_test") %>
+
+production:
+  <<: *default
+  database: <%= ENV.fetch("POSTGRES_PROD_DB", "${1}_production") %>
+  url: <%= ENV.fetch("DATABASE_URL", "") %>
+EOF
+
+  log "PostgreSQL configuration completed"
+}
+
+setup_redis() {
+  log "Setting up Redis for caching and ActionCable"
+  command_exists "redis-server"
+  
+  # Configure Redis for ActionCable
+  cat <<EOF > config/cable.yml
+development:
+  adapter: redis
+  url: <%= ENV.fetch("REDIS_URL", "redis://localhost:6379/1") %>
+
+test:
+  adapter: test
+
+production:
+  adapter: redis
+  url: <%= ENV.fetch("REDIS_URL", "redis://localhost:6379/1") %>
+  channel_prefix: ${APP_NAME}_production
+EOF
+
+  log "Redis configuration completed"
 }
 
 setup_yarn() {
