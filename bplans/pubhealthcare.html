@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pub.Healthcare - Forretningsplan</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Variables */
+        :root {
+            --primary-color: #1a1a1a;
+            --background-color: #f5f5f5;
+            --text-color: #222222;
+            --highlight-color: #20b2aa;
+            --font-family: 'Inter', sans-serif;
+        }
+
+        /* General Styles */
+        body {
+            margin: 0;
+            font-family: var(--font-family);
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            font-size: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Logo Container */
+        .logo-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        /* Logo styling with animated gradient - healthcare colors */
+        .logo-container {
+            font-family: 'Black Han Sans', sans-serif;
+            font-size: 70px;
+            color: transparent;
+            background: linear-gradient(45deg, #20b2aa, #008080, #5f9ea0, #20b2aa);
+            background-size: 400%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            animation: gradientMove 5s infinite linear;
+        }
+
+        /* Header styling */
+        header {
+            text-align: center;
+            padding: 20px;
+            background-color: var(--background-color);
+        }
+
+        .header-text {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-color);
+            margin-top: -1.2rem;
+            max-width: 100%;
+            text-align: center;
+        }
+
+        /* Main content */
+        main {
+            max-width: 900px;
+            margin: 3rem auto;
+            padding: 0 1rem;
+        }
+
+        section {
+            padding: 2rem 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+        }
+
+        p {
+            font-size: 1rem;
+            color: #333333;
+        }
+
+        .ai3-feature {
+            background-color: #e0f8ff;
+            padding: 1rem;
+            border-left: 4px solid var(--highlight-color);
+            margin: 1rem 0;
+        }
+
+        .hapi-tech {
+            background-color: #f0ffff;
+            padding: 1rem;
+            border-left: 4px solid #5f9ea0;
+            margin: 1rem 0;
+        }
+
+        .integration {
+            background-color: #f5fffa;
+            padding: 1rem;
+            border-left: 4px solid #66cdaa;
+            margin: 1rem 0;
+        }
+
+        ul {
+            padding-left: 1.5rem;
+        }
+
+        li {
+            margin: 0.5rem 0;
+        }
+
+        .chart-container {
+            max-width: 500px;
+            margin: 2rem auto;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Responsive adjustments for mobile */
+        @media (max-width: 768px) {
+            .header-text {
+                font-size: 0.9rem;
+            }
+            h2 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <!-- Logo Wrapper -->
+        <div class="logo-wrapper">
+            <div class="logo-container">PUB.HEALTH</div>
+        </div>
+        <div class="header-text">
+            Integrert helse-teknologi med AI³-drevet diagnostikk og behandling
+        </div>
+    </header>
+
+    <main>
+        <!-- Sammendrag Section -->
+        <section id="sammendrag">
+            <h2>Sammendrag</h2>
+            <h3>Visjon</h3>
+            <p>Å transformere helsevesenet gjennom autonome parametriske sykehus og AI³-drevne systemer som dynamisk tilpasser seg endrede helsebehov med høy kostnadseffektivitet.</p>
+            <h3>Misjon</h3>
+            <p>Levere integrerte helsetjenester som kombinerer veterinær-, tann- og allmennmedisin i én sømløs løsning gjennom avansert teknologi og AI³-diagnostikk.</p>
+        </section>
+
+        <!-- AI³-Drevet Diagnostikk Section -->
+        <section id="ai3-diagnostics">
+            <h2>AI³-Drevet Diagnostikk</h2>
+            <div class="ai3-feature">
+                <h3>Artificial Intelligence Cubed for Healthcare</h3>
+                <p><strong>Personaliserte Helsetilbud:</strong> AI³ analyserer pasientdata for skreddersydde behandlingsplaner.</p>
+                <p><strong>Prediktiv Diagnostikk:</strong> Tidlig oppdagelse av sykdommer før symptomer manifesterer seg.</p>
+                <p><strong>Kontinuerlig Læring:</strong> Systemet forbedres konstant gjennom maskinlæring og pasientutfall.</p>
+                <p><strong>Multi-modal Analyse:</strong> Integrering av bildediagnostikk, laboratorieresultater og kliniske data.</p>
+                <p><strong>Real-time Monitoring:</strong> Kontinuerlig overvåking av pasienter med automatiske varsler.</p>
+            </div>
+        </section>
+
+        <!-- hAPI Integration Section -->
+        <section id="hapi-integration">
+            <h2>hAPI - Healthcare API Integration</h2>
+            <div class="hapi-tech">
+                <h3>Public Healthcare Unified Integration (PHUI)</h3>
+                <p><strong>Global Standard:</strong> Overgår tradisjonelle FHIR-standarder for helsedata-utveksling.</p>
+                <p><strong>Dynamic Data Utilization:</strong> Ikke bare utveksling, men dynamisk bruk av helsedata.</p>
+                <p><strong>LangChain.rb Integration:</strong> Ruby-basert API for sømløs systemintegrasjon.</p>
+                <p><strong>Advanced Human Simulation:</strong> Digital tvillinger av pasienter for behandlingsplanlegging.</p>
+                <p><strong>Interoperabilitet:</strong> Kobles til eksisterende helsesystemer på tvers av institusjonser.</p>
+            </div>
+        </section>
+
+        <!-- Integrerte Helsetjenester Section -->
+        <section id="integrated-services">
+            <h2>Integrerte Helsetjenester</h2>
+            <div class="integration">
+                <h3>One-Stop Healthcare Solution</h3>
+                <p><strong>Allmennmedisin:</strong> Komplett primærhelse med AI³-assistert diagnostikk.</p>
+                <p><strong>Tannhelse:</strong> Integrert tannlegetjenester med 3D-printing av proteser og implantater.</p>
+                <p><strong>Veterinærtjenester:</strong> Dyrehelse integrert i samme plattform med tilpassede AI³-modeller.</p>
+                <p><strong>Spesialisttjenester:</strong> AI³-drevet triagering og henvisning til riktige spesialister.</p>
+                <p><strong>Forebyggende Behandling:</strong> Proaktiv helseomsorg basert på prediktive modeller.</p>
+            </div>
+        </section>
+
+        <!-- Teknologi Platform Section -->
+        <section id="tech-platform">
+            <h2>Teknologi Platform</h2>
+            
+            <h3>Core Infrastructure</h3>
+            <ul>
+                <li><strong>Ruby og Roda:</strong> Skalerbar backend for sømløs systemintegrasjon</li>
+                <li><strong>LangChain.rb:</strong> AI³ language processing for medisinske notater og rapporter</li>
+                <li><strong>OpenBSD:</strong> Sikker og stabil plattform for beskyttelse av sensitive helsedata</li>
+                <li><strong>Vector Search (Weaviate):</strong> Intelligent søk i medisinske databaser og forskning</li>
+                <li><strong>Blockchain:</strong> Sikker og transparent håndtering av pasientjournaler</li>
+            </ul>
+            
+            <h3>Autonome Parametriske Sykehus</h3>
+            <ul>
+                <li><strong>Self-Constructing Facilities:</strong> Modulære sykehus som bygger seg selv basert på behov</li>
+                <li><strong>Environmental Optimization:</strong> Automatisk justering av miljøforhold for optimal pasientgjenvinning</li>
+                <li><strong>Continuous Health Monitoring:</strong> Real-time overvåking av miljøforhold og patogennivåer</li>
+                <li><strong>AI-Driven Patient Care:</strong> Personaliserte AI-ledsagere for hver pasient</li>
+                <li><strong>Robotic Assistance:</strong> Autonome roboter for rutineoppgaver og pasientomsorg</li>
+            </ul>
+        </section>
+
+        <!-- Digital Plattform Section -->
+        <section id="digital-platform">
+            <h2>Digital Plattform for Pasienter og Klinikker</h2>
+            
+            <h3>Patient Portal</h3>
+            <ul>
+                <li><strong>Unified Health Records:</strong> Integrerte journaler på tvers av alle helsetjenester</li>
+                <li><strong>AI³ Health Assistant:</strong> Personlig helseassistent tilgjengelig 24/7</li>
+                <li><strong>Predictive Health Insights:</strong> Prognoser og anbefalinger basert på helsedata</li>
+                <li><strong>Appointment Scheduling:</strong> Automatisk booking basert på AI³ triagering</li>
+                <li><strong>Medication Management:</strong> Smart medikamenthåndtering med påminnelser og interaksjonssjekk</li>
+            </ul>
+            
+            <h3>Clinician Dashboard</h3>
+            <ul>
+                <li><strong>AI³ Diagnostic Support:</strong> Real-time diagnostisk støtte under konsultasjoner</li>
+                <li><strong>Treatment Recommendations:</strong> Evidens-baserte behandlingsforslag</li>
+                <li><strong>Resource Optimization:</strong> Intelligent allokering av personell og utstyr</li>
+                <li><strong>Continuous Education:</strong> AI³-drevet oppdatering av medisinsk kunnskap</li>
+                <li><strong>Quality Metrics:</strong> Real-time kvalitetsmålinger og forbedringssug­sjoner</li>
+            </ul>
+        </section>
+
+        <!-- 3D Simulation og Druglab Section -->
+        <section id="3d-druglab">
+            <h2>3D Simulation og Digital Druglab</h2>
+            
+            <h3>Advanced Medical Simulation</h3>
+            <ul>
+                <li><strong>Patient Digital Twins:</strong> 3D-modeller av pasienter for behandlingsplanlegging</li>
+                <li><strong>Surgical Planning:</strong> Virtual reality kirurgisk planlegging og trening</li>
+                <li><strong>Drug Interaction Modeling:</strong> Simulering av medikamenteffekter før administrering</li>
+                <li><strong>Disease Progression:</strong> Modellering av sykdomsutvikling for prognostisering</li>
+            </ul>
+            
+            <h3>Digital Drug Development</h3>
+            <ul>
+                <li><strong>AI³ Drug Discovery:</strong> Accelerert utvikling av nye medikamenter</li>
+                <li><strong>Molecular Simulation:</strong> Quantum-level simulering av medikamentinteraksjoner</li>
+                <li><strong>Clinical Trial Optimization:</strong> AI³-drevet optimalisering av kliniske studier</li>
+                <li><strong>Personalized Medicine:</strong> Skreddersydde medikamenter basert på genetisk profil</li>
+            </ul>
+        </section>
+
+        <!-- Neuralink Integration Section -->
+        <section id="neuralink">
+            <h2>Neuralink og Brain-Computer Interfaces</h2>
+            
+            <h3>Neural Integration</h3>
+            <ul>
+                <li><strong>Brain Monitoring:</strong> Kontinuerlig overvåking av nevrologisk helse</li>
+                <li><strong>Cognitive Enhancement:</strong> AI³-assistert kognitiv støtte for pasienter</li>
+                <li><strong>Neural Prosthetics:</strong> Avanserte proteser kontrollert av tanker</li>
+                <li><strong>Mental Health Support:</strong> Real-time deteksjon og støtte for mental helse</li>
+                <li><strong>Memory Enhancement:</strong> AI³-drevet hukommelsesforstyrrelse og rehabilitering</li>
+            </ul>
+        </section>
+
+        <!-- Finansiering Section -->
+        <section id="finansiering">
+            <h2>Finansiering</h2>
+            <div class="chart-container">
+                <canvas id="financeChart" width="250" height="150"></canvas>
+            </div>
+            
+            <h3>5-års Investeringsplan (2025-2030)</h3>
+            <ul>
+                <li><strong>År 1 (2025):</strong> NOK 500 millioner - AI³ platform og hAPI utvikling</li>
+                <li><strong>År 2 (2026):</strong> NOK 1,2 milliarder - Første autonome sykehus pilot</li>
+                <li><strong>År 3 (2027):</strong> NOK 2,5 milliarder - Nasjonal utrulling i Norge</li>
+                <li><strong>År 4 (2028):</strong> NOK 4 milliarder - Nordic expansion</li>
+                <li><strong>År 5 (2029):</strong> NOK 7 milliarder - Global deployment</li>
+            </ul>
+            
+            <h3>Finansieringskilder</h3>
+            <ul>
+                <li><strong>Innovasjon Norge:</strong> NOK 2 milliarder technology development</li>
+                <li><strong>EU Horizon Program:</strong> NOK 3 milliarder research funding</li>
+                <li><strong>Helse- og omsorgsdepartementet:</strong> NOK 5 milliarder healthcare modernization</li>
+                <li><strong>Private Healthcare Investors:</strong> NOK 4 milliarder venture capital</li>
+                <li><strong>Technology Giants:</strong> NOK 1 milliard strategic partnerships</li>
+            </ul>
+        </section>
+
+        <!-- Market Impact Section -->
+        <section id="market-impact">
+            <h2>Markedsimpact og ROI</h2>
+            <div class="chart-container">
+                <canvas id="impactChart" width="250" height="150"></canvas>
+            </div>
+            
+            <h3>Helseøkonomiske Besparelser</h3>
+            <ul>
+                <li><strong>Reduserte Behandlingskostnader:</strong> 40% gjennom tidlig diagnostikk</li>
+                <li><strong>Optimalisert Ressursbruk:</strong> 35% effektivitetsforbedring i sykehus</li>
+                <li><strong>Færre Reinnleggelser:</strong> 50% reduksjon gjennom bedre oppfølging</li>
+                <li><strong>Preventiv Behandling:</strong> 60% reduksjon i alvorlige sykdomstilfeller</li>
+            </ul>
+            
+            <h3>Samfunnsverdi</h3>
+            <ul>
+                <li><strong>Økt Produktivitet:</strong> Raskere gjenvinning og mindre sykefravær</li>
+                <li><strong>Bedre Livskvalitet:</strong> Proaktiv helseomsorg og personalisert behandling</li>
+                <li><strong>Global Export:</strong> Norsk helseteknologi som eksportprodukt</li>
+                <li><strong>Forskning og Utvikling:</strong> Attraksjon av internasjonal helseforskng til Norge</li>
+            </ul>
+        </section>
+
+        <!-- Konklusjon Section -->
+        <section id="konklusjon">
+            <h2>Konklusjon</h2>
+            <p>Pub.Healthcare representerer den neste generasjonen av helseteknologi, hvor AI³, hAPI og integrerte tjenester skaper en revolusjon i hvordan vi leverer og mottar helseomsorg.</p>
+            <p>Som flaggskip for Autonomipartiet demonstrerer Pub.Healthcare hvordan teknologi kan brukes til å løse samfunnets største utfordringer samtidig som vi skaper betydelig økonomisk verdi.</p>
+            <p>Gjennom autonome parametriske sykehus, AI³-drevet diagnostikk og sømløs integrasjon av alle helsetjenester, setter vi en ny standard for global helseomsorg.</p>
+            <p><strong>Med støtte fra Innovasjon Norge kan vi etablere Norge som verdensledende innen helseteknologi og skape en bærekraftig fremtid for helsevesenet.</strong></p>
+        </section>
+
+        <!-- Konfidensialitet Section -->
+        <section id="confidentiality">
+            <h2>Konfidensialitet</h2>
+            <p>Denna forretningsplanen inneholder konfidensiell og eiendomsbeskyttet informasjon. Informasjonen er kun ment for Innovasjon Norge og eventuelle autoriserte representanter. Uautoriseret distribusjon, reproduksjon eller deling av dette dokumentet er strengt forbudt.</p>
+            <p><strong>Dato:</strong> 5. august 2025<br>
+            <strong>Utarbeidet av:</strong> Pub.Healthcare<br>
+            <strong>Målgruppe:</strong> Innovasjon Norge investorer</p>
+        </section>
+    </main>
+
+    <!-- Chart.js Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Financial Projections Chart
+        const financeCtx = document.getElementById('financeChart').getContext('2d');
+        const financeChart = new Chart(financeCtx, {
+            type: 'bar',
+            data: {
+                labels: ['2025', '2026', '2027', '2028', '2029'],
+                datasets: [
+                    {
+                        label: 'Investering (MNOK)',
+                        data: [500, 1200, 2500, 4000, 7000],
+                        backgroundColor: '#20b2aa',
+                    },
+                    {
+                        label: 'Forventet Besparelser (MNOK)',
+                        data: [100, 500, 1500, 3000, 6000],
+                        backgroundColor: '#008080',
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    y: { beginAtZero: true }
+                },
+                plugins: {
+                    title: { display: true, text: 'Pub.Healthcare - Investering og Besparelser' },
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        // Market Impact Chart
+        const impactCtx = document.getElementById('impactChart').getContext('2d');
+        const impactChart = new Chart(impactCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Behandlingskostnader', 'Ressursoptimalisering', 'Reinnleggelser', 'Preventiv Behandling'],
+                datasets: [{
+                    data: [40, 35, 50, 60],
+                    backgroundColor: ['#20b2aa', '#5f9ea0', '#66cdaa', '#008080'],
+                }]
+            },
+            options: {
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.label}: ${context.raw}% besparelse`;
+                            }
+                        }
+                    },
+                    title: { display: true, text: 'Helseøkonomiske Besparelser' },
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
