@@ -3,8 +3,8 @@
 # assistants/LinuxOpenBSDDriverTranslator.rb
 require 'digest'
 require 'logger'
-require_relative '../tools/filesystem_tool'
-require_relative '../tools/universal_scraper'
+require_relative '../lib/filesystem_tool'
+require_relative '../lib/universal_scraper'
 
 module Assistants
   class LinuxOpenBSDDriverTranslator

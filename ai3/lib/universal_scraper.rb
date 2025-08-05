@@ -373,4 +373,12 @@ class UniversalScraper
   rescue URI::InvalidURIError
     false
   end
+
+  # Execute method for tool manager integration
+  def execute(url, *args)
+    result = scrape(url)
+    result[:content] || ""
+  rescue StandardError => e
+    "Error scraping #{url}: #{e.message}"
+  end
 end
