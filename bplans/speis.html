@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SYRE™ - Forretningsplan for Romarkitektur og Teknologi</title>
+    <title>SPEIS - Forretningsplan for Aerospace og Forsvar</title>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
@@ -13,7 +13,7 @@
             --primary-color: #1a1a1a;
             --background-color: #f5f5f5;
             --text-color: #222222;
-            --highlight-color: #5d93ff;
+            --highlight-color: #dc143c;
             --font-family: 'Inter', sans-serif;
         }
 
@@ -36,12 +36,12 @@
             display: inline-block;
         }
 
-        /* Logo styling with animated gradient */
+        /* Logo styling with animated gradient - defense colors */
         .logo-container {
             font-family: 'Black Han Sans', sans-serif;
             font-size: 70px;
             color: transparent;
-            background: linear-gradient(45deg, #ff8c00, #ff0080, #8a2be2, #ff8c00);
+            background: linear-gradient(45deg, #dc143c, #8b0000, #2f4f4f, #dc143c);
             background-size: 400%;
             background-clip: text;
             -webkit-background-clip: text;
@@ -93,18 +93,38 @@
             color: #333333;
         }
 
-        /* Image Placeholder Styles */
-        .image-placeholder {
-            width: 100%;
-            height: 250px;
-            background-color: #cccccc;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #666666;
-            font-size: 1.5rem;
+        .nato-project {
+            background-color: #e8f4fd;
+            padding: 1rem;
+            border-left: 4px solid var(--highlight-color);
             margin: 1rem 0;
+        }
+
+        .fighter-gen {
+            background-color: #f0f8ff;
+            padding: 1rem;
+            border-left: 4px solid #4682b4;
+            margin: 1rem 0;
+        }
+
+        .ruby-tech {
+            background-color: #fff0f5;
+            padding: 1rem;
+            border-left: 4px solid #ff69b4;
+            margin: 1rem 0;
+        }
+
+        ul {
+            padding-left: 1.5rem;
+        }
+
+        li {
+            margin: 0.5rem 0;
+        }
+
+        .chart-container {
+            max-width: 500px;
+            margin: 2rem auto;
         }
 
         @keyframes gradientMove {
@@ -112,16 +132,26 @@
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
+
+        /* Responsive adjustments for mobile */
+        @media (max-width: 768px) {
+            .header-text {
+                font-size: 0.9rem;
+            }
+            h2 {
+                font-size: 1.8rem;
+            }
+        }
     </style>
 </head>
 <body>
     <header>
-        <!-- Logo Wrapper with TM Symbol -->
+        <!-- Logo Wrapper -->
         <div class="logo-wrapper">
-            <div class="logo-container">SYRE</div>
+            <div class="logo-container">SPEIS</div>
         </div>
         <div class="header-text">
-            Neste-generasjons teknologi for romarkitektur, parametrisk design og fremdrift
+            Kongsberg Defense konkurrent - Avansert aerospace og forsvarsteknologi
         </div>
     </header>
 
@@ -130,53 +160,194 @@
         <section id="sammendrag">
             <h2>Sammendrag</h2>
             <h3>Visjon</h3>
-            <p>Å muliggjøre menneskelig utforskning og bosetting i rommet med avansert produksjonsteknologi, parametrisk arkitektur og fremdriftssystemer som er tilpasset rommiljøer.</p>
+            <p>Å utfordre Kongsberg Defense som Norges ledende aerospace og forsvarsteknologi-leverandør, med fokus på AI-drevne systemer og Ruby-basert 3D-printing for next-generation kampsystemer.</p>
             <h3>Misjon</h3>
-            <p>Å bygge skreddersydde løsninger for rombasert produksjon og arkitektur gjennom on-demand 3D-printing, nanomaterialer og parametrisk design, samt fremdriftsteknologier for langdistanse utforskning.</p>
-            <div class="image-placeholder">Bilde: Visjon og Misjon</div>
+            <p>Levere overlegne aerospace-løsninger for NATO og norske forsvarsbehov, inkludert arktiske skip, neste generasjons jagerfly og avanserte produksjonssystemer.</p>
         </section>
 
-        <!-- Markedsanalyse Section -->
-        <section id="marked">
-            <h2>Markedsanalyse</h2>
-            <p>Den globale romindustrien forventes å vokse til over USD 1 billion innen 2040. Etterspørselen for romarkitektur og produksjonsteknologi øker, drevet av behovet for langvarige strukturer og transportløsninger til Mars og månen.</p>
-            <div class="image-placeholder">Bilde: Markedsanalyse</div>
+        <!-- NATO Arctic Ships Section -->
+        <section id="nato-ships">
+            <h2>NATO Arctic Ships "Aurora" Klasse - 2025 Implementasjon</h2>
+            <div class="nato-project">
+                <h3>Arktisk Dominanse - NÅ Tilgjengelig</h3>
+                <p><strong>Hybrid Nuclear og AI-Powered Propulsion:</strong> Doble kjernereaktorer med AI-optimalisering for maksimal effektivitet.</p>
+                <p><strong>Isbrytningskapasitet:</strong> Bryter gjennom 3,5 meter flerårig is - overlegent Russlands Arktika-klasse.</p>
+                <p><strong>Forsvarssystemer:</strong> NATO-standard missilforsvar og sonar-arrays for under-is deteksjon.</p>
+                <p><strong>Modulære Missjonssystemer:</strong> Konfigurerbare rom for UAV/USV, undervannsbåtdeteksjon og missiler.</p>
+                <p><strong>Investering:</strong> €4,8 milliarder for utvikling, €1,1 milliarder per skip.</p>
+                <p><strong>Status:</strong> Klar for produksjon 2025 - ikke fremtidsvisjon!</p>
+            </div>
         </section>
 
-        <!-- Teknologi og Produktutvikling Section -->
-        <section id="teknologi">
-            <h2>Teknologi og Produktutvikling</h2>
-            <h3>Parametrisk Arkitektur</h3>
-            <p>Parametrisk design gir muligheten til å skape skreddersydde strukturer som tilpasser seg miljømessige krav og tilgjengelige ressurser i rommet, noe som sikrer effektivitet og bærekraft.</p>
-            <div class="image-placeholder">Bilde: Parametrisk Arkitektur</div>
+        <!-- Jagerfly Generasjoner Section -->
+        <section id="fighter-jets">
+            <h2>Jagerfly 7.-10. Generasjon Business Plans</h2>
             
-            <h3>On-Demand 3D-Printing</h3>
-            <p>Med autonom 3D-printing kan vi produsere romstrukturer på stedet, og utnytte ressurser fra månen og Mars for å bygge infrastruktur uten å måtte frakte alt fra Jorden.</p>
-            <div class="image-placeholder">Bilde: 3D-Printing</div>
+            <div class="fighter-gen">
+                <h3>7. Generasjon: "STRATOSENTIENT" (2025-klar)</h3>
+                <p><strong>Neural-interface swarm fighters:</strong> Piloter kontrollerer sverm av kampsystemer via neural grensesnitt.</p>
+                <p><strong>Implementerbar nå:</strong> Basert på eksisterende VR/AR teknologi og AI-assistert flyving.</p>
+                <p><strong>Kostnad:</strong> €120 millioner per fly, €2,4 milliarder for første skvadron.</p>
+                <p><strong>Leveringstid:</strong> 18 måneder fra bestilling til første fly.</p>
+            </div>
+
+            <div class="fighter-gen">
+                <h3>8. Generasjon: "AETHERWING" (2026-2027)</h3>
+                <p><strong>Morphing nanomaterial fighters:</strong> Flykrop som endrer form basert på misjonsbehov.</p>
+                <p><strong>Realiserbar teknologi:</strong> Shape-memory alloys og adaptive geometri.</p>
+                <p><strong>Kostnad:</strong> €200 millioner per fly, utviklingsbudsjett €3,5 milliarder.</p>
+            </div>
+
+            <div class="fighter-gen">
+                <h3>9. Generasjon: "NOETICA" (2028-2029)</h3>
+                <p><strong>Sentient AI aerospace platforms:</strong> Autonome AI-systemer med avansert beslutningsevne.</p>
+                <p><strong>Teknologi fokus:</strong> Maskinlæring og prediktiv analyse for kampsituasjoner.</p>
+                <p><strong>Kostnad:</strong> €350 millioner per enhet, total program €5 milliarder.</p>
+            </div>
+
+            <div class="fighter-gen">
+                <h3>10. Generasjon: "OMEGA AERIS" (2030+)</h3>
+                <p><strong>Post-physical cognitive warfare:</strong> Cyberkrigføring og informasjonsdominanse plattformer.</p>
+                <p><strong>Fokus:</strong> Elektronisk krigføring og data-dominanse fremfor fysisk luftkamp.</p>
+                <p><strong>Kostnad:</strong> €500 millioner per system, estimert program €8 milliarder.</p>
+            </div>
+        </section>
+
+        <!-- Ruby 3D Printing Section -->
+        <section id="ruby-3d">
+            <h2>Ruby 3D Printing for Aerospace Manufacturing</h2>
+            <div class="ruby-tech">
+                <h3>SYRE™ Hardware/Software Gjenbruk</h3>
+                <p><strong>Aerospace Component Manufacturing:</strong> Gjenbruk SYRE™ 3D-printing teknologi for aerospace produksjon.</p>
+                <p><strong>Ruby-drevet kontrollsystemer:</strong> Flexible programvare for tilpassede kampfly-komponenter.</p>
+                <p><strong>Material Excellence:</strong> Titanium Ti-6Al-4V, Carbon Fiber Composite, Inconel 718 for aerospace-kvalitet.</p>
+                <p><strong>Quantum Propulsion Integration:</strong> 3D-printing av quantum vacuum thruster komponenter.</p>
+                <p><strong>Kostnadseffektivitet:</strong> 40% reduksjon i produksjonstid vs tradisjonell manufacturing.</p>
+                <p><strong>Investering:</strong> NOK 500 millioner for fullt produksonsanlegg.</p>
+            </div>
+        </section>
+
+        <!-- Konkurranse med Kongsberg Defense Section -->
+        <section id="kongsberg-competition">
+            <h2>Direkte Konkurranse med Kongsberg Defense</h2>
+            <h3>Våre Konkurransefortrinn</h3>
+            <ul>
+                <li><strong>AI³ Integration:</strong> Avanserte AI-systemer som overgår tradisjonelle kontrollsystemer</li>
+                <li><strong>Ruby-basert Utvikling:</strong> Rask prototyping og tilpasning vs stive legacy-systemer</li>
+                <li><strong>Modulær Design:</strong> Fleksible løsninger som kan oppdateres og modifiseres</li>
+                <li><strong>Kostnadseffektivitet:</strong> 30% lavere produksjonskostnader gjennom 3D-printing</li>
+                <li><strong>Leveringshastighet:</strong> 50% raskere leveringstid på tilpassede systemer</li>
+            </ul>
             
-            <h3>Materialdesign</h3>
-            <p>Avanserte nanomaterialer og kompositter utvikles for å forbedre styrke, isolasjon og strålingstoleranse, tilpasset ekstreme romforhold.</p>
-            <div class="image-placeholder">Bilde: Materialdesign</div>
-            
-            <h3>Avansert Fremdrift</h3>
-            <p>Våre fremdriftssystemer er designet for høy effektivitet og langdistanse reiser, med lavt drivstofforbruk og høy ytelse for dypromutforskning.</p>
-            <div class="image-placeholder">Bilde: Fremdriftssystemer</div>
+            <h3>Målmarked</h3>
+            <ul>
+                <li>Norges Forsvarsdepartement - Alternative til Kongsberg-systemer</li>
+                <li>NATO medlemsland som søker innovativ teknologi</li>
+                <li>Allierte nasjoner med spesialiserte forsvarsbehov</li>
+                <li>Private aerospace og forsvarsbedrifter</li>
+            </ul>
         </section>
 
         <!-- Finansiering Section -->
         <section id="finansiering">
             <h2>Finansiering</h2>
-            <p>Vi søker NOK 20 millioner for å utvikle vår teknologiportefølje innen romarkitektur, parametrisk design og fremdrift, med fokus på å skape autonome produksjonsløsninger i rommet.</p>
-            <div class="image-placeholder">Bilde: Finansiering</div>
+            <div class="chart-container">
+                <canvas id="financeChart" width="250" height="150"></canvas>
+            </div>
+            <h3>5-års Investering (2025-2030)</h3>
+            <ul>
+                <li><strong>År 1 (2025):</strong> NOK 2 milliarder - NATO Aurora skip og STRATOSENTIENT</li>
+                <li><strong>År 2 (2026):</strong> NOK 3,5 milliarder - AETHERWING utvikling og Ruby 3D fabrikk</li>
+                <li><strong>År 3 (2027):</strong> NOK 5 milliarder - NOETICA program start</li>
+                <li><strong>År 4 (2028):</strong> NOK 7 milliarder - Full produksjonskapasitet</li>
+                <li><strong>År 5 (2029):</strong> NOK 10 milliarder - OMEGA AERIS og global ekspansjon</li>
+            </ul>
+            
+            <h3>Finansieringskilder</h3>
+            <ul>
+                <li>Innovasjon Norge: NOK 5 milliarder</li>
+                <li>NATO Innovation Fund: NOK 8 milliarder</li>
+                <li>Norges Bank Investment Management: NOK 10 milliarder</li>
+                <li>Private aerospace investorer: NOK 5 milliarder</li>
+            </ul>
+        </section>
+
+        <!-- Implementeringsplan Section -->
+        <section id="implementering">
+            <h2>Implementeringsplan 2025-2030</h2>
+            <h3>2025 - Umiddelbar Lansering</h3>
+            <ul>
+                <li>NATO Aurora skip - første leveranse Q4 2025</li>
+                <li>STRATOSENTIENT første prototype - Q2 2025</li>
+                <li>Ruby 3D produksjonsanlegg - Q3 2025</li>
+            </ul>
+            
+            <h3>2026-2027 - Ekspansjon</h3>
+            <ul>
+                <li>AETHERWING full utvikling og testing</li>
+                <li>Aurora klasse produksjon - 4 skip per år</li>
+                <li>Kongsberg Defense markedsandel overtagelse</li>
+            </ul>
+            
+            <h3>2028-2030 - Dominanse</h3>
+            <ul>
+                <li>NOETICA og OMEGA AERIS full implementering</li>
+                <li>Global aerospace lederskap</li>
+                <li>Kongsberg Defense som junior partner</li>
+            </ul>
         </section>
 
         <!-- Konklusjon Section -->
         <section id="konklusjon">
             <h2>Konklusjon</h2>
-            <p>SYRE er posisjonert som en ledende aktør innen parametrisk romarkitektur og romteknologi. Gjennom partnerskap og strategisk finansiering kan vi forme en bærekraftig fremtid i rommet.</p>
-            <div class="image-placeholder">Bilde: Konklusjon</div>
+            <p>SPEIS posisjonerer seg som Norges nye aerospace og forsvarsteknologi leder, direkte utfordrende Kongsberg Defense med overlegne AI³-drevne systemer og Ruby-basert 3D-printing teknologi.</p>
+            <p>Med NATO Arctic Ships klar for 2025 leveranse og neste-generasjons jagerfly som kan implementeres nå, ikke i fremtiden, tilbyr SPEIS konkrete løsninger til dagens forsvarsbehov.</p>
+            <p><strong>Gjennom partnerskap med Innovasjon Norge kan vi sikre Norges posisjon som global leder innen aerospace teknologi og utfordre etablerte aktører som Kongsberg Defense.</strong></p>
+        </section>
+
+        <!-- Konfidensialitet Section -->
+        <section id="confidentiality">
+            <h2>Konfidensialitet</h2>
+            <p>Denne forretningsplanen inneholder konfidensiell og eiendomsbeskyttet informasjon. Informasjonen er kun ment for Innovasjon Norge og eventuelle autoriserte representanter. Uautoriseret distribusjon, reproduksjon eller deling av dette dokumentet er strengt forbudt.</p>
+            <p><strong>Dato:</strong> 5. august 2025<br>
+            <strong>Utarbeidet av:</strong> SPEIS Aerospace & Defense<br>
+            <strong>Målgruppe:</strong> Innovasjon Norge investorer</p>
         </section>
     </main>
+
+    <!-- Chart.js Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Financial Projections Chart
+        const financeCtx = document.getElementById('financeChart').getContext('2d');
+        const financeChart = new Chart(financeCtx, {
+            type: 'bar',
+            data: {
+                labels: ['2025', '2026', '2027', '2028', '2029'],
+                datasets: [
+                    {
+                        label: 'Investering (MNOK)',
+                        data: [2000, 3500, 5000, 7000, 10000],
+                        backgroundColor: '#dc143c',
+                    },
+                    {
+                        label: 'Forventet Omsetning (MNOK)',
+                        data: [500, 1500, 3500, 6000, 12000],
+                        backgroundColor: '#8b0000',
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    y: { beginAtZero: true }
+                },
+                plugins: {
+                    title: { display: true, text: 'SPEIS - Finansielle Prognoser' },
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+    </script>
 </body>
 </html>
 
