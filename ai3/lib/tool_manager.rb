@@ -3,8 +3,8 @@
 # ToolManager: Handles execution of integrated tools.
 # Loads available tools from the "tools" subdirectory.
 
-require_relative "tools/filesystem_tool"
-require_relative "tools/universal_scraper"
+require_relative "filesystem_tool"
+require_relative "universal_scraper"
 
 class ToolManager
   TOOLS = {

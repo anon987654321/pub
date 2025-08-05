@@ -12,9 +12,23 @@ require 'pastel'
 require 'yaml'
 require 'dotenv'
 require 'i18n'
+require 'logger'
+require 'json'
 
 # Load environment variables
 Dotenv.load('.env', File.expand_path('~/.ai3_keys'))
+
+# Setup global logger (from backup)
+$logger = Logger.new('ai3.log', 'daily')
+$logger.level = Logger::INFO
+
+# Load prompt configuration from "prompts.json" if it exists (from backup)
+PROMPTS_FILE = '../prompts.json'
+$prompts = if File.exist?(PROMPTS_FILE)
+             JSON.parse(File.read(PROMPTS_FILE))
+           else
+             {}
+           end
 
 # Setup I18n
 I18n.load_path = Dir[File.join(__dir__, 'config', 'locales', '*.yml')]
