@@ -1,6 +1,7 @@
 #!/bin/bash
 
 #!/usr/bin/env zsh
+set -euo pipefail
 
 # --- CONFIGURATION ---
 app_name="blognet"

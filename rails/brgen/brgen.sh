@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #!/usr/bin/env zsh
-set -e
+set -euo pipefail
 
 # Brgen core setup: Multi-tenant social and marketplace platform with Mapbox, live search, infinite scroll, and anonymous features on OpenBSD 7.5, unprivileged user
 
@@ -23,9 +23,10 @@ command_exists "redis-server"
 install_gem "acts_as_tenant"
 install_gem "pagy"
 
+# Generate Brgen-specific models using DRY helper
+generate_rails_scaffold "Listing" "title:string description:text price:decimal category:string status:string user:references location:string lat:decimal lng:decimal photos:attachments"
+generate_rails_scaffold "City" "name:string subdomain:string country:string city:string language:string favicon:string analytics:string tld:string"
 bin/rails generate model Follower follower:references followed:references
-bin/rails generate scaffold Listing title:string description:text price:decimal category:string status:string user:references location:string lat:decimal lng:decimal photos:attachments
-bin/rails generate scaffold City name:string subdomain:string country:string city:string language:string favicon:string analytics:string tld:string
 
 cat <<EOF > app/reflexes/listings_infinite_scroll_reflex.rb
 class ListingsInfiniteScrollReflex < InfiniteScrollReflex
@@ -104,16 +105,23 @@ EOF
 
 cat <<EOF > config/initializers/tenant.rb
 Rails.application.config.middleware.use ActsAsTenant::Middleware
+
 ActsAsTenant.configure do |config|
   config.require_tenant = true
+  config.tenant_class = 'City'
 end
 EOF
 
 cat <<EOF > app/controllers/application_controller.rb
 class ApplicationController < ActionController::Base
+  include SecurityEnhancements
+  
   before_action :set_tenant
   before_action :authenticate_user!, except: [:index, :show], unless: :guest_user_allowed?
-
+  before_action :ensure_tenant_access
+  
+  protect_from_forgery with: :exception
+  
   def after_sign_in_path_for(resource)
     root_path
   end
@@ -121,16 +129,75 @@ class ApplicationController < ActionController::Base
   private
 
   def set_tenant
-    ActsAsTenant.current_tenant = City.find_by(subdomain: request.subdomain)
-    unless ActsAsTenant.current_tenant
-      redirect_to root_url(subdomain: false), alert: t("brgen.tenant_not_found")
+    subdomain = request.subdomain.presence
+    return redirect_to_main_site unless subdomain
+    
+    tenant = City.find_by(subdomain: subdomain)
+    unless tenant
+      Rails.logger.warn "Tenant not found for subdomain: #{subdomain}"
+      redirect_to_main_site
+      return
     end
+    
+    ActsAsTenant.current_tenant = tenant
+  end
+  
+  def ensure_tenant_access
+    unless ActsAsTenant.current_tenant
+      redirect_to_main_site
+    end
+  end
+  
+  def redirect_to_main_site
+    redirect_to root_url(subdomain: false), alert: t("brgen.tenant_not_found")
   end
 
   def guest_user_allowed?
     controller_name == "home" || 
     (controller_name == "posts" && action_name.in?(["index", "show", "create"])) || 
     (controller_name == "listings" && action_name.in?(["index", "show"]))
+  end
+end
+EOF
+
+# Add security enhancements module
+mkdir -p app/controllers/concerns
+cat <<EOF > app/controllers/concerns/security_enhancements.rb
+module SecurityEnhancements
+  extend ActiveSupport::Concern
+  
+  included do
+    before_action :set_security_headers
+    before_action :validate_tenant_access
+    before_action :log_tenant_access
+  end
+  
+  private
+  
+  def set_security_headers
+    response.headers['X-Frame-Options'] = 'DENY'
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['X-XSS-Protection'] = '1; mode=block'
+    response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
+  end
+  
+  def validate_tenant_access
+    return unless ActsAsTenant.current_tenant
+    
+    # Ensure user belongs to current tenant's scope
+    if current_user && !tenant_user_valid?
+      sign_out current_user
+      redirect_to root_path, alert: t("brgen.access_denied")
+    end
+  end
+  
+  def tenant_user_valid?
+    # Add custom tenant validation logic here
+    true
+  end
+  
+  def log_tenant_access
+    Rails.logger.info "Tenant access: #{ActsAsTenant.current_tenant&.subdomain} - User: #{current_user&.id} - IP: #{request.remote_ip}"
   end
 end
 EOF

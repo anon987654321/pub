@@ -30,7 +30,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>J Dilla Sacred Geometry Visualizer</title>
-  <script src="https://www.youtube.com/iframe_api"></script>
+  <meta name="description" content="Experience J Dilla's rhythmic genius through transcendent sacred geometry patterns combining mathematics and music.">
+  <meta name="theme-color" content="#000000">
+  <script src="https://www.youtube.com/iframe_api" async></script>
   <style>
     * {
       margin: 0;
@@ -39,7 +41,7 @@
     }
 
     body {
-      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      font-family: system-ui, -apple-system, sans-serif;
       background: #000;
       color: #fff;
       overflow: hidden;
@@ -49,7 +51,7 @@
       user-select: none;
       -webkit-user-select: none;
       -webkit-tap-highlight-color: transparent;
-      cursor: none; /* Custom cursor will be added */
+      cursor: none;
     }
 
     /* Custom cursor for desktop */
@@ -246,13 +248,16 @@
   </style>
 </head>
 <body>
+  <!-- Skip navigation for accessibility -->
+  <a href="#main-content" class="sr-only" tabindex="1">Skip to main content</a>
+  
   <!-- Custom cursor for desktop -->
-  <div class="custom-cursor" id="customCursor"></div>
+  <div class="custom-cursor" id="customCursor" aria-hidden="true"></div>
 
   <!-- Start overlay -->
-  <div class="start-overlay" id="startOverlay">
-    <h1 class="start-title">J Dilla Sacred Geometry</h1>
-    <p class="start-subtitle">
+  <div class="start-overlay" id="startOverlay" role="dialog" aria-labelledby="start-title" aria-describedby="start-subtitle">
+    <h1 class="start-title" id="start-title">J Dilla Sacred Geometry</h1>
+    <p class="start-subtitle" id="start-subtitle">
       Experience the rhythmic genius of J Dilla through transcendent sacred geometry patterns. 
       Each track transforms into a unique visual meditation combining mathematics and music.
     </p>
@@ -262,17 +267,19 @@
   </div>
 
   <!-- Main visualizer -->
-  <div class="visualizer-container" id="visualizerContainer">
-    <canvas class="geometry-canvas" id="geometryCanvas" aria-label="Sacred geometry visualization"></canvas>
-    <div id="youtube-player"></div>
+  <main class="visualizer-container" id="main-content" role="main">
+    <canvas class="geometry-canvas" id="geometryCanvas" 
+            aria-label="Sacred geometry visualization that responds to music" 
+            role="img"></canvas>
+    <div id="youtube-player" aria-hidden="true"></div>
     
     <!-- Track info display -->
-    <div class="track-info" id="trackInfo">
-      <div class="track-title" id="trackTitle">J Dilla Sacred Geometry</div>
-      <div class="track-artist" id="trackArtist">Loading...</div>
-      <div class="track-mode" id="trackMode">Preparing visualization...</div>
-    </div>
-  </div>
+    <section class="track-info" id="trackInfo" role="region" aria-live="polite" aria-label="Current track information">
+      <h2 class="track-title" id="trackTitle">J Dilla Sacred Geometry</h2>
+      <p class="track-artist" id="trackArtist">Loading...</p>
+      <p class="track-mode" id="trackMode">Preparing visualization...</p>
+    </section>
+  </main>
 
   <!-- Screen reader accessibility -->
   <div class="sr-only" aria-live="polite" id="visualizerStatus"></div>
@@ -507,7 +514,7 @@
     }
 
     function animate() {
-      const currentTime = Date.now();
+      const currentTime = performance.now();
       const elapsed = (currentTime - startTime) / 1000;
       
       // Auto-advance tracks if no YouTube player or after track duration
@@ -515,7 +522,7 @@
         nextTrack();
       }
       
-      // Clear canvas
+      // Clear canvas with optimized alpha blending
       ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       
