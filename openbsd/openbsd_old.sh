@@ -12,7 +12,6 @@ hyp_ip="194.63.248.53"
 
 # Logging and state management
 LOG_FILE="./openbsd_setup.log"
-STATE_FILE="./openbsd.state"
 
 # JSON logging function
 log() {
@@ -29,56 +28,53 @@ run_cmd() {
         exit 1
     fi
 }
-}
 
 # Define all domains, subdomains and associated apps
 typeset -A all_domains
-all_domains=(
-  ["brgen.no"]="markedsplass playlist dating tv takeaway maps"
-  ["oshlo.no"]="markedsplass playlist dating tv takeaway maps"
-  ["trndheim.no"]="markedsplass playlist dating tv takeaway maps"
-  ["stvanger.no"]="markedsplass playlist dating tv takeaway maps"
-  ["trmso.no"]="markedsplass playlist dating tv takeaway maps"
-  ["longyearbyn.no"]="markedsplass playlist dating tv takeaway maps"
-  ["reykjavk.is"]="markadur playlist dating tv takeaway maps"
-  ["kobenhvn.dk"]="markedsplads playlist dating tv takeaway maps"
-  ["stholm.se"]="marknadsplats playlist dating tv takeaway maps"
-  ["gteborg.se"]="marknadsplats playlist dating tv takeaway maps"
-  ["mlmoe.se"]="marknadsplats playlist dating tv takeaway maps"
-  ["hlsinki.fi"]="markkinapaikka playlist dating tv takeaway maps"
-  ["lndon.uk"]="marketplace playlist dating tv takeaway maps"
-  ["mnchester.uk"]="marketplace playlist dating tv takeaway maps"
-  ["brmingham.uk"]="marketplace playlist dating tv takeaway maps"
-  ["edinbrgh.uk"]="marketplace playlist dating tv takeaway maps"
-  ["glasgw.uk"]="marketplace playlist dating tv takeaway maps"
-  ["lverpool.uk"]="marketplace playlist dating tv takeaway maps"
-  ["amstrdam.nl"]="marktplaats playlist dating tv takeaway maps"
-  ["rottrdam.nl"]="marktplaats playlist dating tv takeaway maps"
-  ["utrcht.nl"]="marktplaats playlist dating tv takeaway maps"
-  ["brssels.be"]="marche playlist dating tv takeaway maps"
-  ["zrich.ch"]="marktplatz playlist dating tv takeaway maps"
-  ["lchtenstein.li"]="marktplatz playlist dating tv takeaway maps"
-  ["frankfrt.de"]="marktplatz playlist dating tv takeaway maps"
-  ["mrseille.fr"]="marche playlist dating tv takeaway maps"
-  ["mlan.it"]="mercato playlist dating tv takeaway maps"
-  ["lsbon.pt"]="mercado playlist dating tv takeaway maps"
-  ["lsangeles.com"]="marketplace playlist dating tv takeaway maps"
-  ["newyrk.us"]="marketplace playlist dating tv takeaway maps"
-  ["chcago.us"]="marketplace playlist dating tv takeaway maps"
-  ["dtroit.us"]="marketplace playlist dating tv takeaway maps"
-  ["houstn.us"]="marketplace playlist dating tv takeaway maps"
-  ["dllas.us"]="marketplace playlist dating tv takeaway maps"
-  ["austn.us"]="marketplace playlist dating tv takeaway maps"
-  ["prtland.com"]="marketplace playlist dating tv takeaway maps"
-  ["mnneapolis.com"]="marketplace playlist dating tv takeaway maps"
-  ["pub.healthcare"]=""
-  ["pub.attorney"]=""
-  ["freehelp.legal"]=""
-  ["bsdports.org"]=""
-  ["discordb.org"]=""
-  ["foodielicio.us"]=""
-  ["neuroticerotic.com"]=""
-)
+all_domains[brgen.no]="markedsplass playlist dating tv takeaway maps"
+all_domains[oshlo.no]="markedsplass playlist dating tv takeaway maps"
+all_domains[trndheim.no]="markedsplass playlist dating tv takeaway maps"
+all_domains[stvanger.no]="markedsplass playlist dating tv takeaway maps"
+all_domains[trmso.no]="markedsplass playlist dating tv takeaway maps"
+all_domains[longyearbyn.no]="markedsplass playlist dating tv takeaway maps"
+all_domains[reykjavk.is]="markadur playlist dating tv takeaway maps"
+all_domains[kobenhvn.dk]="markedsplads playlist dating tv takeaway maps"
+all_domains[stholm.se]="marknadsplats playlist dating tv takeaway maps"
+all_domains[gteborg.se]="marknadsplats playlist dating tv takeaway maps"
+all_domains[mlmoe.se]="marknadsplats playlist dating tv takeaway maps"
+all_domains[hlsinki.fi]="markkinapaikka playlist dating tv takeaway maps"
+all_domains[lndon.uk]="marketplace playlist dating tv takeaway maps"
+all_domains[mnchester.uk]="marketplace playlist dating tv takeaway maps"
+all_domains[brmingham.uk]="marketplace playlist dating tv takeaway maps"
+all_domains[edinbrgh.uk]="marketplace playlist dating tv takeaway maps"
+all_domains[glasgw.uk]="marketplace playlist dating tv takeaway maps"
+all_domains[lverpool.uk]="marketplace playlist dating tv takeaway maps"
+all_domains[amstrdam.nl]="marktplaats playlist dating tv takeaway maps"
+all_domains[rottrdam.nl]="marktplaats playlist dating tv takeaway maps"
+all_domains[utrcht.nl]="marktplaats playlist dating tv takeaway maps"
+all_domains[brssels.be]="marche playlist dating tv takeaway maps"
+all_domains[zrich.ch]="marktplatz playlist dating tv takeaway maps"
+all_domains[lchtenstein.li]="marktplatz playlist dating tv takeaway maps"
+all_domains[frankfrt.de]="marktplatz playlist dating tv takeaway maps"
+all_domains[mrseille.fr]="marche playlist dating tv takeaway maps"
+all_domains[mlan.it]="mercato playlist dating tv takeaway maps"
+all_domains[lsbon.pt]="mercado playlist dating tv takeaway maps"
+all_domains[lsangeles.com]="marketplace playlist dating tv takeaway maps"
+all_domains[newyrk.us]="marketplace playlist dating tv takeaway maps"
+all_domains[chcago.us]="marketplace playlist dating tv takeaway maps"
+all_domains[dtroit.us]="marketplace playlist dating tv takeaway maps"
+all_domains[houstn.us]="marketplace playlist dating tv takeaway maps"
+all_domains[dllas.us]="marketplace playlist dating tv takeaway maps"
+all_domains[austn.us]="marketplace playlist dating tv takeaway maps"
+all_domains[prtland.com]="marketplace playlist dating tv takeaway maps"
+all_domains[mnneapolis.com]="marketplace playlist dating tv takeaway maps"
+all_domains[pub.healthcare]=""
+all_domains[pub.attorney]=""
+all_domains[freehelp.legal]=""
+all_domains[bsdports.org]=""
+all_domains[discordb.org]=""
+all_domains[foodielicio.us]=""
+all_domains[neuroticerotic.com]=""
 
 # Fixed port mapping (replacing random port assignment)
 typeset -A app_ports
@@ -276,9 +272,9 @@ authority letsencrypt-staging {
 }
 EOF
 
+# Add ACME configurations for domains
 for domain in "${(@k)all_domains}"; do
   log "Adding ACME configuration for domain: $domain"
-  
   doas tee -a /etc/acme-client.conf > /dev/null << EOF
 domain "$domain" {
   domain key "/etc/ssl/private/$domain.key"
@@ -418,7 +414,7 @@ daemon_flags="-p $port"
 rc_bg=YES
 rc_reload=NO
 
-rc_cmd \$1
+rc_cmd $1
 EOF
   run_cmd "doas chmod +x /etc/rc.d/$app"
   run_cmd "doas rcctl enable $app"
