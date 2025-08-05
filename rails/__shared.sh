@@ -767,145 +767,631 @@ setup_mapbox() {
   echo "/* *= require mapbox-gl-geocoder */" >> app/assets/stylesheets/application.css
 }
 
-setup_live_search() {
-  log "Setting up live search with StimulusReflex"
-  bundle add stimulus_reflex
-  if [ $? -ne 0 ]; then
-    error "Failed to add StimulusReflex"
+setup_optimized_live_search() {
+  log "Setting up optimized live search with StimulusReflex and performance enhancements"
+  
+  # Verify Rails environment
+  if [[ ! -f "bin/rails" ]]; then
+    error "Rails application not found - cannot setup live search"
   fi
-  bin/rails stimulus_reflex:install
-  if [ $? -ne 0 ]; then
+  
+  # Install search dependencies with error handling
+  log "Installing live search dependencies"
+  if ! bundle add stimulus_reflex pg_search ransack --optimistic; then
+    error "Failed to add live search gems"
+  fi
+  
+  # Install StimulusReflex with comprehensive setup
+  log "Installing and configuring StimulusReflex"
+  if ! bin/rails stimulus_reflex:install; then
     error "Failed to install StimulusReflex"
   fi
-  yarn add stimulus-debounce
-  if [ $? -ne 0 ]; then
-    error "Failed to install stimulus-debounce"
+  
+  # Install stimulus-debounce for performance
+  if ! yarn add stimulus-debounce stimulus-use --silent; then
+    error "Failed to install stimulus search dependencies"
   fi
-
+  
+  # Enhanced SearchReflex with performance optimizations
+  log "Creating optimized SearchReflex"
   mkdir -p app/reflexes
-  cat <<EOF > app/reflexes/search_reflex.rb
+  cat > app/reflexes/search_reflex.rb << 'EOF'
 class SearchReflex < ApplicationReflex
+  include PgSearch::Model
+  
+  # Performance optimized search with caching and limits
   def search(query = "")
-    model = element.dataset["model"].constantize
-    field = element.dataset["field"]
-    results = model.where("\#{field} ILIKE ?", "%\#{query}%")
-    morph "\#search-results", render(partial: "shared/search_results", locals: { results: results, model: model.downcase })
-    morph "\#reset-link", render(partial: "shared/reset_link", locals: { query: query })
+    @query = query.to_s.strip.truncate(100)
+    
+    # Return early for empty or too short queries
+    return clear_results if @query.length < 2
+    
+    # Get model and field from element dataset
+    model_name = element.dataset["model"]
+    field_name = element.dataset["field"]
+    tenant_scope = element.dataset["tenant"]
+    
+    # Validate model and field
+    return clear_results unless valid_model_and_field?(model_name, field_name)
+    
+    # Get model class and apply search
+    model_class = model_name.constantize
+    
+    # Apply tenant scoping if available
+    scope = tenant_scope ? model_class.where(community: ActsAsTenant.current_tenant) : model_class
+    
+    # Perform optimized search with limits and caching
+    @results = Rails.cache.fetch(search_cache_key, expires_in: 1.minute) do
+      perform_search(scope, field_name)
+    end
+    
+    # Update UI with results
+    update_search_results
+    update_reset_link
+  end
+  
+  private
+  
+  def valid_model_and_field?(model_name, field_name)
+    return false unless model_name.present? && field_name.present?
+    
+    allowed_models = %w[Post Listing Profile User Message]
+    allowed_fields = %w[title name email content description bio location]
+    
+    allowed_models.include?(model_name) && allowed_fields.include?(field_name)
+  end
+  
+  def perform_search(scope, field_name)
+    if scope.respond_to?(:search_by_field)
+      # Use pg_search if available
+      scope.search_by_field(@query).limit(10)
+    else
+      # Fallback to ILIKE search with performance optimization
+      scope.where("#{field_name} ILIKE ?", "%#{@query}%")
+           .limit(10)
+           .order(:created_at)
+    end
+  end
+  
+  def search_cache_key
+    "search:#{element.dataset['model']}:#{element.dataset['field']}:#{@query}:#{ActsAsTenant.current_tenant&.id}"
+  end
+  
+  def update_search_results
+    morph("#search-results", render(
+      partial: "shared/search_results", 
+      locals: { 
+        results: @results, 
+        model: element.dataset["model"].downcase,
+        field: element.dataset["field"],
+        query: @query
+      }
+    ))
+  end
+  
+  def update_reset_link
+    morph("#reset-link", render(
+      partial: "shared/reset_link", 
+      locals: { query: @query }
+    ))
+  end
+  
+  def clear_results
+    morph("#search-results", "")
+    morph("#reset-link", "")
   end
 end
 EOF
 
+  # Enhanced search controller with accessibility and performance
+  log "Creating accessible and performant search controller"
   mkdir -p app/javascript/controllers
-  cat <<EOF > app/javascript/controllers/search_controller.js
+  cat > app/javascript/controllers/search_controller.js << 'EOF'
 import { Controller } from "@hotwired/stimulus"
-import debounce from "stimulus-debounce"
+import { debounce } from "stimulus-debounce"
+import { useThrottle } from "stimulus-use"
 
+// Accessible and performant search controller - WCAG compliant
 export default class extends Controller {
-  static targets = ["input", "results"]
-
-  connect() {
-    this.search = debounce(this.search, 200).bind(this)
+  static targets = ["input", "results", "status"]
+  static values = { 
+    minLength: { type: Number, default: 2 },
+    debounceDelay: { type: Number, default: 300 },
+    maxResults: { type: Number, default: 10 }
   }
-
+  
+  connect() {
+    useThrottle(this, { delay: this.debounceDelayValue })
+    this.search = debounce(this.search, this.debounceDelayValue).bind(this)
+    this.abortController = new AbortController()
+    
+    // Set up accessibility attributes
+    this.setupAccessibility()
+  }
+  
+  disconnect() {
+    this.abortController.abort()
+  }
+  
   search(event) {
-    if (!this.hasInputTarget) {
-      console.error("SearchController: Input target not found")
+    const query = this.inputTarget.value.trim()
+    
+    // Clear results for short queries
+    if (query.length < this.minLengthValue) {
+      this.clearResults()
       return
     }
-    this.resultsTarget.innerHTML = "<i class='fas fa-spinner fa-spin' aria-label='<%= t('shared.searching') %>'></i>"
-    this.stimulate("SearchReflex#search", this.inputTarget.value)
+    
+    // Show loading state with accessibility announcement
+    this.showLoadingState()
+    
+    // Perform search with StimulusReflex
+    this.stimulate("SearchReflex#search", query, {
+      element: this.element
+    })
   }
-
+  
   reset(event) {
     event.preventDefault()
     this.inputTarget.value = ""
-    this.stimulate("SearchReflex#search")
+    this.clearResults()
+    this.inputTarget.focus()
+    
+    // Announce to screen readers
+    this.announceToScreenReader("Search cleared")
   }
-
-  beforeSearch() {
-    this.resultsTarget.animate(
-      [{ opacity: 0 }, { opacity: 1 }],
-      { duration: 300 }
-    )
+  
+  setupAccessibility() {
+    const inputId = this.inputTarget.id || `search-input-${Math.random().toString(36).substr(2, 9)}`
+    const resultsId = this.resultsTarget.id || `search-results-${Math.random().toString(36).substr(2, 9)}`
+    
+    this.inputTarget.id = inputId
+    this.resultsTarget.id = resultsId
+    
+    this.inputTarget.setAttribute("aria-describedby", resultsId)
+    this.inputTarget.setAttribute("aria-expanded", "false")
+    this.inputTarget.setAttribute("aria-autocomplete", "list")
+    this.inputTarget.setAttribute("role", "combobox")
+    
+    this.resultsTarget.setAttribute("role", "listbox")
+    this.resultsTarget.setAttribute("aria-live", "polite")
+    this.resultsTarget.setAttribute("aria-label", "Search results")
+  }
+  
+  showLoadingState() {
+    if (this.hasStatusTarget) {
+      this.statusTarget.textContent = "Searching..."
+      this.statusTarget.setAttribute("aria-live", "polite")
+    }
+    
+    this.inputTarget.setAttribute("aria-expanded", "true")
+    this.resultsTarget.innerHTML = '<li role="option" aria-disabled="true">Searching...</li>'
+  }
+  
+  clearResults() {
+    this.resultsTarget.innerHTML = ""
+    this.inputTarget.setAttribute("aria-expanded", "false")
+    
+    if (this.hasStatusTarget) {
+      this.statusTarget.textContent = ""
+    }
+  }
+  
+  announceToScreenReader(message) {
+    const announcement = document.createElement("div")
+    announcement.setAttribute("aria-live", "assertive")
+    announcement.setAttribute("aria-atomic", "true")
+    announcement.className = "sr-only"
+    announcement.textContent = message
+    
+    document.body.appendChild(announcement)
+    setTimeout(() => document.body.removeChild(announcement), 1000)
+  }
+  
+  // Handle keyboard navigation
+  keydown(event) {
+    const results = this.resultsTarget.querySelectorAll('[role="option"]')
+    const currentFocus = document.activeElement
+    
+    switch (event.key) {
+      case "ArrowDown":
+        event.preventDefault()
+        this.focusNext(results, currentFocus)
+        break
+      case "ArrowUp":
+        event.preventDefault()
+        this.focusPrevious(results, currentFocus)
+        break
+      case "Enter":
+        if (currentFocus && currentFocus.getAttribute("role") === "option") {
+          event.preventDefault()
+          currentFocus.click()
+        }
+        break
+      case "Escape":
+        this.clearResults()
+        this.inputTarget.focus()
+        break
+    }
+  }
+  
+  focusNext(results, currentFocus) {
+    const currentIndex = Array.from(results).indexOf(currentFocus)
+    const nextIndex = currentIndex < results.length - 1 ? currentIndex + 1 : 0
+    results[nextIndex]?.focus()
+  }
+  
+  focusPrevious(results, currentFocus) {
+    const currentIndex = Array.from(results).indexOf(currentFocus)
+    const previousIndex = currentIndex > 0 ? currentIndex - 1 : results.length - 1
+    results[previousIndex]?.focus()
   }
 }
 EOF
 
-  mkdir -p app/views/shared
-  cat <<EOF > app/views/shared/_search_results.html.erb
-<% results.each do |result| %>
-  <%= tag.p do %>
-    <%= link_to result.send(element.dataset["field"]), "/\#{model}s/\#{result.id}", "aria-label": t("shared.view_\#{model}", name: result.send(element.dataset["field"])) %>
-  <% end %>
-<% end %>
-EOF
-
-  cat <<EOF > app/views/shared/_reset_link.html.erb
-<% if query.present? %>
-  <%= link_to t("shared.clear_search"), "#", data: { action: "click->search#reset" }, "aria-label": t("shared.clear_search") %>
-<% end %>
-EOF
+  log "Optimized live search with accessibility and performance enhancements completed"
 }
 
-setup_infinite_scroll() {
-  log "Setting up infinite scroll with StimulusReflex"
-  bundle add stimulus_reflex cable_ready pagy
-  if [ $? -ne 0 ]; then
+setup_optimized_infinite_scroll() {
+  log "Setting up optimized infinite scroll with performance enhancements and accessibility"
+  
+  # Verify Rails environment
+  if [[ ! -f "bin/rails" ]]; then
+    error "Rails application not found - cannot setup infinite scroll"
+  fi
+  
+  # Install infinite scroll dependencies
+  log "Installing infinite scroll dependencies"
+  if ! bundle add stimulus_reflex cable_ready pagy kaminari-actionview --optimistic; then
     error "Failed to add infinite scroll gems"
   fi
-  yarn add stimulus-use
-  if [ $? -ne 0 ]; then
-    error "Failed to install stimulus-use"
+  
+  if ! yarn add stimulus-use intersection-observer --silent; then
+    error "Failed to install infinite scroll JS dependencies"
   fi
 
+  # Enhanced InfiniteScrollReflex with performance optimizations
+  log "Creating optimized InfiniteScrollReflex"
   mkdir -p app/reflexes
-  cat <<EOF > app/reflexes/infinite_scroll_reflex.rb
+  cat > app/reflexes/infinite_scroll_reflex.rb << 'EOF'
 class InfiniteScrollReflex < ApplicationReflex
   include Pagy::Backend
-
-  attr_reader :collection
-
+  
+  attr_reader :collection, :pagy
+  
   def load_more
+    # Get pagination parameters from element
+    @page = element.dataset["next_page"].to_i
+    @model_name = element.dataset["model"]
+    @scope_method = element.dataset["scope"]
+    @tenant_aware = element.dataset["tenant"] == "true"
+    
+    # Validate parameters
+    return unless valid_load_more_params?
+    
+    # Get collection with optimizations
+    @collection = get_optimized_collection
+    
+    # Apply tenant scoping if needed
+    @collection = apply_tenant_scope(@collection) if @tenant_aware
+    
+    # Paginate with performance optimizations
+    @pagy, @records = pagy(@collection, page: @page, items: items_per_page)
+    
+    # Update UI if more records exist
+    if @records.any?
+      append_records
+      update_sentinel
+    else
+      hide_sentinel
+    end
+    
+    # Update performance metrics
+    track_performance_metrics
+  end
+  
+  private
+  
+  def valid_load_more_params?
+    allowed_models = %w[Post Listing Profile Match Message User]
+    allowed_scopes = %w[published active recent popular featured]
+    
+    @model_name.present? && 
+    allowed_models.include?(@model_name) &&
+    (@scope_method.blank? || allowed_scopes.include?(@scope_method)) &&
+    @page > 0 && @page < 1000 # Prevent abuse
+  end
+  
+  def get_optimized_collection
+    model_class = @model_name.constantize
+    
+    # Apply scope if specified
+    collection = @scope_method.present? ? model_class.send(@scope_method) : model_class.all
+    
+    # Apply default ordering for performance
+    collection = collection.order(:created_at) unless collection.order_values.any?
+    
+    # Apply performance optimizations
+    collection = collection.includes(default_includes) if default_includes.any?
+    collection = collection.select(optimized_select_fields)
+    
+    collection
+  end
+  
+  def apply_tenant_scope(collection)
+    return collection unless ActsAsTenant.current_tenant
+    
+    if collection.respond_to?(:where)
+      collection.where(community: ActsAsTenant.current_tenant)
+    else
+      collection
+    end
+  end
+  
+  def items_per_page
+    case @model_name
+    when 'Post', 'Message' then 20
+    when 'Listing', 'Profile' then 15
+    when 'Match' then 10
+    else 20
+    end
+  end
+  
+  def default_includes
+    case @model_name
+    when 'Post' then [:user, :votes]
+    when 'Listing' then [:user, { photos_attachments: :blob }]
+    when 'Profile' then [:user, { photos_attachments: :blob }]
+    when 'Match' then [:initiator, :receiver]
+    else []
+    end
+  end
+  
+  def optimized_select_fields
+    base_fields = [:id, :created_at, :updated_at]
+    
+    case @model_name
+    when 'Post' then base_fields + [:title, :body, :user_id, :anonymous]
+    when 'Listing' then base_fields + [:title, :description, :price, :user_id, :status]
+    when 'Profile' then base_fields + [:bio, :location, :user_id, :age, :gender]
+    else base_fields + [:title, :name, :content]
+    end
+  end
+  
+  def append_records
     cable_ready.insert_adjacent_html(
-      selector: selector,
-      html: render(collection, layout: false),
-      position: position
+      selector: sentinel_selector,
+      html: render_records,
+      position: "beforebegin"
     ).broadcast
   end
-
-  def page
-    element.dataset["next_page"].to_i
+  
+  def update_sentinel
+    if @pagy.next
+      cable_ready.set_dataset_property(
+        selector: sentinel_selector,
+        name: "nextPage",
+        value: @pagy.next.to_s
+      ).broadcast
+    else
+      hide_sentinel
+    end
   end
-
-  def position
-    "beforebegin"
+  
+  def hide_sentinel
+    cable_ready.add_css_class(
+      selector: sentinel_selector,
+      name: "hidden"
+    ).set_attribute(
+      selector: sentinel_selector,
+      name: "aria-hidden",
+      value: "true"
+    ).broadcast
   end
-
-  def selector
-    "#sentinel"
+  
+  def render_records
+    partial_name = "#{@model_name.downcase.pluralize}/#{@model_name.downcase}"
+    
+    render(
+      partial: partial_name,
+      collection: @records,
+      layout: false,
+      cached: true
+    )
+  end
+  
+  def sentinel_selector
+    "#infinite-scroll-sentinel"
+  end
+  
+  def track_performance_metrics
+    Rails.logger.info "InfiniteScroll: #{@model_name} page #{@page} loaded #{@records.count} records"
   end
 end
 EOF
 
+  # Enhanced infinite scroll controller with accessibility
+  log "Creating accessible infinite scroll controller"
   mkdir -p app/javascript/controllers
-  cat <<EOF > app/javascript/controllers/infinite_scroll_controller.js
+  cat > app/javascript/controllers/infinite_scroll_controller.js << 'EOF'
 import { Controller } from "@hotwired/stimulus"
-import { useIntersection } from "stimuse"
+import { useIntersection, useDebounce } from "stimulus-use"
 
+// Accessible infinite scroll controller - WCAG compliant with performance optimizations
 export default class extends Controller {
-  static targets = ["sentinel"]
-
-  connect() {
-    useIntersection(this, { element: this.sentinelTarget })
+  static targets = ["sentinel", "container", "status"]
+  static values = {
+    threshold: { type: Number, default: 0.1 },
+    rootMargin: { type: String, default: "100px" },
+    debounceDelay: { type: Number, default: 250 }
   }
-
+  
+  connect() {
+    // Set up intersection observer with performance optimizations
+    useIntersection(this, {
+      element: this.sentinelTarget,
+      threshold: this.thresholdValue,
+      rootMargin: this.rootMarginValue
+    })
+    
+    // Set up debouncing to prevent excessive API calls
+    useDebounce(this, { delay: this.debounceDelayValue })
+    
+    // Set up accessibility
+    this.setupAccessibility()
+    
+    // Track loading state
+    this.isLoading = false
+    this.hasMoreContent = true
+  }
+  
   appear() {
-    this.sentinelTarget.disabled = true
-    this.sentinelTarget.innerHTML = '<i class="fas fa-spinner fa-spin" aria-label="<%= t("shared.loading") %>"></i>'
-    this.stimulate("InfiniteScroll#load_more", this.sentinelTarget)
+    // Prevent duplicate requests
+    if (this.isLoading || !this.hasMoreContent) {
+      return
+    }
+    
+    // Check if sentinel is actually visible (prevents false triggers)
+    if (!this.isElementVisible(this.sentinelTarget)) {
+      return
+    }
+    
+    this.loadMore()
+  }
+  
+  disappear() {
+    // Optional: Handle when sentinel goes out of view
+  }
+  
+  loadMore() {
+    this.isLoading = true
+    this.showLoadingState()
+    
+    // Get next page from sentinel data
+    const nextPage = this.sentinelTarget.dataset.nextPage
+    
+    if (!nextPage) {
+      this.showEndOfContent()
+      return
+    }
+    
+    // Announce to screen readers
+    this.announceToScreenReader("Loading more content")
+    
+    // Trigger StimulusReflex with error handling
+    try {
+      this.stimulate("InfiniteScrollReflex#load_more", {
+        element: this.sentinelTarget
+      })
+    } catch (error) {
+      console.error("Infinite scroll error:", error)
+      this.showErrorState()
+    }
+  }
+  
+  setupAccessibility() {
+    // Set up ARIA attributes for screen readers
+    this.containerTarget.setAttribute("aria-live", "polite")
+    this.containerTarget.setAttribute("aria-label", "Content list with infinite scroll")
+    
+    this.sentinelTarget.setAttribute("aria-hidden", "true")
+    this.sentinelTarget.setAttribute("role", "status")
+    
+    if (this.hasStatusTarget) {
+      this.statusTarget.setAttribute("aria-live", "polite")
+      this.statusTarget.setAttribute("aria-atomic", "true")
+    }
+  }
+  
+  showLoadingState() {
+    this.sentinelTarget.innerHTML = `
+      <div class="infinite-scroll-loading" role="status" aria-label="Loading more content">
+        <span class="spinner" aria-hidden="true"></span>
+        <span class="sr-only">Loading more content...</span>
+      </div>
+    `
+    
+    if (this.hasStatusTarget) {
+      this.statusTarget.textContent = "Loading more content..."
+    }
+  }
+  
+  showEndOfContent() {
+    this.hasMoreContent = false
+    this.isLoading = false
+    
+    this.sentinelTarget.innerHTML = `
+      <div class="infinite-scroll-end" role="status" aria-label="End of content">
+        <span class="sr-only">You have reached the end of the content.</span>
+      </div>
+    `
+    
+    this.sentinelTarget.classList.add("hidden")
+    this.sentinelTarget.setAttribute("aria-hidden", "true")
+    
+    this.announceToScreenReader("You have reached the end of the content")
+  }
+  
+  showErrorState() {
+    this.isLoading = false
+    
+    this.sentinelTarget.innerHTML = `
+      <div class="infinite-scroll-error" role="alert">
+        <p>Unable to load more content. <button type="button" data-action="click->infinite-scroll#retry">Try again</button></p>
+      </div>
+    `
+    
+    this.announceToScreenReader("Error loading content. Please try again.")
+  }
+  
+  retry(event) {
+    event.preventDefault()
+    this.loadMore()
+  }
+  
+  isElementVisible(element) {
+    const rect = element.getBoundingClientRect()
+    const windowHeight = window.innerHeight || document.documentElement.clientHeight
+    
+    return rect.top < windowHeight && rect.bottom > 0
+  }
+  
+  announceToScreenReader(message) {
+    const announcement = document.createElement("div")
+    announcement.setAttribute("aria-live", "assertive")
+    announcement.setAttribute("aria-atomic", "true")
+    announcement.className = "sr-only"
+    announcement.textContent = message
+    
+    document.body.appendChild(announcement)
+    setTimeout(() => document.body.removeChild(announcement), 1000)
+  }
+  
+  // Callback for successful load
+  infiniteScrollLoaded() {
+    this.isLoading = false
+    
+    // Check if we still have more content
+    const nextPage = this.sentinelTarget.dataset.nextPage
+    if (!nextPage) {
+      this.showEndOfContent()
+    } else {
+      this.sentinelTarget.innerHTML = ""
+    }
+  }
+  
+  // Performance optimization: pause infinite scroll when tab is not visible
+  handleVisibilityChange() {
+    if (document.hidden) {
+      this.disconnect()
+    } else {
+      this.connect()
+    }
   }
 }
 EOF
+
+  log "Optimized infinite scroll with accessibility and performance enhancements completed"
 }
 
 setup_anon_posting() {
