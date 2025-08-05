@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'langchain'
-require 'dotenv/load'
-require 'reline'
+# Multi-Assistant Chat System
+# Manages specialized roles: Legal, Architect, Music, Manufacturing
+# Session tracking with active task management
 
 class MultiAssistantChat
   def initialize
@@ -17,9 +17,13 @@ class MultiAssistantChat
   end
 
   def start
+    puts "Multi-Assistant Chat System"
+    puts "Available assistants: #{@assistants.keys.join(', ')}"
+    puts "Type 'exit' to quit, 'back' to return to assistant selection"
+    
     loop do
       print 'Assistant (legal, architect, music, manufacturing): '
-      assistant_type = Reline.readline.strip.downcase
+      assistant_type = gets.chomp.strip.downcase
       break if assistant_type == 'exit'
 
       if @assistants.key?(assistant_type)
@@ -63,7 +67,7 @@ class MultiAssistantChat
     puts "\n--- #{assistant_type.capitalize} Assistant ---"
     loop do
       print "#{assistant_type}> "
-      user_input = Reline.readline.strip
+      user_input = gets.chomp.strip
       break if user_input.downcase == 'back'
 
       # Update active session with current task
