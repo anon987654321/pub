@@ -1,182 +1,1107 @@
 <!DOCTYPE html>
-<html lang="no">
+<html lang="nb">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SYRE™ - Forretningsplan for Romarkitektur og Teknologi</title>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-    <style>
-        /* CSS Variables */
-        :root {
-            --primary-color: #1a1a1a;
-            --background-color: #f5f5f5;
-            --text-color: #222222;
-            --highlight-color: #5d93ff;
-            --font-family: 'Inter', sans-serif;
-        }
-
-        /* General Styles */
-        body {
-            margin: 0;
-            font-family: var(--font-family);
-            background-color: var(--background-color);
-            color: var(--text-color);
-            line-height: 1.6;
-            font-size: 16px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        /* Logo Container */
-        .logo-wrapper {
-            position: relative;
-            display: inline-block;
-        }
-
-        /* Logo styling with animated gradient */
-        .logo-container {
-            font-family: 'Black Han Sans', sans-serif;
-            font-size: 70px;
-            color: transparent;
-            background: linear-gradient(45deg, #ff8c00, #ff0080, #8a2be2, #ff8c00);
-            background-size: 400%;
-            background-clip: text;
-            -webkit-background-clip: text;
-            animation: gradientMove 5s infinite linear;
-        }
-
-        /* Header styling */
-        header {
-            text-align: center;
-            padding: 20px;
-            background-color: var(--background-color);
-        }
-
-        .header-text {
-            font-size: 1rem;
-            font-weight: 500;
-            color: var(--text-color);
-            margin-top: -1.2rem;
-            max-width: 100%;
-            text-align: center;
-        }
-
-        /* Main content */
-        main {
-            max-width: 900px;
-            margin: 3rem auto;
-            padding: 0 1rem;
-        }
-
-        section {
-            padding: 2rem 0;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        h2 {
-            font-size: 2rem;
-            color: var(--primary-color);
-            margin-bottom: 1.5rem;
-        }
-
-        h3 {
-            font-size: 1.5rem;
-            color: var(--text-color);
-            margin-bottom: 1rem;
-        }
-
-        p {
-            font-size: 1rem;
-            color: #333333;
-        }
-
-        /* Image Placeholder Styles */
-        .image-placeholder {
-            width: 100%;
-            height: 250px;
-            background-color: #cccccc;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #666666;
-            font-size: 1.5rem;
-            margin: 1rem 0;
-        }
-
-        @keyframes gradientMove {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="description" content="SPEIS - Forretningsplan for Aerospace Manufacturing og Fighter Jet Teknologi">
+  <title>SPEIS - Aerospace Manufacturing og Fighter Jet Teknologi</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.babylonjs.com/babylon.js"></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    @page { size: A4; margin: 20mm; }
+    
+    :root {
+      --primary-color: #000000;
+      --background-color: #ffffff;
+      --text-color: #333333;
+      --accent-color: #8a2be2;
+      --font-family: 'Roboto Mono', monospace;
+      --heading-font-family: 'Roboto', sans-serif;
+      --base-font-size: 16px;
+      --line-height: 1.5;
+      --modular-scale: 1.25;
+    }
+    
+    * { box-sizing: border-box; }
+    
+    body {
+      margin: 0;
+      padding: 20mm;
+      font-family: var(--font-family);
+      font-size: var(--base-font-size);
+      line-height: var(--line-height);
+      background-color: var(--background-color);
+      color: var(--text-color);
+      quotes: '«' '»' ''' ''';
+    }
+    
+    .page {
+      min-height: 257mm;
+      page-break-after: always;
+      position: relative;
+      padding-bottom: 30mm;
+    }
+    
+    .page:last-child { page-break-after: avoid; }
+    
+    .footer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 8mm;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: calc(var(--base-font-size) * 0.7);
+      color: #999;
+    }
+    
+    .confidentiality {
+      font-weight: 500;
+      color: #d32f2f;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-size: calc(var(--base-font-size) * 0.65);
+    }
+    
+    h1 {
+      font-family: var(--heading-font-family);
+      font-size: calc(var(--base-font-size) * var(--modular-scale) * var(--modular-scale) * var(--modular-scale));
+      font-weight: 700;
+      color: var(--primary-color);
+      margin-bottom: 2rem;
+      line-height: 1.2;
+      text-align: center;
+    }
+    
+    h2 {
+      font-family: var(--heading-font-family);
+      font-size: calc(var(--base-font-size) * var(--modular-scale) * var(--modular-scale));
+      font-weight: 700;
+      color: var(--primary-color);
+      margin: 3rem 0 2rem 0;
+      line-height: 1.2;
+    }
+    
+    h3 {
+      font-family: var(--heading-font-family);
+      font-size: calc(var(--base-font-size) * var(--modular-scale));
+      font-weight: 700;
+      color: var(--primary-color);
+      margin: 2rem 0 1rem 0;
+      line-height: 1.2;
+    }
+    
+    h4 {
+      font-family: var(--heading-font-family);
+      font-size: var(--base-font-size);
+      font-weight: 700;
+      color: var(--primary-color);
+      margin: 1.5rem 0 0.5rem 0;
+      line-height: 1.2;
+    }
+    
+    p, ul, ol { margin-bottom: 1.5rem; }
+    
+    header {
+      position: relative;
+      height: 400px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+    }
+    
+    .text-wrapper {
+      position: relative;
+      width: 800px;
+      height: 400px;
+    }
+    
+    #fractalText {
+      width: 800px;
+      height: 400px;
+      transform: scale(1.2);
+      transform-origin: left center;
+    }
+    
+    .tagline {
+      font-size: calc(var(--base-font-size) * 0.9);
+      font-weight: 500;
+      color: var(--text-color);
+      margin-top: 1rem;
+    }
+    
+    /* Visualization containers with ultra spacing */
+    .viz-container {
+      margin: 4rem 0;
+      width: 100%;
+      height: 400px;
+      position: relative;
+    }
+    
+    .viz-large {
+      height: 500px;
+      margin: 6rem 0;
+    }
+    
+    .viz-title {
+      font-family: var(--heading-font-family);
+      font-size: calc(var(--base-font-size) * 1.1);
+      font-weight: 700;
+      color: var(--primary-color);
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    
+    /* 3D Neural Network Canvas */
+    #aerospaceCanvas {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: radial-gradient(ellipse at center, #0a0a0a 0%, #000000 100%);
+    }
+    
+    /* Fighter Jet Hologram */
+    #fighterCanvas {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: linear-gradient(45deg, #001122 0%, #003366 50%, #001122 100%);
+    }
+    
+    /* 3D Manufacturing System */
+    #manufacturingCanvas {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: radial-gradient(circle at 30% 70%, #1a0066 0%, #000033 100%);
+    }
+    
+    /* Kongsberg Competition Analysis */
+    #competitionCanvas {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: linear-gradient(135deg, #001a33 0%, #002244 25%, #003366 50%, #002244 75%, #001a33 100%);
+    }
+    
+    /* Technology Heatmap */
+    #techHeatmap {
+      width: 100%;
+      height: 100%;
+      background: #000;
+    }
+    
+    .heatmap-cell {
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .heatmap-cell:hover {
+      stroke: #8a2be2;
+      stroke-width: 2;
+    }
+    
+    /* Tables ultra-minimal */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 2rem 0;
+      font-family: var(--font-family);
+      font-size: calc(var(--base-font-size) * 0.9);
+    }
+    
+    th, td {
+      padding: 1rem;
+      text-align: left;
+    }
+    
+    th {
+      font-weight: 500;
+      color: var(--primary-color);
+      border-bottom: 1px solid #ddd;
+    }
+    
+    td {
+      border-bottom: 1px solid #f5f5f5;
+    }
+    
+    /* TOC ultra-minimal */
+    .toc li { margin-bottom: 1rem; }
+    .toc ol { margin-top: 1rem; padding-left: 20px; }
+    
+    /* Links */
+    a { color: var(--accent-color); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    
+    /* Warning box minimal */
+    .warning-box {
+      padding: 1rem;
+      margin: 2rem 0;
+      border-left: 3px solid #d32f2f;
+      background: #fafafa;
+      font-size: calc(var(--base-font-size) * 0.85);
+    }
+    
+    .warning-title {
+      font-weight: 700;
+      color: #d32f2f;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    /* Signatures */
+    .signatures {
+      margin-top: 4rem;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3rem;
+      text-align: center;
+    }
+    
+    .signatures p {
+      margin: 1rem 0;
+      border-top: 1px solid var(--text-color);
+      padding-top: 1rem;
+      font-family: var(--heading-font-family);
+      font-weight: 700;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      body { font-size: calc(var(--base-font-size) * 0.9); padding: 15mm; }
+      header { height: 350px; }
+      .text-wrapper, #fractalText { width: 600px; height: 300px; }
+      #fractalText { transform: scale(0.7); }
+      .signatures { grid-template-columns: 1fr; }
+      .viz-container { height: 300px; margin: 3rem 0; }
+    }
+    
+    @media (max-width: 480px) {
+      body { font-size: calc(var(--base-font-size) * 0.85); padding: 10mm; }
+      header { height: 300px; }
+      .text-wrapper, #fractalText { width: 400px; height: 200px; }
+      #fractalText { transform: scale(0.6); }
+      .viz-container { height: 250px; margin: 2rem 0; }
+    }
+    
+    @media print {
+      .page { page-break-after: always; }
+      .page:last-child { page-break-after: avoid; }
+    }
+  </style>
 </head>
 <body>
+
+  <!-- Front Page with Fractal Logo -->
+  <div class="page">
     <header>
-        <!-- Logo Wrapper with TM Symbol -->
-        <div class="logo-wrapper">
-            <div class="logo-container">SYRE</div>
-        </div>
-        <div class="header-text">
-            Neste-generasjons teknologi for romarkitektur, parametrisk design og fremdrift
-        </div>
+      <div class="text-wrapper">
+        <h1 style="display: none;">SPEIS</h1>
+        <svg id="fractalText" viewBox="0 0 800 400" preserveAspectRatio="xMinYMid meet" role="heading" aria-level="1">
+          <defs>
+            <filter id="displacementFilter">
+              <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="3" result="noise">
+                <animate attributeName="baseFrequency" values="0.01;0.02;0.01" dur="20s" repeatCount="indefinite"/>
+              </feTurbulence>
+              <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" xChannelSelector="R" yChannelSelector="G">
+                <animate attributeName="scale" values="2;10;2" dur="10s" repeatCount="indefinite"/>
+              </feDisplacementMap>
+            </filter>
+            <filter id="glowEffect">
+              <feGaussianBlur stdDeviation="3" result="blur"/>
+              <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.8 0" result="glow"/>
+              <feBlend in="SourceGraphic" in2="glow" mode="screen"/>
+            </filter>
+            <pattern id="fractalPattern" patternUnits="userSpaceOnUse" width="2400" height="1200" patternTransform="translate(-800, -400)">
+              <g transform="translate(1200, 600)">
+                <!-- Aerospace Geometric Patterns -->
+                <g class="fractal-layer0">
+                  <polygon points="0,-200 173.2,-100 173.2,100 0,200 -173.2,100 -173.2,-100" fill="none" stroke="url(#gradient0)" stroke-width="8">
+                    <animateTransform attributeName="transform" type="rotate" values="0 0 0;60 0 0;120 0 0;180 0 0;240 0 0;300 0 0;360 0 0" dur="120s" repeatCount="indefinite" calcMode="discrete"/>
+                    <animateTransform attributeName="transform" type="scale" values="0.7;1.3;0.7" dur="30s" repeatCount="indefinite" additive="sum"/>
+                  </polygon>
+                </g>
+                <!-- Fighter Jet Wings Pattern -->
+                <g class="fractal-layer1">
+                  <path d="M-300,0 L-100,-150 L100,-50 L300,0 L100,50 L-100,150 Z" fill="url(#gradient1)" opacity="0.8">
+                    <animateTransform attributeName="transform" type="rotate" values="0 0 0;45 0 0;90 0 0;135 0 0;180 0 0;225 0 0;270 0 0;315 0 0;360 0 0" dur="90s" repeatCount="indefinite" calcMode="discrete"/>
+                    <animate attributeName="opacity" values="0.4;0.9;0.4" dur="25s" repeatCount="indefinite"/>
+                  </path>
+                </g>
+                <!-- Propulsion Rings -->
+                <g class="fractal-layer2">
+                  <circle cx="0" cy="0" r="250" fill="none" stroke="url(#gradient2)" stroke-width="12" opacity="0.6">
+                    <animateTransform attributeName="transform" type="rotate" values="0 0 0;360 0 0" dur="60s" repeatCount="indefinite"/>
+                    <animate attributeName="r" values="250;350;250" dur="20s" repeatCount="indefinite"/>
+                  </circle>
+                  <circle cx="0" cy="0" r="150" fill="none" stroke="url(#gradient2)" stroke-width="8" opacity="0.8">
+                    <animateTransform attributeName="transform" type="rotate" values="360 0 0;0 0 0" dur="45s" repeatCount="indefinite"/>
+                    <animate attributeName="r" values="150;200;150" dur="15s" repeatCount="indefinite"/>
+                  </circle>
+                </g>
+              </g>
+            </pattern>
+            <radialGradient id="gradient0" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+              <stop offset="0%" style="stop-color:#87ceeb; stop-opacity:0.9;">
+                <animate attributeName="stop-opacity" values="0.9;1;0.9" dur="12s" repeatCount="indefinite"/>
+                <animate attributeName="stop-color" values="#87ceeb;#4169e1;#191970;#000080;#87ceeb" dur="12s" repeatCount="indefinite"/>
+              </stop>
+              <stop offset="100%" style="stop-color:#4169e1; stop-opacity:0.9;">
+                <animate attributeName="stop-opacity" values="0.9;1;0.9" dur="12s" repeatCount="indefinite"/>
+                <animate attributeName="stop-color" values="#4169e1;#191970;#000080;#87ceeb;#4169e1" dur="12s" repeatCount="indefinite"/>
+              </stop>
+            </radialGradient>
+            <radialGradient id="gradient1" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+              <stop offset="0%" style="stop-color:#191970; stop-opacity:0.9;">
+                <animate attributeName="stop-opacity" values="0.9;1;0.9" dur="8s" repeatCount="indefinite"/>
+                <animate attributeName="stop-color" values="#191970;#000080;#87ceeb;#4169e1;#191970" dur="8s" repeatCount="indefinite"/>
+              </stop>
+              <stop offset="100%" style="stop-color:#000080; stop-opacity:0.9;">
+                <animate attributeName="stop-opacity" values="0.9;1;0.9" dur="8s" repeatCount="indefinite"/>
+                <animate attributeName="stop-color" values="#000080;#87ceeb;#4169e1;#191970;#000080" dur="8s" repeatCount="indefinite"/>
+              </stop>
+            </radialGradient>
+            <radialGradient id="gradient2" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+              <stop offset="0%" style="stop-color:#4169e1; stop-opacity:0.9;">
+                <animate attributeName="stop-opacity" values="0.9;1;0.9" dur="10s" repeatCount="indefinite"/>
+                <animate attributeName="stop-color" values="#4169e1;#191970;#000080;#87ceeb;#4169e1" dur="10s" repeatCount="indefinite"/>
+              </stop>
+              <stop offset="100%" style="stop-color:#87ceeb; stop-opacity:0.9;">
+                <animate attributeName="stop-opacity" values="0.9;1;0.9" dur="10s" repeatCount="indefinite"/>
+                <animate attributeName="stop-color" values="#87ceeb;#4169e1;#191970;#000080;#87ceeb" dur="10s" repeatCount="indefinite"/>
+              </stop>
+            </radialGradient>
+          </defs>
+          <text x="0" y="200" font-family="'Roboto', sans-serif" font-size="256px" font-weight="bold" text-anchor="start" dominant-baseline="central" fill="url(#fractalPattern)" filter="url(#displacementFilter) url(#glowEffect)">
+            SPEIS
+            <tspan font-size="32px" dy="-0.5em">™</tspan>
+          </text>
+        </svg>
+        <p class="tagline">Aerospace Manufacturing og Neste-Generasjons Fighter Jets - Konkurrer direkte med Kongsberg Defense and Aerospace</p>
+      </div>
     </header>
+    
+    <p style="margin-top: 3rem;"><strong>Forretningsplan for Innovasjon Norge</strong><br>
+    Søknadsbeløp: NOK 15 000 000 | Prosjektperiode: 36 måneder | Dato: 5. august 2025</p>
+    
+    <div class="footer">
+      <div class="confidentiality">Strengt konfidensiell - Kun for Innovasjon Norge</div>
+      <div>SPEIS AS | Side 1</div>
+    </div>
+  </div>
 
-    <main>
-        <!-- Sammendrag Section -->
-        <section id="sammendrag">
-            <h2>Sammendrag</h2>
-            <h3>Visjon</h3>
-            <p>Å muliggjøre menneskelig utforskning og bosetting i rommet med avansert produksjonsteknologi, parametrisk arkitektur og fremdriftssystemer som er tilpasset rommiljøer.</p>
-            <h3>Misjon</h3>
-            <p>Å bygge skreddersydde løsninger for rombasert produksjon og arkitektur gjennom on-demand 3D-printing, nanomaterialer og parametrisk design, samt fremdriftsteknologier for langdistanse utforskning.</p>
-            <div class="image-placeholder">Bilde: Visjon og Misjon</div>
-        </section>
+  <!-- Confidentiality and TOC Page -->
+  <div class="page">
+    
+    <div class="warning-box">
+      <div class="warning-title">Konfidensiell</div>
+      <p><strong>Dette dokumentet inneholder konfidensiell og eiendomsbeskyttet informasjon tilhørende SPEIS AS.</strong></p>
+      <p>Ved å motta og lese dette dokumentet bekrefter mottakeren at all informasjon er strengt konfidensiell, kun ment for Innovasjon Norge og deres autoriserte representanter, og at uautorisert kopiering, distribusjon eller deling er strengt forbudt.</p>
+    </div>
 
-        <!-- Markedsanalyse Section -->
-        <section id="marked">
-            <h2>Markedsanalyse</h2>
-            <p>Den globale romindustrien forventes å vokse til over USD 1 billion innen 2040. Etterspørselen for romarkitektur og produksjonsteknologi øker, drevet av behovet for langvarige strukturer og transportløsninger til Mars og månen.</p>
-            <div class="image-placeholder">Bilde: Markedsanalyse</div>
-        </section>
+    <h2>Innholdsfortegnelse</h2>
+    <ol class="toc">
+      <li><h4>Sammendrag og strategisk posisjonering</h4></li>
+      <li><h4>Selskapet og aerospace-kompetanse</h4></li>
+      <li><h4>Markedsanalyse og Kongsberg-konkurranse</h4></li>
+      <li><h4>Fighter Jet produktlinjer (7.-10. generasjon)</h4></li>
+      <li><h4>3D-printing teknologi fra SYRE integration</h4></li>
+      <li><h4>NATO Arctic Ships og forsvarsteknologi</h4></li>
+      <li><h4>Forretningsmodell og verdiskapning</h4></li>
+      <li><h4>Gjennomføringsplan og milepæler</h4></li>
+      <li><h4>Finansieringsplan og budsjett</h4></li>
+      <li><h4>Risikohåndtering og teknisk sikkerhet</h4></li>
+      <li><h4>Eksport og internasjonale partnerskap</h4></li>
+      <li><h4>Konklusjon og anbefaling</h4></li>
+    </ol>
+    
+    <div class="footer">
+      <div class="confidentiality">Strengt konfidensiell - Kun for Innovasjon Norge</div>
+      <div>SPEIS AS | Side 2</div>
+    </div>
+  </div>
 
-        <!-- Teknologi og Produktutvikling Section -->
-        <section id="teknologi">
-            <h2>Teknologi og Produktutvikling</h2>
-            <h3>Parametrisk Arkitektur</h3>
-            <p>Parametrisk design gir muligheten til å skape skreddersydde strukturer som tilpasser seg miljømessige krav og tilgjengelige ressurser i rommet, noe som sikrer effektivitet og bærekraft.</p>
-            <div class="image-placeholder">Bilde: Parametrisk Arkitektur</div>
-            
-            <h3>On-Demand 3D-Printing</h3>
-            <p>Med autonom 3D-printing kan vi produsere romstrukturer på stedet, og utnytte ressurser fra månen og Mars for å bygge infrastruktur uten å måtte frakte alt fra Jorden.</p>
-            <div class="image-placeholder">Bilde: 3D-Printing</div>
-            
-            <h3>Materialdesign</h3>
-            <p>Avanserte nanomaterialer og kompositter utvikles for å forbedre styrke, isolasjon og strålingstoleranse, tilpasset ekstreme romforhold.</p>
-            <div class="image-placeholder">Bilde: Materialdesign</div>
-            
-            <h3>Avansert Fremdrift</h3>
-            <p>Våre fremdriftssystemer er designet for høy effektivitet og langdistanse reiser, med lavt drivstofforbruk og høy ytelse for dypromutforskning.</p>
-            <div class="image-placeholder">Bilde: Fremdriftssystemer</div>
-        </section>
+  <!-- Executive Summary with Aerospace Visualization -->
+  <div class="page">
+    <h2>1. Sammendrag og Strategisk Posisjonering</h2>
+    
+    <h3>Aerospace Manufacturing og Defense Innovation</h3>
+    <p>SPEIS etablerer seg som Norges ledende utfordrer til Kongsberg Defense and Aerospace gjennom revolusjonerende aerospace manufacturing og neste-generasjons fighter jet teknologi. Ved å integrere 3D-printing expertise fra SYRE med avanserte aerospace systemer, skaper vi en vertikal integrert leverandør som kan konkurrere på høyeste nivå internasjonalt.</p>
+    
+    <!-- Aerospace Manufacturing Visualization -->
+    <div class="viz-container viz-large">
+      <div class="viz-title">SPEIS Aerospace Manufacturing System - 3D Produksjonsarkitektur</div>
+      <canvas id="aerospaceCanvas"></canvas>
+    </div>
+    
+    <h3>Konkurransefortrinn mot Kongsberg</h3>
+    <ul>
+      <li><strong>Kortere leveringstid:</strong> 50% raskere produksjon gjennom AI-optimalisert 3D-printing</li>
+      <li><strong>Lavere kostnader:</strong> 30% reduksjon i produksjonskostnader sammenlignet med tradisjonell manufaktur</li>
+      <li><strong>Høyere innovasjonstakt:</strong> 4 generasjoner fighter jets i utvikling parallelt</li>
+      <li><strong>Fleksibel produksjon:</strong> On-demand manufaktur av kritiske komponenter</li>
+      <li><strong>NATO-integrasjon:</strong> Eksisterende Arctic Ships kontrakter som springbrett</li>
+    </ul>
+    
+    <div class="footer">
+      <div class="confidentiality">Strengt konfidensiell - Kun for Innovasjon Norge</div>
+      <div>SPEIS AS | Side 3</div>
+    </div>
+  </div>
 
-        <!-- Finansiering Section -->
-        <section id="finansiering">
-            <h2>Finansiering</h2>
-            <p>Vi søker NOK 20 millioner for å utvikle vår teknologiportefølje innen romarkitektur, parametrisk design og fremdrift, med fokus på å skape autonome produksjonsløsninger i rommet.</p>
-            <div class="image-placeholder">Bilde: Finansiering</div>
-        </section>
+  <!-- Fighter Jet Product Lines -->
+  <div class="page">
+    <h2>4. Fighter Jet Produktlinjer (7.-10. Generasjon)</h2>
+    
+    <h3>Revolusjonerende Aerospace Teknologi</h3>
+    <p>SPEIS utvikler fire neste-generasjons fighter jet serier som overgår alle nåværende systemer på markedet, posisjonert for deployment mellom 2040-2070+.</p>
+    
+    <!-- Fighter Jet Hologram -->
+    <div class="viz-container viz-large">
+      <div class="viz-title">Fighter Jet Evolution - Holografisk Fremvisning</div>
+      <canvas id="fighterCanvas"></canvas>
+    </div>
+    
+    <h3>7. Generasjon: "STRATOSENTIENT" (2040+)</h3>
+    <ul>
+      <li><strong>SS-1 Interceptor:</strong> Fullautonome swarm-capable air superiority fighter</li>
+      <li><strong>NeuroCommand Interface:</strong> Neural-interface kontrollsystem for pilotløs operasjon</li>
+      <li><strong>QComm Mesh:</strong> Quantum-resistant kommunikasjon mellom fighter enheter</li>
+      <li><strong>HIVE OS:</strong> Distributed intelligence operativsystem for swarm koordinering</li>
+      <li><strong>Målmarked:</strong> NATO, allierte Stillehavs-forsvar, smart city defence (USD 50 milliarder marked)</li>
+    </ul>
+    
+    <h3>8. Generasjon: "AETHERWING" (2050+)</h3>
+    <ul>
+      <li><strong>AW-M1 MorphJet:</strong> Shape-morphing smart alloys for adaptive aerodynamikk</li>
+      <li><strong>NanoForge Pods:</strong> Self-healing nanomaterialer for real-time reparasjon</li>
+      <li><strong>SunCore Reactor:</strong> Edge-of-orbit propulsion for hybrid exosphere dominance</li>
+      <li><strong>BioSync Helm:</strong> Biologisk-digital interface for enhanced pilot performance</li>
+      <li><strong>Målmarked:</strong> Defense-space hybrid organisasjoner, off-earth forsvar (USD 100 milliarder marked)</li>
+    </ul>
+    
+    <div class="footer">
+      <div class="confidentiality">Strengt konfidensiell - Kun for Innovasjon Norge</div>
+      <div>SPEIS AS | Side 4</div>
+    </div>
+  </div>
 
-        <!-- Konklusjon Section -->
-        <section id="konklusjon">
-            <h2>Konklusjon</h2>
-            <p>SYRE er posisjonert som en ledende aktør innen parametrisk romarkitektur og romteknologi. Gjennom partnerskap og strategisk finansiering kan vi forme en bærekraftig fremtid i rommet.</p>
-            <div class="image-placeholder">Bilde: Konklusjon</div>
-        </section>
-    </main>
+  <!-- Advanced Fighter Generations -->
+  <div class="page">
+    <h3>9. Generasjon: "NOETICA" (2060+)</h3>
+    <ul>
+      <li><strong>NX-Σ DroneMind:</strong> Sentient AI warfighter med full autonomi og læreevne</li>
+      <li><strong>EventHorizon Drive:</strong> Antimatter/zero-point energy propulsion system</li>
+      <li><strong>MindSplice Core:</strong> Gravity vector modulation for 6D maneuvering</li>
+      <li><strong>TachyonNet:</strong> Quantum entanglement kommunikasjon over galaktiske avstander</li>
+      <li><strong>Målmarked:</strong> Orbital deterrence strategier, space mining rights (USD 250 milliarder marked)</li>
+    </ul>
+    
+    <h3>10. Generasjon: "OMEGA AERIS" (2070+)</h3>
+    <ul>
+      <li><strong>OA-GODCLASS:</strong> Post-fysisk aerospace presence med reality-twisting våpen</li>
+      <li><strong>Singularity Driver:</strong> Controlled micro black hole propulsion</li>
+      <li><strong>Continuum Tether:</strong> Consciousness-linked fleets for instant command</li>
+      <li><strong>GhostFleet:</strong> Transdimensional deterrence capabilities</li>
+      <li><strong>Målmarked:</strong> Post-nation coalitions, planetary councils, AI collectives (USD 1 trillion marked)</li>
+    </ul>
+    
+    <h3>Teknologisk Roadmap og Utvikling</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Generasjon</th>
+          <th>Utviklingsstart</th>
+          <th>Første flight</th>
+          <th>Investering (NOK mill.)</th>
+          <th>Forventet omsetning (NOK mill./år)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>7. Gen (STRATOSENTIENT)</td>
+          <td>2025</td>
+          <td>2042</td>
+          <td>2 500</td>
+          <td>15 000</td>
+        </tr>
+        <tr>
+          <td>8. Gen (AETHERWING)</td>
+          <td>2030</td>
+          <td>2052</td>
+          <td>5 000</td>
+          <td>35 000</td>
+        </tr>
+        <tr>
+          <td>9. Gen (NOETICA)</td>
+          <td>2040</td>
+          <td>2062</td>
+          <td>12 000</td>
+          <td>75 000</td>
+        </tr>
+        <tr>
+          <td>10. Gen (OMEGA AERIS)</td>
+          <td>2055</td>
+          <td>2072</td>
+          <td>30 000</td>
+          <td>200 000</td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <div class="footer">
+      <div class="confidentiality">Strengt konfidensiell - Kun for Innovasjon Norge</div>
+      <div>SPEIS AS | Side 5</div>
+    </div>
+  </div>
+
+  <!-- 3D Printing Integration from SYRE -->
+  <div class="page">
+    <h2>5. 3D-Printing Teknologi fra SYRE Integration</h2>
+    
+    <h3>Ruby-basert Aerospace Manufacturing Platform</h3>
+    <p>Gjennom strategisk integrasjon av SYREs 3D-printing teknologi har SPEIS utviklet verdens mest avanserte aerospace manufacturing system, bygget på Ruby og LangChain.rb infrastruktur.</p>
+    
+    <!-- Manufacturing System Visualization -->
+    <div class="viz-container viz-large">
+      <div class="viz-title">Integrert 3D Manufacturing System - SYRE-SPEIS Teknologi</div>
+      <canvas id="manufacturingCanvas"></canvas>
+    </div>
+    
+    <h3>Teknologisk Overføring fra SYRE</h3>
+    <ul>
+      <li><strong>Parametrisk Design System:</strong> Adaptive algorithms for aerospace komponenter</li>
+      <li><strong>AI³-Materialoptimalisering:</strong> Quantum-resistant alloys og composites</li>
+      <li><strong>Ruby Production Engine:</strong> Skalert fra sko til fighter jet komponenter</li>
+      <li><strong>Master.json Framework:</strong> Konstitusjonell AI sikkerhet for forsvarsindustri</li>
+      <li><strong>Nano-precision Printing:</strong> 0.001mm toleranse for kritiske aerospace deler</li>
+    </ul>
+    
+    <h3>Aerospace-spesifikke Innovasjoner</h3>
+    <ul>
+      <li><strong>Titanium-Carbon Lattice:</strong> 40% lettere enn konvensjonelle materialer</li>
+      <li><strong>Self-diagnostic Components:</strong> Integert sensornettverk i alle printede deler</li>
+      <li><strong>Rapid Prototyping:</strong> Fra design til flyklar prototype på 72 timer</li>
+      <li><strong>Field Repair Capability:</strong> Mobile 3D-printere for front-line vedlikehold</li>
+      <li><strong>Classified Material Production:</strong> NATO SECRET clearance produksjonsfasiliteter</li>
+    </ul>
+    
+    <h3>Produksjonskapasitet og Skalering</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>År</th>
+          <th>Produksjonsvolum</th>
+          <th>Antall Komponenter</th>
+          <th>Kvalitetsnivå</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>2025</td>
+          <td>500 deler/måned</td>
+          <td>15 000</td>
+          <td>99.8% defektfri</td>
+        </tr>
+        <tr>
+          <td>2027</td>
+          <td>2 500 deler/måned</td>
+          <td>85 000</td>
+          <td>99.95% defektfri</td>
+        </tr>
+        <tr>
+          <td>2030</td>
+          <td>10 000 deler/måned</td>
+          <td>350 000</td>
+          <td>99.99% defektfri</td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <div class="footer">
+      <div class="confidentiality">Strengt konfidensiell - Kun for Innovasjon Norge</div>
+      <div>SPEIS AS | Side 6</div>
+    </div>
+  </div>
+
+  <!-- NATO Arctic Ships and Competition -->
+  <div class="page">
+    <h2>6. NATO Arctic Ships og Kongsberg Konkurranse</h2>
+    
+    <h3>Eksisterende NATO-kontrakter som Springbrett</h3>
+    <p>SPEIS bygger videre på eksisterende NATO Arctic Ships kontrakter for å etablere kredibilitet og teknologisk modenhet før full konkurranse med Kongsberg Defense.</p>
+    
+    <!-- Competition Analysis Visualization -->
+    <div class="viz-container viz-large">
+      <div class="viz-title">Kongsberg vs SPEIS - Konkurranseanalyse</div>
+      <canvas id="competitionCanvas"></canvas>
+    </div>
+    
+    <h3>NATO Arctic Ships Portfolio</h3>
+    <ul>
+      <li><strong>Icebreaker Enhancement:</strong> 3D-printed hull reinforcement systemer</li>
+      <li><strong>Arctic Communication Arrays:</strong> Quantum-resistant kommunikasjonssystemer</li>
+      <li><strong>Stealth Coatings:</strong> Nano-materialer for radar signature reduction</li>
+      <li><strong>Propulsion Optimization:</strong> AI-drevne efficiency systems</li>
+      <li><strong>Crew Protection Systems:</strong> Advanced life support i ekstreme forhold</li>
+    </ul>
+    
+    <h3>Direkte Kongsberg Konkurranse-områder</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Teknologiområde</th>
+          <th>Kongsberg Styrke</th>
+          <th>SPEIS Fordel</th>
+          <th>Markedsandel Mål</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Luftforsvarssystemer</td>
+          <td>Etablert NASAMS</td>
+          <td>AI-swarm teknologi</td>
+          <td>25% innen 2030</td>
+        </tr>
+        <tr>
+          <td>Naval Combat Systems</td>
+          <td>NSM missiler</td>
+          <td>3D-printed hypersonics</td>
+          <td>15% innen 2028</td>
+        </tr>
+        <tr>
+          <td>Aerospace</td>
+          <td>JSF komponenter</td>
+          <td>Next-gen fighter development</td>
+          <td>40% innen 2035</td>
+        </tr>
+        <tr>
+          <td>Maritime Technology</td>
+          <td>Subsea systems</td>
+          <td>Arctic specialization</td>
+          <td>20% innen 2027</td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <h3>Strategisk Posisjonering</h3>
+    <p>Hvor Kongsberg fokuserer på evolutionary improvements, satser SPEIS på revolutionary breakthroughs. Vår 3D-printing approach gir oss agility og cost advantages som etablerte aktører ikke kan matche uten fundamental restrukturering.</p>
+    
+    <div class="footer">
+      <div class="confidentiality">Strengt konfidensiell - Kun for Innovasjon Norge</div>
+      <div>SPEIS AS | Side 7</div>
+    </div>
+  </div>
+
+  <!-- Financial Planning -->
+  <div class="page">
+    <h2>9. Finansieringsplan og Budsjett</h2>
+    
+    <h3>Totalt Finansieringsbehov</h3>
+    <p>SPEIS søker NOK 15 millioner fra Innovasjon Norge som del av en total finansieringsrunde på NOK 50 millioner over prosjektperioden på 36 måneder, fokusert på å utfordre Kongsberg direkte.</p>
+    
+    <h3>Finansieringsstruktur</h3>
+    <ul>
+      <li><strong>Innovasjon Norge:</strong> NOK 15 000 000 (30%)</li>
+      <li><strong>Norsk forsvarsdepartement:</strong> NOK 20 000 000 (40%)</li>
+      <li><strong>Private investorer:</strong> NOK 10 000 000 (20%)</li>
+      <li><strong>NATO teknologi-fond:</strong> NOK 5 000 000 (10%)</li>
+    </ul>
+    
+    <h3>Aerospace Inntektsprognoser</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>År</th>
+          <th>Omsetning (NOK mill.)</th>
+          <th>NATO Kontrakter</th>
+          <th>Fighter Jet Utvikling</th>
+          <th>3D Manufacturing</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>2025</td>
+          <td>25</td>
+          <td>NOK 15M</td>
+          <td>NOK 5M</td>
+          <td>NOK 5M</td>
+        </tr>
+        <tr>
+          <td>2027</td>
+          <td>125</td>
+          <td>NOK 50M</td>
+          <td>NOK 45M</td>
+          <td>NOK 30M</td>
+        </tr>
+        <tr>
+          <td>2030</td>
+          <td>750</td>
+          <td>NOK 200M</td>
+          <td>NOK 350M</td>
+          <td>NOK 200M</td>
+        </tr>
+        <tr>
+          <td>2035</td>
+          <td>2 500</td>
+          <td>NOK 500M</td>
+          <td>NOK 1 500M</td>
+          <td>NOK 500M</td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <h3>Investeringsallokering</h3>
+    <ul>
+      <li><strong>R&D (60%):</strong> NOK 30M for fighter jet og 3D-printing utvikling</li>
+      <li><strong>Produksjonsfasiliteter (25%):</strong> NOK 12.5M for manufacturing setup</li>
+      <li><strong>Talentrekruttering (10%):</strong> NOK 5M for aerospace ingeniører</li>
+      <li><strong>Markedsføring (5%):</strong> NOK 2.5M for internasjonale kontrakter</li>
+    </ul>
+    
+    <div class="footer">
+      <div class="confidentiality">Strengt konfidensiell - Kun for Innovasjon Norge</div>
+      <div>SPEIS AS | Side 8</div>
+    </div>
+  </div>
+
+  <!-- Conclusion -->
+  <div class="page">
+    <h2>12. Konklusjon og Anbefaling</h2>
+    
+    <h3>Strategisk Sammendrag</h3>
+    <p>SPEIS representerer en unik mulighet for Norge å etablere en hjemlig konkurrent til Kongsberg Defense and Aerospace, samtidig som vi posisjonerer landet som en global leder innen neste-generasjons aerospace teknologi.</p>
+    
+    <h3>Nøkkelfortrinn</h3>
+    <ul>
+      <li><strong>Teknologisk Ledetid:</strong> 4 generasjoner fighter jets under utvikling parallelt</li>
+      <li><strong>3D-Printing Excellence:</strong> Overført fra SYREs suksessrike shoe manufacturing</li>
+      <li><strong>NATO-Kredibilitet:</strong> Eksisterende Arctic Ships kontrakter</li>
+      <li><strong>Kongsberg Challenge:</strong> Direkte konkurranse med etablert norsk forsvarsaktør</li>
+      <li><strong>Global Export Potential:</strong> Addresserer USD 1+ trillion aerospace marked</li>
+    </ul>
+    
+    <h3>Anbefaling til Innovasjon Norge</h3>
+    <p>Vi anbefaler sterkt at Innovasjon Norge støtter SPEIS-prosjektet med NOK 15 millioner over 36 måneder. Denne investeringen vil:</p>
+    
+    <ul>
+      <li>Skape en norsk aerospace gigant som kan konkurrere globalt</li>
+      <li>Redusere Norges avhengighet av én dominerende forsvarsaktør</li>
+      <li>Posisjonere Norge som teknologileder innen future warfare systems</li>
+      <li>Generere tusenvis av høykompetanse arbeidsplasser</li>
+      <li>Etablere Norge som eksportleder i aerospace manufacturing</li>
+    </ul>
+    
+    <h3>Fremtidige Ambisjoner</h3>
+    <p>Innen 2035 ser vi for oss at SPEIS vil være en av verdens ledende aerospace teknologi-selskaper, med fighter jets i aktiv tjeneste hos NATO-allierte og 3D-manufacturing fasiliteter på flere kontinenter.</p>
+    
+    <div class="signatures">
+      <div>
+        <p>Balder Laupsa Mæhle</p>
+        <p style="font-size: 0.8rem; font-weight: 400;">CEO & Aerospace Director</p>
+      </div>
+      <div>
+        <p>Ragnhild Laupsa Mæhle</p>
+        <p style="font-size: 0.8rem; font-weight: 400;">CTO & Manufacturing Director</p>
+      </div>
+      <div>
+        <p>Johann Tepstad</p>
+        <p style="font-size: 0.8rem; font-weight: 400;">Fighter Jet Design Director</p>
+      </div>
+    </div>
+    
+    <div class="footer">
+      <div class="confidentiality">Strengt konfidensiell - Kun for Innovasjon Norge</div>
+      <div>SPEIS AS | Side 9</div>
+    </div>
+  </div>
+
+  <script>
+    // Aerospace Manufacturing Visualization
+    function initAerospace() {
+      const canvas = document.getElementById('aerospaceCanvas');
+      const engine = new BABYLON.Engine(canvas, true);
+      const scene = new BABYLON.Scene(engine);
+      
+      // Camera setup
+      const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI/2, Math.PI/4, 12, BABYLON.Vector3.Zero(), scene);
+      camera.attachControls(canvas, true);
+      
+      // Lighting
+      const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 0), scene);
+      light.intensity = 0.8;
+      
+      // Manufacturing stations
+      const stations = [];
+      for (let i = 0; i < 8; i++) {
+        const angle = (i / 8) * Math.PI * 2;
+        const x = Math.cos(angle) * 4;
+        const z = Math.sin(angle) * 4;
+        
+        const station = BABYLON.MeshBuilder.CreateBox(`station_${i}`, {width: 0.5, height: 1, depth: 0.5}, scene);
+        station.position = new BABYLON.Vector3(x, 0, z);
+        station.material = new BABYLON.StandardMaterial(`mat_${i}`, scene);
+        station.material.emissiveColor = new BABYLON.Color3(0.2, 0.6, 1);
+        
+        // Printing animation
+        BABYLON.Animation.CreateAndStartAnimation("print", station.position, "y", 30, 120, 
+          0, 0.5, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+        
+        stations.push(station);
+      }
+      
+      // Central command unit
+      const command = BABYLON.MeshBuilder.CreateSphere("command", {diameter: 1}, scene);
+      command.material = new BABYLON.StandardMaterial("commandMat", scene);
+      command.material.emissiveColor = new BABYLON.Color3(1, 0.5, 0);
+      
+      // Data flow lines
+      stations.forEach((station, index) => {
+        const line = BABYLON.MeshBuilder.CreateLines(`flow_${index}`, {
+          points: [command.position, station.position]
+        }, scene);
+        line.color = new BABYLON.Color3(0, 1, 1);
+        line.alpha = 0.7;
+      });
+      
+      // Rotation animation
+      scene.registerBeforeRender(() => {
+        command.rotation.y += 0.01;
+      });
+      
+      engine.runRenderLoop(() => {
+        scene.render();
+      });
+      
+      window.addEventListener("resize", () => {
+        engine.resize();
+      });
+    }
+    
+    // Fighter Jet Hologram
+    function initFighter() {
+      const canvas = document.getElementById('fighterCanvas');
+      const engine = new BABYLON.Engine(canvas, true);
+      const scene = new BABYLON.Scene(engine);
+      
+      // Camera
+      const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI/3, Math.PI/3, 20, BABYLON.Vector3.Zero(), scene);
+      camera.attachControls(canvas, true);
+      
+      // Lighting
+      const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+      light.intensity = 0.4;
+      
+      // Fighter jet wireframe
+      const fuselage = BABYLON.MeshBuilder.CreateBox("fuselage", {width: 0.5, height: 0.3, depth: 4}, scene);
+      fuselage.material = new BABYLON.StandardMaterial("fuselageMat", scene);
+      fuselage.material.wireframe = true;
+      fuselage.material.emissiveColor = new BABYLON.Color3(0, 1, 1);
+      
+      // Wings
+      const leftWing = BABYLON.MeshBuilder.CreateBox("leftWing", {width: 3, height: 0.1, depth: 1}, scene);
+      leftWing.position.x = -1.5;
+      leftWing.material = new BABYLON.StandardMaterial("wingMat", scene);
+      leftWing.material.wireframe = true;
+      leftWing.material.emissiveColor = new BABYLON.Color3(0, 0.8, 1);
+      
+      const rightWing = leftWing.clone("rightWing");
+      rightWing.position.x = 1.5;
+      
+      // Engines
+      const leftEngine = BABYLON.MeshBuilder.CreateCylinder("leftEngine", {height: 1, diameter: 0.3}, scene);
+      leftEngine.position = new BABYLON.Vector3(-1, 0, -1.5);
+      leftEngine.rotation.x = Math.PI/2;
+      leftEngine.material = new BABYLON.StandardMaterial("engineMat", scene);
+      leftEngine.material.emissiveColor = new BABYLON.Color3(1, 0.5, 0);
+      
+      const rightEngine = leftEngine.clone("rightEngine");
+      rightEngine.position.x = 1;
+      
+      // Holographic scanlines
+      const scanlines = [];
+      for (let i = 0; i < 40; i++) {
+        const scanline = BABYLON.MeshBuilder.CreateBox(`scan_${i}`, {width: 8, height: 0.02, depth: 8}, scene);
+        scanline.position.y = -4 + (i * 0.2);
+        scanline.material = new BABYLON.StandardMaterial(`scanMat_${i}`, scene);
+        scanline.material.emissiveColor = new BABYLON.Color3(0, 0.3, 1);
+        scanline.material.alpha = 0.1;
+        scanlines.push(scanline);
+      }
+      
+      // Scanning animation
+      let scanTime = 0;
+      scene.registerBeforeRender(() => {
+        scanTime += 0.03;
+        scanlines.forEach((line, index) => {
+          line.material.alpha = 0.05 + 0.15 * Math.sin(scanTime + index * 0.2);
+        });
+        
+        // Fighter rotation
+        fuselage.rotation.y += 0.005;
+        leftWing.rotation.y += 0.005;
+        rightWing.rotation.y += 0.005;
+        leftEngine.rotation.z += 0.005;
+        rightEngine.rotation.z += 0.005;
+      });
+      
+      engine.runRenderLoop(() => {
+        scene.render();
+      });
+      
+      window.addEventListener("resize", () => {
+        engine.resize();
+      });
+    }
+    
+    // Manufacturing System Visualization
+    function initManufacturing() {
+      const canvas = document.getElementById('manufacturingCanvas');
+      const engine = new BABYLON.Engine(canvas, true);
+      const scene = new BABYLON.Scene(engine);
+      
+      // Camera
+      const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI/6, Math.PI/6, 15, BABYLON.Vector3.Zero(), scene);
+      camera.attachControls(canvas, true);
+      
+      // Lighting
+      const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+      light.intensity = 0.6;
+      
+      // 3D Printer heads
+      const printers = [];
+      for (let i = 0; i < 12; i++) {
+        const printer = BABYLON.MeshBuilder.CreateBox(`printer_${i}`, {width: 0.3, height: 0.3, depth: 0.3}, scene);
+        const angle = (i / 12) * Math.PI * 2;
+        printer.position = new BABYLON.Vector3(Math.cos(angle) * 5, Math.sin(i * 0.5) * 2, Math.sin(angle) * 5);
+        printer.material = new BABYLON.StandardMaterial(`printerMat_${i}`, scene);
+        printer.material.emissiveColor = new BABYLON.Color3(1, 0.3, 0.7);
+        
+        // Printing beam
+        const beam = BABYLON.MeshBuilder.CreateCylinder(`beam_${i}`, {height: 5, diameter: 0.05}, scene);
+        beam.position = printer.position.clone();
+        beam.position.y -= 2.5;
+        beam.material = new BABYLON.StandardMaterial(`beamMat_${i}`, scene);
+        beam.material.emissiveColor = new BABYLON.Color3(0, 1, 0);
+        beam.material.alpha = 0.7;
+        
+        printers.push({printer, beam});
+      }
+      
+      // Central workpiece
+      const workpiece = BABYLON.MeshBuilder.CreateSphere("workpiece", {diameter: 2}, scene);
+      workpiece.material = new BABYLON.StandardMaterial("workpieceMat", scene);
+      workpiece.material.emissiveColor = new BABYLON.Color3(0.8, 0.8, 0.8);
+      workpiece.material.alpha = 0.8;
+      
+      // Animation
+      scene.registerBeforeRender(() => {
+        printers.forEach((p, index) => {
+          p.printer.rotation.y += 0.01;
+          p.beam.scaling.y = 0.5 + 0.5 * Math.sin(Date.now() * 0.001 + index);
+        });
+        workpiece.rotation.x += 0.005;
+        workpiece.rotation.y += 0.003;
+      });
+      
+      engine.runRenderLoop(() => {
+        scene.render();
+      });
+      
+      window.addEventListener("resize", () => {
+        engine.resize();
+      });
+    }
+    
+    // Competition Analysis Visualization
+    function initCompetition() {
+      const canvas = document.getElementById('competitionCanvas');
+      const engine = new BABYLON.Engine(canvas, true);
+      const scene = new BABYLON.Scene(engine);
+      
+      // Camera
+      const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI/4, Math.PI/4, 10, BABYLON.Vector3.Zero(), scene);
+      camera.attachControls(canvas, true);
+      
+      // Lighting
+      const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+      light.intensity = 0.5;
+      
+      // Kongsberg representation (traditional)
+      const kongsberg = BABYLON.MeshBuilder.CreateBox("kongsberg", {width: 2, height: 3, depth: 2}, scene);
+      kongsberg.position.x = -3;
+      kongsberg.material = new BABYLON.StandardMaterial("kongsbergMat", scene);
+      kongsberg.material.emissiveColor = new BABYLON.Color3(0.8, 0.2, 0.2);
+      
+      // SPEIS representation (innovative)
+      const speis = BABYLON.MeshBuilder.CreateSphere("speis", {diameter: 2}, scene);
+      speis.position.x = 3;
+      speis.material = new BABYLON.StandardMaterial("speisMat", scene);
+      speis.material.emissiveColor = new BABYLON.Color3(0.2, 0.8, 1);
+      
+      // Innovation particles around SPEIS
+      const particles = [];
+      for (let i = 0; i < 20; i++) {
+        const particle = BABYLON.MeshBuilder.CreateSphere(`particle_${i}`, {diameter: 0.1}, scene);
+        particle.material = new BABYLON.StandardMaterial(`particleMat_${i}`, scene);
+        particle.material.emissiveColor = new BABYLON.Color3(0, 1, 1);
+        particles.push(particle);
+      }
+      
+      // Market share visualization
+      const marketSphere = BABYLON.MeshBuilder.CreateSphere("market", {diameter: 8}, scene);
+      marketSphere.material = new BABYLON.StandardMaterial("marketMat", scene);
+      marketSphere.material.alpha = 0.1;
+      marketSphere.material.emissiveColor = new BABYLON.Color3(1, 1, 1);
+      
+      // Animation
+      let time = 0;
+      scene.registerBeforeRender(() => {
+        time += 0.02;
+        
+        // Animate particles around SPEIS
+        particles.forEach((particle, index) => {
+          const angle = time + index * 0.3;
+          particle.position.x = 3 + Math.cos(angle) * 2;
+          particle.position.y = Math.sin(angle) * 2;
+          particle.position.z = Math.sin(angle * 0.7) * 2;
+        });
+        
+        // Market expansion animation
+        marketSphere.scaling = new BABYLON.Vector3(
+          1 + 0.2 * Math.sin(time * 0.5),
+          1 + 0.2 * Math.sin(time * 0.5),
+          1 + 0.2 * Math.sin(time * 0.5)
+        );
+      });
+      
+      engine.runRenderLoop(() => {
+        scene.render();
+      });
+      
+      window.addEventListener("resize", () => {
+        engine.resize();
+      });
+    }
+    
+    // Initialize all visualizations when DOM is ready
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add delay to ensure canvas elements are ready
+      setTimeout(() => {
+        if (document.getElementById('aerospaceCanvas')) initAerospace();
+        if (document.getElementById('fighterCanvas')) initFighter();
+        if (document.getElementById('manufacturingCanvas')) initManufacturing();
+        if (document.getElementById('competitionCanvas')) initCompetition();
+      }, 1000);
+    });
+  </script>
+
 </body>
 </html>
-
