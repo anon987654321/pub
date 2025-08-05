@@ -140,9 +140,9 @@ pass
 # Block all inbound traffic by default
 block in
 
-# Prevent SSH brute-force attacks
+# Prevent SSH brute-force attacks (less aggressive for sshfs compatibility)
 table <bruteforce> persist
-pass in on \$ext_if proto tcp to port 22 keep state (max-src-conn 2, max-src-conn-rate 2/60, overload <bruteforce>)
+pass in on \$ext_if proto tcp to port 22 keep state (max-src-conn 15, max-src-conn-rate 10/60, overload <bruteforce>)
 
 # Allow DNS queries to the server
 pass in on \$ext_if proto { tcp, udp } to $BRGEN_IP port 53 keep state
@@ -166,7 +166,8 @@ EOF
 setup_dns() {
     log "Setting up NSD and DNSSEC"
 
-    run mkdir -p /var/nsd/zones/master /var/www/acme
+    run mkdir -p /var/nsd/zones/master
+    run mkdir -p /var/www/acme
     run chown _nsd:_nsd /var/nsd/zones/master
     run chown -R www:www /var/www/acme
 
