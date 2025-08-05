@@ -63,14 +63,32 @@ apps_domains=(
   ["neuroticerotic"]="neuroticerotic.com"
 )
 
+# Logging and error handling functions
+LOG_FILE="./openbsd_setup.log"
+
+log() {
+    local message="$1"
+    printf '{"timestamp":"%s","level":"INFO","message":"%s"}\n' \
+        "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$message" >> "$LOG_FILE"
+}
+
+run() {
+    if ! eval "$@"; then
+        log "Error: Command failed: $*"
+        exit 1
+    fi
+}
+
 # -- INSTALLATION BEGIN --
 
 echo "Installing necessary packages..."
-doas pkg_add -U ruby postgresql-client dnscrypt-proxy
+log "Installing system packages"
+run pkg_add -U ruby postgresql-client dnscrypt-proxy ldns-utils zap
 
 # -- PF --
 
 echo "Setting up pf.conf..."
+log "Configuring pf firewall"
 doas tee /etc/pf.conf > /dev/null << "EOF"
 ext_if = "vio0"
 
@@ -98,11 +116,14 @@ block log all
 # Allow all outgoing traffic
 pass out quick on $ext_if all
 
-# Allow incoming SSH, HTTP, and HTTPS traffic
-pass in on $ext_if proto tcp to $ext_if port { 22, 80, 443 } keep state
+# Prevent SSH brute-force attacks with connection limits
+pass in on $ext_if proto tcp to port 22 keep state (max-src-conn 2, max-src-conn-rate 2/60, overload <bruteforce>)
 
-# Allow incoming DNS traffic
-pass in on $ext_if proto { tcp, udp } to $ext_if port 53 keep state
+# Allow HTTP/HTTPS with connection limits to prevent DoS
+pass in on $ext_if proto tcp to port { 80, 443 } keep state (max-src-conn 100, max-src-conn-rate 100/60)
+
+# Allow DNS queries with state tracking
+pass in on $ext_if proto { tcp, udp } to port 53 keep state
 
 # Allow ICMP traffic (ping, etc.)
 pass inet proto icmp all icmp-type { echoreq, unreach, timex, paramprob }
@@ -125,15 +146,24 @@ for app in "${(@k)apps_domains}"; do
 table <${app}> { 127.0.0.1 }
 
 protocol "http_protocol_${app}" {
+  # Forward client IP for logging
   match request header set "X-Forwarded-By" value "\$SERVER_ADDR:\$SERVER_PORT"
   match request header set "X-Forwarded-For" value "\$REMOTE_ADDR"
+  # Indicate HTTPS protocol
+  match request header set "X-Forwarded-Proto" value "https"
+  
+  # Enhanced security headers
   match response header set "Content-Security-Policy" value "upgrade-insecure-requests; default-src https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval'"
+  # Enforce HTTPS for one year, including subdomains (prevents downgrade attacks)
   match response header set "Strict-Transport-Security" value "max-age=31536000; includeSubDomains; preload"
   match response header set "Referrer-Policy" value "strict-origin"
-  match response header set "Feature-Policy" value "accelerometer 'none'; ..."
+  match response header set "Feature-Policy" value "accelerometer 'none'; camera 'none'; microphone 'none'"
+  # Prevent MIME-type sniffing (mitigates drive-by downloads)
   match response header set "X-Content-Type-Options" value "nosniff"
   match response header set "X-Download-Options" value "noopen"
+  # Block framing to prevent clickjacking
   match response header set "X-Frame-Options" value "DENY"
+  # Enable XSS filtering in browsers (mitigates reflected XSS)
   match response header set "X-XSS-Protection" value "1; mode=block"
 
   tcp { no delay }
@@ -176,12 +206,18 @@ EOF
 
 echo "Creating directory for ACME challenges..."
 doas mkdir -p /var/www/acme
+run chown -R www:www /var/www/acme
 
 echo "Setting up acme-client.conf..."
+# Generate ACME account key if it doesn't exist
+if [ ! -f /etc/acme/letsencrypt.pem ]; then
+    run openssl ecparam -name prime256v1 -genkey -out /etc/acme/letsencrypt.pem
+fi
+
 doas tee /etc/acme-client.conf > /dev/null << EOF
 authority letsencrypt {
   api url "https://acme-v02.api.letsencrypt.org/directory"
-  account key "/etc/acme/letsencrypt-privkey.pem"
+  account key "/etc/acme/letsencrypt.pem"
 }
 
 authority letsencrypt-staging {
@@ -203,6 +239,14 @@ domain "$domain" {
   sign with letsencrypt
 }
 EOF
+
+  # Generate SSL certificates with retry logic
+  echo "Generating SSL certificate for $domain"
+  if ! run timeout 120 acme-client -v "$domain"; then
+      log "Warning: acme-client failed for $domain, retrying after delay"
+      sleep 5
+      run timeout 120 acme-client -v "$domain"
+  fi
 done
 
 echo "Enabling and starting httpd..."
@@ -211,15 +255,18 @@ doas rcctl start httpd
 
 # -- NSD --
 
-echo "Setting up NSD..."
+echo "Setting up NSD with DNSSEC..."
+log "Setting up NSD and DNSSEC"
 
-echo "Creating zones..."
+echo "Creating zones with DNSSEC support..."
 doas mkdir -p /var/nsd/zones/master /etc/nsd
+run chown _nsd:_nsd /var/nsd/zones/master
 
 for domain in "${(@k)all_domains}"; do
   serial=$(date +"%Y%m%d%H")
 
   echo "Creating zone file for domain: $domain"
+  log "Processing domain: $domain"
   doas tee "/var/nsd/zones/master/$domain.zone" > /dev/null << EOF
 \$ORIGIN $domain.
 \$TTL 24h
@@ -231,6 +278,7 @@ for domain in "${(@k)all_domains}"; do
 www IN CNAME @
 
 @ IN A $main_ip
+@ IN CAA 0 issue "letsencrypt.org"
 EOF
 
   if [[ -n "${all_domains[$domain]}" ]]; then
@@ -238,42 +286,50 @@ EOF
       echo "$subdomain IN CNAME @" | doas tee -a "/var/nsd/zones/master/$domain.zone" > /dev/null
     done
   fi
+
+  # DNSSEC key generation and zone signing
+  echo "Generating DNSSEC keys for $domain"
+  cd /var/nsd/zones/master
+  zsk=$(run ldns-keygen -a ECDSAP256SHA256 -b 256 "$domain")
+  ksk=$(run ldns-keygen -k -a ECDSAP256SHA256 -b 256 "$domain")
+  run chown _nsd:_nsd "$zsk".* "$ksk".*
+  run ldns-signzone -n -p -s "$(openssl rand -hex 8)" "$domain.zone" "$zsk" "$ksk"
+  cd - >/dev/null
+  
+  log "DNSSEC keys generated and zone signed for $domain"
 done
 
 echo "Creating NSD configuration file..."
-doas tee /etc/nsd/nsd.conf > /dev/null << EOF
+doas tee /var/nsd/etc/nsd.conf > /dev/null << EOF
 server:
-  ip-address: 0.0.0.0
+  ip-address: $main_ip
   hide-version: yes
   zonesdir: "/var/nsd/zones"
 
 remote-control:
   control-enable: yes
-
-pattern:
-  name: "default"
-  zonefile: "%s.zone"
-  notify: yes
-  provide-xfr: 203.0.113.2 NOKEY
-
-zone:
-  name: "brgen.no"
-  include-pattern: "default"
-
 EOF
 
 for domain in "${(@k)all_domains}"; do
   echo "Adding zone configuration for domain: $domain"
-  doas tee -a /etc/nsd/nsd.conf > /dev/null << EOF
+  doas tee -a /var/nsd/etc/nsd.conf > /dev/null << EOF
+
 zone:
   name: "$domain"
-  include-pattern: "default"
+  zonefile: "master/$domain.zone.signed"
+  provide-xfr: 194.63.248.53 NOKEY
+  notify: 194.63.248.53 NOKEY
 EOF
 done
 
 echo "Enabling and starting NSD..."
 doas rcctl enable nsd
 doas rcctl start nsd
+
+# Reload NSD configuration to apply DNSSEC changes
+echo "Reloading NSD configuration..."
+run nsd-control reload
+log "NSD setup with DNSSEC complete"
 
 # -- APP USER ACCOUNTS --
 
@@ -310,6 +366,24 @@ EOF
   doas rcctl start $app
 done
 
-echo "Setup complete. Your OpenBSD server is now configured for multiple Rails apps."
+# -- CLEANUP FUNCTION --
+
+cleanup_nsd() {
+    echo "Performing NSD cleanup with zap..."
+    log "Cleaning up NSD with zap"
+    
+    if ! run zap -f nsd; then
+        log "Warning: zap cleanup failed, continuing anyway"
+    fi
+    
+    run nsd-control reload
+    log "NSD cleanup complete"
+}
+
+# Optional cleanup - uncomment the next line to enable
+# cleanup_nsd
+
+echo "Setup complete. Your OpenBSD server is now configured for multiple Rails apps with DNSSEC support."
+log "OpenBSD setup with DNSSEC complete"
 
 # -- INSTALLATION COMPLETE --
