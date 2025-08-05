@@ -1,7 +1,16 @@
 # frozen_string_literal: true
 
 require_relative 'cognitive_orchestrator'
-require 'sqlite3'
+
+# Graceful SQLite loading
+begin
+  require 'sqlite3'
+  SQLITE_AVAILABLE = true
+rescue LoadError
+  SQLITE_AVAILABLE = false
+  puts "Warning: sqlite3 gem not available. Using in-memory session storage."
+end
+
 require 'openssl'
 require 'digest'
 require 'securerandom'
@@ -12,11 +21,11 @@ require 'json'
 class EnhancedSessionManager
   attr_accessor :sessions, :max_sessions, :eviction_strategy, :cognitive_monitor
 
-  def initialize(max_sessions: 10, eviction_strategy: :cognitive_load_aware)
+  def initialize(max_sessions: 10, eviction_strategy: :cognitive_load_aware, cognitive_monitor: nil)
     @sessions = {}
     @max_sessions = max_sessions
     @eviction_strategy = eviction_strategy
-    @cognitive_monitor = CognitiveOrchestrator.new
+    @cognitive_monitor = cognitive_monitor || CognitiveOrchestrator.new
     @db = setup_database
     @cipher = OpenSSL::Cipher.new('AES-256-CBC')
   end
@@ -195,6 +204,11 @@ class EnhancedSessionManager
 
   # Setup SQLite database for session storage
   def setup_database
+    unless SQLITE_AVAILABLE
+      puts "📝 Using in-memory session storage (SQLite not available)"
+      return MockDatabase.new
+    end
+
     db = SQLite3::Database.new('data/sessions.db')
 
     db.execute <<-SQL
@@ -238,6 +252,12 @@ class EnhancedSessionManager
 
   # Store session to database
   def store_session_to_db(user_id, session)
+    unless SQLITE_AVAILABLE
+      # Just log for mock database
+      puts "💾 Mock: Storing session for #{user_id}"
+      return
+    end
+
     # Remove database handle and other non-serializable objects
     serializable_session = session.dup
     serializable_session.delete(:db)
@@ -252,6 +272,12 @@ class EnhancedSessionManager
 
   # Load session from database
   def load_session_from_db(user_id)
+    unless SQLITE_AVAILABLE
+      # Return nil for mock database
+      puts "💾 Mock: Loading session for #{user_id}"
+      return nil
+    end
+
     rows = @db.execute(
       'SELECT context FROM sessions WHERE user_id = ? ORDER BY created_at DESC LIMIT 1',
       [user_id]
@@ -395,5 +421,34 @@ class EnhancedSessionManager
     else
       'poor'
     end
+  end
+end
+
+# Mock database for when SQLite is not available
+class MockDatabase
+  def initialize
+    @data = {}
+    puts "💾 Mock database initialized (SQLite not available)"
+  end
+
+  def execute(sql, *params)
+    # Mock database operations
+    case sql
+    when /CREATE TABLE/
+      puts "📋 Mock: Creating table"
+    when /CREATE INDEX/
+      puts "🔍 Mock: Creating index"
+    when /INSERT/
+      puts "➕ Mock: Inserting data"
+    when /SELECT/
+      puts "🔍 Mock: Selecting data"
+      []
+    when /DELETE/
+      puts "🗑️ Mock: Deleting data"
+    end
+  end
+
+  def close
+    puts "🔒 Mock database closed"
   end
 end
