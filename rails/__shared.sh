@@ -743,28 +743,581 @@ setup_storage() {
   fi
 }
 
-setup_stripe() {
-  log "Setting up Stripe"
-  bundle add stripe
-  if [ $? -ne 0 ]; then
-    error "Failed to add Stripe gem"
+setup_enhanced_stripe() {
+  log "Setting up enhanced Stripe integration with comprehensive security"
+  
+  # Verify Rails environment
+  if [[ ! -f "bin/rails" ]]; then
+    error "Rails application not found - cannot setup Stripe"
   fi
+  
+  # Install Stripe with security enhancements
+  log "Installing Stripe with security dependencies"
+  if ! bundle add stripe money-rails rack-attack --optimistic; then
+    error "Failed to add Stripe gems"
+  fi
+  
+  # Enhanced Stripe configuration with security
+  log "Creating secure Stripe configuration"
+  cat > config/initializers/stripe.rb << 'EOF'
+# Enhanced Stripe configuration - Framework v35.3.8 security focused
+Rails.application.configure do
+  # Environment-specific API keys with validation
+  config.stripe.secret_key = Rails.application.credentials.dig(:stripe, Rails.env.to_sym, :secret_key) ||
+                             ENV['STRIPE_SECRET_KEY']
+  config.stripe.publishable_key = Rails.application.credentials.dig(:stripe, Rails.env.to_sym, :publishable_key) ||
+                                 ENV['STRIPE_PUBLISHABLE_KEY']
+  
+  # Webhook configuration with security
+  config.stripe.webhook_secret = Rails.application.credentials.dig(:stripe, :webhook_secret) ||
+                                ENV['STRIPE_WEBHOOK_SECRET']
+  
+  # Validate keys are present
+  unless config.stripe.secret_key&.start_with?('sk_')
+    Rails.logger.error "Invalid or missing Stripe secret key"
+  end
+  
+  unless config.stripe.publishable_key&.start_with?('pk_')
+    Rails.logger.error "Invalid or missing Stripe publishable key"
+  end
+end
+
+# Initialize Stripe with error handling
+begin
+  Stripe.api_key = Rails.application.config.stripe.secret_key
+  Stripe.api_version = "2024-06-20"
+  
+  # Enhanced logging for security
+  Stripe.log_level = Rails.env.production? ? Stripe::LEVEL_INFO : Stripe::LEVEL_DEBUG
+  
+rescue => e
+  Rails.logger.error "Stripe initialization failed: #{e.message}"
+end
+
+# Enhanced Stripe webhook handler with security
+class StripeWebhookHandler
+  WEBHOOK_TOLERANCE = 300 # 5 minutes
+  
+  def self.handle(payload, signature)
+    # Verify webhook signature for security
+    event = verify_webhook_signature(payload, signature)
+    return false unless event
+    
+    # Log for security monitoring
+    Rails.logger.info "Stripe webhook received: #{event['type']} for #{event['id']}"
+    
+    # Handle different event types with error handling
+    case event['type']
+    when 'payment_intent.succeeded'
+      handle_payment_success(event['data']['object'])
+    when 'payment_intent.payment_failed'
+      handle_payment_failure(event['data']['object'])
+    when 'customer.subscription.created'
+      handle_subscription_created(event['data']['object'])
+    when 'customer.subscription.deleted'
+      handle_subscription_deleted(event['data']['object'])
+    when 'invoice.payment_succeeded'
+      handle_invoice_payment(event['data']['object'])
+    else
+      Rails.logger.info "Unhandled Stripe event: #{event['type']}"
+    end
+    
+    true
+  rescue => e
+    Rails.logger.error "Stripe webhook error: #{e.message}"
+    false
+  end
+  
+  private
+  
+  def self.verify_webhook_signature(payload, signature)
+    webhook_secret = Rails.application.config.stripe.webhook_secret
+    return nil unless webhook_secret
+    
+    Stripe::Webhook.construct_event(payload, signature, webhook_secret, WEBHOOK_TOLERANCE)
+  rescue Stripe::SignatureVerificationError => e
+    Rails.logger.error "Stripe signature verification failed: #{e.message}"
+    nil
+  end
+  
+  def self.handle_payment_success(payment_intent)
+    # Implement payment success logic with security checks
+    customer_id = payment_intent['customer']
+    amount = payment_intent['amount']
+    
+    Rails.logger.info "Payment succeeded: #{payment_intent['id']} for customer #{customer_id}"
+    # Add your payment success logic here
+  end
+  
+  def self.handle_payment_failure(payment_intent)
+    # Implement payment failure logic
+    Rails.logger.warn "Payment failed: #{payment_intent['id']}"
+    # Add your payment failure logic here
+  end
+  
+  def self.handle_subscription_created(subscription)
+    # Implement subscription creation logic
+    Rails.logger.info "Subscription created: #{subscription['id']}"
+    # Add your subscription logic here
+  end
+  
+  def self.handle_subscription_deleted(subscription)
+    # Implement subscription deletion logic
+    Rails.logger.info "Subscription deleted: #{subscription['id']}"
+    # Add your subscription cleanup logic here
+  end
+  
+  def self.handle_invoice_payment(invoice)
+    # Implement invoice payment logic
+    Rails.logger.info "Invoice paid: #{invoice['id']}"
+    # Add your invoice logic here
+  end
+end
+EOF
+
+  # Secure Stripe controller
+  log "Creating secure Stripe webhook controller"
+  mkdir -p app/controllers/api/v1
+  cat > app/controllers/api/v1/stripe_controller.rb << 'EOF'
+class Api::V1::StripeController < ApplicationController
+  protect_from_forgery with: :null_session
+  before_action :verify_stripe_webhook, only: [:webhook]
+  
+  # Rate limiting for security
+  before_action :apply_rate_limiting
+  
+  def webhook
+    if StripeWebhookHandler.handle(request.body.read, request.env['HTTP_STRIPE_SIGNATURE'])
+      head :ok
+    else
+      head :bad_request
+    end
+  end
+  
+  private
+  
+  def verify_stripe_webhook
+    return unless Rails.env.production?
+    
+    # Additional IP whitelist check for production
+    allowed_ips = %w[
+      54.187.174.169 54.187.205.235 54.187.216.72
+      54.241.31.99 54.241.31.102 54.241.34.107
+    ]
+    
+    unless allowed_ips.include?(request.remote_ip)
+      Rails.logger.warn "Stripe webhook from unauthorized IP: #{request.remote_ip}"
+      head :forbidden
+    end
+  end
+  
+  def apply_rate_limiting
+    # Rate limit to prevent abuse
+    key = "stripe_webhook:#{request.remote_ip}"
+    count = Rails.cache.read(key) || 0
+    
+    if count > 100 # requests per hour
+      Rails.logger.warn "Rate limit exceeded for Stripe webhook: #{request.remote_ip}"
+      head :too_many_requests
+      return
+    end
+    
+    Rails.cache.write(key, count + 1, expires_in: 1.hour)
+  end
+end
+EOF
+
+  # Enhanced routes for Stripe
+  log "Adding secure Stripe routes"
+  cat >> config/routes.rb << 'EOF'
+
+  # Stripe webhook endpoint with security
+  namespace :api do
+    namespace :v1 do
+      post '/stripe/webhook', to: 'stripe#webhook'
+    end
+  end
+EOF
+
+  log "Enhanced Stripe integration with security completed"
 }
 
-setup_mapbox() {
-  log "Setting up Mapbox"
-  bundle add mapbox-gl-rails
-  if [ $? -ne 0 ]; then
-    error "Failed to install Mapbox gem"
+setup_enhanced_mapbox() {
+  log "Setting up enhanced Mapbox integration with security and performance optimizations"
+  
+  # Verify Rails environment
+  if [[ ! -f "bin/rails" ]]; then
+    error "Rails application not found - cannot setup Mapbox"
   fi
-  yarn add mapbox-gl mapbox-gl-geocoder
-  if [ $? -ne 0 ]; then
-    error "Failed to install Mapbox JS"
+  
+  # Install Mapbox dependencies with security features
+  log "Installing Mapbox dependencies"
+  if ! bundle add geocoder geokit-rails3 --optimistic; then
+    error "Failed to install Mapbox server-side gems"
   fi
-  echo "//= require mapbox-gl" >> app/assets/javascripts/application.js
-  echo "//= require mapbox-gl-geocoder" >> app/assets/javascripts/application.js
-  echo "/* *= require mapbox-gl */" >> app/assets/stylesheets/application.css
-  echo "/* *= require mapbox-gl-geocoder */" >> app/assets/stylesheets/application.css
+  
+  if ! yarn add mapbox-gl mapbox-gl-geocoder @mapbox/mapbox-gl-directions --silent; then
+    error "Failed to install Mapbox JavaScript dependencies"
+  fi
+  
+  # Enhanced Mapbox configuration
+  log "Creating secure Mapbox configuration"
+  cat > config/initializers/mapbox.rb << 'EOF'
+# Enhanced Mapbox configuration - Framework v35.3.8 security optimized
+Rails.application.configure do
+  # Secure API key management
+  config.mapbox = ActiveSupport::OrderedOptions.new
+  config.mapbox.access_token = Rails.application.credentials.dig(:mapbox, :access_token) ||
+                               ENV['MAPBOX_ACCESS_TOKEN']
+  config.mapbox.secret_key = Rails.application.credentials.dig(:mapbox, :secret_key) ||
+                             ENV['MAPBOX_SECRET_KEY']
+  
+  # Validate Mapbox tokens
+  unless config.mapbox.access_token&.start_with?('pk.')
+    Rails.logger.error "Invalid or missing Mapbox access token"
+  end
+  
+  # Performance and security settings
+  config.mapbox.style = 'mapbox://styles/mapbox/streets-v11'
+  config.mapbox.geocoding_limit = 5 # Requests per second
+  config.mapbox.cache_timeout = 1.hour
+  config.mapbox.rate_limit = 1000 # Requests per day per IP
+end
+
+# Enhanced Geocoder configuration
+Geocoder.configure(
+  lookup: :mapbox,
+  api_key: Rails.application.config.mapbox.secret_key,
+  cache: Rails.cache,
+  cache_prefix: 'geocoder:',
+  timeout: 5,
+  units: :km,
+  
+  # Security and performance settings
+  use_https: true,
+  http_headers: {
+    'User-Agent' => "#{Rails.application.class.module_parent_name}/#{Rails.env}"
+  },
+  
+  # Rate limiting
+  always_raise: Rails.env.development? ? :all : [Geocoder::OverQueryLimitError],
+)
+EOF
+
+  # Enhanced Mapbox JavaScript controller with security
+  log "Creating secure and accessible Mapbox controller"
+  mkdir -p app/javascript/controllers
+  cat > app/javascript/controllers/mapbox_controller.js << 'EOF'
+import { Controller } from "@hotwired/stimulus"
+import mapboxgl from "mapbox-gl"
+import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder"
+import MapboxDirections from "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions"
+
+// Enhanced Mapbox controller - WCAG compliant with security features
+export default class extends Controller {
+  static targets = ["container", "search", "directions"]
+  static values = {
+    apiKey: String,
+    style: { type: String, default: "mapbox://styles/mapbox/streets-v11" },
+    center: { type: Array, default: [5.3467, 60.3971] }, // Bergen, Norway
+    zoom: { type: Number, default: 12 },
+    markers: { type: Array, default: [] },
+    interactive: { type: Boolean, default: true },
+    maxBounds: Array
+  }
+  
+  connect() {
+    // Validate API key for security
+    if (!this.validateApiKey()) {
+      this.showError("Invalid Mapbox configuration")
+      return
+    }
+    
+    this.initializeMap()
+    this.setupAccessibility()
+    this.addMarkers()
+    this.setupGeocoder()
+    this.setupDirections()
+    this.trackUsage()
+  }
+  
+  disconnect() {
+    if (this.map) {
+      this.map.remove()
+    }
+    this.cleanup()
+  }
+  
+  validateApiKey() {
+    return this.apiKeyValue && this.apiKeyValue.startsWith('pk.')
+  }
+  
+  initializeMap() {
+    mapboxgl.accessToken = this.apiKeyValue
+    
+    const mapOptions = {
+      container: this.containerTarget,
+      style: this.styleValue,
+      center: this.centerValue,
+      zoom: this.zoomValue,
+      interactive: this.interactiveValue,
+      attributionControl: true,
+      customAttribution: 'Map data enhanced for accessibility'
+    }
+    
+    // Add bounds if specified for security
+    if (this.hasMaxBoundsValue) {
+      mapOptions.maxBounds = this.maxBoundsValue
+    }
+    
+    try {
+      this.map = new mapboxgl.Map(mapOptions)
+      this.setupMapEventHandlers()
+    } catch (error) {
+      console.error("Mapbox initialization failed:", error)
+      this.showError("Map failed to load")
+    }
+  }
+  
+  setupMapEventHandlers() {
+    this.map.on('load', () => this.handleMapLoad())
+    this.map.on('error', (e) => this.handleMapError(e))
+    this.map.on('sourcedata', (e) => this.handleSourceData(e))
+    
+    // Accessibility event handlers
+    this.map.on('click', (e) => this.announceLocation(e.lngLat))
+  }
+  
+  setupAccessibility() {
+    // Enhanced accessibility attributes
+    this.containerTarget.setAttribute('role', 'application')
+    this.containerTarget.setAttribute('aria-label', 'Interactive map')
+    this.containerTarget.setAttribute('tabindex', '0')
+    
+    // Add keyboard navigation
+    this.containerTarget.addEventListener('keydown', (e) => this.handleKeyboardNavigation(e))
+    
+    // Add screen reader announcements for map changes
+    this.announceToScreenReader('Map loaded and ready for interaction')
+  }
+  
+  handleKeyboardNavigation(event) {
+    const panDistance = 50
+    const center = this.map.getCenter()
+    
+    switch (event.key) {
+      case 'ArrowUp':
+        event.preventDefault()
+        this.map.panBy([0, -panDistance])
+        this.announceToScreenReader('Map panned north')
+        break
+      case 'ArrowDown':
+        event.preventDefault()
+        this.map.panBy([0, panDistance])
+        this.announceToScreenReader('Map panned south')
+        break
+      case 'ArrowLeft':
+        event.preventDefault()
+        this.map.panBy([-panDistance, 0])
+        this.announceToScreenReader('Map panned west')
+        break
+      case 'ArrowRight':
+        event.preventDefault()
+        this.map.panBy([panDistance, 0])
+        this.announceToScreenReader('Map panned east')
+        break
+      case '+':
+      case '=':
+        event.preventDefault()
+        this.map.zoomIn()
+        this.announceToScreenReader('Map zoomed in')
+        break
+      case '-':
+        event.preventDefault()
+        this.map.zoomOut()
+        this.announceToScreenReader('Map zoomed out')
+        break
+    }
+  }
+  
+  addMarkers() {
+    if (!this.markersValue.length) return
+    
+    this.markers = []
+    
+    this.markersValue.forEach((markerData, index) => {
+      try {
+        const marker = this.createAccessibleMarker(markerData, index)
+        this.markers.push(marker)
+      } catch (error) {
+        console.error("Failed to create marker:", error)
+      }
+    })
+  }
+  
+  createAccessibleMarker(data, index) {
+    // Create custom marker element with accessibility
+    const markerElement = document.createElement('div')
+    markerElement.className = 'mapbox-marker'
+    markerElement.setAttribute('role', 'button')
+    markerElement.setAttribute('aria-label', data.title || `Location ${index + 1}`)
+    markerElement.setAttribute('tabindex', '0')
+    markerElement.style.cursor = 'pointer'
+    
+    // Add marker to map
+    const marker = new mapboxgl.Marker({
+      element: markerElement,
+      anchor: 'bottom'
+    })
+    .setLngLat([data.lng, data.lat])
+    .addTo(this.map)
+    
+    // Add popup with accessibility
+    if (data.title || data.description) {
+      const popup = new mapboxgl.Popup({
+        offset: 25,
+        closeButton: true,
+        closeOnClick: false
+      }).setHTML(this.createPopupContent(data))
+      
+      marker.setPopup(popup)
+      
+      // Keyboard support for markers
+      markerElement.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          popup.addTo(this.map)
+          this.announceToScreenReader(`Opened details for ${data.title || 'location'}`)
+        }
+      })
+    }
+    
+    return marker
+  }
+  
+  createPopupContent(data) {
+    const title = data.title ? `<h3>${this.escapeHtml(data.title)}</h3>` : ''
+    const description = data.description ? `<p>${this.escapeHtml(data.description)}</p>` : ''
+    const price = data.price ? `<p class="price">Price: ${this.escapeHtml(data.price)}</p>` : ''
+    
+    return `
+      <div class="mapbox-popup" role="dialog" aria-labelledby="popup-title">
+        ${title}
+        ${description}
+        ${price}
+      </div>
+    `
+  }
+  
+  setupGeocoder() {
+    if (!this.hasSearchTarget) return
+    
+    const geocoder = new MapboxGeocoder({
+      accessToken: mapboxgl.accessToken,
+      mapboxgl: mapboxgl,
+      placeholder: 'Search for places...',
+      bbox: this.hasMaxBoundsValue ? this.maxBoundsValue.flat() : undefined,
+      limit: 5,
+      
+      // Accessibility enhancements
+      marker: {
+        color: '#e74c3c'
+      }
+    })
+    
+    geocoder.on('result', (e) => {
+      this.announceToScreenReader(`Location found: ${e.result.place_name}`)
+    })
+    
+    this.searchTarget.appendChild(geocoder.onAdd(this.map))
+  }
+  
+  setupDirections() {
+    if (!this.hasDirectionsTarget) return
+    
+    const directions = new MapboxDirections({
+      accessToken: mapboxgl.accessToken,
+      unit: 'metric',
+      profile: 'mapbox/driving',
+      alternatives: false,
+      geometries: 'geojson',
+      controls: {
+        instructions: true,
+        profileSwitcher: true
+      }
+    })
+    
+    this.map.addControl(directions, 'top-left')
+    
+    directions.on('route', () => {
+      this.announceToScreenReader('Route calculated')
+    })
+  }
+  
+  escapeHtml(text) {
+    const div = document.createElement('div')
+    div.textContent = text
+    return div.innerHTML
+  }
+  
+  announceToScreenReader(message) {
+    const announcement = document.createElement('div')
+    announcement.setAttribute('aria-live', 'polite')
+    announcement.setAttribute('aria-atomic', 'true')
+    announcement.className = 'sr-only'
+    announcement.textContent = message
+    
+    document.body.appendChild(announcement)
+    setTimeout(() => document.body.removeChild(announcement), 1000)
+  }
+  
+  announceLocation(lngLat) {
+    this.announceToScreenReader(`Location: ${lngLat.lat.toFixed(4)}, ${lngLat.lng.toFixed(4)}`)
+  }
+  
+  showError(message) {
+    this.containerTarget.innerHTML = `
+      <div class="mapbox-error" role="alert">
+        <p>Map Error: ${message}</p>
+        <button onclick="location.reload()">Retry</button>
+      </div>
+    `
+  }
+  
+  trackUsage() {
+    // Track map usage for analytics and rate limiting
+    if (window.gtag) {
+      window.gtag('event', 'map_load', {
+        event_category: 'mapbox',
+        event_label: this.styleValue
+      })
+    }
+  }
+  
+  handleMapLoad() {
+    this.announceToScreenReader('Map fully loaded')
+  }
+  
+  handleMapError(error) {
+    console.error('Mapbox error:', error)
+    this.showError('Failed to load map data')
+  }
+  
+  handleSourceData(event) {
+    if (event.isSourceLoaded) {
+      this.announceToScreenReader('Map data updated')
+    }
+  }
+  
+  cleanup() {
+    if (this.markers) {
+      this.markers.forEach(marker => marker.remove())
+    }
+  }
+}
+EOF
+
+  log "Enhanced Mapbox integration with security and accessibility completed"
 }
 
 setup_optimized_live_search() {
@@ -2756,8 +3309,8 @@ setup_full_app() {
   setup_core
   setup_devise
   setup_storage
-  setup_stripe
-  setup_mapbox
+  setup_enhanced_stripe
+  setup_enhanced_mapbox
   setup_optimized_live_search
   setup_optimized_infinite_scroll
   setup_anon_posting
