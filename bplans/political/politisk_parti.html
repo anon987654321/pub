@@ -1,85 +1,316 @@
-# **Forretningsplan for Autonomipartiet**
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autonomipartiet (Bergen Selvstyreparti) - Forretningsplan</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* CSS Variables */
+        :root {
+            --primary-color: #1a1a1a;
+            --background-color: #f5f5f5;
+            --text-color: #222222;
+            --highlight-color: #5d93ff;
+            --font-family: 'Inter', sans-serif;
+        }
 
-**Utgivelsesdato:** 8. januar 2025  
-**Utarbeidet av:** *Autonomipartiet*  
+        /* General Styles */
+        body {
+            margin: 0;
+            font-family: var(--font-family);
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            font-size: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
----
+        /* Logo Container */
+        .logo-wrapper {
+            position: relative;
+            display: inline-block;
+        }
 
-## **1. Innledning**
-Autonomipartiet er Norges fremtidige AI-styrte politiske parti, drevet av **AI³** – en dynamisk AI-assistent bygget med Ruby og LangChain.rb, på en sikker OpenBSD-plattform. Gjennom AI³ kan vi levere intelligent, spesialisert og tilpasningsdyktig styring for et desentralisert, bærekraftig og rettferdig samfunn.  
+        /* Logo styling with animated gradient */
+        .logo-container {
+            font-family: 'Black Han Sans', sans-serif;
+            font-size: 70px;
+            color: transparent;
+            background: linear-gradient(45deg, #ff8c00, #ff0080, #8a2be2, #ff8c00);
+            background-size: 400%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            animation: gradientMove 5s infinite linear;
+        }
 
----
+        /* Header styling */
+        header {
+            text-align: center;
+            padding: 20px;
+            background-color: var(--background-color);
+        }
 
-## **2. Visjon og Misjon**
+        .header-text {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-color);
+            margin-top: -1.2rem;
+            max-width: 100%;
+            text-align: center;
+        }
 
-### **Visjon**
-Å bygge et Norge der kunstig intelligens styrker borgere og samfunn, fremmer rettferdighet, og sikrer bærekraftige løsninger for fremtiden.
+        /* Main content */
+        main {
+            max-width: 900px;
+            margin: 3rem auto;
+            padding: 0 1rem;
+        }
 
-### **Misjon**
-Bruke AI³ for å tilby dynamisk, transparent og effektiv politisk styring som skaper et samfunn basert på autonomi, bærekraft og deltakelse.
+        section {
+            padding: 2rem 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
 
----
+        h2 {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
 
-## **3. AI³: Teknologisk Grunnlag**
+        h3 {
+            font-size: 1.5rem;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+        }
 
-### **3.1 Dynamisk Styring**
-- **Spesialiserte Assistanter**: AI³ laster dynamisk relevante assistenter som håndterer spesifikke behov (f.eks. juridiske, medisinske eller arkitektoniske oppgaver). 
-- **Task Management**: Administrerer og optimaliserer nasjonale og lokale prosjekter basert på sanntidsdata.
-- **Kontekstuell Chat**: Bevarer samtalekontekst for smartere beslutninger.
+        p, li {
+            font-size: 1rem;
+            color: #333333;
+        }
 
-### **3.2 Teknologi**
-- **Ruby og Roda**: Effektive API-er og dynamisk funksjonalitet.
-- **LangChain.rb**: Forsterker AI³ med avanserte språklige og logiske evner.
-- **OpenBSD**: Sikker og stabil plattform for kritisk infrastruktur.
-- **Vector Search (Weaviate)**: Intelligent datasøk for presise beslutninger.
+        ul {
+            margin: 1rem 0;
+            padding-left: 2rem;
+        }
 
----
+        .chart-container {
+            max-width: 500px;
+            margin: 2rem auto;
+        }
 
-## **4. Prinsipper**
+        .side-projects {
+            background-color: #f9f9f9;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
 
-### **4.1 Desentralisering**
-- Lokale beslutninger basert på sanntidsanalyse fra AI³.
-- Blockchain for sikker stemmegivning og budsjettering.
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-wrapper">
+            <div class="logo-container">Autonomipartiet</div>
+        </div>
+        <div class="header-text">
+            Bergen Selvstyreparti - AI-drevet demokrati og digital styring
+        </div>
+    </header>
 
-### **4.2 Rettferdighet**
-- Gratis helse, transport og utdanning som grunnleggende rettigheter.
-- Tidbanker for å bytte tjenester uten økonomiske barrierer.
+    <main>
+        <!-- Sammendrag Section -->
+        <section id="sammendrag">
+            <h2>Sammendrag</h2>
+            <p><strong>Utgivelsesdato:</strong> 8. januar 2025<br>
+            <strong>Utarbeidet av:</strong> <em>Autonomipartiet (Bergen Selvstyreparti)</em></p>
+            
+            <h3>Visjon</h3>
+            <p>Å bygge et Norge der kunstig intelligens styrker borgere og samfunn, fremmer rettferdighet, og sikrer bærekraftige løsninger for fremtiden.</p>
+            
+            <h3>Misjon</h3>
+            <p>Bruke AI³ for å tilby dynamisk, transparent og effektiv politisk styring som skaper et samfunn basert på autonomi, bærekraft og deltakelse.</p>
+        </section>
 
-### **4.3 Bærekraft**
-- Swarm robotics for å bygge og vedlikeholde byer med minimal miljøpåvirkning.
-- AI-drevet energioptimalisering for nasjonal overgang til fornybar energi.
+        <!-- AI³ Teknologi Section -->
+        <section id="ai3">
+            <h2>AI³: Teknologisk Grunnlag</h2>
+            
+            <h3>Dynamisk Styring</h3>
+            <ul>
+                <li><strong>Spesialiserte Assistenter:</strong> AI³ laster dynamisk relevante assistenter som håndterer spesifikke behov (f.eks. juridiske, medisinske eller arkitektoniske oppgaver)</li>
+                <li><strong>Task Management:</strong> Administrerer og optimaliserer nasjonale og lokale prosjekter basert på sanntidsdata</li>
+                <li><strong>Kontekstuell Chat:</strong> Bevarer samtalekontekst for smartere beslutninger</li>
+            </ul>
+            
+            <h3>AI³-Visualisering for Juridiske Saker</h3>
+            <p>Revolusjonær visualiseringsteknologi som transformerer komplekse juridiske saker til interaktive, forståelige presentasjoner:</p>
+            <ul>
+                <li><strong>Intelligent Beviskartlegging:</strong> Automatisk analyse og visualisering av juridiske dokumenter</li>
+                <li><strong>Mønstergjenkjenning:</strong> Avdekker skjulte sammenhenger og motstridende informasjon</li>
+                <li><strong>Interaktive Tidslinjer:</strong> Viser saksforløp og avgjørelser i kronologisk rekkefølge</li>
+                <li><strong>Rettferdighetsmetrikk:</strong> Kvantifiserer og visualiserer systemiske skjevheter</li>
+            </ul>
 
----
+            <h3>Teknologi</h3>
+            <ul>
+                <li><strong>Ruby og Roda:</strong> Effektive API-er og dynamisk funksjonalitet</li>
+                <li><strong>LangChain.rb:</strong> Forsterker AI³ med avanserte språklige og logiske evner</li>
+                <li><strong>OpenBSD:</strong> Sikker og stabil plattform for kritisk infrastruktur</li>
+                <li><strong>Vector Search (Weaviate):</strong> Intelligent datasøk for presise beslutninger</li>
+            </ul>
+        </section>
 
-## **5. Flaggskip: Pub.Healthcare**
+        <!-- Prinsipper Section -->
+        <section id="prinsipper">
+            <h2>Prinsipper</h2>
+            
+            <h3>Desentralisering</h3>
+            <ul>
+                <li>Lokale beslutninger basert på sanntidsanalyse fra AI³</li>
+                <li>Blockchain for sikker stemmegivning og budsjettering</li>
+                <li>Digital demokrati med transparente beslutningsprosesser</li>
+            </ul>
+            
+            <h3>Rettferdighet</h3>
+            <ul>
+                <li>Gratis helse, transport og utdanning som grunnleggende rettigheter</li>
+                <li>Tidbanker for å bytte tjenester uten økonomiske barrierer</li>
+                <li>AI³-drevet rettferdighetsanalyse av offentlige beslutninger</li>
+            </ul>
+            
+            <h3>Bærekraft</h3>
+            <ul>
+                <li>Swarm robotics for å bygge og vedlikeholde byer med minimal miljøpåvirkning</li>
+                <li>AI-drevet energioptimalisering for nasjonal overgang til fornybar energi</li>
+            </ul>
+        </section>
 
-### **Hva vi tilbyr**
-- **Integrerte helsetjenester**: Veterinær-, tann- og allmennmedisin i én løsning.
-- **AI-drevet diagnostikk**: Bruker LangChain.rb og hAPI for personaliserte helsetilbud.
-- **Sømløs tilgang**: Digital plattform for pasienter og klinikker.
+        <!-- Side-prosjekter Section -->
+        <section id="sideprosjekter" class="side-projects">
+            <h2>Side-prosjekter og Initiativer</h2>
+            
+            <h3>Barnevernet Reform</h3>
+            <p>Omfattende reform av det norske barnevernet med fokus på familievennlige løsninger og rettssikkerhet:</p>
+            <ul>
+                <li><strong>AI³-assistert saksbehandling:</strong> Objektiv vurdering av barnevernssaker med visualisering av bevis og prosedyrer</li>
+                <li><strong>Forebygging først:</strong> Tidlig innsats og familieråd før drastiske tiltak</li>
+                <li><strong>Uavhengige vurderinger:</strong> Eksterne eksperter sikrer objektivitet i kritiske saker</li>
+                <li><strong>Transparent rapportering:</strong> Offentlig tilgang til statistikk og systemiske analyser</li>
+                <li><strong>Familieorientert fokus:</strong> Prioritering av støtte til familier fremfor omsorgsovertakelse</li>
+            </ul>
+            
+            <h3>Bergen Selvstyre</h3>
+            <p>Lokalt selvstyre for Bergen med økt autonomi og borgerdeltakelse:</p>
+            <ul>
+                <li>Digital deltakelse i byplanlegging og budsjettfordeling</li>
+                <li>Lokale løsninger for transport, bolig og miljø</li>
+                <li>Redusert byråkrati og direkte borgerpåvirkning</li>
+            </ul>
+        </section>
 
-### **Teknologi i praksis**
-- Ruby og Roda sikrer skalerbarhet.
-- LangChain.rb muliggjør personalisering og kontinuerlig læring.
-- OpenBSD beskytter sensitive data.
+        <!-- Pub.Healthcare Section -->
+        <section id="healthcare">
+            <h2>Flaggskip: Pub.Healthcare</h2>
+            
+            <h3>Hva vi tilbyr</h3>
+            <ul>
+                <li><strong>Integrerte helsetjenester:</strong> Veterinær-, tann- og allmennmedisin i én løsning</li>
+                <li><strong>AI-drevet diagnostikk:</strong> Bruker LangChain.rb og hAPI for personaliserte helsetilbud</li>
+                <li><strong>Sømløs tilgang:</strong> Digital plattform for pasienter og klinikker</li>
+            </ul>
+            
+            <h3>Teknologi i praksis</h3>
+            <ul>
+                <li>Ruby og Roda sikrer skalerbarhet</li>
+                <li>LangChain.rb muliggjør personalisering og kontinuerlig læring</li>
+                <li>OpenBSD beskytter sensitive data</li>
+            </ul>
+        </section>
 
----
+        <!-- Implementering Section -->
+        <section id="implementering">
+            <h2>Implementeringsplan</h2>
+            
+            <h3>Fase 1: Pilot (2025)</h3>
+            <ul>
+                <li>Start i Bergen med fokus på Pub.Healthcare og lokale tiltak</li>
+                <li>Implementering av AI³-visualisering for juridiske saker</li>
+                <li>Pilotprosjekt for barnevernreform</li>
+            </ul>
+            
+            <h3>Fase 2: Nasjonal Skalering (2026-2027)</h3>
+            <ul>
+                <li>Utvid AI³ til å inkludere nasjonal styring av infrastruktur og ressurser</li>
+                <li>Lansering av blockchain-basert stemmegivning</li>
+                <li>Nasjonal utrulling av barnevernreform</li>
+            </ul>
+            
+            <h3>Fase 3: Global Ekspansjon (2028+)</h3>
+            <ul>
+                <li>Tilby AI³-løsninger som eksportmodeller til andre land</li>
+                <li>Fokus på bærekraft og rettferdighet</li>
+            </ul>
+            
+            <div class="chart-container">
+                <canvas id="implementationChart" width="400" height="200"></canvas>
+            </div>
+        </section>
 
-## **6. Implementeringsplan**
+        <!-- Konklusjon Section -->
+        <section id="konklusjon">
+            <h2>Konklusjon</h2>
+            <p>Autonomipartiet (Bergen Selvstyreparti) representerer fremtiden for politisk styring. Med AI³ som kjerne leverer vi dynamiske, transparente og intelligente løsninger som setter mennesker og miljø først. Norge blir en global leder i AI-drevet styring, bærekraft og sosial rettferdighet.</p>
+            <p><strong>Bli med oss og bygg fremtiden!</strong></p>
+        </section>
+    </main>
 
-### **Fase 1: Pilot**
-- Start i Bergen med fokus på Pub.Healthcare og lokale tiltak.
-
-### **Fase 2: Nasjonal Skalering**
-- Utvid AI³ til å inkludere nasjonal styring av infrastruktur og ressurser.
-
-### **Fase 3: Global Ekspansjon**
-- Tilby AI³-løsninger som eksportmodeller til andre land, med fokus på bærekraft og rettferdighet.
-
----
-
-## **7. Konklusjon**
-Autonomipartiet representerer fremtiden for politisk styring. Med AI³ som kjerne leverer vi dynamiske, transparente og intelligente løsninger som setter mennesker og miljø først. Norge blir en global leder i AI-drevet styring, bærekraft og sosial rettferdighet.
-
-**Bli med oss og bygg fremtiden!**
-
+    <script>
+        // Implementation Timeline Chart
+        const ctx = document.getElementById('implementationChart').getContext('2d');
+        const implementationChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['2025', '2026', '2027', '2028', '2029', '2030'],
+                datasets: [{
+                    label: 'Prosjektmilestoner',
+                    data: [25, 50, 75, 85, 95, 100],
+                    backgroundColor: 'rgba(93, 147, 255, 0.2)',
+                    borderColor: '#5d93ff',
+                    borderWidth: 2,
+                    fill: true
+                }]
+            },
+            options: {
+                plugins: {
+                    title: { 
+                        display: true, 
+                        text: 'Implementeringsplan - Fremdrift over tid' 
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

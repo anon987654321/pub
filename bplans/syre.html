@@ -196,7 +196,38 @@
             <h3>Visjon</h3>
             <p>Å revolusjonere fottøyindustrien ved å tilby skreddersydde, bærekraftige sko som kombinerer avansert teknologi og nordisk estetikk.</p>
             <h3>Misjon</h3>
-            <p>Å bruke 3D-printing og parametrisk design for å skape sko som oppfyller kundens behov for komfort og stil, samtidig som de bidrar positivt til miljøet.</p>
+            <p>Å bruke 3D-printing og parametrisk design for å skape sko som oppfyller kundens behov for komfort og stil, samtidig som de bidrar positivt til miljøet. Å dele avansert 3D-printing teknologi med SPEIS Aerospace for innovativ dual-use produksjon.</p>
+        </section>
+
+        <!-- 3D Printing Technology Sharing Section -->
+        <section id="teknologi-deling">
+            <h2>3D Printing Teknologi-deling</h2>
+            <h3>SYRE™ x SPEIS Integrasjon</h3>
+            <p>Revolusjonær samarbeidsmodell hvor samme 3D-printing teknologi produserer både skreddersydde sko og aerospace komponenter:</p>
+            <ul>
+                <li><strong>Dual-Use Manufacturing:</strong> Samme printere og software håndterer både tekstil/polymer sko og aerospace metall-komponenter</li>
+                <li><strong>Ruby Framework:</strong> Delt programvare-arkitektur for optimal produksjonskontroll</li>
+                <li><strong>Advanced Materials Research:</strong> Nanomaterialer utviklet for begge industrier</li>
+                <li><strong>Skalerbar Produksjon:</strong> Fleksible produksjonslinjer som kan bytte mellom produkttyper</li>
+                <li><strong>Kostnadseffektivitet:</strong> Delt infrastruktur reduserer produksjonskostnader betydelig</li>
+            </ul>
+            <div class="chart-container">
+                <canvas id="techSharingChart" width="400" height="200"></canvas>
+            </div>
+        </section>
+
+        <!-- Sosial Impact Section -->
+        <section id="sosial-impact">
+            <h2>Gratis Sko Program</h2>
+            <h3>Sko til Folk Under Fattigdomsgrensen</h3>
+            <p>SYRE™ forplikter seg til å tilby gratis, skreddersydde sko til alle under fattigdomsgrensen:</p>
+            <ul>
+                <li><strong>Behovsvurdering:</strong> Samarbeid med NAV og sosiale tjenester for identifisering</li>
+                <li><strong>Kvalitet uten kompromiss:</strong> Samme høykvalitets 3D-printing teknologi</li>
+                <li><strong>Verdighet i design:</strong> Stilfulle design som ikke skiller seg fra betalte produkter</li>
+                <li><strong>Sustainable Impact:</strong> Redusert tekstilavfall og økt tilgjengelighet</li>
+                <li><strong>Community Outreach:</strong> Partnerskap med lokale organisasjoner</li>
+            </ul>
         </section>
 
         <!-- Markedsanalyse Section -->
@@ -229,7 +260,7 @@
         <!-- Conclusion Section -->
         <section id="conclusion">
             <h2>Konklusjon</h2>
-            <p>SYRE er posisjonert for å bli en ledende aktør innen bærekraftig skreddersydd fottøy. Med støtte fra Innovasjon Norge kan vi realisere våre mål om å utvide vårt teknologiske tilbud, forbedre produktutvikling, og oppnå betydelig markedsandel i Norge og internasjonalt.</p>
+            <p>SYRE™ er posisjonert for å bli en ledende aktør innen bærekraftig skreddersydd fottøy og avansert 3D-printing teknologi. Gjennom innovativ teknologi-deling med SPEIS Aerospace og vårt engasjement for sosial rettferdighet via gratis sko-programmet, skaper vi en fullstendig bærekraftig forretningsmodell. Med støtte fra Innovasjon Norge kan vi realisere våre mål om teknologisk innovasjon og sosial påvirkning.</p>
         </section>
 
         <!-- Investment Likelihood Section -->
@@ -337,6 +368,25 @@
                     title: { display: true, text: 'Forventet Markedsvekst' }
                 },
                 scales: { y: { beginAtZero: true } }
+            }
+        });
+
+        // Technology Sharing Chart
+        const techSharingCtx = document.getElementById('techSharingChart').getContext('2d');
+        const techSharingChart = new Chart(techSharingCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['SYRE™ Sko', 'SPEIS Aerospace', 'Delt Infrastruktur'],
+                datasets: [{
+                    data: [40, 35, 25],
+                    backgroundColor: ['#8a2be2', '#ff007f', '#00c9ff'],
+                }]
+            },
+            options: {
+                plugins: {
+                    title: { display: true, text: '3D Printing Kapasitetsfordeling' },
+                    legend: { position: 'bottom' }
+                }
             }
         });
     </script>
