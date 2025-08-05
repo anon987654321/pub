@@ -248,13 +248,16 @@
   </style>
 </head>
 <body>
+  <!-- Skip navigation for accessibility -->
+  <a href="#main-content" class="sr-only" tabindex="1">Skip to main content</a>
+  
   <!-- Custom cursor for desktop -->
-  <div class="custom-cursor" id="customCursor"></div>
+  <div class="custom-cursor" id="customCursor" aria-hidden="true"></div>
 
   <!-- Start overlay -->
-  <div class="start-overlay" id="startOverlay">
-    <h1 class="start-title">J Dilla Sacred Geometry</h1>
-    <p class="start-subtitle">
+  <div class="start-overlay" id="startOverlay" role="dialog" aria-labelledby="start-title" aria-describedby="start-subtitle">
+    <h1 class="start-title" id="start-title">J Dilla Sacred Geometry</h1>
+    <p class="start-subtitle" id="start-subtitle">
       Experience the rhythmic genius of J Dilla through transcendent sacred geometry patterns. 
       Each track transforms into a unique visual meditation combining mathematics and music.
     </p>
@@ -264,17 +267,19 @@
   </div>
 
   <!-- Main visualizer -->
-  <div class="visualizer-container" id="visualizerContainer">
-    <canvas class="geometry-canvas" id="geometryCanvas" aria-label="Sacred geometry visualization"></canvas>
-    <div id="youtube-player"></div>
+  <main class="visualizer-container" id="main-content" role="main">
+    <canvas class="geometry-canvas" id="geometryCanvas" 
+            aria-label="Sacred geometry visualization that responds to music" 
+            role="img"></canvas>
+    <div id="youtube-player" aria-hidden="true"></div>
     
     <!-- Track info display -->
-    <div class="track-info" id="trackInfo">
-      <div class="track-title" id="trackTitle">J Dilla Sacred Geometry</div>
-      <div class="track-artist" id="trackArtist">Loading...</div>
-      <div class="track-mode" id="trackMode">Preparing visualization...</div>
-    </div>
-  </div>
+    <section class="track-info" id="trackInfo" role="region" aria-live="polite" aria-label="Current track information">
+      <h2 class="track-title" id="trackTitle">J Dilla Sacred Geometry</h2>
+      <p class="track-artist" id="trackArtist">Loading...</p>
+      <p class="track-mode" id="trackMode">Preparing visualization...</p>
+    </section>
+  </main>
 
   <!-- Screen reader accessibility -->
   <div class="sr-only" aria-live="polite" id="visualizerStatus"></div>

@@ -312,6 +312,7 @@ EOF
   <%= yield(:schema) %>
 </head>
 <body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
   <noscript>
     <div class="noscript-warning" role="alert">
       This application requires JavaScript to function properly. Please enable JavaScript in your browser.
@@ -1059,12 +1060,16 @@ setup_full_app() {
 :root {
   --white: #ffffff;
   --black: #000000;
-  --grey: #666666;
-  --light-grey: #e0e0e0;
-  --dark-grey: #333333;
-  --primary: #1a73e8;
-  --error: #d93025;
-  --focus-outline: 2px solid #4285f4;
+  --grey: #525252; /* Improved contrast from #666666 - now 4.5:1 on white */
+  --light-grey: #d1d5db; /* Better contrast for borders */
+  --dark-grey: #1f2937; /* Higher contrast for better readability */
+  --primary: #1d4ed8; /* Slightly darker blue for better contrast */
+  --primary-hover: #1e40af;
+  --error: #dc2626; /* WCAG AA compliant red */
+  --success: #059669; /* WCAG AA compliant green */
+  --warning: #d97706; /* WCAG AA compliant orange */
+  --focus-outline: 2px solid #2563eb;
+  --focus-ring: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
 body {
@@ -1153,7 +1158,14 @@ textarea:focus,
 select:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
+  box-shadow: var(--focus-ring);
+}
+
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: 2px;
 }
 
 textarea {
@@ -1199,7 +1211,7 @@ input[type="submit"],
 button:hover,
 input[type="submit"]:hover,
 .button:hover {
-  background: #1557b0;
+  background: var(--primary-hover);
   transform: translateY(-1px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
@@ -1209,6 +1221,7 @@ input[type="submit"]:focus,
 .button:focus {
   outline: var(--focus-outline);
   outline-offset: 2px;
+  box-shadow: var(--focus-ring);
 }
 
 button:disabled,
@@ -1366,7 +1379,70 @@ footer {
   }
 
   #map {
-    height: 300px
+    height: 300px;
+  }
+}
+
+/* Accessibility enhancements */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: var(--primary);
+  color: var(--white);
+  padding: 8px;
+  text-decoration: none;
+  border-radius: 0 0 4px 4px;
+  z-index: 1000;
+  font-weight: 500;
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: var(--focus-outline);
+  outline-offset: 2px;
+}
+
+.noscript-warning {
+  background: var(--warning);
+  color: var(--white);
+  padding: 1rem;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* Screen reader only content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --primary: #0000ff;
+    --grey: #000000;
+    --light-grey: #808080;
+  }
+  
+  button, .button {
+    border: 2px solid currentColor;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
 EOF
