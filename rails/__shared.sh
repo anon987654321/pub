@@ -1,9 +1,12 @@
-#!/bin/bash
-
 #!/usr/bin/env zsh
-set -e
-
 # Shared utility functions for Rails apps on OpenBSD 7.5, unprivileged user, NNG/SEO/Schema optimized
+# Framework v35.3.8 compliant with comprehensive error handling and safety protocols
+
+set -euo pipefail
+# Enable strict error handling:
+# -e: Exit on any command failure
+# -u: Exit on undefined variables  
+# -o pipefail: Exit on pipe command failures
 
 BASE_DIR="/home/dev/rails"
 RAILS_VERSION="8.0.0"
@@ -13,32 +16,89 @@ BRGEN_IP="46.23.95.45"
 
 log() {
   local app_name="${APP_NAME:-unknown}"
-  echo "$(date -u +'%Y-%m-%dT%H:%M:%SZ') - $1" >> "$BASE_DIR/$app_name/setup.log"
-  echo "$1"
+  local timestamp
+  timestamp="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+  local log_file="$BASE_DIR/$app_name/setup.log"
+  
+  # Ensure log directory exists
+  mkdir -p "$(dirname "$log_file")"
+  
+  # Structured logging with severity levels
+  printf "[%s] INFO: %s\n" "$timestamp" "$1" | tee -a "$log_file"
 }
 
 error() {
-  log "ERROR: $1"
+  local app_name="${APP_NAME:-unknown}"
+  local timestamp
+  timestamp="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+  local log_file="$BASE_DIR/$app_name/setup.log"
+  
+  # Ensure log directory exists
+  mkdir -p "$(dirname "$log_file")"
+  
+  # Error logging with stack trace context
+  printf "[%s] ERROR: %s\n" "$timestamp" "$1" >&2 | tee -a "$log_file"
+  printf "[%s] ERROR: Script: %s, Line: %s, Function: %s\n" "$timestamp" "${BASH_SOURCE[1]:-unknown}" "${BASH_LINENO[0]:-unknown}" "${FUNCNAME[1]:-main}" >&2 | tee -a "$log_file"
   exit 1
 }
 
+validate_input() {
+  local input="$1"
+  local validation_type="${2:-alphanumeric}"
+  
+  case "$validation_type" in
+    "alphanumeric")
+      if [[ ! "$input" =~ ^[a-zA-Z0-9_-]+$ ]]; then
+        error "Invalid input '$input': must contain only alphanumeric characters, underscores, and hyphens"
+      fi
+      ;;
+    "email")
+      if [[ ! "$input" =~ ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$ ]]; then
+        error "Invalid email format: '$input'"
+      fi
+      ;;
+    "path")
+      if [[ ! "$input" =~ ^[a-zA-Z0-9/_.-]+$ ]]; then
+        error "Invalid path '$input': contains unsafe characters"
+      fi
+      ;;
+    *)
+      error "Unknown validation type: '$validation_type'"
+      ;;
+  esac
+}
+
 command_exists() {
-  command -v "$1" > /dev/null 2>&1
-  if [ $? -ne 0 ]; then
-    error "Command '$1' not found. Please install it."
+  if ! command -v "$1" >/dev/null 2>&1; then
+    error "Command '$1' not found. Please install it before proceeding."
   fi
+  log "Command '$1' verified successfully"
 }
 
 init_app() {
-  log "Initializing app directory for '$1'"
-  mkdir -p "$BASE_DIR/$1"
-  if [ $? -ne 0 ]; then
-    error "Failed to create app directory '$BASE_DIR/$1'"
+  local app_name="$1"
+  
+  # Validate app name
+  validate_input "$app_name" "alphanumeric"
+  
+  log "Initializing app directory for '$app_name'"
+  
+  # Create app directory with proper permissions
+  if ! mkdir -p "$BASE_DIR/$app_name"; then
+    error "Failed to create app directory '$BASE_DIR/$app_name'"
   fi
-  cd "$BASE_DIR/$1"
-  if [ $? -ne 0 ]; then
-    error "Failed to change to directory '$BASE_DIR/$1'"
+  
+  # Verify directory creation and permissions
+  if [[ ! -d "$BASE_DIR/$app_name" ]]; then
+    error "App directory '$BASE_DIR/$app_name' was not created successfully"
   fi
+  
+  # Change to app directory with verification
+  if ! cd "$BASE_DIR/$app_name"; then
+    error "Failed to change to directory '$BASE_DIR/$app_name'"
+  fi
+  
+  log "Successfully initialized and entered app directory: $(pwd)"
 }
 
 setup_ruby() {
