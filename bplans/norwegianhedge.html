@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Norwegian Hedge Fund - Nordic Prosperity Fund</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* CSS Variables */
+        :root {
+            --primary-color: #1a1a1a;
+            --background-color: #f5f5f5;
+            --text-color: #222222;
+            --highlight-color: #5d93ff;
+            --font-family: 'Inter', sans-serif;
+        }
+
+        /* General Styles */
+        body {
+            margin: 0;
+            font-family: var(--font-family);
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            font-size: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Logo Container */
+        .logo-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        /* Logo styling with animated gradient */
+        .logo-container {
+            font-family: 'Black Han Sans', sans-serif;
+            font-size: 70px;
+            color: transparent;
+            background: linear-gradient(45deg, #ff8c00, #ff0080, #8a2be2, #ff8c00);
+            background-size: 400%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            animation: gradientMove 5s infinite linear;
+        }
+
+        /* Header styling */
+        header {
+            text-align: center;
+            padding: 20px;
+            background-color: var(--background-color);
+        }
+
+        .header-text {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-color);
+            margin-top: -1.2rem;
+            max-width: 100%;
+            text-align: center;
+        }
+
+        /* Main content */
+        main {
+            max-width: 900px;
+            margin: 3rem auto;
+            padding: 0 1rem;
+        }
+
+        section {
+            padding: 2rem 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+        }
+
+        p, li {
+            font-size: 1rem;
+            color: #333333;
+        }
+
+        ul {
+            margin: 1rem 0;
+            padding-left: 2rem;
+        }
+
+        .chart-container {
+            max-width: 500px;
+            margin: 2rem auto;
+        }
+
+        .highlight-box {
+            background-color: #f0f8ff;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid var(--highlight-color);
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-wrapper">
+            <div class="logo-container">Norwegian Hedge</div>
+        </div>
+        <div class="header-text">
+            Nordic Prosperity Fund - AI³-drevet bærekraftig kapitalforvaltning
+        </div>
+    </header>
+
+    <main>
+        <!-- Sammendrag Section -->
+        <section id="sammendrag">
+            <h2>Sammendrag</h2>
+            <p><strong>Utgivelsesdato:</strong> 5. august 2025<br>
+            <strong>Konsolidert fond:</strong> <em>Nordic Prosperity Fund + Norwegian Hedge</em></p>
+            
+            <h3>Visjon</h3>
+            <p>Å etablere Norges ledende AI³-drevne hedge fund som kombinerer bærekraftig investering med revolusjonær Ruby-basert handelsteknologi.</p>
+            
+            <h3>Misjon</h3>
+            <p>Å generere konsistente, langsiktige avkastninger for våre investorer samtidig som vi driver positive endringer gjennom bærekraftige investeringer og teknologisk eksellense.</p>
+        </section>
+
+        <!-- AI³ og Ruby Trading Section -->
+        <section id="ai3-ruby">
+            <h2>AI³ og Ruby Trading Swarm</h2>
+            
+            <h3>Ruby Trading Bot Swarm</h3>
+            <p>Revolusjonær trading-arkitektur bygget på Ruby-rammeverk med AI³-integrasjon:</p>
+            <ul>
+                <li><strong>Desentralisert Beslutningstagning:</strong> Roboter tar uavhengige beslutninger for å redusere risiko</li>
+                <li><strong>Maskinlæring:</strong> Roboter lærer fra hver handel for å forbedre strategier</li>
+                <li><strong>Swarm Intelligence:</strong> Kollektiv intelligens fra multiple trading bots</li>
+                <li><strong>Real-time Adaptation:</strong> Kontinuerlig tilpasning til markedsforhold</li>
+                <li><strong>Quantum-Safe Encryption:</strong> Post-quantum kryptografi for sikker kommunikasjon</li>
+            </ul>
+            
+            <div class="highlight-box">
+                <h4>AI³ Financial Analysis</h4>
+                <p>Prediktiv analyse og porteføljeoptimalisering drevet av AI³-plattformen, utviklet spesielt for finansmarkeder:</p>
+                <ul>
+                    <li>Sanntids markedsanalyse og trendpredikasjon</li>
+                    <li>Risikomodellering med maskinlæring</li>
+                    <li>Automatisert compliance og regulatorisk overholdelse</li>
+                    <li>Blockchain-basert transparens og investorportaler</li>
+                </ul>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="performanceChart" width="400" height="200"></canvas>
+            </div>
+        </section>
+
+        <!-- Investeringsstrategier Section -->
+        <section id="strategier">
+            <h2>Konsoliderte Investeringsstrategier</h2>
+            
+            <h3>Bærekraftige Globale Aksjer</h3>
+            <ul>
+                <li><strong>Sustainable Leaders Portfolio:</strong> Investering i selskaper som leder bærekraftighet i sine industrier</li>
+                <li><strong>Emerging Innovators Fund:</strong> Støtte til startups som utvikler gjennombruddsteknologier</li>
+                <li><strong>Tematisk Investering:</strong> Fokus på sektorer som ren energi og smart teknologi</li>
+            </ul>
+            
+            <h3>Kryptovaluta og Digital Assets</h3>
+            <ul>
+                <li><strong>Bitcoin og Ethereum:</strong> Langsiktig hodling med AI³-optimert timing</li>
+                <li><strong>DeFi Protokoller:</strong> Yield farming og liquidity mining</li>
+                <li><strong>NFT Investments:</strong> Kuraterte investeringer i digitale eiendeler</li>
+                <li><strong>Blockchain Infrastructure:</strong> Investering i blockchain-teknologi selskaper</li>
+            </ul>
+            
+            <h3>Alternative Investeringer</h3>
+            <ul>
+                <li><strong>Private Equity i Bærekraft:</strong> Investering i private selskaper med sterke ESG-praktisker</li>
+                <li><strong>Real Estate Tech:</strong> PropTech og smart infrastruktur</li>
+                <li><strong>Commodities Trading:</strong> AI³-optimerte råvarehandler</li>
+            </ul>
+        </section>
+
+        <!-- Nordic Prosperity Fund Integration Section -->
+        <section id="nordic-integration">
+            <h2>Nordic Prosperity Fund Integrasjon</h2>
+            
+            <h3>ESG og Impact Investing</h3>
+            <p>Integrering av Environmental, Social og Governance kriterier i alle investeringsbeslutninger:</p>
+            <ul>
+                <li><strong>Triple Bottom Line:</strong> Fokus på finansiell avkastning, sosial påvirkning og miljøfordeler</li>
+                <li><strong>Grønne Obligasjoner:</strong> Investering i miljøprosjekt-finansiering</li>
+                <li><strong>Sosiale Obligasjoner:</strong> Støtte til initiativer for å forbedre sosiale utfall</li>
+                <li><strong>Carbon Negative Mål:</strong> Investering i prosjekter som fjerner mer karbon enn vi slipper ut</li>
+            </ul>
+            
+            <div class="chart-container">
+                <canvas id="esgChart" width="400" height="200"></canvas>
+            </div>
+        </section>
+
+        <!-- Teknologi og Infrastruktur Section -->
+        <section id="teknologi">
+            <h2>Teknologisk Infrastruktur</h2>
+            
+            <h3>Ruby Framework Architecture</h3>
+            <ul>
+                <li><strong>Microservices:</strong> Modulær arkitektur for skalerbarhet</li>
+                <li><strong>Roda Web Framework:</strong> Effektive API-er for trading systemer</li>
+                <li><strong>Ruby on Rails:</strong> Backend for investor portaler</li>
+                <li><strong>Crystal Integration:</strong> High-performance komponenter</li>
+            </ul>
+            
+            <h3>AI³ Integration</h3>
+            <ul>
+                <li><strong>LangChain.rb:</strong> Advanced language processing for markedssentiment</li>
+                <li><strong>Vector Databases:</strong> Weaviate for intelligent datasøk</li>
+                <li><strong>Neural Networks:</strong> Deep learning for prediksjon</li>
+                <li><strong>OpenBSD Security:</strong> Sikker infrastruktur for kritiske systemer</li>
+            </ul>
+        </section>
+
+        <!-- Finansielle Projeksjoner Section -->
+        <section id="finansiering">
+            <h2>Finansielle Projeksjoner</h2>
+            <p>Konsolidert kapitalbehov og avkastningsforventninger for Norwegian Hedge / Nordic Prosperity Fund:</p>
+            <ul>
+                <li><strong>Oppstartskapital:</strong> NOK 50 millioner</li>
+                <li><strong>År 1 Målsetning:</strong> 15% ROI med 10% fra AI³-trading, 5% fra ESG-investeringer</li>
+                <li><strong>År 2 Målsetning:</strong> 18% ROI med økt kryptovaluta-eksponering</li>
+                <li><strong>År 3 Målsetning:</strong> 22% ROI med fullstendig automatisert trading swarm</li>
+            </ul>
+            
+            <div class="chart-container">
+                <canvas id="financeChart" width="400" height="200"></canvas>
+            </div>
+        </section>
+
+        <!-- Konklusjon Section -->
+        <section id="konklusjon">
+            <h2>Konklusjon</h2>
+            <p>Norwegian Hedge Fund / Nordic Prosperity Fund representerer fremtiden for norsk kapitalforvaltning. Gjennom innovativ AI³-teknologi, Ruby-baserte trading swarms og kompromissløs fokus på bærekraftighet, skaper vi en helt ny standard for hedge fund-operasjoner. Vårt konsoliderte fond kombinerer det beste fra traditionell wealth management med cutting-edge fintech for å levere overlegen avkastning til våre investorer.</p>
+            <p><strong>Investering i innovasjon. Velstand med mening.</strong></p>
+        </section>
+    </main>
+
+    <script>
+        // Performance Chart
+        const performanceCtx = document.getElementById('performanceChart').getContext('2d');
+        const performanceChart = new Chart(performanceCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun'],
+                datasets: [
+                    {
+                        label: 'AI³ Trading (%)',
+                        data: [2.1, 3.2, 1.8, 4.1, 2.9, 3.5],
+                        borderColor: '#ff007f',
+                        backgroundColor: 'rgba(255, 0, 127, 0.1)',
+                        fill: true
+                    },
+                    {
+                        label: 'ESG Portfolio (%)',
+                        data: [1.2, 1.8, 2.1, 1.5, 2.3, 1.9],
+                        borderColor: '#00c9ff',
+                        backgroundColor: 'rgba(0, 201, 255, 0.1)',
+                        fill: true
+                    }
+                ]
+            },
+            options: {
+                plugins: {
+                    title: { display: true, text: 'Månedlig Avkastning 2025' }
+                },
+                scales: { y: { beginAtZero: true } }
+            }
+        });
+
+        // ESG Impact Chart
+        const esgCtx = document.getElementById('esgChart').getContext('2d');
+        const esgChart = new Chart(esgCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Environmental', 'Social', 'Governance'],
+                datasets: [{
+                    data: [40, 35, 25],
+                    backgroundColor: ['#8a2be2', '#ff007f', '#00c9ff'],
+                }]
+            },
+            options: {
+                plugins: {
+                    title: { display: true, text: 'ESG Investeringsfordeling' },
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        // Financial Projections Chart
+        const financeCtx = document.getElementById('financeChart').getContext('2d');
+        const financeChart = new Chart(financeCtx, {
+            type: 'bar',
+            data: {
+                labels: ['År 1', 'År 2', 'År 3'],
+                datasets: [
+                    {
+                        label: 'ROI (%)',
+                        data: [15, 18, 22],
+                        backgroundColor: '#8a2be2',
+                    },
+                    {
+                        label: 'AUM (MNOK)',
+                        data: [50, 85, 150],
+                        backgroundColor: '#ff007f',
+                        yAxisID: 'y1'
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    y: { beginAtZero: true, position: 'left' },
+                    y1: { type: 'linear', display: true, position: 'right' }
+                },
+                plugins: {
+                    title: { display: true, text: 'Finansielle Projeksjoner' }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
