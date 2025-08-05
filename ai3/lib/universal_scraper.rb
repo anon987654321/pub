@@ -5,9 +5,11 @@ require 'nokogiri'
 require 'fileutils'
 require 'uri'
 require 'digest'
+require 'logger'
 
 # Universal Scraper with Ferrum for web content and screenshots
 # Includes cognitive load awareness and depth-based analysis
+# Merged with tools/universal_scraper.rb for enhanced functionality
 class UniversalScraper
   attr_reader :browser, :config, :cognitive_monitor
 
@@ -29,6 +31,13 @@ class UniversalScraper
   # Set cognitive monitor for load-aware processing
   def set_cognitive_monitor(monitor)
     @cognitive_monitor = monitor
+  end
+
+  # Tool manager compatible execute method
+  def execute(url, *args)
+    options = args.first.is_a?(Hash) ? args.first : {}
+    result = scrape(url, options)
+    result[:content] || result[:error] || ""
   end
 
   # Main scraping method with cognitive awareness
