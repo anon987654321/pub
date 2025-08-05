@@ -1,33 +1,47 @@
 #!/bin/bash
 
 #!/usr/bin/env zsh
+set -euo pipefail
 
-# --- CONFIGURATION ---
-app_name="blognet"
+# Blognet - AI-Enhanced Blogging Platform  
+# Framework v37.3.2 compliant with advanced content management and AI features
 
-# --- GLOBAL SETUP ---
-source __shared.sh
+APP_NAME="blognet"
+BASE_DIR="/home/dev/rails"
+BRGEN_IP="46.23.95.45"
 
-# --- INITIALIZATION SECTION ---
-initialize_app_directory() {
-  initialize_setup "$app_name"
-  log "Initialized application directory for $app_name"
-}
+source "./__shared.sh"
 
-# --- FRONTEND SETUP SECTION ---
-setup_frontend_with_rails() {
-  log "Setting up front-end tools integrated with Rails for $app_name"
+log "Starting Blognet AI-enhanced blogging platform setup"
 
-  # Leveraging Rails with modern frontend tools
-  create_rails_app "$app_name"
-  bin/rails db:migrate || error_exit "Database migration failed for $app_name"
-  log "Rails and frontend tools setup completed for $app_name"
+setup_full_app "$APP_NAME"
 
-  # Generate views for Home controller using shared scaffold generation
-  generate_home_view "$app_name" "Welcome to BlogNet"
-  add_seo_metadata "app/views/home/index.html.erb" "BlogNet | Share Your Stories" "Join BlogNet to share your stories, connect with other bloggers, and explore community discussions." || error_exit "Failed to add SEO metadata for Home view"
-  add_schema_org_metadata "app/views/home/index.html.erb" || error_exit "Failed to add schema.org metadata for Home view"
-}
+command_exists "ruby"
+command_exists "node"
+command_exists "psql"
+command_exists "redis-server"
+
+# Add AI and content management gems
+bundle add ruby-openai
+bundle add langchainrb
+bundle add friendly_id
+bundle add acts_as_tenant
+bundle add babosa
+bundle add rouge
+bundle add redcarpet
+bundle install
+
+# Generate enhanced blogging models
+bin/rails generate model Blog name:string description:text user:references subdomain:string theme:string
+bin/rails generate model Post title:string content:text blog:references user:references published:boolean slug:string tags:text
+bin/rails generate model Comment post:references user:references content:text approved:boolean
+bin/rails generate model Category name:string description:text blog:references
+bin/rails generate model PostCategory post:references category:references
+bin/rails generate model Subscription user:references blog:references
+bin/rails generate model AIAssistant name:string model_type:string api_key:string blog:references
+
+log "Blognet AI-enhanced blogging platform setup completed"
+commit "Set up Blognet with AI content generation and multi-tenant blogging features"
 
 # --- APP-SPECIFIC SETUP SECTION ---
 setup_app_specific() {

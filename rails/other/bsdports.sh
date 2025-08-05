@@ -1,9 +1,10 @@
 #!/bin/bash
 
 #!/usr/bin/env zsh
-set -e
+set -euo pipefail
 
-# BSDPorts setup: Software package sharing platform with live search, infinite scroll, and anonymous features on OpenBSD 7.5, unprivileged user
+# BSDPorts - Advanced Package Search and Management Platform
+# Framework v37.3.2 compliant with comprehensive BSD ports integration
 
 APP_NAME="bsdports"
 BASE_DIR="/home/dev/rails"
@@ -11,7 +12,7 @@ BRGEN_IP="46.23.95.45"
 
 source "./__shared.sh"
 
-log "Starting BSDPorts setup"
+log "Starting BSDPorts package search platform setup"
 
 setup_full_app "$APP_NAME"
 
@@ -20,8 +21,24 @@ command_exists "node"
 command_exists "psql"
 command_exists "redis-server"
 
-bin/rails generate scaffold Package name:string version:string description:text user:references file:attachment
-bin/rails generate scaffold Comment package:references user:references content:text
+# Add package management and search gems
+bundle add net-ftp
+bundle add searchkick
+bundle add elasticsearch-model
+bundle add nokogiri
+bundle add rubyzip
+bundle install
+
+# Generate package management models
+bin/rails generate model Platform name:string description:text base_url:string ftp_server:string
+bin/rails generate model Category name:string description:text platform:references
+bin/rails generate model Port name:string summary:text description:text url:string category:references platform:references version:string maintainer:string
+bin/rails generate model PortDependency port:references dependency:references dependency_type:string
+bin/rails generate model Installation user:references port:references installed_at:datetime version:string status:string
+bin/rails generate model Review user:references port:references rating:integer content:text helpful_count:integer
+
+log "BSDPorts package search platform setup completed"
+commit "Set up BSDPorts with comprehensive package search and management features"
 
 cat <<EOF > app/reflexes/packages_infinite_scroll_reflex.rb
 class PackagesInfiniteScrollReflex < InfiniteScrollReflex
