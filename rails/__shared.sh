@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #!/usr/bin/env zsh
-set -e
+set -euo pipefail
 
 # Shared utility functions for Rails apps on OpenBSD 7.5, unprivileged user, NNG/SEO/Schema optimized
 
@@ -23,20 +23,17 @@ error() {
 }
 
 command_exists() {
-  command -v "$1" > /dev/null 2>&1
-  if [ $? -ne 0 ]; then
+  if ! command -v "$1" > /dev/null 2>&1; then
     error "Command '$1' not found. Please install it."
   fi
 }
 
 init_app() {
   log "Initializing app directory for '$1'"
-  mkdir -p "$BASE_DIR/$1"
-  if [ $? -ne 0 ]; then
+  if ! mkdir -p "$BASE_DIR/$1"; then
     error "Failed to create app directory '$BASE_DIR/$1'"
   fi
-  cd "$BASE_DIR/$1"
-  if [ $? -ne 0 ]; then
+  if ! cd "$BASE_DIR/$1"; then
     error "Failed to change to directory '$BASE_DIR/$1'"
   fi
 }
@@ -47,8 +44,7 @@ setup_ruby() {
   if ! ruby -v | grep -q "$RUBY_VERSION"; then
     error "Ruby $RUBY_VERSION not found. Please install it manually (e.g., pkg_add ruby-$RUBY_VERSION)."
   fi
-  gem install bundler
-  if [ $? -ne 0 ]; then
+  if ! gem install bundler; then
     error "Failed to install Bundler"
   fi
 }

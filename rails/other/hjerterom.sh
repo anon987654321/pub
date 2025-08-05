@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #!/usr/bin/env zsh
-set -e
+set -euo pipefail
 
 # Hjerterom setup: Food redistribution platform with Mapbox, Vipps, analytics, live search, infinite scroll, and anonymous features on OpenBSD 7.5, unprivileged user
 
