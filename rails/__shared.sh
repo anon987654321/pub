@@ -164,37 +164,61 @@ setup_yarn() {
 }
 
 setup_rails() {
-  log "Setting up Rails $RAILS_VERSION for '$1'"
-  if [ -f "Gemfile" ]; then
-    log "Gemfile exists, skipping Rails new"
+  local app_name="$1"
+  
+  # Validate app name
+  validate_input "$app_name" "alphanumeric"
+  
+  log "Setting up Rails $RAILS_VERSION for '$app_name' with modern configuration"
+  
+  # Check if Gemfile exists to avoid overwriting existing apps
+  if [[ -f "Gemfile" ]]; then
+    log "Gemfile exists - skipping Rails new command"
+    log "Assuming existing Rails application in $(pwd)"
   else
-    rails new . -f --skip-bundle --database=postgresql --asset-pipeline=propshaft --css=scss
-    if [ $? -ne 0 ]; then
-      error "Failed to create Rails app '$1'"
+    log "Creating new Rails $RAILS_VERSION application"
+    
+    # Create Rails app with comprehensive options
+    if ! rails new . -f \
+      --skip-bundle \
+      --database=postgresql \
+      --asset-pipeline=propshaft \
+      --css=scss \
+      --javascript=esbuild \
+      --skip-test \
+      2>/dev/null; then
+      error "Failed to create Rails application '$app_name'"
     fi
+    
+    log "Rails application '$app_name' created successfully"
   fi
   
-  # Add modern Rails 8 gems to Gemfile
-  cat <<EOF >> Gemfile
+  # Enhance Gemfile with Rails 8 modern stack
+  log "Adding Rails 8 modern stack gems to Gemfile"
+  
+  cat >> Gemfile << 'EOF'
 
-# Rails 8 Modern Stack
-gem 'solid_queue', '~> 1.0'
-gem 'solid_cache', '~> 1.0'
-gem 'falcon', '~> 0.47'
-gem 'hotwire-rails', '~> 0.1'
-gem 'turbo-rails', '~> 2.0'
-gem 'stimulus-rails', '~> 1.3'
-gem 'propshaft', '~> 1.0'
+# Rails 8 Modern Stack - Framework v35.3.8 compliant
+gem 'solid_queue', '~> 1.0'          # Background job processing
+gem 'solid_cache', '~> 1.0'          # Caching layer
+gem 'falcon', '~> 0.47'               # High-performance web server
+gem 'hotwire-rails', '~> 0.1'        # Modern frontend framework
+gem 'turbo-rails', '~> 2.0'          # SPA-like page acceleration
+gem 'stimulus-rails', '~> 1.3'       # JavaScript behavior framework
+gem 'propshaft', '~> 1.0'            # Asset pipeline
 
 # Enhanced Stimulus Components
-gem 'stimulus_reflex', '~> 3.5'
-gem 'cable_ready', '~> 5.0'
+gem 'stimulus_reflex', '~> 3.5'      # Real-time updates
+gem 'cable_ready', '~> 5.0'          # DOM manipulation
 EOF
 
-  bundle install
-  if [ $? -ne 0 ]; then
-    error "Failed to run bundle install"
+  # Run bundle install with error handling
+  log "Installing gems with Bundler"
+  if ! bundle install --quiet; then
+    error "Bundle install failed for application '$app_name'"
   fi
+  
+  log "Rails setup completed successfully for '$app_name'"
 }
 
 setup_postgresql() {
@@ -318,18 +342,52 @@ EOF
 }
 
 install_gem() {
-  log "Installing gem '$1'"
-  if ! gem list | grep -q "$1"; then
-    gem install "$1"
-    if [ $? -ne 0 ]; then
-      error "Failed to install gem '$1'"
+  local gem_name="$1"
+  local gem_version="${2:-}"
+  
+  # Validate gem name
+  validate_input "$gem_name" "alphanumeric"
+  
+  log "Installing gem '$gem_name'${gem_version:+ version $gem_version}"
+  
+  # Check if gem is already installed
+  if gem list "$gem_name" --installed --quiet >/dev/null 2>&1; then
+    log "Gem '$gem_name' already installed"
+    return 0
+  fi
+  
+  # Install gem with version if specified
+  local install_cmd="gem install $gem_name"
+  if [[ -n "$gem_version" ]]; then
+    install_cmd="$install_cmd --version $gem_version"
+  fi
+  
+  if ! $install_cmd --quiet; then
+    error "Failed to install gem '$gem_name'"
+  fi
+  
+  # Add gem to Gemfile if it exists
+  if [[ -f "Gemfile" ]]; then
+    local gem_line="gem \"$gem_name\""
+    if [[ -n "$gem_version" ]]; then
+      gem_line="$gem_line, \"$gem_version\""
     fi
-    echo "gem \"$1\"" >> Gemfile
-    bundle install
-    if [ $? -ne 0 ]; then
-      error "Failed to bundle gem '$1'"
+    
+    # Check if gem is already in Gemfile
+    if ! grep -q "gem ['\"]$gem_name['\"]" Gemfile; then
+      echo "$gem_line" >> Gemfile
+      log "Added '$gem_name' to Gemfile"
+      
+      # Run bundle install to update Gemfile.lock
+      if ! bundle install --quiet; then
+        error "Failed to run bundle install after adding '$gem_name'"
+      fi
+    else
+      log "Gem '$gem_name' already present in Gemfile"
     fi
   fi
+  
+  log "Gem '$gem_name' installation completed successfully"
 }
 
 setup_core() {
@@ -1003,19 +1061,56 @@ generate_social_models() {
 }
 
 commit() {
-  log "Committing changes: '$1'"
+  local commit_message="$1"
+  
+  # Validate commit message
+  if [[ -z "$commit_message" ]]; then
+    error "Commit message cannot be empty"
+  fi
+  
+  if [[ ${#commit_message} -lt 10 ]]; then
+    error "Commit message too short (minimum 10 characters): '$commit_message'"
+  fi
+  
+  log "Preparing Git commit: '$commit_message'"
+  
+  # Verify Git command exists
   command_exists "git"
-  if ! git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
-    git init
-    if [ $? -ne 0 ]; then
+  
+  # Initialize Git repository if needed
+  if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    log "Initializing Git repository"
+    if ! git init; then
       error "Failed to initialize Git repository"
     fi
+    
+    # Set basic Git configuration if not set
+    if [[ -z "$(git config user.name 2>/dev/null)" ]]; then
+      git config user.name "Rails App Generator"
+    fi
+    
+    if [[ -z "$(git config user.email 2>/dev/null)" ]]; then
+      git config user.email "noreply@example.com"
+    fi
   fi
-  git add .
-  git commit -m "$1"
-  if [ $? -ne 0 ]; then
+  
+  # Stage all changes
+  if ! git add .; then
+    error "Failed to stage changes for commit"
+  fi
+  
+  # Check if there are changes to commit
+  if git diff --cached --quiet; then
     log "No changes to commit"
+    return 0
   fi
+  
+  # Create commit
+  if ! git commit -m "$commit_message"; then
+    error "Failed to create Git commit"
+  fi
+  
+  log "Git commit created successfully: '$commit_message'"
 }
 
 migrate_db() {
