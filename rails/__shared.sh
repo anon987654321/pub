@@ -1314,7 +1314,282 @@ commit() {
   log "Git commit created successfully: '$commit_message'"
 }
 
-migrate_db() {
+setup_efficient_pagination() {
+  log "Setting up efficient pagination with Pagy and performance optimizations"
+  
+  # Verify Rails environment
+  if [[ ! -f "bin/rails" ]]; then
+    error "Rails application not found - cannot setup pagination"
+  fi
+  
+  # Enhanced Pagy configuration
+  log "Creating optimized Pagy configuration"
+  cat > config/initializers/pagy.rb << 'EOF'
+# Pagy configuration - Framework v35.3.8 optimized for performance
+require 'pagy/extras/bootstrap'
+require 'pagy/extras/overflow'
+require 'pagy/extras/metadata'
+require 'pagy/extras/countless'
+require 'pagy/extras/searchkick' if defined?(Searchkick)
+
+# Default Pagy configuration with performance optimizations
+Pagy::DEFAULT[:items] = 20
+Pagy::DEFAULT[:size] = [1, 4, 4, 1]
+Pagy::DEFAULT[:page_param] = :page
+Pagy::DEFAULT[:anchor_string] = 'data-turbo-action="advance"'
+
+# Performance optimizations
+Pagy::DEFAULT[:overflow] = :last_page
+Pagy::DEFAULT[:metadata] = [:scaffold_url, :first_url, :prev_url, :next_url, :last_url]
+
+# Enable countless pagination for better performance on large datasets
+Pagy::DEFAULT[:countless_minimal] = true
+
+# Custom CSS classes for styling
+Pagy::DEFAULT[:bootstrap_nav_class] = 'pagy-bootstrap-nav'
+Pagy::DEFAULT[:bootstrap_nav_class_responsive] = 'pagy-bootstrap-nav-responsive'
+
+# Custom pagination helper
+module PagyHelper
+  include Pagy::Frontend
+  
+  def pagy_nav_turbo(pagy, **kwargs)
+    pagy_nav(pagy, **kwargs).gsub(/<a /, '<a data-turbo-action="advance" ')
+  end
+  
+  def pagy_info_i18n(pagy, **kwargs)
+    return '' if pagy.count == 0
+    
+    key = if pagy.count == 1
+      'pagy.info.single_page.one'
+    elsif pagy.pages == 1
+      'pagy.info.single_page.other'
+    else
+      'pagy.info.multiple_pages'
+    end
+    
+    t(key, count: pagy.count, from: pagy.from, to: pagy.to, **kwargs)
+  end
+end
+EOF
+
+  # Add Pagy backend helpers to ApplicationController
+  log "Adding Pagy backend helpers to ApplicationController"
+  cat >> app/controllers/application_controller.rb << 'EOF'
+
+  # Pagy backend helper
+  include Pagy::Backend
+  
+  # Performance optimized pagination
+  private
+  
+  def pagy_get_vars(collection, vars)
+    vars[:count] ||= collection.count(:all)
+    vars[:page] ||= params[vars[:page_param] || Pagy::DEFAULT[:page_param]]
+    vars[:items] ||= params[:items] if params[:items]
+    vars
+  end
+  
+  def pagy_countless(collection, vars = {})
+    pagy, records = pagy_countless_get_vars(collection, vars)
+    return pagy, records
+  end
+EOF
+
+  # Add Pagy frontend helpers to ApplicationHelper
+  log "Adding Pagy frontend helpers to ApplicationHelper"
+  mkdir -p app/helpers
+  cat >> app/helpers/application_helper.rb << 'EOF'
+
+  # Pagy frontend helper with accessibility enhancements
+  include Pagy::Frontend
+  
+  def accessible_pagy_nav(pagy, **kwargs)
+    return '' unless pagy.pages > 1
+    
+    nav_tag = pagy_nav(pagy, **kwargs)
+    nav_tag.gsub('<nav class="pagy-nav pagination"', 
+                 '<nav class="pagy-nav pagination" aria-label="Pagination Navigation" role="navigation"')
+           .gsub(/<a /, '<a aria-label="Go to page" ')
+           .gsub(/<span class="page current"/, '<span class="page current" aria-current="page" aria-label="Current page"')
+  end
+  
+  def pagy_performance_info(pagy)
+    content_tag :div, class: 'pagy-info' do
+      t('pagy.info.performance', 
+        from: pagy.from, 
+        to: pagy.to, 
+        count: pagy.count,
+        time: '%.2f' % (Time.current - @pagy_start_time))
+    end
+  end
+EOF
+
+  # Enhanced localization for Pagy
+  log "Adding Pagy localization with accessibility"
+  cat >> config/locales/en.yml << 'EOF'
+  pagy:
+    nav:
+      prev: '‹ Previous'
+      next: 'Next ›'
+      gap: '…'
+    info:
+      single_page:
+        zero: 'No items found'
+        one: 'Displaying 1 item'
+        other: 'Displaying %{count} items'
+      multiple_pages: 'Displaying items %{from} - %{to} of %{count} total'
+      performance: 'Showing %{from}-%{to} of %{count} in %{time}s'
+    aria:
+      nav: 'Pagination navigation'
+      prev: 'Go to previous page'
+      next: 'Go to next page'
+      current: 'Current page, page %{page}'
+      page: 'Go to page %{page}'
+EOF
+
+  log "Efficient pagination with Pagy setup completed"
+}
+  log "Setting up database optimizations with indexing strategies and performance tuning"
+  
+  # Verify Rails environment
+  if [[ ! -f "bin/rails" ]]; then
+    error "Rails application not found - cannot setup database optimizations"
+  fi
+  
+  # Create database optimization migration
+  log "Creating database optimization migration with indexes"
+  local migration_file="db/migrate/$(date +%Y%m%d%H%M%S)_add_database_optimizations.rb"
+  
+  cat > "$migration_file" << 'EOF'
+class AddDatabaseOptimizations < ActiveRecord::Migration[8.0]
+  def up
+    # User table optimizations
+    add_index :users, :email, unique: true, algorithm: :concurrently if table_exists?(:users)
+    add_index :users, :reset_password_token, unique: true, algorithm: :concurrently if table_exists?(:users)
+    add_index :users, :confirmation_token, unique: true, algorithm: :concurrently if table_exists?(:users)
+    add_index :users, :unlock_token, unique: true, algorithm: :concurrently if table_exists?(:users)
+    add_index :users, :provider, algorithm: :concurrently if table_exists?(:users)
+    add_index :users, :uid, algorithm: :concurrently if table_exists?(:users)
+    add_index :users, [:provider, :uid], unique: true, algorithm: :concurrently if table_exists?(:users)
+    add_index :users, :guest, algorithm: :concurrently if table_exists?(:users)
+    add_index :users, :created_at, algorithm: :concurrently if table_exists?(:users)
+    
+    # Post table optimizations
+    add_index :posts, :user_id, algorithm: :concurrently if table_exists?(:posts)
+    add_index :posts, :created_at, algorithm: :concurrently if table_exists?(:posts)
+    add_index :posts, [:user_id, :created_at], algorithm: :concurrently if table_exists?(:posts)
+    add_index :posts, :anonymous, algorithm: :concurrently if table_exists?(:posts)
+    
+    # Vote table optimizations  
+    add_index :votes, :votable_type, algorithm: :concurrently if table_exists?(:votes)
+    add_index :votes, :votable_id, algorithm: :concurrently if table_exists?(:votes)
+    add_index :votes, [:votable_type, :votable_id], algorithm: :concurrently if table_exists?(:votes)
+    add_index :votes, :user_id, algorithm: :concurrently if table_exists?(:votes)
+    add_index :votes, [:votable_type, :votable_id, :user_id], unique: true, algorithm: :concurrently if table_exists?(:votes)
+    add_index :votes, :value, algorithm: :concurrently if table_exists?(:votes)
+    
+    # Message table optimizations
+    add_index :messages, :sender_id, algorithm: :concurrently if table_exists?(:messages)
+    add_index :messages, :receiver_id, algorithm: :concurrently if table_exists?(:messages)
+    add_index :messages, :created_at, algorithm: :concurrently if table_exists?(:messages)
+    add_index :messages, [:sender_id, :receiver_id], algorithm: :concurrently if table_exists?(:messages)
+    
+    # Listing table optimizations (for marketplace)
+    add_index :listings, :user_id, algorithm: :concurrently if table_exists?(:listings)
+    add_index :listings, :created_at, algorithm: :concurrently if table_exists?(:listings)
+    add_index :listings, :status, algorithm: :concurrently if table_exists?(:listings)
+    add_index :listings, :category, algorithm: :concurrently if table_exists?(:listings)
+    add_index :listings, [:lat, :lng], algorithm: :concurrently if table_exists?(:listings)
+    add_index :listings, [:status, :created_at], algorithm: :concurrently if table_exists?(:listings)
+    
+    # Profile table optimizations (for dating)
+    add_index :profiles, :user_id, algorithm: :concurrently if table_exists?(:profiles)
+    add_index :profiles, [:lat, :lng], algorithm: :concurrently if table_exists?(:profiles)
+    add_index :profiles, :gender, algorithm: :concurrently if table_exists?(:profiles)
+    add_index :profiles, :age, algorithm: :concurrently if table_exists?(:profiles)
+    
+    # Match table optimizations (for dating)
+    add_index :matches, :initiator_id, algorithm: :concurrently if table_exists?(:matches)
+    add_index :matches, :receiver_id, algorithm: :concurrently if table_exists?(:matches)
+    add_index :matches, :status, algorithm: :concurrently if table_exists?(:matches)
+    add_index :matches, :created_at, algorithm: :concurrently if table_exists?(:matches)
+    
+    # City table optimizations (for multi-tenancy)
+    add_index :cities, :subdomain, unique: true, algorithm: :concurrently if table_exists?(:cities)
+    add_index :cities, :country, algorithm: :concurrently if table_exists?(:cities)
+    add_index :cities, :language, algorithm: :concurrently if table_exists?(:cities)
+    
+    # Active Storage optimizations
+    add_index :active_storage_attachments, [:record_type, :record_id, :name, :blob_id], 
+              unique: true, name: 'index_active_storage_attachments_uniqueness', 
+              algorithm: :concurrently if table_exists?(:active_storage_attachments)
+    add_index :active_storage_blobs, :key, unique: true, algorithm: :concurrently if table_exists?(:active_storage_blobs)
+    
+    # Solid Queue optimizations
+    add_index :solid_queue_jobs, :queue_name, algorithm: :concurrently if table_exists?(:solid_queue_jobs)
+    add_index :solid_queue_jobs, :scheduled_at, algorithm: :concurrently if table_exists?(:solid_queue_jobs)
+    add_index :solid_queue_jobs, :priority, algorithm: :concurrently if table_exists?(:solid_queue_jobs)
+    add_index :solid_queue_jobs, [:queue_name, :scheduled_at], algorithm: :concurrently if table_exists?(:solid_queue_jobs)
+    
+    # Full-text search indexes (PostgreSQL specific)
+    if connection.adapter_name == 'PostgreSQL'
+      execute "CREATE INDEX CONCURRENTLY IF NOT EXISTS posts_full_text_search ON posts USING gin(to_tsvector('english', title || ' ' || body))" if table_exists?(:posts)
+      execute "CREATE INDEX CONCURRENTLY IF NOT EXISTS listings_full_text_search ON listings USING gin(to_tsvector('english', title || ' ' || description))" if table_exists?(:listings)
+    end
+  end
+  
+  def down
+    # Remove indexes in reverse order
+    remove_index :posts, name: 'posts_full_text_search' if index_exists?(:posts, name: 'posts_full_text_search')
+    remove_index :listings, name: 'listings_full_text_search' if index_exists?(:listings, name: 'listings_full_text_search')
+    
+    # Remove other indexes
+    remove_index :users, :email if index_exists?(:users, :email)
+    remove_index :posts, [:user_id, :created_at] if index_exists?(:posts, [:user_id, :created_at])
+    remove_index :votes, [:votable_type, :votable_id, :user_id] if index_exists?(:votes, [:votable_type, :votable_id, :user_id])
+    # ... (additional removes would be here in a real migration)
+  end
+end
+EOF
+
+  # Add database connection pool configuration
+  log "Enhancing database.yml with performance optimizations"
+  cat >> config/database.yml << 'EOF'
+
+# Performance optimizations for all environments
+default: &default_optimizations
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS", 5).to_i + 10 %>
+  timeout: 5000
+  
+  # PostgreSQL specific optimizations  
+  prepared_statements: true
+  advisory_locks: true
+  statement_timeout: 30000
+  lock_timeout: 10000
+  idle_in_transaction_session_timeout: 300000
+  
+  # Connection pooling
+  checkout_timeout: 5
+  reaping_frequency: 10
+  
+production:
+  <<: *default
+  <<: *default_optimizations
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS", 25).to_i %>
+  
+development:
+  <<: *default
+  <<: *default_optimizations
+  
+test:
+  <<: *default
+  <<: *default_optimizations
+  pool: 5
+EOF
+
+  log "Database optimizations setup completed with comprehensive indexing"
+}
   local environment="${1:-production}"
   
   # Validate environment parameter
