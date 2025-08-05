@@ -58,7 +58,8 @@ class LawyerAssistant
   # Analyzes emotional state of the target based on case context or communication
   def analyze_emotional_state
     # Placeholder for emotional state analysis logic (could use case context or recent communications)
-    case_data[:communication_history].map { |comm| emotional_analysis(comm) }.compact
+    communication_history = case_data[:communication_history] || []
+    communication_history.map { |comm| emotional_analysis(comm) }.compact
   end
 
   # Emotional analysis of communication to detect stress, urgency, anxiety, etc.
