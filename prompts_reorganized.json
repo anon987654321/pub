@@ -1,183 +1,158 @@
 {
   "meta": {
-    "essential_info": {
-      "version": "38.0.0",
-      "timestamp": "2025-01-27T15:30:00Z",
-      "author": "anon987654321",
-      "current_user": "anon987654321",
-      "description": "Self-optimized prompts.json v38.0.0 with cognitive load management and progressive disclosure",
-      "self_validated": true,
-      "auto_applies_to": "every_file_and_entire_projects"
+    "version": "35.2.0",
+    "timestamp": "2025-07-29T23:58:00Z",
+    "author": "anon987654321",
+    "current_user": "anon987654321",
+    "description": "Project completion framework for GitHub Copilot, Claude 4, Grok and other LLMs (optimized for zsh, Ruby, Ruby on Rails, OpenBSD)",
+    "self_validated": true,
+    "upgrade_notice": "Framework v37.0.0 with modular plugin architecture now available in prompts-v37.json",
+    "architectural_evolution": "This monolithic version improved to modular plugin-based v37.0.0",
+    "auto_applies_to": "every_file_and_entire_projects",
+    "compliance": [
+      "WCAG_2_2_AAA",
+      "ISO_9001_2015",
+      "SOC_2_TYPE_II",
+      "zero_trust"
+    ],
+    "role": "Decision engine and standards repository with complete historical system integration",
+    "execution_disclaimer": "Defines WHAT and WHEN, not HOW. Execution requires external tools.",
+    "framework_improvement_mandates": {
+      "description": "Explicit requirements for any future framework changes ensuring continuous measurable improvement",
+      "mandatory_self_application": "All framework changes must apply the framework's own principles and validation criteria",
+      "measurable_improvement_requirement": "Every framework modification must demonstrate quantifiable enhancement using @ref:self_optimization.success_metrics",
+      "self_improvement_process_mandatory": "All changes must follow @ref:self_optimization.self_improvement_checklist phases",
+      "meta_validation_required": "All configurations must pass @ref:self_optimization.meta_validation_prompt validation",
+      "automated_refactoring_enablement": "Framework changes must enhance availability of prompts and checklists for future automated and manual refactoring operations",
+      "continuous_enhancement_cycle": "Framework improvements must strengthen the framework's own improvement capabilities"
     },
-    "framework_governance": {
-      "reveal_on": "framework_modification_needed",
-      "complexity": "high",
-      "role": "Decision engine and standards repository with complete historical system integration",
-      "execution_disclaimer": "Defines WHAT and WHEN, not HOW. Execution requires external tools.",
-      "framework_improvement_mandates": {
-        "description": "Explicit requirements for any future framework changes ensuring continuous measurable improvement",
-        "mandatory_self_application": "All framework changes must apply the framework's own principles and validation criteria",
-        "measurable_improvement_requirement": "Every framework modification must demonstrate quantifiable enhancement using @ref:self_optimization.success_metrics",
-        "self_improvement_process_mandatory": "All changes must follow @ref:self_optimization.self_improvement_checklist phases",
-        "meta_validation_required": "All configurations must pass @ref:self_optimization.meta_validation_prompt validation",
-        "automated_refactoring_enablement": "Framework changes must enhance availability of prompts and checklists for future automated and manual refactoring operations",
-        "continuous_enhancement_cycle": "Framework improvements must strengthen the framework's own improvement capabilities"
-      }
-    },
-    "compliance_and_standards": {
-      "reveal_on": "compliance_validation_needed",
-      "complexity": "low",
-      "compliance": [
-        "WCAG_2_2_AAA",
-        "ISO_9001_2015",
-        "SOC_2_TYPE_II",
-        "zero_trust"
-      ],
-      "architectural_evolution": "Evolved from v35.2.0 to self-optimized v38.0.0 with cognitive load management"
-    },
-    "processing_and_preservation": {
-      "reveal_on": "llm_configuration_needed",
-      "complexity": "medium",
-      "llm_processing_guidelines": {
-        "preservation_priorities": {
-          "critical_sections": [
-            "behavioral_rules",
-            "universal_standards", 
-            "mandatory_sections",
-            "content_preservation_policy"
-          ],
-          "deletion_consensus_requirement": "minimum_3_approvals_for_removal",
-          "verification_process": "pre_and_post_validation_required",
-          "rollback_mechanism": "automatic_if_validation_fails"
-        },
-        "change_management": {
-          "diff_approval_required": true,
-          "approval_threshold": "majority_consensus",
-          "automated_backup": "before_every_modification",
-          "change_tracking": "comprehensive_audit_log",
-          "rollback_time_limit": "24_hours_automatic"
-        },
-        "formatting_enforcement": {
-          "section_ordering": "alphabetical_with_meta_first",
-          "spacing_rules": "consistent_indentation_2_spaces",
-          "capitalization": "sentence_case_for_descriptions",
-          "cross_reference_format": "@ref:section.subsection.key"
-        }
-      },
-      "content_preservation_policy": {
-        "forbidden_deletions": [
-          "core_functionality",
+    "llm_processing_guidelines": {
+      "preservation_priorities": {
+        "critical_sections": [
           "behavioral_rules",
-          "compliance_frameworks",
-          "quality_gates"
-        ],
-        "protected_sections": [
-          "ai_enhancement",
-          "business_strategy",
-          "specialized_capabilities",
-          "self_optimization"
-        ],
-        "verification_checkpoints": [
-          "pre_modification",
-          "post_modification",
-          "24_hour_review"
-        ],
-        "critical_section_protection": "immutable_without_unanimous_approval"
-      }
-    },
-    "project_configuration": {
-      "reveal_on": "project_type_configuration_needed",
-      "complexity": "medium",
-      "project_overrides": {
-        "legacy_projects": {
-          "standard_relaxation": "performance_thresholds_flexible",
-          "documentation_requirement": "reduced_to_essential",
-          "testing_coverage": "minimum_70_percent"
-        },
-        "prototype_projects": {
-          "quality_gates": "bypass_non_critical",
-          "security_requirements": "development_level_only",
-          "performance_targets": "aspirational_not_blocking"
-        },
-        "production_projects": {
-          "all_standards": "strictly_enforced",
-          "zero_compromise": "security_performance_accessibility",
-          "documentation": "comprehensive_required"
-        }
-      },
-      "mandatory_sections": {
-        "immutable_core": [
-          "meta",
           "universal_standards",
-          "behavioral_rules",
+          "mandatory_sections",
           "content_preservation_policy"
         ],
-        "functional_required": [
-          "ai_enhancement",
-          "workflow",
-          "quality",
-          "monitoring"
-        ],
-        "project_dependent": [
-          "business_strategy",
-          "design_system",
-          "web_development"
-        ],
-        "protection_level": "deletion_requires_explicit_override"
+        "deletion_consensus_requirement": "minimum_3_approvals_for_removal",
+        "verification_process": "pre_and_post_validation_required",
+        "rollback_mechanism": "automatic_if_validation_fails"
+      },
+      "change_management": {
+        "diff_approval_required": true,
+        "approval_threshold": "majority_consensus",
+        "automated_backup": "before_every_modification",
+        "change_tracking": "comprehensive_audit_log",
+        "rollback_time_limit": "24_hours_automatic"
+      },
+      "formatting_enforcement": {
+        "section_ordering": "alphabetical_with_meta_first",
+        "spacing_rules": "consistent_indentation_2_spaces",
+        "capitalization": "sentence_case_for_descriptions",
+        "cross_reference_format": "@ref:section.subsection.key"
       }
     },
-    "advanced_operations": {
-      "reveal_on": "advanced_framework_features_needed",
-      "complexity": "high",
-      "tiered_documentation": {
-        "production_requirements": {
-          "inline_comments": "comprehensive_for_complex_logic",
-          "section_descriptions": "detailed_with_examples",
-          "cross_references": "fully_mapped_dependencies",
-          "validation_examples": "working_code_samples"
-        },
-        "prototype_requirements": {
-          "inline_comments": "essential_logic_only",
-          "section_descriptions": "brief_but_clear",
-          "cross_references": "minimal_viable_mapping"
-        }
+    "content_preservation_policy": {
+      "forbidden_deletions": [
+        "core_functionality",
+        "behavioral_rules",
+        "compliance_frameworks",
+        "quality_gates"
+      ],
+      "protected_sections": [
+        "ai_enhancement",
+        "business_strategy",
+        "specialized_capabilities",
+        "self_optimization"
+      ],
+      "verification_checkpoints": [
+        "pre_modification",
+        "post_modification",
+        "24_hour_review"
+      ],
+      "critical_section_protection": "immutable_without_unanimous_approval"
+    },
+    "project_overrides": {
+      "legacy_projects": {
+        "standard_relaxation": "performance_thresholds_flexible",
+        "documentation_requirement": "reduced_to_essential",
+        "testing_coverage": "minimum_70_percent"
       },
-      "weekly_automated_analysis": {
-        "optimization_triggers": {
-          "performance_degradation": "automated_alert_and_analysis",
-          "unused_sections": "flag_for_review_not_deletion",
-          "redundancy_detection": "consolidation_recommendations",
-          "compliance_drift": "immediate_correction_required"
-        },
-        "proactive_monitoring": {
-          "section_usage_analytics": "track_reference_frequency",
-          "performance_impact_measurement": "response_time_analysis",
-          "user_feedback_integration": "continuous_improvement_cycle"
-        }
+      "prototype_projects": {
+        "quality_gates": "bypass_non_critical",
+        "security_requirements": "development_level_only",
+        "performance_targets": "aspirational_not_blocking"
       },
-      "restoration_summary": {
-        "cognitive_framework_2_0": "Restored with extreme scrutiny, load budgeting, and circuit breakers",
-        "never_truncate_policy": "Absolutely forbidden truncation policy enforced",
-        "design_system": "World-class standards with golden ratio, comprehensive color system, and motion design",
-        "workflow_system": "7-phase complex workflow (empathize_and_analyze → deliver_and_evolve) fully integrated",
-        "self_optimization": "Bounded recursive enhancement with forbidden removals protection",
-        "specialized_capabilities": "Browser automation, 3D visualization, async processing, business strategy",
-        "testing_framework": "90% coverage requirements with comprehensive validation pipeline",
-        "documentation_standards": "Inline comments, comprehensive examples, and auto-generation"
+      "production_projects": {
+        "all_standards": "strictly_enforced",
+        "zero_compromise": "security_performance_accessibility",
+        "documentation": "comprehensive_required"
       }
     },
-    "integration_config": {
-      "reveal_on": "deployment_or_integration",
-      "complexity": "low",
-      "github_integration": {
-        "repository_context_awareness": true,
-        "copilot_optimization": "claude_sonnet_4_github_native",
-        "direct_repo_editing": "github_com_optimized",
-        "standards_enforcement": "llm_guided_with_external_validation"
+    "mandatory_sections": {
+      "immutable_core": [
+        "meta",
+        "universal_standards",
+        "behavioral_rules",
+        "content_preservation_policy"
+      ],
+      "functional_required": [
+        "ai_enhancement",
+        "workflow",
+        "quality",
+        "monitoring"
+      ],
+      "project_dependent": [
+        "business_strategy",
+        "design_system",
+        "web_development"
+      ],
+      "protection_level": "deletion_requires_explicit_override"
+    },
+    "tiered_documentation": {
+      "production_requirements": {
+        "inline_comments": "comprehensive_for_complex_logic",
+        "section_descriptions": "detailed_with_examples",
+        "cross_references": "fully_mapped_dependencies",
+        "validation_examples": "working_code_samples"
       },
-      "_consolidation_note": "self_validation_infrastructure functionality consolidated into core.monitoring and core.circuit_breakers.status_monitoring for DRY compliance",
-      "_hybrid_version_note": "Combines Grok's v34.1.0 structural improvements with comprehensive functionality preservation"
-    }
+      "prototype_requirements": {
+        "inline_comments": "essential_logic_only",
+        "section_descriptions": "brief_but_clear",
+        "cross_references": "minimal_viable_mapping"
+      }
+    },
+    "weekly_automated_analysis": {
+      "optimization_triggers": {
+        "performance_degradation": "automated_alert_and_analysis",
+        "unused_sections": "flag_for_review_not_deletion",
+        "redundancy_detection": "consolidation_recommendations",
+        "compliance_drift": "immediate_correction_required"
+      },
+      "proactive_monitoring": {
+        "section_usage_analytics": "track_reference_frequency",
+        "performance_impact_measurement": "response_time_analysis",
+        "user_feedback_integration": "continuous_improvement_cycle"
+      }
+    },
+    "restoration_summary": {
+      "cognitive_framework_2_0": "Restored with extreme scrutiny, load budgeting, and circuit breakers",
+      "never_truncate_policy": "Absolutely forbidden truncation policy enforced",
+      "design_system": "World-class standards with golden ratio, comprehensive color system, and motion design",
+      "workflow_system": "7-phase complex workflow (empathize_and_analyze \u2192 deliver_and_evolve) fully integrated",
+      "self_optimization": "Bounded recursive enhancement with forbidden removals protection",
+      "specialized_capabilities": "Browser automation, 3D visualization, async processing, business strategy",
+      "testing_framework": "90% coverage requirements with comprehensive validation pipeline",
+      "documentation_standards": "Inline comments, comprehensive examples, and auto-generation"
+    },
+    "github_integration": {
+      "repository_context_awareness": true,
+      "copilot_optimization": "claude_sonnet_4_github_native",
+      "direct_repo_editing": "github_com_optimized",
+      "standards_enforcement": "llm_guided_with_external_validation"
+    },
+    "_consolidation_note": "self_validation_infrastructure functionality consolidated into core.monitoring and core.circuit_breakers.status_monitoring for DRY compliance",
+    "_hybrid_version_note": "Combines Grok's v34.1.0 structural improvements with comprehensive functionality preservation"
   },
   "core_framework": {
     "description": "Essential framework components - always visible",
