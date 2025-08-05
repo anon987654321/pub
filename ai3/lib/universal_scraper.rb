@@ -258,6 +258,262 @@ class UniversalScraper
     end.compact.uniq
   end
 
+  # Lovdata.no specific scraping enhancements
+  def scrape_lovdata(url, options = {})
+    options = { lovdata_specific: true }.merge(options)
+    
+    begin
+      puts "🏛️ Scraping Lovdata.no: #{url}..."
+      
+      # Navigate with specific wait for Lovdata
+      @browser.go_to(url)
+      wait_for_lovdata_content
+      
+      # Extract Lovdata-specific content
+      content = extract_lovdata_content
+      
+      # Take screenshot
+      screenshot_path = take_screenshot(url)
+      
+      # Analyze Lovdata structure
+      analysis = analyze_lovdata_structure
+      
+      # Extract related laws and regulations
+      related_links = extract_lovdata_related_links(url) if options[:extract_links]
+      
+      result = {
+        url: url,
+        title: content[:title],
+        law_reference: content[:law_reference],
+        content: content[:text],
+        html: content[:html],
+        law_structure: content[:law_structure],
+        section_hierarchy: content[:section_hierarchy],
+        screenshot: screenshot_path,
+        analysis: analysis,
+        related_links: related_links,
+        timestamp: Time.now,
+        success: true,
+        source: 'lovdata.no'
+      }
+      
+      puts "✅ Successfully scraped Lovdata.no: #{url}"
+      result
+    rescue StandardError => e
+      puts "❌ Lovdata scraping failed for #{url}: #{e.message}"
+      { url: url, error: e.message, success: false, source: 'lovdata.no' }
+    end
+  end
+
+  # Enhanced content extraction for Lovdata.no
+  def extract_lovdata_content
+    title = @browser.evaluate(<<~JS)
+      var titleElement = document.querySelector('h1, .lovtittel, .title, .main-title');
+      return titleElement ? titleElement.innerText : document.title;
+    JS
+
+    # Extract law reference number
+    law_reference = @browser.evaluate(<<~JS)
+      var refElement = document.querySelector('.lov-ref, .lovnummer, .law-number');
+      if (refElement) return refElement.innerText;
+      
+      // Try to extract from URL or page content
+      var content = document.body.innerText;
+      var matches = content.match(/(?:LOV|FOR)\\s+\\d{4}-\\d{2}-\\d{2}-\\d+/);
+      return matches ? matches[0] : null;
+    JS
+
+    # Extract structured law content
+    law_content = @browser.evaluate(<<~JS)
+      function extractLawStructure() {
+        var structure = {
+          chapters: [],
+          sections: [],
+          paragraphs: []
+        };
+        
+        // Extract chapters (kapittel)
+        var chapters = document.querySelectorAll('.kapittel, .chapter, h2');
+        chapters.forEach(function(chapter, index) {
+          structure.chapters.push({
+            number: index + 1,
+            title: chapter.innerText.trim(),
+            id: chapter.id || 'chapter-' + (index + 1)
+          });
+        });
+        
+        // Extract sections (paragraf)
+        var sections = document.querySelectorAll('.paragraf, .section, .lov-paragraf');
+        sections.forEach(function(section) {
+          var sectionNum = section.querySelector('.paragrafnummer, .section-number');
+          var sectionText = section.querySelector('.paragroftekst, .section-text, p');
+          
+          structure.sections.push({
+            number: sectionNum ? sectionNum.innerText : '',
+            text: sectionText ? sectionText.innerText : section.innerText,
+            id: section.id || ''
+          });
+        });
+        
+        return structure;
+      }
+      
+      return extractLawStructure();
+    JS
+
+    # Extract main text content with legal structure preserved
+    text_content = @browser.evaluate(<<~JS)
+      // Remove navigation, ads, and non-content elements
+      var elementsToRemove = document.querySelectorAll('nav, .nav, .ads, .advertisement, footer, .footer, .sidebar');
+      elementsToRemove.forEach(function(el) { el.remove(); });
+      
+      // Get main content area for Lovdata
+      var mainContent = document.querySelector('.lovtekst, .lov-innhold, .law-content, main, .content');
+      if (mainContent) {
+        return mainContent.innerText;
+      }
+      
+      // Fallback to body content
+      return document.body.innerText;
+    JS
+
+    # Get full HTML for detailed analysis
+    html = @browser.evaluate('document.documentElement.outerHTML')
+
+    {
+      title: title&.strip || '',
+      law_reference: law_reference&.strip,
+      text: clean_text(text_content || ''),
+      html: html,
+      law_structure: law_content || {},
+      section_hierarchy: extract_section_hierarchy(law_content)
+    }
+  end
+
+  # Wait for Lovdata.no specific content to load
+  def wait_for_lovdata_content(timeout = 15)
+    @browser.evaluate_async(<<~JS, timeout)
+      function waitForLovdata() {
+        if (document.querySelector('.lovtekst, .lov-innhold, .law-content') || 
+            document.readyState === 'complete') {
+          arguments[0]();
+        } else {
+          setTimeout(waitForLovdata, 500);
+        }
+      }
+      waitForLovdata();
+    JS
+  rescue Ferrum::TimeoutError
+    puts '⚠️ Lovdata content load timeout'
+  end
+
+  # Analyze Lovdata.no page structure
+  def analyze_lovdata_structure
+    structure = @browser.evaluate(<<~JS)
+      function analyzeLovdataStructure() {
+        var analysis = {
+          document_type: 'unknown',
+          law_sections: 0,
+          chapters: 0,
+          references: [],
+          amendments: [],
+          effective_date: null
+        };
+        
+        // Determine document type
+        var url = window.location.href;
+        if (url.includes('/lov/')) {
+          analysis.document_type = 'law';
+        } else if (url.includes('/forskrift/')) {
+          analysis.document_type = 'regulation';
+        } else if (url.includes('/rettskilder/')) {
+          analysis.document_type = 'legal_source';
+        }
+        
+        // Count structural elements
+        analysis.law_sections = document.querySelectorAll('.paragraf, .section').length;
+        analysis.chapters = document.querySelectorAll('.kapittel, .chapter').length;
+        
+        // Extract cross-references
+        var refs = document.querySelectorAll('a[href*="lovdata.no"]');
+        refs.forEach(function(ref) {
+          analysis.references.push({
+            text: ref.innerText,
+            url: ref.href
+          });
+        });
+        
+        // Look for effective dates
+        var dateElements = document.querySelectorAll('.ikrafttredelse, .effective-date');
+        if (dateElements.length > 0) {
+          analysis.effective_date = dateElements[0].innerText;
+        }
+        
+        return analysis;
+      }
+      
+      return analyzeLovdataStructure();
+    JS
+
+    structure || {}
+  end
+
+  # Extract related links specific to Lovdata.no
+  def extract_lovdata_related_links(base_url)
+    links = @browser.evaluate(<<~JS)
+      var links = [];
+      var anchors = document.querySelectorAll('a[href*="lovdata.no"]');
+      
+      anchors.forEach(function(a) {
+        var href = a.href;
+        if (href && !href.includes('#') && !href.includes('javascript:')) {
+          links.push({
+            url: href,
+            text: a.innerText.trim(),
+            type: href.includes('/lov/') ? 'law' : 
+                  href.includes('/forskrift/') ? 'regulation' : 'other'
+          });
+        }
+      });
+      
+      return links;
+    JS
+
+    (links || []).uniq { |link| link[:url] }
+  end
+
+  # Extract hierarchical structure from law content
+  def extract_section_hierarchy(law_structure)
+    return {} unless law_structure.is_a?(Hash)
+
+    hierarchy = {
+      root: law_structure[:chapters] || [],
+      sections: {}
+    }
+
+    # Group sections by chapter
+    if law_structure[:sections]
+      law_structure[:sections].each do |section|
+        chapter_id = determine_chapter_for_section(section, law_structure[:chapters])
+        hierarchy[:sections][chapter_id] ||= []
+        hierarchy[:sections][chapter_id] << section
+      end
+    end
+
+    hierarchy
+  end
+
+  def determine_chapter_for_section(section, chapters)
+    # Simple heuristic to associate sections with chapters
+    return 'general' if chapters.nil? || chapters.empty?
+    
+    # For now, distribute sections evenly across chapters
+    section_index = section[:number].to_i rescue 0
+    chapter_index = [section_index / 10, chapters.size - 1].min
+    
+    chapters[chapter_index]&.dig(:id) || 'general'
+  end
+
   # Close browser
   def close
     @browser&.quit
