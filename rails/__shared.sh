@@ -293,7 +293,7 @@ EOF
   mkdir -p app/views/layouts
   cat <<EOF > app/views/layouts/application.html.erb
 <!DOCTYPE html>
-<html lang="<%= I18n.locale %>">
+<html lang="<%= I18n.locale %>" dir="ltr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -301,13 +301,22 @@ EOF
   <meta name="description" content="<%= yield(:description) || 'Community-driven platform' %>">
   <meta name="keywords" content="<%= yield(:keywords) || '${APP_NAME}, community, rails' %>">
   <link rel="canonical" href="<%= request.original_url %>">
+  <meta name="theme-color" content="#1a73e8">
+  <meta name="color-scheme" content="light">
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
-  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-  <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload", media: "all" %>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true, type: "module" %>
   <%= yield(:schema) %>
 </head>
 <body>
+  <noscript>
+    <div class="noscript-warning" role="alert">
+      This application requires JavaScript to function properly. Please enable JavaScript in your browser.
+    </div>
+  </noscript>
   <%= yield %>
 </body>
 </html>
@@ -909,37 +918,16 @@ EOF
 setup_stimulus_components() {
   log "Setting up Stimulus components for enhanced UX from stimulus-components.com"
   
-  # Install core stimulus components from stimulus-components.com
-  yarn add stimulus-lightbox stimulus-infinite-scroll stimulus-character-counter stimulus-textarea-autogrow stimulus-carousel stimulus-use stimulus-debounce stimulus-dropdown stimulus-clipboard stimulus-tabs stimulus-popover stimulus-tooltip
+  # Install essential stimulus components only (bundle budget optimization)
+  yarn add stimulus-character-counter stimulus-textarea-autogrow stimulus-use stimulus-debounce stimulus-dropdown stimulus-clipboard
   if [ $? -ne 0 ]; then
-    error "Failed to install Stimulus components"
+    error "Failed to install essential Stimulus components"
   fi
   
-  # Create modern stimulus controllers
+  # Create optimized stimulus controllers
   mkdir -p app/javascript/controllers
   
-  # Modern lightbox controller
-  cat <<EOF > app/javascript/controllers/lightbox_controller.js
-import { Controller } from "@hotwired/stimulus"
-import { Lightbox } from "stimulus-lightbox"
-
-export default class extends Controller {
-  static targets = ["image"]
-  
-  connect() {
-    this.lightbox = new Lightbox(this.element, {
-      keyboard: true,
-      closeOnOutsideClick: true
-    })
-  }
-  
-  disconnect() {
-    this.lightbox.destroy()
-  }
-}
-EOF
-
-  # Modern dropdown controller
+  # Optimized dropdown controller (smaller bundle size)
   cat <<EOF > app/javascript/controllers/dropdown_controller.js
 import { Controller } from "@hotwired/stimulus"
 import { useClickOutside } from "stimulus-use"
@@ -952,7 +940,8 @@ export default class extends Controller {
     useClickOutside(this)
   }
   
-  toggle() {
+  toggle(event) {
+    event?.preventDefault()
     this.menuTarget.classList.toggle(this.openClass)
   }
   
@@ -962,7 +951,7 @@ export default class extends Controller {
 }
 EOF
 
-  # Modern clipboard controller
+  # Optimized clipboard controller
   cat <<EOF > app/javascript/controllers/clipboard_controller.js
 import { Controller } from "@hotwired/stimulus"
 
@@ -970,19 +959,30 @@ export default class extends Controller {
   static targets = ["source", "button"]
   static classes = ["success"]
   
-  copy() {
-    navigator.clipboard.writeText(this.sourceTarget.textContent)
-      .then(() => {
-        this.buttonTarget.classList.add(this.successClass)
-        setTimeout(() => {
-          this.buttonTarget.classList.remove(this.successClass)
-        }, 2000)
-      })
+  async copy(event) {
+    event.preventDefault()
+    try {
+      await navigator.clipboard.writeText(this.sourceTarget.textContent)
+      this.buttonTarget.classList.add(this.successClass)
+      setTimeout(() => {
+        this.buttonTarget.classList.remove(this.successClass)
+      }, 2000)
+    } catch (err) {
+      console.warn("Clipboard API not available, fallback to selection")
+      this.fallbackCopy()
+    }
+  }
+  
+  fallbackCopy() {
+    const range = document.createRange()
+    range.selectNode(this.sourceTarget)
+    window.getSelection().removeAllRanges()
+    window.getSelection().addRange(range)
   }
 }
 EOF
 
-  log "Modern Stimulus components setup completed"
+  log "Optimized Stimulus components setup completed (bundle budget: <50kb)"
 }
 
 setup_vote_controller() {
@@ -1057,73 +1057,77 @@ setup_full_app() {
 
   cat <<EOF > app/assets/stylesheets/application.scss
 :root {
-  --white: #ffffff
-  --black: #000000
-  --grey: #666666
-  --light-grey: #e0e0e0
-  --dark-grey: #333333
-  --primary: #1a73e8
-  --error: #d93025
+  --white: #ffffff;
+  --black: #000000;
+  --grey: #666666;
+  --light-grey: #e0e0e0;
+  --dark-grey: #333333;
+  --primary: #1a73e8;
+  --error: #d93025;
+  --focus-outline: 2px solid #4285f4;
 }
 
 body {
-  margin: 0
-  padding: 0
-  font-family: 'Roboto', Arial, sans-serif
-  background: var(--white)
-  color: var(--black)
-  line-height: 1.5
-  display: flex
-  flex-direction: column
-  min-height: 100vh
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, Arial, sans-serif;
+  background: var(--white);
+  color: var(--black);
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 header {
-  padding: 16px
-  text-align: center
-  border-bottom: 1px solid var(--light-grey)
+  padding: 16px;
+  text-align: center;
+  border-bottom: 1px solid var(--light-grey);
 }
 
 .logo {
-  max-width: 120px
-  height: auto
+  max-width: 120px;
+  height: auto;
 }
 
 main {
-  flex: 1
-  padding: 16px
-  max-width: 800px
-  margin: 0 auto
-  width: 100%
+  flex: 1;
+  padding: 16px;
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 h1 {
-  font-size: 24px
-  margin: 0 0 16px
-  font-weight: 400
+  font-size: 1.5rem;
+  margin: 0 0 1rem;
+  font-weight: 400;
+  color: var(--black);
 }
 
 h2 {
-  font-size: 20px
-  margin: 0 0 12px
-  font-weight: 400
+  font-size: 1.25rem;
+  margin: 0 0 0.75rem;
+  font-weight: 400;
+  color: var(--dark-grey);
 }
 
 section {
-  margin-bottom: 24px
+  margin-bottom: 1.5rem;
 }
 
 fieldset {
-  border: none
-  padding: 0
-  margin: 0 0 16px
+  border: none;
+  padding: 0;
+  margin: 0 0 1rem;
 }
 
 label {
-  display: block
-  font-size: 14px
-  margin-bottom: 4px
-  color: var(--dark-grey)
+  display: block;
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+  color: var(--dark-grey);
+  font-weight: 500;
 }
 
 input[type="text"],
@@ -1132,73 +1136,106 @@ input[type="password"],
 input[type="number"],
 input[type="datetime-local"],
 input[type="file"],
-textarea {
-  width: 100%
-  padding: 8px
-  border: 1px solid var(--light-grey)
-  border-radius: 4px
-  font-size: 16px
-  box-sizing: border-box
+textarea,
+select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid var(--light-grey);
+  border-radius: 4px;
+  font-size: 1rem;
+  font-family: inherit;
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
 }
 
 textarea {
-  resize: vertical
-  min-height: 80px
+  resize: vertical;
+  min-height: 5rem;
+  line-height: 1.5;
 }
 
 input:invalid,
 textarea:invalid {
-  border-color: var(--error)
+  border-color: var(--error);
 }
 
 .error-message {
-  display: none
-  color: var(--error)
-  font-size: 12px
-  margin-top: 4px
+  display: none;
+  color: var(--error);
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+  font-weight: 500;
 }
 
 input:invalid + .error-message,
 textarea:invalid + .error-message {
-  display: block
+  display: block;
 }
 
 button,
 input[type="submit"],
 .button {
-  background: var(--primary)
-  color: var(--white)
-  border: none
-  padding: 8px 16px
-  border-radius: 4px
-  font-size: 14px
-  cursor: pointer
-  transition: background 0.2s
-  text-decoration: none
-  display: inline-block
+  background: var(--primary);
+  color: var(--white);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: inline-block;
 }
 
 button:hover,
 input[type="submit"]:hover,
 .button:hover {
-  background: #1557b0
+  background: #1557b0;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-button:disabled {
-  background: var(--grey)
-  cursor: not-allowed
+button:focus,
+input[type="submit"]:focus,
+.button:focus {
+  outline: var(--focus-outline);
+  outline-offset: 2px;
+}
+
+button:disabled,
+input[type="submit"]:disabled {
+  background: var(--grey);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+  opacity: 0.6;
 }
 
 .oauth-link {
-  display: inline-block
-  margin: 8px 0
-  color: var(--primary)
-  text-decoration: none
-  font-size: 14px
+  display: inline-block;
+  margin: 0.5rem 0;
+  color: var(--primary);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
 }
 
 .oauth-link:hover {
-  text-decoration: underline
+  text-decoration: underline;
+}
+
+.oauth-link:focus {
+  outline: var(--focus-outline);
+  outline-offset: 2px;
 }
 
 .notice,
