@@ -2412,7 +2412,648 @@ end
 EOF
 }
 
+setup_enhanced_multi_tenancy() {
+  log "Setting up enhanced multi-tenant architecture with security isolation"
+  
+  # Verify Rails environment
+  if [[ ! -f "bin/rails" ]]; then
+    error "Rails application not found - cannot setup multi-tenancy"
+  fi
+  
+  # Install multi-tenancy gems with security enhancements
+  log "Installing multi-tenant dependencies with security features"
+  if ! bundle add acts_as_tenant apartment redis-namespace rack-attack --optimistic; then
+    error "Failed to add multi-tenancy gems"
+  fi
+  
+  # Enhanced tenant configuration with security
+  log "Creating secure tenant configuration"
+  cat > config/initializers/tenant.rb << 'EOF'
+# Enhanced multi-tenant configuration - Framework v35.3.8 security focused
+Rails.application.config.middleware.use ActsAsTenant::Middleware
+
+ActsAsTenant.configure do |config|
+  config.require_tenant = true
+  config.pkey = :id
+  config.fkey = :city_id
+  
+  # Security enhancements
+  config.raise_on_missing_tenant = Rails.env.production?
+  config.default_tenant = nil
+  
+  # Tenant validation
+  config.tenant_class = 'City'
+  config.current_tenant_method = :current_tenant
+end
+
+# Enhanced tenant security middleware
+class TenantSecurityMiddleware
+  def initialize(app)
+    @app = app
+  end
+  
+  def call(env)
+    request = Rack::Request.new(env)
+    
+    # Extract subdomain with validation
+    subdomain = extract_subdomain(request.host)
+    
+    # Validate subdomain format
+    unless valid_subdomain?(subdomain)
+      return security_error_response("Invalid subdomain format")
+    end
+    
+    # Set tenant with security checks
+    tenant = find_secure_tenant(subdomain)
+    unless tenant
+      return tenant_not_found_response(subdomain)
+    end
+    
+    # Apply tenant isolation
+    ActsAsTenant.current_tenant = tenant
+    
+    # Add security headers
+    status, headers, body = @app.call(env)
+    headers['X-Tenant-ID'] = tenant.id.to_s
+    headers['X-Content-Type-Options'] = 'nosniff'
+    headers['X-Frame-Options'] = 'SAMEORIGIN'
+    
+    [status, headers, body]
+  ensure
+    ActsAsTenant.current_tenant = nil
+  end
+  
+  private
+  
+  def extract_subdomain(host)
+    return nil unless host
+    
+    # Remove port if present
+    host = host.split(':').first
+    
+    # Split by dots and get first part
+    parts = host.split('.')
+    return nil if parts.length < 2
+    
+    subdomain = parts.first
+    subdomain unless subdomain == 'www'
+  end
+  
+  def valid_subdomain?(subdomain)
+    return false unless subdomain
+    
+    # Check format: 3-20 characters, alphanumeric and hyphens only
+    subdomain.match?(/\A[a-z0-9-]{3,20}\z/)
+  end
+  
+  def find_secure_tenant(subdomain)
+    City.where(subdomain: subdomain, active: true).first
+  rescue => e
+    Rails.logger.error "Tenant lookup error: #{e.message}"
+    nil
+  end
+  
+  def security_error_response(message)
+    [400, {'Content-Type' => 'text/plain'}, [message]]
+  end
+  
+  def tenant_not_found_response(subdomain)
+    [404, {'Content-Type' => 'text/plain'}, ["Tenant not found: #{subdomain}"]]
+  end
+end
+
+Rails.application.config.middleware.insert_before ActionDispatch::Routing::RouteSet::Dispatcher, TenantSecurityMiddleware
+EOF
+
+  # Enhanced ApplicationController with tenant security
+  log "Enhancing ApplicationController with tenant security"
+  cat >> app/controllers/application_controller.rb << 'EOF'
+
+  # Enhanced tenant security and isolation
+  before_action :verify_tenant_security
+  before_action :set_tenant_context
+  around_action :with_tenant_isolation
+  
+  private
+  
+  def verify_tenant_security
+    return unless ActsAsTenant.current_tenant
+    
+    # Verify tenant is active and accessible
+    unless ActsAsTenant.current_tenant.active?
+      redirect_to_main_site("Tenant is currently inactive")
+      return
+    end
+    
+    # Check for suspicious activity
+    if suspicious_tenant_activity?
+      Rails.logger.warn "Suspicious activity detected for tenant: #{ActsAsTenant.current_tenant.subdomain}"
+      redirect_to_main_site("Access restricted")
+      return
+    end
+  end
+  
+  def set_tenant_context
+    return unless ActsAsTenant.current_tenant
+    
+    # Set tenant-specific configurations
+    @current_tenant = ActsAsTenant.current_tenant
+    @tenant_locale = @current_tenant.language || I18n.default_locale
+    @tenant_timezone = @current_tenant.timezone || Time.zone
+    
+    # Set locale and timezone for this request
+    I18n.locale = @tenant_locale
+    Time.zone = @tenant_timezone
+  end
+  
+  def with_tenant_isolation
+    return yield unless ActsAsTenant.current_tenant
+    
+    # Ensure all database queries are scoped to current tenant
+    ActsAsTenant.with_tenant(ActsAsTenant.current_tenant) do
+      # Additional security: verify user belongs to tenant
+      if user_signed_in? && current_user.respond_to?(:tenant_id)
+        unless current_user.tenant_id == ActsAsTenant.current_tenant.id
+          sign_out current_user
+          redirect_to_main_site("User not authorized for this tenant")
+          return
+        end
+      end
+      
+      yield
+    end
+  end
+  
+  def suspicious_tenant_activity?
+    # Implement rate limiting check
+    key = "tenant_requests:#{ActsAsTenant.current_tenant.id}:#{request.remote_ip}"
+    count = Rails.cache.read(key) || 0
+    
+    if count > 1000 # requests per hour
+      Rails.cache.write(key, count + 1, expires_in: 1.hour)
+      return true
+    else
+      Rails.cache.write(key, count + 1, expires_in: 1.hour)
+      return false
+    end
+  end
+  
+  def redirect_to_main_site(message)
+    redirect_to root_url(subdomain: false), alert: message
+  end
+  
+  def current_tenant
+    ActsAsTenant.current_tenant
+  end
+  
+  helper_method :current_tenant
+EOF
+
+  # Enhanced City model with security features
+  log "Creating enhanced City model with security validations"
+  cat > app/models/city.rb << 'EOF'
+class City < ApplicationRecord
+  acts_as_tenant(:city)
+  
+  # Security validations
+  validates :name, presence: true, length: { minimum: 2, maximum: 100 }
+  validates :subdomain, presence: true, uniqueness: true,
+            format: { with: /\A[a-z0-9-]{3,20}\z/, message: "must be 3-20 characters, lowercase letters, numbers, and hyphens only" }
+  validates :country, presence: true, length: { maximum: 100 }
+  validates :language, presence: true, inclusion: { in: %w[en no se dk fi is de fr es it pt nl] }
+  validates :tld, presence: true, inclusion: { in: %w[com org net no se dk fi is de fr es it pt nl uk] }
+  
+  # Security scopes
+  scope :active, -> { where(active: true) }
+  scope :verified, -> { where(verified: true) }
+  scope :by_country, ->(country) { where(country: country) }
+  
+  # Callbacks for security
+  before_save :sanitize_fields
+  before_create :set_security_defaults
+  after_create :log_city_creation
+  
+  # Instance methods
+  def display_name
+    "#{name}, #{country}"
+  end
+  
+  def full_domain
+    "#{subdomain}.#{app_domain}.#{tld}"
+  end
+  
+  def app_domain
+    Rails.application.credentials.app_domain || 'example'
+  end
+  
+  def active?
+    active && verified
+  end
+  
+  def timezone
+    case country.downcase
+    when 'norway', 'sweden', 'denmark' then 'Europe/Oslo'
+    when 'finland' then 'Europe/Helsinki'
+    when 'iceland' then 'Atlantic/Reykjavik'
+    when 'uk', 'united kingdom' then 'Europe/London'
+    when 'germany' then 'Europe/Berlin'
+    when 'france' then 'Europe/Paris'
+    when 'usa', 'united states' then 'America/New_York'
+    else 'UTC'
+    end
+  end
+  
+  private
+  
+  def sanitize_fields
+    self.name = name.strip.titleize if name
+    self.subdomain = subdomain.strip.downcase if subdomain
+    self.country = country.strip.titleize if country
+    self.language = language.strip.downcase if language
+    self.tld = tld.strip.downcase if tld
+  end
+  
+  def set_security_defaults
+    self.active = false unless has_attribute?(:active)
+    self.verified = false unless has_attribute?(:verified)
+    self.created_by ||= 'system'
+  end
+  
+  def log_city_creation
+    Rails.logger.info "New city created: #{name} (#{subdomain}) by #{created_by}"
+  end
+end
+EOF
+
+  # Enhanced routes with tenant security
+  log "Adding secure tenant routing configuration"
+  cat > config/routes.rb << 'EOF'
+Rails.application.routes.draw do
+  # Health check endpoint (no tenant required)
+  get '/health', to: 'application#health'
+  
+  # Root route with tenant detection
+  root 'home#index'
+  
+  # Devise routes with tenant scope
+  devise_for :users, controllers: {
+    omniauth_callbacks: 'users/omniauth_callbacks',
+    sessions: 'users/sessions'
+  }
+  
+  # Tenant-scoped application routes
+  constraints(TenantConstraint.new) do
+    resources :posts do
+      resources :votes, only: [:create, :destroy]
+    end
+    
+    resources :listings do
+      resources :votes, only: [:create, :destroy]
+    end
+    
+    resources :profiles, only: [:show, :edit, :update] do
+      resources :matches, only: [:create, :show, :destroy]
+    end
+    
+    resources :messages, only: [:index, :create, :show]
+    
+    # Admin routes (require admin user)
+    namespace :admin do
+      resources :cities, except: [:destroy]
+      resources :users, only: [:index, :show, :edit, :update]
+      resources :analytics, only: [:index, :show]
+    end
+  end
+  
+  # Tenant constraint class
+  class TenantConstraint
+    def matches?(request)
+      subdomain = request.subdomain
+      return false if subdomain.blank? || subdomain == 'www'
+      
+      # Cache tenant lookup for performance
+      Rails.cache.fetch("tenant_exists:#{subdomain}", expires_in: 1.hour) do
+        City.exists?(subdomain: subdomain, active: true)
+      end
+    end
+  end
+end
+EOF
+
+  log "Enhanced multi-tenant architecture with security isolation completed"
+}
+
 setup_full_app() {
+  log "Setting up full Rails app '$1' with Framework v35.3.8 optimizations and security enhancements"
+  init_app "$1"
+  setup_postgresql "$1"
+  setup_redis
+  setup_ruby
+  setup_yarn
+  setup_rails "$1"
+  setup_solid_queue
+  setup_solid_cache
+  setup_core
+  setup_devise
+  setup_storage
+  setup_stripe
+  setup_mapbox
+  setup_optimized_live_search
+  setup_optimized_infinite_scroll
+  setup_anon_posting
+  setup_anon_chat
+  setup_expiry_job
+  setup_seeds
+  setup_pwa
+  setup_i18n
+  setup_falcon
+  setup_stimulus_components
+  setup_vote_controller
+  setup_database_optimizations
+  setup_efficient_pagination
+  setup_enhanced_multi_tenancy
+  generate_social_models
+  migrate_db
+
+  cat <<EOF > app/assets/stylesheets/application.scss
+:root {
+  --white: #ffffff
+  --black: #000000
+  --grey: #666666
+  --light-grey: #e0e0e0
+  --dark-grey: #333333
+  --primary: #1a73e8
+  --error: #d93025
+}
+
+body {
+  margin: 0
+  padding: 0
+  font-family: 'Roboto', Arial, sans-serif
+  background: var(--white)
+  color: var(--black)
+  line-height: 1.5
+  display: flex
+  flex-direction: column
+  min-height: 100vh
+}
+
+header {
+  padding: 16px
+  text-align: center
+  border-bottom: 1px solid var(--light-grey)
+}
+
+.logo {
+  max-width: 120px
+  height: auto
+}
+
+main {
+  flex: 1
+  padding: 16px
+  max-width: 800px
+  margin: 0 auto
+  width: 100%
+}
+
+h1 {
+  font-size: 24px
+  margin: 0 0 16px
+  font-weight: 400
+}
+
+h2 {
+  font-size: 20px
+  margin: 0 0 12px
+  font-weight: 400
+}
+
+section {
+  margin-bottom: 24px
+}
+
+fieldset {
+  border: none
+  padding: 0
+  margin: 0 0 16px
+}
+
+label {
+  display: block
+  font-size: 14px
+  margin-bottom: 4px
+  color: var(--dark-grey)
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="datetime-local"],
+input[type="file"],
+textarea {
+  width: 100%
+  padding: 8px
+  border: 1px solid var(--light-grey)
+  border-radius: 4px
+  font-size: 16px
+  box-sizing: border-box
+}
+
+textarea {
+  resize: vertical
+  min-height: 80px
+}
+
+input:invalid,
+textarea:invalid {
+  border-color: var(--error)
+}
+
+.error-message {
+  display: none
+  color: var(--error)
+  font-size: 12px
+  margin-top: 4px
+}
+
+input:invalid + .error-message,
+textarea:invalid + .error-message {
+  display: block
+}
+
+button,
+input[type="submit"],
+.button {
+  background: var(--primary)
+  color: var(--white)
+  border: none
+  padding: 8px 16px
+  border-radius: 4px
+  font-size: 14px
+  cursor: pointer
+  transition: background 0.2s
+  text-decoration: none
+  display: inline-block
+}
+
+button:hover,
+input[type="submit"]:hover,
+.button:hover {
+  background: #1557b0
+}
+
+button:disabled {
+  background: var(--grey)
+  cursor: not-allowed
+}
+
+.oauth-link {
+  display: inline-block
+  margin: 8px 0
+  color: var(--primary)
+  text-decoration: none
+  font-size: 14px
+}
+
+.oauth-link:hover {
+  text-decoration: underline
+}
+
+.notice,
+.alert {
+  padding: 8px
+  margin-bottom: 16px
+  border-radius: 4px
+  font-size: 14px
+}
+
+.notice {
+  background: #e8f0fe
+  color: var(--primary)
+}
+
+.alert {
+  background: #fce8e6
+  color: var(--error)
+}
+
+footer {
+  padding: 16px
+  border-top: 1px solid var(--light-grey)
+  text-align: center
+}
+
+.footer-links {
+  display: flex
+  justify-content: center
+  gap: 16px
+}
+
+.footer-link {
+  color: var(--grey)
+  text-decoration: none
+  font-size: 12px
+}
+
+.footer-link:hover {
+  text-decoration: underline
+}
+
+.footer-link.fb,
+.footer-link.tw,
+.footer-link.ig {
+  width: 16px
+  height: 16px
+  background-size: contain
+}
+
+.footer-link.fb { background: url('/fb.svg') no-repeat }
+.footer-link.tw { background: url('/tw.svg') no-repeat }
+.footer-link.ig { background: url('/ig.svg') no-repeat }
+
+.post-card {
+  border: 1px solid var(--light-grey)
+  padding: 16px
+  margin-bottom: 16px
+  border-radius: 4px
+}
+
+.post-header {
+  display: flex
+  justify-content: space-between
+  font-size: 12px
+  color: var(--grey)
+  margin-bottom: 8px
+}
+
+.post-actions {
+  margin-top: 8px
+}
+
+.post-actions a,
+.post-actions button {
+  margin-right: 8px
+}
+
+.vote {
+  display: flex
+  align-items: center
+  gap: 4px
+}
+
+.vote-count {
+  font-size: 14px
+}
+
+.message {
+  padding: 8px
+  border-bottom: 1px solid var(--light-grey)
+}
+
+.message small {
+  color: var(--grey)
+  font-size: 12px
+}
+
+#map {
+  height: 400px
+  width: 100%
+  border-radius: 4px
+}
+
+#search-results {
+  margin-top: 8px
+}
+
+#reset-link {
+  margin: 8px 0
+}
+
+#sentinel.hidden {
+  display: none
+}
+
+@media (max-width: 600px) {
+  main {
+    padding: 8px
+  }
+
+  h1 {
+    font-size: 20px
+  }
+
+  h2 {
+    font-size: 18px
+  }
+
+  #map {
+    height: 300px
+  }
+}
+EOF
+}
   log "Setting up full Rails app '$1' with NNG/SEO/Schema enhancements and Rails 8 modern stack"
   init_app "$1"
   setup_postgresql "$1"
